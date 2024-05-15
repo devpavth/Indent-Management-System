@@ -16,7 +16,7 @@ export class ViewEmployeeComponent implements OnInit {
     private readonly countryStateCity: SharedServiceService,
     private AdminService: AdminProductServiceService,
     private branchService: BranchService,
-  ) {}
+  ) { }
   @Output() closeEmployeePop = new EventEmitter<boolean>();
   @Input() EmployeeCode: any;
   @Output() showSuccess = new EventEmitter<boolean>();
