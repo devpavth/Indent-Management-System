@@ -185,6 +185,7 @@ export class AddEmployeeComponent implements OnInit {
       },
     );
   }
+
   fetchState(state: string) {
     console.log(state);
     this.http
