@@ -1,0 +1,17 @@
+.error{
+    @apply w-full pl-12 pr-3  py-2  bg-transparent outline-none   shadow-sm  bg-red-50 border border-red-500 text-red-900 placeholder-red-700  rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block  dark:text-red-500 dark:placeholder-red-500 dark:border-red-500;
+  }
+  .success{
+    @apply w-full pl-12 pr-3 py-2  bg-transparent outline-none   shadow-sm   border border-blue-500 text-gray-50 dark:text-blue-400 placeholder-blue-700 dark:placeholder-blue-500  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-blue-500
+  }
+
+  .error1
+  {
+    @apply w-full  pr-3  py-2  bg-transparent outline-none   shadow-sm  border border-red-500 text-gray-50 placeholder-red-700  rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block  dark:text-red-500 dark:placeholder-red-500 dark:border-red-500;
+  }
+  .disabled-field{
+    @apply  border border-purple-100 cursor-no-drop	;
+  }
+  .diabale-login{
+    @apply cursor-no-drop hover:scale-100
+  }

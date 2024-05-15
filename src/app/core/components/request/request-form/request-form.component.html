@@ -1,0 +1,505 @@
+<section class="overflow-y-auto">
+  <div class="p-4 sm:ml-64">
+    <!-- <div class="p-4 bg-white rounded-lg"></div> -->
+
+    <!-- Request form entry start -->
+    <div
+      class="mb-4 rounded-lg border-purple-500/10 bg-white p-4 backdrop-blur-lg"
+    >
+      <div>
+        <label
+          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          for="file_input"
+          >Requisitioner</label
+        >
+
+        <div *ngIf="isRequisitioner" class="flex gap-4">
+          <input
+            #reqName
+            class="block w-80 truncate rounded-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+            type="text"
+          />
+          <div class="">
+            <button
+              (click)="RequisitionerFunction(reqName.value)"
+              type="button"
+              class="btn-primary whitespace-nowrap"
+            >
+              <svg
+                class="h-6 w-6 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 12h14m-7 7V5"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="showRequisitioner" class="flex gap-4">
+          <div
+            class="flex items-center justify-center gap-4 rounded-lg bg-purple-200 px-4 py-2"
+          >
+            <h1>{{ reqName }}</h1>
+            <button (click)="clearReqisition()">
+              <svg
+                class="h-5 w-5 text-purple-800"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
+    >
+      <form [formGroup]="requestProduct" class="flex gap-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <label
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              for="file_input"
+              >Select Product</label
+            >
+            <button
+              (click)="isOther = true"
+              class="mb-2 flex items-center gap-1"
+            >
+              <svg
+                class="h-3 w-3 text-gray-400 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+
+              <a
+                class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                >Add Product</a
+              >
+            </button>
+          </div>
+
+          <div class="flex">
+            <div class="w- flex">
+              <select
+                #rproduct
+                class="select-option w-30 scroll rounded-l-lg"
+                formControlName="itemName"
+                (change)="fetchBrand(rproduct.value)"
+              >
+                <option [value]="null" disabled selected>Product</option>
+
+                <option
+                  *ngFor="let product of _productName"
+                  value="{{ product }}"
+                >
+                  {{ product }}
+                </option>
+              </select>
+              <select
+                #rbrand
+                class="select-option w-30"
+                formControlName="brandName"
+                (change)="fetchModel(rproduct.value, rbrand.value)"
+              >
+                <option [value]="null" disabled selected>Brand</option>
+
+                <option *ngFor="let brand of _brandName" value="{{ brand }}">
+                  {{ brand }}
+                </option>
+              </select>
+              <select
+                #rmodel
+                class="select-option w-30"
+                formControlName="model"
+                (change)="
+                  fetchDescription(rproduct.value, rbrand.value, rmodel.value)
+                "
+              >
+                <option [value]="null" disabled selected>Model</option>
+
+                <option *ngFor="let model of _model" value="{{ model }}">
+                  {{ model }}
+                </option>
+              </select>
+              <select
+                #desc
+                class="select-option rounded-r-lg"
+                formControlName="description"
+                (change)="this.fetchProductDetails(desc.value)"
+              >
+                <option [value]="null" disabled selected>Description</option>
+
+                <option
+                  class=""
+                  *ngFor="let description of _description"
+                  value="{{ description.productId }}"
+                >
+                  <span class="truncate">{{ description.configuration }}</span>
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div>
+          <label
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            for="file_input"
+            >HSN Code</label
+          >
+          <div class="flex">
+            <div class="flex">
+              <input class="input-text" formControlName="hsnCode" id="file_input" type="text" />
+            </div>
+          </div>
+        </div> -->
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >Unit Price</label
+          >
+          <div class="flex">
+            <div class="flex">
+              <input
+                class="input-text"
+                id="file_input"
+                type="text"
+                formControlName="unitPrice"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+            >Quantity</label
+          >
+          <div class="flex">
+            <div class="flex gap-3">
+              <input class="input-text" type="text" formControlName="qty" />
+              <div class="">
+                <button
+                  type="button"
+                  class="btn-primary whitespace-nowrap"
+                  (click)="addRequestedProductItem(requestProduct.value)"
+                >
+                  Add Items
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Request form entry end -->
+
+    <!-- Request form display start -->
+    <div class="mt-4 rounded-lg border bg-white">
+      <div>
+        <section class="dark:bg-gray-900">
+          <div class="mx-auto">
+            <div
+              class="relative overflow-hidden bg-white dark:bg-gray-800 sm:rounded-lg"
+            >
+              <div class="scroll max-h-96 overflow-y-auto">
+                <table
+                  class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
+                >
+                  <thead
+                    class="sticky top-0 bg-purple-900 text-xs uppercase text-purple-50 dark:bg-gray-700 dark:text-gray-400"
+                  >
+                    <tr>
+                      <th class="px-4 py-3">Product</th>
+                      <!-- <th class="px-4 py-3">Brand</th>
+                      <th class="px-4 py-3">Model</th>
+                      <th class="px-4 py-3">Description</th> -->
+                      <th class="px-4 py-3">Unit Price</th>
+                      <th class="px-4 py-3">Quantity</th>
+                      <th class="px-4 py-3">Gst %</th>
+                      <th class="px-4 py-3">Item Total</th>
+                      <th class="px-4 py-3">
+                        <span class="sr-only">Actions</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="visiable">
+                    <tr
+                      class="group/tr border-b transition-all duration-500 hover:bg-gray-50 dark:border-gray-700"
+                      *ngFor="let rItem of _rItemList; let i = index"
+                    >
+                      <td
+                        class="space-y-1 text-wrap px-4 py-3 group-hover/tr:text-black"
+                      >
+                        <p class="font-bold text-black">{{ rItem.itemName }}</p>
+                        <p class="text-gray-800">
+                          {{ rItem.brandName }} {{ rItem.model }}
+                        </p>
+                        <p class="w-48 truncate text-xs text-gray-400">
+                          {{ this._product.configuration }}
+                        </p>
+                      </td>
+                      <!-- <td
+                        class="px-4 py-3  group-hover/tr:text-black"
+                      >
+                        
+                      </td>
+                      <td
+                      class="px-4 py-3  group-hover/tr:text-black"
+                    >
+                      
+                    </td>
+                      <td
+                        class="px-4 py-3  text-wrap group-hover/tr:text-black"
+                      >
+                     
+                      </td> -->
+                      <td class="px-4 py-3 group-hover/tr:text-black">
+                        {{ rItem.unitPrice | currency: "INR" }}
+                      </td>
+                      <td class="px-4 py-3 group-hover/tr:text-black">
+                        {{ rItem.qty }}
+                      </td>
+                      <td class="text-wrap px-4 py-3 group-hover/tr:text-black">
+                        {{ this._product.gstpercentage }}
+                      </td>
+                      <td class="px-4 py-3 group-hover/tr:text-black">
+                        {{ rItem.itemPrice | currency: "INR" }}
+                      </td>
+
+                      <td
+                        class="items-center px-4 py-3 group-hover/tr:font-bold group-hover/tr:text-gray-500"
+                      >
+                        <button
+                          id="apple-imac-27-dropdown-button"
+                          data-dropdown-toggle="apple-imac-27-dropdown"
+                          class="inline-flex items-center rounded-lg text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                          type="button"
+                          (click)="deleterItem(i, rItem.itemPrice)"
+                        >
+                          <div
+                            class="group/delete rounded-lg bg-red-100 p-1 transition-all duration-500 hover:bg-red-600 active:translate-y-1"
+                          >
+                            <svg
+                              class="h-4 w-4 text-red-600 group-hover/delete:text-red-100"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                              />
+                            </svg>
+                          </div>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div
+                  class="col-span-full flex h-80 items-center justify-center bg-purple-100"
+                  *ngIf="emptyVisiable"
+                >
+                  <tr>
+                    <td class="col-span-12">
+                      <img
+                        src="../../../../../assets/Img/9264882.svg"
+                        class="w-52"
+                        alt=""
+                      />
+                    </td>
+                  </tr>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Request form display end -->
+
+    <!-- total start -->
+    <!-- <div class="p-4 mt-4 bg-green-200 border border-green-300 rounded-lg">
+      <div class="flex">
+        <div class="w-4/5"></div>
+        <div class="w-1/5 flex items-center justify-between">
+          <div class="w-1/2">
+            <h1 class="font-bold text-green-800">Total Amount:</h1>
+          </div>
+          <div class="w-1/2 font-bold text-green-800 text-end">
+            <h1>{{ _totalPrice | currency : "INR" }}</h1>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <!-- total end -->
+
+    <div class="mt-4 rounded-lg border bg-white p-4 shadow-lg">
+      <div class="flex items-center">
+        <div class="w-4/5">
+          <div class="flex w-1/2">
+            <div>
+              <h1 class="font-bold text-purple-800">Total Amount:</h1>
+            </div>
+            <div class="ml-6 w-1/2 font-bold text-gray-800">
+              <h1>{{ _totalPrice | currency: "INR" }}</h1>
+            </div>
+          </div>
+        </div>
+        <div class="grid w-1/5 grid-cols-2">
+          <div></div>
+          <div>
+            <button
+              type="button"
+              (click)="postRequestDetails()"
+              class="ml-5 inline-flex items-center rounded-lg bg-purple-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:translate-y-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+            >
+              <h1 class="font-bold">Save</h1>
+              <svg
+                class="ms-2 h-3.5 w-3.5 rtl:rotate-180"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 10"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="animate__animated animate__fadeIn absolute right-4 top-20 justify-center"
+    *ngIf="successToast"
+  >
+    <app-delete-toast></app-delete-toast>
+  </div>
+</section>
+
+<!-- popup element -->
+<div
+  *ngIf="isSuccess"
+  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
+>
+  <div class="relative h-full w-full max-w-md p-4 md:h-auto">
+    <!-- Modal content -->
+    <div
+      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
+    >
+      <button
+        (click)="this.isSuccess = false"
+        type="button"
+        class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+        data-modal-toggle="successModal"
+      >
+        <svg
+          aria-hidden="true"
+          class="h-5 w-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+      <!-- w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 -->
+      <div
+        class="mx-auto mb-3.5 flex h-12 w-12 items-center justify-center p-2"
+      >
+        <!-- <svg aria-hidden="true" class="w-8 h-8 text-green-500 dark:text-green-400" fill="currentColor"
+          viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+            clip-rule="evenodd"></path>
+        </svg> -->
+        <iframe
+          class="w-20"
+          src="https://lottie.host/embed/dc778159-edb6-41d0-89ee-a87bdc8c96e8/XuNkfRRGgm.json"
+        ></iframe>
+
+        <span class="sr-only">Success</span>
+      </div>
+      <p class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+        Request Successfully Created
+      </p>
+
+      <p class="my-4 font-bold text-green-600">
+        Request ID :
+        <span class="my-3 cursor-pointer font-medium text-blue-600 underline">{{
+          _indentId
+        }}</span>
+      </p>
+      <!-- <button (click)="this.isSuccess=false"   type="button" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900">
+              Continue
+          </button> -->
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isOther"
+  class="fixed top-0 z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+>
+  <section>
+    <app-other-product
+      (closeToggle)="closeOtherProduct($event)"
+      (throwOtherProduct)="getOtherProduct($event)"
+    ></app-other-product>
+  </section>
+</div>

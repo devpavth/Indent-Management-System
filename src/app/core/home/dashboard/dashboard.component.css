@@ -1,0 +1,91 @@
+
+
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        
+        transform: scale(0.5);
+       
+    }
+
+    to {
+        opacity: 1;
+        /* Final opacity */
+        transform: scale(1);
+        /* Final scale */
+    }
+}
+
+.animate__zoomIn {
+    animation-name: zoomIn;
+    animation-duration: 6s;
+  
+    animation-fill-mode: both;
+
+}
+
+.custom-animation {
+    animation-duration: 6s;
+    animation-iteration-count: 1;
+}
+
+
+/* .textshadow {
+    text-shadow: 5px 5px rgb(77 55 47 / 20%)
+}
+
+.bg {
+    background-image: url(../../../../assets/Img/medium-shot-nurse-checking-man.jpg);
+    opacity: 90px;
+} */
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+        /* Change from 5px to -10px */
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 2s ease-in-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+
+        /* Change from 5px to -10px */
+    }
+
+    to {
+        opacity: 1;
+
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 2s ease-out;
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.zoom-in {
+    animation: zoomIn 7s ease-out;
+}
