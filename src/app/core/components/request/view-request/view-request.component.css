@@ -1,0 +1,15 @@
+.ssts{
+@apply text-green-500
+}
+.dsts{
+    @apply text-gray-500
+}
+.psts{
+    @apply text-blue-500
+}
+.rsts{
+    @apply text-red-500
+}
+.nsts{
+    @apply text-amber-500
+}

@@ -1,0 +1,16 @@
+
+  .animation-rotate{
+    animation-duration: 3s;
+    animation-name: slidein;
+  }
+  
+  @keyframes slidein {
+    from {
+      transform: rotateY(360deg);
+    }
+  
+    to {
+        transform: rotateY(0);
+    }
+  }
+  

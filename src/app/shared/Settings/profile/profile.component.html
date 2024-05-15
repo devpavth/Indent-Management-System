@@ -1,0 +1,142 @@
+<section class="">
+  <div class="p-4 sm:ml-64">
+    <div class="rounded-lg bg-white p-4">
+      <div>
+        <h1 class="mb-4 text-xl">Personal Details</h1>
+      </div>
+      <div class="flow-root rounded-lg border border-gray-100 py-3 shadow-sm">
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Name</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empFirstName }} {{ userDetail.empLastName }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Email</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empEmail }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Phone</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empPhone }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Gender</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empGender }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Date of Birth</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empDateofBirth | date: "dd-MM-yyyy" }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Country</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.country }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Address</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.addressLine1 }} {{ userDetail.addressLine2 }}
+              {{ userDetail.state }}, {{ userDetail.city }} -
+              {{ userDetail.pin }}.
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    <div class="mt-4 rounded-lg bg-white p-4">
+      <div>
+        <h1 class="mb-4 text-xl">Job Details</h1>
+      </div>
+      <div class="flow-root rounded-lg border border-gray-100 py-3 shadow-sm">
+        <dl class="-my-3 divide-y divide-gray-100 text-sm">
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">User ID</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.employeeId }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Join Date</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empJoiningDate | date: "dd-MM-yyyy" }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Role</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empRole }}
+            </dd>
+          </div>
+
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Department</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empDepartment }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Designation</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empDesignation }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Branch</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.branchName }}
+            </dd>
+          </div>
+          <div
+            class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
+          >
+            <dt class="font-medium text-gray-900">Flage</dt>
+            <dd class="text-gray-700 sm:col-span-2">
+              {{ userDetail.empFlag }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
