@@ -50,7 +50,7 @@ export class AddBranchComponent {
   }
   addDepartList(data: any) {
     this.isDepartment = true;
-    let departlist = { deptName: data };
+    let departlist = { deptName: data, deptStatus: 200 };
     this._department.push(departlist);
     console.log(this._department);
   }

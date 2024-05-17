@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.6:9010/';
+let Url = 'http://192.168.1.102:9010/';
 
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';

@@ -10,21 +10,10 @@
             <button routerLink="/home/employeeList">
               <svg
                 class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  class=""
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18 17.94 6M18 18 6.06 6"
-                />
+                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
+                <path class="" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M6 18 17.94 6M18 18 6.06 6" />
               </svg>
             </button>
           </div>
@@ -33,113 +22,61 @@
           </div>
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
-              <label
-                for="first_name"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >First name</label
-              >
-              <input
-                type="text"
-                formControlName="empFirstName"
-                (input)="onNameInput($event)"
-                class="input-form"
-                placeholder="John"
-                appFirstCapLetter
-                [ngClass]="{
+              <label for="first_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">First
+                name</label>
+              <input type="text" formControlName="empFirstName" (input)="onNameInput($event)" class="input-form"
+                placeholder="John" appFirstCapLetter [ngClass]="{
                   error:
                     addEmployeeForm.get('empFirstName')?.invalid &&
                     addEmployeeForm.get('empFirstName')?.touched
-                }"
-                required
-              />
-              <small
-                *ngIf="
+                }" required />
+              <small *ngIf="
                   addEmployeeForm?.get('empFirstName')?.invalid &&
                   addEmployeeForm?.get('empFirstName')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Name Should not be Empty!
               </small>
             </div>
             <div>
-              <label
-                for="last_name"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Last name</label
-              >
-              <input
-                type="text"
-                formControlName="empLastName"
-                (input)="onNameInput($event)"
-                class="input-form"
-                placeholder="Doe"
-                appFirstCapLetter
-                [ngClass]="{
+              <label for="last_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Last
+                name</label>
+              <input type="text" formControlName="empLastName" (input)="onNameInput($event)" class="input-form"
+                placeholder="Doe" appFirstCapLetter [ngClass]="{
                   error:
                     addEmployeeForm.get('empLastName')?.invalid &&
                     addEmployeeForm.get('empLastName')?.touched
-                }"
-                required
-              />
-              <small
-                *ngIf="
+                }" required />
+              <small *ngIf="
                   addEmployeeForm?.get('empLastName')?.invalid &&
                   addEmployeeForm?.get('empLastName')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Name Should not be Empty!
               </small>
             </div>
             <div>
-              <label
-                for="email-address-icon"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Email</label
-              >
+              <label for="email-address-icon"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Email</label>
               <div class="relative">
-                <div
-                  class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                >
-                  <svg
-                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 16"
-                  >
+                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
+                  <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
                     <path
-                      d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"
-                    />
+                      d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z" />
                     <path
-                      d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"
-                    />
+                      d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z" />
                   </svg>
                 </div>
-                <input
-                  type="email"
-                  #email
-                  (change)="verifyEmailId(email.value)"
-                  formControlName="empEmail"
-                  class="icon-input"
-                  autocomplete="email"
-                  placeholder="name@company.com"
-                  [ngClass]="{
+                <input type="email" #email (change)="verifyEmailId(email.value)" formControlName="empEmail"
+                  class="icon-input" autocomplete="email" placeholder="name@company.com" [ngClass]="{
                     error:
                       addEmployeeForm.get('empEmail')?.invalid &&
                       addEmployeeForm.get('empEmail')?.touched
-                  }"
-                  required
-                />
+                  }" required />
               </div>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empEmail')?.invalid &&
                   addEmployeeForm?.get('empEmail')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Invalid Email !
               </small>
               <small *ngIf="isVerifiedEmail" class="text-danger text-red-600">
@@ -148,52 +85,26 @@
             </div>
 
             <div>
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Phone</label
-              >
+              <label class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Phone</label>
               <div class="relative">
-                <div
-                  class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                >
-                  <svg
-                    class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
+                  <svg class="h-5 w-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path
-                      d="M7.978 4a2.553 2.553 0 0 0-1.926.877C4.233 6.7 3.699 8.751 4.153 10.814c.44 1.995 1.778 3.893 3.456 5.572 1.68 1.679 3.577 3.018 5.57 3.459 2.062.456 4.115-.073 5.94-1.885a2.556 2.556 0 0 0 .001-3.861l-1.21-1.21a2.689 2.689 0 0 0-3.802 0l-.617.618a.806.806 0 0 1-1.14 0l-1.854-1.855a.807.807 0 0 1 0-1.14l.618-.62a2.692 2.692 0 0 0 0-3.803l-1.21-1.211A2.555 2.555 0 0 0 7.978 4Z"
-                    />
+                      d="M7.978 4a2.553 2.553 0 0 0-1.926.877C4.233 6.7 3.699 8.751 4.153 10.814c.44 1.995 1.778 3.893 3.456 5.572 1.68 1.679 3.577 3.018 5.57 3.459 2.062.456 4.115-.073 5.94-1.885a2.556 2.556 0 0 0 .001-3.861l-1.21-1.21a2.689 2.689 0 0 0-3.802 0l-.617.618a.806.806 0 0 1-1.14 0l-1.854-1.855a.807.807 0 0 1 0-1.14l.618-.62a2.692 2.692 0 0 0 0-3.803l-1.21-1.211A2.555 2.555 0 0 0 7.978 4Z" />
                   </svg>
                 </div>
-                <input
-                  type="text"
-                  #phone
-                  class="icon-input"
-                  autocomplete="phone"
-                  (change)="verifyPhone(phone.value)"
-                  (input)="onPhoneNumberInput($event)"
-                  formControlName="empPhone"
-                  placeholder="123-456-970"
-                  [ngClass]="{
+                <input type="text" #phone class="icon-input" autocomplete="phone" (change)="verifyPhone(phone.value)"
+                  (input)="onPhoneNumberInput($event)" formControlName="empPhone" placeholder="123-456-970" [ngClass]="{
                     error:
                       addEmployeeForm.get('empPhone')?.invalid &&
                       addEmployeeForm.get('empPhone')?.touched
-                  }"
-                  required
-                />
+                  }" required />
               </div>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empPhone')?.invalid &&
                   addEmployeeForm?.get('empPhone')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Phone number must be in 10-Digit!
               </small>
               <small *ngIf="isPhoneNo" class="text-danger text-red-600">
@@ -201,289 +112,169 @@
               </small>
             </div>
             <div>
-              <label
-                for="Date of Birth"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Date of Birth</label
-              >
-              <input
-                type="date"
-                placeholder="dd/mm/yyyy"
-                formControlName="empDateofBirth"
-                class="input-form"
-                autocomplete="dateofbirth"
-                [ngClass]="{
+              <label for="Date of Birth" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Date of
+                Birth</label>
+              <input type="date" placeholder="dd/mm/yyyy" formControlName="empDateofBirth" class="input-form"
+                autocomplete="dateofbirth" [ngClass]="{
                   error:
                     addEmployeeForm.get('empDateofBirth')?.invalid &&
                     addEmployeeForm.get('empDateofBirth')?.touched
-                }"
-                required
-                [max]="maxDate"
-              />
-              <small
-                *ngIf="
+                }" required [max]="maxDate" />
+              <small *ngIf="
                   addEmployeeForm?.get('empDateofBirth')?.invalid &&
                   addEmployeeForm?.get('empDateofBirth')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Invalid DOB!
               </small>
             </div>
             <div>
-              <label
-                for="Gender"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Gender</label
-              >
+              <label for="Gender" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Gender</label>
               <!-- <input type="number" id="visitors" class="input-form" placeholder="" required /> -->
-              <select
-                class="input-form"
-                formControlName="empGender"
-                autocomplete="gender"
-                [ngClass]="{
+              <select class="input-form" formControlName="empGender" autocomplete="gender" [ngClass]="{
                   error:
                     addEmployeeForm.get('empGender')?.invalid &&
                     addEmployeeForm.get('empGender')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose Gender</option>
                 <option *ngFor="let gender of _gender">{{ gender }}</option>
               </select>
             </div>
-            <small
-              *ngIf="
+            <small *ngIf="
                 addEmployeeForm?.get('empGender')?.invalid &&
                 addEmployeeForm?.get('empGender')?.touched
-              "
-              class="text-danger text-red-600"
-            >
+              " class="text-danger text-red-600">
               Select Gender!
             </small>
           </div>
           <div class="mb-2">
-            <label
-              for="Address"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >Address</label
-            >
+            <label for="Address" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Address</label>
             <p class="note-text mb-2">
               Use a permanent address where you can receive mail.
             </p>
-            <input
-              type="text"
-              class="input-form"
-              formControlName="addressLine1"
-              autocomplete="street-address"
-              placeholder="Flat, House no., Building, Company, Apartment"
-              [ngClass]="{
+            <input type="text" class="input-form" formControlName="addressLine1" autocomplete="street-address"
+              placeholder="Flat, House no., Building, Company, Apartment" [ngClass]="{
                 error:
                   addEmployeeForm.get('addressLine1')?.invalid &&
                   addEmployeeForm.get('addressLine1')?.touched
-              }"
-              required
-            />
-            <small
-              *ngIf="
+              }" required />
+            <small *ngIf="
                 addEmployeeForm?.get('addressLine1')?.invalid &&
                 addEmployeeForm?.get('addressLine1')?.touched
-              "
-              class="text-danger text-red-600"
-            >
+              " class="text-danger text-red-600">
               Address Should be atleast 10 characters!
             </small>
           </div>
           <div class="mb-6">
-            <input
-              type="text"
-              formControlName="addressLine2"
-              autocomplete="street-address-level2"
-              class="input-form"
-              placeholder="Area, Street, Sector, Village"
-              [ngClass]="{
+            <input type="text" formControlName="addressLine2" autocomplete="street-address-level2" class="input-form"
+              placeholder="Area, Street, Sector, Village" [ngClass]="{
                 error:
                   addEmployeeForm.get('addressLine2')?.invalid &&
                   addEmployeeForm.get('addressLine2')?.touched
-              }"
-              required
-            />
-            <small
-              *ngIf="
+              }" required />
+            <small *ngIf="
                 addEmployeeForm?.get('addressLine2')?.invalid &&
                 addEmployeeForm?.get('addressLine2')?.touched
-              "
-              class="text-danger text-red-600"
-            >
+              " class="text-danger text-red-600">
               Address Should be atleast 10 characters!
             </small>
           </div>
 
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
-              <label
-                for="Country"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Country/Region</label
-              >
-              <select
-                class="input-form"
-                #countryvalue
-                formControlName="country"
-                autocomplete="country-name"
-                (change)="fetchState(countryvalue.value)"
-                [ngClass]="{
+              <label for="Country"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Country/Region</label>
+              <select class="input-form" #countryvalue formControlName="country" autocomplete="country-name"
+                (change)="fetchState(countryvalue.value)" [ngClass]="{
                   error:
                     addEmployeeForm.get('country')?.invalid &&
                     addEmployeeForm.get('country')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose Country</option>
                 <option value="India">India</option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('country')?.invalid &&
                   addEmployeeForm?.get('country')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Country Should not be Empty!
               </small>
             </div>
             <div>
-              <label
-                for="State"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >State</label
-              >
-              <select
-                class="input-form"
-                #statevalue
-                formControlName="state"
-                autocomplete="address-level1"
-                (change)="fetchCity(statevalue.value)"
-                [ngClass]="{
+              <label for="State" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">State</label>
+              <select class="input-form" #statevalue formControlName="state" autocomplete="address-level1"
+                (change)="fetchCity(statevalue.value)" [ngClass]="{
                   error:
                     addEmployeeForm.get('state')?.invalid &&
                     addEmployeeForm.get('state')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose State</option>
                 <option *ngFor="let state of _state" value="{{ state.sname }}">
                   {{ state.sname }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('state')?.invalid &&
                   addEmployeeForm?.get('state')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 State Should not be
               </small>
             </div>
 
             <div>
-              <label
-                for="city"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Town/City</label
-              >
-              <select
-                class="input-form"
-                formControlName="city"
-                autocomplete="city"
-                [ngClass]="{
+              <label for="city" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Town/City</label>
+              <select class="input-form" formControlName="city" autocomplete="city" [ngClass]="{
                   error:
                     addEmployeeForm.get('city')?.invalid &&
                     addEmployeeForm.get('city')?.touched
-                }"
-                required
-              >
+                }" required>
                 >
                 <option null selected disabled>Choose Town/City</option>
                 <option *ngFor="let city of _city" value="{{ city.name }}">
                   {{ city.name }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('city')?.invalid &&
                   addEmployeeForm?.get('city')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 City should not be empty!
               </small>
             </div>
             <div>
-              <label
-                for="Pincode"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Pincode</label
-              >
-              <input
-                type="text"
-                formControlName="pin"
-                (input)="onPinNumberInput($event)"
-                class="input-form"
-                autocomplete="postal-code"
-                placeholder="000 000"
-                [ngClass]="{
+              <label for="Pincode" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Pincode</label>
+              <input type="text" formControlName="pin" (input)="onPinNumberInput($event)" class="input-form"
+                autocomplete="postal-code" placeholder="000 000" [ngClass]="{
                   error:
                     addEmployeeForm.get('pin')?.invalid &&
                     addEmployeeForm.get('pin')?.touched
-                }"
-                required
-              />
-              <small
-                *ngIf="
+                }" required />
+
+              <small *ngIf="
                   addEmployeeForm?.get('pin')?.invalid &&
                   addEmployeeForm?.get('pin')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Invalid pin!
               </small>
             </div>
           </div>
         </div>
-        <div
-          class="mt-3 rounded-lg p-4 transition-all duration-500 md:px-10 md:pb-2 md:pt-4"
-        >
+        <div class="mt-3 rounded-lg p-4 transition-all duration-500 md:px-10 md:pb-2 md:pt-4">
           <div class="mb-4">
             <h2 class="sub-title">Job Information</h2>
           </div>
           <div class="mb-6 grid gap-6 md:grid-cols-6">
             <div class="col-span-3 mb-2">
-              <label
-                for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Joining Date</label
-              >
-              <input
-                type="date"
-                class="input-form"
-                formControlName="empJoiningDate"
-                required
-              />
+              <label for="Address" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Joining
+                Date</label>
+              <input type="date" class="input-form" formControlName="empJoiningDate" required />
             </div>
             <div class="col-span-3">
-              <label
-                for="Role"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Role</label
-              >
-              <select
-                class="input-form"
-                formControlName="empRole"
-                [ngClass]="{
+              <label for="Role" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Role</label>
+              <select class="input-form" formControlName="empRole" [ngClass]="{
                   error:
                     addEmployeeForm.get('empRole')?.invalid &&
                     addEmployeeForm.get('empRole')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled class="bg-purple-800 text-white">
                   Choose Role
                 </option>
@@ -491,222 +282,133 @@
                   {{ role }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empRole')?.invalid &&
                   addEmployeeForm?.get('empRole')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Field should not be Empty!
               </small>
             </div>
             <div class="col-span-3">
               <div class="flex items-center gap-2">
-                <label
-                  for="Branch"
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Branch</label
-                >
+                <label for="Branch" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Branch</label>
                 <div class="mb-2 flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
+                  <svg class="h-3 w-3 text-gray-400 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
                       d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                      clip-rule="evenodd"
-                    />
+                      clip-rule="evenodd" />
                   </svg>
 
-                  <a
-                    routerLink="/home/addBranch"
-                    class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                    >Add branch</a
-                  >
+                  <a routerLink="/home/addBranch" class="text-sm text-gray-400 hover:underline dark:text-blue-500">Add
+                    branch</a>
                 </div>
               </div>
-              <select
-                class="input-form"
-                #BranchName
-                formControlName="empBranch"
-                (click)="department(BranchName.value)"
+              <select class="input-form" #BranchName formControlName="empBranch" (click)="department(BranchName.value)"
                 [ngClass]="{
                   error:
                     addEmployeeForm.get('empBranch')?.invalid &&
                     addEmployeeForm.get('empBranch')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose Branch</option>
-                <option
-                  *ngFor="let branch of _branch"
-                  value="{{ branch.branchId }}"
-                >
+                <option *ngFor="let branch of _branch" value="{{ branch.branchId }}">
                   {{ branch.branchName }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empBranch')?.invalid &&
                   addEmployeeForm?.get('empBranch')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Branch should not be Empty!
               </small>
             </div>
 
             <div class="col-span-3">
               <div class="flex items-center gap-2">
-                <label
-                  for="Department"
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Department</label
-                >
+                <label for="Department"
+                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Department</label>
                 <button class="mb-2 flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
+                  <svg class="h-3 w-3 text-gray-400 dark:text-white" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
                       d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                      clip-rule="evenodd"
-                    />
+                      clip-rule="evenodd" />
                   </svg>
 
-                  <a
-                    (click)="viewAddDepartment('')"
-                    class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                    >Add Department</a
-                  >
+                  <a (click)="viewAddDepartment('')"
+                    class="text-sm text-gray-400 hover:underline dark:text-blue-500">Add Department</a>
                 </button>
               </div>
 
-              <select
-                class="input-form"
-                formControlName="empDepartment"
-                [ngClass]="{
+              <select class="input-form" formControlName="empDepartment" [ngClass]="{
                   error:
                     addEmployeeForm.get('empDepartment')?.invalid &&
                     addEmployeeForm.get('empDepartment')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose Department</option>
-                <option
-                  *ngFor="let Department of _department"
-                  value="{{ Department.deptId }}"
-                >
+                <option *ngFor="let Department of _department" value="{{ Department.deptId }}">
                   {{ Department.deptName }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empDepartment')?.invalid &&
                   addEmployeeForm?.get('empDepartment')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Department should not be null!
               </small>
             </div>
             <div class="col-span-4">
-              <label
-                for="Designation"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Designation</label
-              >
-              <select
-                class="input-form"
-                formControlName="empDesignation"
-                [ngClass]="{
+              <label for="Designation"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Designation</label>
+              <select class="input-form" formControlName="empDesignation" [ngClass]="{
                   error:
                     addEmployeeForm.get('empDesignation')?.invalid &&
                     addEmployeeForm.get('empDesignation')?.touched
-                }"
-              >
+                }">
                 <option null selected disabled>Choose Designation</option>
-                <option
-                  *ngFor="let designation of _designation"
-                  value="{{ designation }}"
-                >
+                <option *ngFor="let designation of _designation" value="{{ designation }}">
                   {{ designation }}
                 </option>
               </select>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empDesignation')?.invalid &&
                   addEmployeeForm?.get('empDesignation')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 Designation should not be null!
               </small>
             </div>
           </div>
           <div class="col-span-3">
-            <label
-              for="Country"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >Flag</label
-            >
+            <label for="Country" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Flag</label>
 
             <div class="flex">
               <div class="me-4 flex items-center">
-                <input
-                  type="radio"
-                  formControlName="empFlag"
-                  value="202"
+                <input type="radio" formControlName="empFlag" value="202"
                   class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   [ngClass]="{
                     error:
                       addEmployeeForm.get('empFlag')?.invalid &&
                       addEmployeeForm.get('empFlag')?.touched
-                  }"
-                />
-                <label
-                  for="inline-radio"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Authorized</label
-                >
+                  }" />
+                <label for="inline-radio"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Authorized</label>
               </div>
 
               <div class="me-4 flex items-center">
-                <input
-                  type="radio"
-                  value="403"
-                  formControlName="empFlag"
+                <input type="radio" value="403" formControlName="empFlag"
                   class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   [ngClass]="{
                     error:
                       addEmployeeForm.get('empFlag')?.invalid &&
                       addEmployeeForm.get('empFlag')?.touched
-                  }"
-                />
-                <label
-                  for="inline-2-radio"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Unauthorized</label
-                >
+                  }" />
+                <label for="inline-2-radio"
+                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Unauthorized</label>
               </div>
-              <small
-                *ngIf="
+              <small *ngIf="
                   addEmployeeForm?.get('empFlag')?.invalid &&
                   addEmployeeForm?.get('empFlag')?.touched
-                "
-                class="text-danger text-red-600"
-              >
+                " class="text-danger text-red-600">
                 choose flag!
               </small>
             </div>
@@ -717,24 +419,17 @@
           </p>
 
           <div class="mt-6 flex items-center justify-end gap-x-6">
-            <button
-              type="button"
-              (click)="this.addEmployeeForm.reset()"
-              class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
-            >
+            <button type="button" (click)="this.addEmployeeForm.reset()"
+              class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">
               Cancel
             </button>
 
-            <button
-              type="button"
-              (click)="addEmployee(addEmployeeForm.value)"
-              [disabled]="addEmployeeForm.invalid"
-              [ngClass]="{
-                'bg-gray-400': addEmployeeForm.invalid,
-                'hover:bg-gray-400': addEmployeeForm.invalid
+            <button type="button" (click)="addEmployee(addEmployeeForm.value)"
+              [disabled]="addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true " [ngClass]="{
+                'bg-gray-400': addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true,
+                'hover:bg-gray-400': addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true
               }"
-              class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
+              class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
               Submit
             </button>
           </div>
@@ -744,10 +439,8 @@
   </div>
 </section>
 
-<div
-  *ngIf="isSuccess"
-  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
->
+<div *ngIf="isSuccess"
+  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm">
   <app-success-pop></app-success-pop>
   <!-- <div class="relative p-4 w-full max-w-md h-full md:h-auto">
     
@@ -765,60 +458,37 @@
   </div> -->
 </div>
 
-<div
-  *ngIf="isDepartment"
-  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
->
+<div *ngIf="isDepartment"
+  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm">
   <div class="relative h-full w-full max-w-md p-4 md:h-auto">
     <!-- Modal content -->
     <div
-      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 shadow dark:bg-gray-800 sm:p-5"
-    >
+      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 shadow dark:bg-gray-800 sm:p-5">
       <div class="flex">
         <div
-          class="left-2.5 top-2.5 bg-transparent text-lg font-semibold text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-        >
+          class="left-2.5 top-2.5 bg-transparent text-lg font-semibold text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
           <h1>Add Department</h1>
         </div>
-        <button
-          (click)="viewAddDepartment(BranchName.value)"
-          type="button"
+        <button (click)="viewAddDepartment(BranchName.value)" type="button"
           class="right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-toggle="successModal"
-        >
-          <svg
-            aria-hidden="true"
-            class="h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
+          data-modal-toggle="successModal">
+          <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
               d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
+              clip-rule="evenodd"></path>
           </svg>
           <span class="sr-only">Close modal</span>
         </button>
       </div>
 
       <div class="mt-4 text-lg text-gray-900">
-        <label
-          for="pinCode"
-          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-          >Department</label
-        >
-        <input
-          type="text"
-          #branchDepart
+        <label for="pinCode" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Department</label>
+        <input type="text" #branchDepart
           class="w-3/4 rounded-l-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          required
-        />
-        <button
-          (click)="addBranchDepartment(BranchName.value, branchDepart.value)"
-          class="w-1/4 rounded-r-lg border border-blue-300 bg-blue-600 p-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-        >
+          required />
+        <button (click)="addBranchDepartment(BranchName.value, branchDepart.value)"
+          class="w-1/4 rounded-r-lg border border-blue-300 bg-blue-600 p-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
           Add
         </button>
       </div>
