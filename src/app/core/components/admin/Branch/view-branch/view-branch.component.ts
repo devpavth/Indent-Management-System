@@ -18,6 +18,7 @@ export class ViewBranchComponent implements OnInit {
   isSave: boolean = false;
   isEdit: boolean = true;
   date = new Date();
+  isclose = true
 
   constructor(
     private fb: FormBuilder,
