@@ -6,6 +6,7 @@
 }
 .psts{
     @apply text-blue-500
+
 }
 .rsts{
     @apply text-red-500
