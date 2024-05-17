@@ -250,7 +250,7 @@ export class AddEmployeeComponent implements OnInit {
 
   addBranchDepartment(branch: any, department: any) {
     console.log(department);
-    let list = [{ deptName: department }];
+    let list = [{ deptName: department, deptStatus: 200 }];
     console.log(list);
 
     this.branchService.addBranchDepartment(branch, list).subscribe(
