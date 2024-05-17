@@ -121,11 +121,10 @@ export class AddEmployeeComponent implements OnInit {
   //letter disable
   onPhoneNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    inputElement.value = inputElement.value.replace(/[^0-9]/g, ''); // Allow only digits (0-9)
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
 
-    // Ensure only 10 digits are allowed
     if (inputElement.value.length > 10) {
-      inputElement.value = inputElement.value.slice(0, 9); // Keep only the first 10 digits
+      inputElement.value = inputElement.value.slice(0, 9);
     }
   }
   onPinNumberInput(event: Event) {
