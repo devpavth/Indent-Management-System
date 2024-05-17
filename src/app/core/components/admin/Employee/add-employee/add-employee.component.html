@@ -424,10 +424,10 @@
               Cancel
             </button>
 
-            <button type="button" (click)="addEmployee(addEmployeeForm.value)" [disabled]="addEmployeeForm.invalid"
-              [ngClass]="{
-                'bg-gray-400': addEmployeeForm.invalid,
-                'hover:bg-gray-400': addEmployeeForm.invalid
+            <button type="button" (click)="addEmployee(addEmployeeForm.value)"
+              [disabled]="addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true " [ngClass]="{
+                'bg-gray-400': addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true,
+                'hover:bg-gray-400': addEmployeeForm.invalid || isVerifiedEmail == true || this.isPhoneNo == true
               }"
               class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
               Submit
