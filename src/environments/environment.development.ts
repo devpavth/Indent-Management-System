@@ -4,7 +4,7 @@ let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
 let baseRequestApi = 'requestindent';
 let baseBranchApi = 'branch';
-let baseDonarApi = 'donar';
+let baseDonarApi = 'donor';
 
 export const environment = {
   employee: Url + bassEmployeeApi,
