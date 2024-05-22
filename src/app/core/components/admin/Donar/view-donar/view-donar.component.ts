@@ -57,6 +57,9 @@ export class ViewDonarComponent implements OnInit {
         dstate: this._donor.dstate,
         dpinCode: this._donor.dpinCode,
       });
+      Object.keys(this.updateDonorForm.controls).forEach((controlName) => {
+        this.updateDonorForm.get(controlName)?.disable();
+      });
     });
   }
   updateDonor(data: any) {}
