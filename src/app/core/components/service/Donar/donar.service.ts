@@ -10,4 +10,10 @@ export class DonarService {
   addDonar(donarData: any) {
     return this.http.post(environment.addDonar, donarData);
   }
+  getAllDonor() {
+    return this.http.get(environment.getAllDonor);
+  }
+  viewDonor(donorId: any) {
+    return this.http.get(environment.viewDonorDetails + donorId);
+  }
 }
