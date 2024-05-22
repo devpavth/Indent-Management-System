@@ -22,6 +22,7 @@ export class ViewDonarComponent implements OnInit {
   isEdit: boolean = true;
   isSave: boolean = false;
   isDelete: boolean = false;
+  isSuccess: boolean = false;
   ngOnInit() {
     this.fetchDonorData();
   }
@@ -68,9 +69,16 @@ export class ViewDonarComponent implements OnInit {
   }
   updateDonor(data: any) {
     console.log(data);
-    this.donorService.updateDonor(this.donorId, data).subscribe((res) => {
-      console.log(res);
-    });
+    this.donorService.updateDonor(this.donorId, data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.isSuccess = true;
+        }
+      },
+    );
   }
   edit() {
     this.isEdit = false;
