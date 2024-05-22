@@ -46,6 +46,8 @@ export class ViewDonarComponent implements OnInit {
     });
   }
   fetchDonorData() {
+    this.isEdit = true;
+    this.isSave = false;
     this.donorService.viewDonor(this.donorId).subscribe((res) => {
       this._donor = res;
       this.updateDonorForm.patchValue({
