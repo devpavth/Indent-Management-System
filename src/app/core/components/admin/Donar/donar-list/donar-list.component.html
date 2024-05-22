@@ -1,5 +1,8 @@
 <div class="absolute left-0 right-0 z-20" *ngIf="isDonorView">
-  <app-view-donar [donorId]="donorId"></app-view-donar>
+  <app-view-donar
+    [donorId]="donorId"
+    (closeView)="close($event)"
+  ></app-view-donar>
 </div>
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
