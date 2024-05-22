@@ -35,21 +35,21 @@
               >
               <input
                 type="text"
-                formControlName="dfirstname"
+                formControlName="dfirstName"
                 class="input-form"
                 placeholder="John"
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dfirstname')?.invalid &&
-                    addDonarForm.get('dfirstname')?.touched
+                    addDonarForm.get('dfirstName')?.invalid &&
+                    addDonarForm.get('dfirstName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addDonarForm?.get('dfirstname')?.invalid &&
-                  addDonarForm?.get('dfirstname')?.touched
+                  addDonarForm?.get('dfirstName')?.invalid &&
+                  addDonarForm?.get('dfirstName')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -65,21 +65,21 @@
               >
               <input
                 type="text"
-                formControlName="dlastname"
+                formControlName="dlastName"
                 class="input-form"
                 placeholder="Doe"
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dfirstname')?.invalid &&
-                    addDonarForm.get('dfirstname')?.touched
+                    addDonarForm.get('dlastName')?.invalid &&
+                    addDonarForm.get('dlastName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addDonarForm?.get('dfirstname')?.invalid &&
-                  addDonarForm?.get('dfirstname')?.touched
+                  addDonarForm?.get('dlastName')?.invalid &&
+                  addDonarForm?.get('dlastName')?.touched
                 "
                 class="text-danger text-red-600"
               >
