@@ -17,6 +17,8 @@ export class DonarListComponent implements OnInit {
 
   fetchAllDonor() {
     this.donorService.getAllDonor().subscribe((res) => {
+      console.log(res);
+
       this._donar = res;
     });
   }
