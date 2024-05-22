@@ -397,7 +397,7 @@
                 </div>
               </div>
               <div class="mt-6 flex items-center justify-start gap-x-6">
-                <div>
+                <div *ngIf="isEdit">
                   <button
                     type="submit"
                     (click)="edit()"
@@ -423,6 +423,32 @@
                     </svg>
 
                     Edit
+                  </button>
+                </div>
+                <div *ngIf="isSave">
+                  <button
+                    type="submit"
+                    class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+                  >
+                    <svg
+                      class="mr-1 inline-flex h-5 w-5 items-center justify-center text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+
+                    Save
                   </button>
                 </div>
                 <button
