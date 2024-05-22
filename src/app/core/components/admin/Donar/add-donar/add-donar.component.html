@@ -1,10 +1,10 @@
 <section class="">
   <div class="p-4 sm:ml-64">
     <div class="md:flex md:justify-center">
-      <form class="md:w-2/3" [formGroup]="addDonarForm">
+      <form class="md:w-2/3" [formGroup]="addDonorForm">
         <div class="p-4 md:px-10 md:pb-2 md:pt-6">
           <div class="mb-6 flex justify-between">
-            <h1 class="text-xl font-semibold text-purple-800">Donar Details</h1>
+            <h1 class="text-xl font-semibold text-purple-800">Donor Details</h1>
             <button routerLink="/home/donarList">
               <svg
                 class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
@@ -41,15 +41,15 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dfirstName')?.invalid &&
-                    addDonarForm.get('dfirstName')?.touched
+                    addDonorForm.get('dfirstName')?.invalid &&
+                    addDonorForm.get('dfirstName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addDonarForm?.get('dfirstName')?.invalid &&
-                  addDonarForm?.get('dfirstName')?.touched
+                  addDonorForm?.get('dfirstName')?.invalid &&
+                  addDonorForm?.get('dfirstName')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -70,15 +70,15 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dlastName')?.invalid &&
-                    addDonarForm.get('dlastName')?.touched
+                    addDonorForm.get('dlastName')?.invalid &&
+                    addDonorForm.get('dlastName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addDonarForm?.get('dlastName')?.invalid &&
-                  addDonarForm?.get('dlastName')?.touched
+                  addDonorForm?.get('dlastName')?.invalid &&
+                  addDonorForm?.get('dlastName')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -119,16 +119,16 @@
                   placeholder="name@company.com"
                   [ngClass]="{
                     error:
-                      addDonarForm.get('demailId')?.invalid &&
-                      addDonarForm.get('demailId')?.touched
+                      addDonorForm.get('demailId')?.invalid &&
+                      addDonorForm.get('demailId')?.touched
                   }"
                   required
                 />
               </div>
               <small
                 *ngIf="
-                  addDonarForm?.get('demailId')?.invalid &&
-                  addDonarForm?.get('demailId')?.touched
+                  addDonorForm?.get('demailId')?.invalid &&
+                  addDonorForm?.get('demailId')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -167,8 +167,8 @@
                   placeholder="123-456-970"
                   [ngClass]="{
                     error:
-                      addDonarForm.get('dcontactNumber')?.invalid &&
-                      addDonarForm.get('dcontactNumber')?.touched
+                      addDonorForm.get('dcontactNumber')?.invalid &&
+                      addDonorForm.get('dcontactNumber')?.touched
                   }"
                   required
                 />
@@ -187,8 +187,8 @@
                 autocomplete="dcategory"
                 [ngClass]="{
                   error:
-                    addDonarForm.get('state')?.invalid &&
-                    addDonarForm.get('state')?.touched
+                    addDonorForm.get('state')?.invalid &&
+                    addDonorForm.get('state')?.touched
                 }"
               >
                 <option null selected disabled>Choose Category</option>
@@ -201,8 +201,8 @@
               </select>
               <small
                 *ngIf="
-                  addDonarForm?.get('state')?.invalid &&
-                  addDonarForm?.get('state')?.touched
+                  addDonorForm?.get('state')?.invalid &&
+                  addDonorForm?.get('state')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -226,15 +226,15 @@
               placeholder="Flat, House no., Building, Company, Apartment"
               [ngClass]="{
                 error:
-                  addDonarForm.get('daddress1')?.invalid &&
-                  addDonarForm.get('daddress1')?.touched
+                  addDonorForm.get('daddress1')?.invalid &&
+                  addDonorForm.get('daddress1')?.touched
               }"
               required
             />
             <small
               *ngIf="
-                addDonarForm?.get('daddress1')?.invalid &&
-                addDonarForm?.get('daddress1')?.touched
+                addDonorForm?.get('daddress1')?.invalid &&
+                addDonorForm?.get('daddress1')?.touched
               "
               class="text-danger text-red-600"
             >
@@ -250,15 +250,15 @@
               placeholder="Area, Street, Sector, Village"
               [ngClass]="{
                 error:
-                  addDonarForm.get('daddress2')?.invalid &&
-                  addDonarForm.get('daddress2')?.touched
+                  addDonorForm.get('daddress2')?.invalid &&
+                  addDonorForm.get('daddress2')?.touched
               }"
               required
             />
             <small
               *ngIf="
-                addDonarForm?.get('daddress2')?.invalid &&
-                addDonarForm?.get('daddress2')?.touched
+                addDonorForm?.get('daddress2')?.invalid &&
+                addDonorForm?.get('daddress2')?.touched
               "
               class="text-danger text-red-600"
             >
@@ -281,15 +281,15 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dcountry')?.invalid &&
-                    addDonarForm.get('dcountry')?.touched
+                    addDonorForm.get('dcountry')?.invalid &&
+                    addDonorForm.get('dcountry')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addDonarForm?.get('dcountry')?.invalid &&
-                  addDonarForm?.get('dcountry')?.touched
+                  addDonorForm?.get('dcountry')?.invalid &&
+                  addDonorForm?.get('dcountry')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -310,16 +310,16 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dstate')?.invalid &&
-                    addDonarForm.get('dstate')?.touched
+                    addDonorForm.get('dstate')?.invalid &&
+                    addDonorForm.get('dstate')?.touched
                 }"
                 required
               />
 
               <small
                 *ngIf="
-                  addDonarForm?.get('state')?.invalid &&
-                  addDonarForm?.get('state')?.touched
+                  addDonorForm?.get('state')?.invalid &&
+                  addDonorForm?.get('state')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -341,16 +341,16 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('dcity')?.invalid &&
-                    addDonarForm.get('dcity')?.touched
+                    addDonorForm.get('dcity')?.invalid &&
+                    addDonorForm.get('dcity')?.touched
                 }"
                 required
               />
 
               <small
                 *ngIf="
-                  addDonarForm?.get('city')?.invalid &&
-                  addDonarForm?.get('city')?.touched
+                  addDonorForm?.get('city')?.invalid &&
+                  addDonorForm?.get('city')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -371,16 +371,16 @@
                 placeholder="000 000"
                 [ngClass]="{
                   error:
-                    addDonarForm.get('pin')?.invalid &&
-                    addDonarForm.get('pin')?.touched
+                    addDonorForm.get('pin')?.invalid &&
+                    addDonorForm.get('pin')?.touched
                 }"
                 required
               />
 
               <small
                 *ngIf="
-                  addDonarForm?.get('pin')?.invalid &&
-                  addDonarForm?.get('pin')?.touched
+                  addDonorForm?.get('pin')?.invalid &&
+                  addDonorForm?.get('pin')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -391,7 +391,7 @@
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button
               type="button"
-              (click)="this.addDonarForm.reset()"
+              (click)="this.addDonorForm.reset()"
               class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
             >
               Cancel
@@ -399,7 +399,7 @@
 
             <button
               type="button"
-              (click)="submitDonarDetails(addDonarForm.value)"
+              (click)="submitDonarDetails(addDonorForm.value)"
               class="rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
               Submit

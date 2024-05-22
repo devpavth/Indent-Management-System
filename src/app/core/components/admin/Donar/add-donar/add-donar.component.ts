@@ -9,7 +9,7 @@ import { DonarService } from '../../../service/Donar/donar.service';
   styleUrl: './add-donar.component.css',
 })
 export class AddDonarComponent implements OnInit {
-  addDonarForm: FormGroup;
+  addDonorForm: FormGroup;
   _state: any;
   _city: any;
 
@@ -23,9 +23,9 @@ export class AddDonarComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private readonly countryStateCity: SharedServiceService,
-    private donarService: DonarService,
+    private donorService: DonarService,
   ) {
-    this.addDonarForm = this.fb.group({
+    this.addDonorForm = this.fb.group({
       dfirstName: ['', [Validators.required]],
       dlastName: ['', [Validators.required]],
       dcontactNumber: ['', [Validators.required]],
@@ -55,7 +55,7 @@ export class AddDonarComponent implements OnInit {
   }
   submitDonarDetails(data: any) {
     console.log(data);
-    this.donarService.addDonar(data).subscribe((res) => {
+    this.donorService.addDonar(data).subscribe((res) => {
       console.log(res);
     });
   }
