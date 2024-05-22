@@ -26,8 +26,8 @@
               </svg>
             </button>
           </div>
-          <div class="mb-6 grid gap-6 md:grid-cols-2">
-            <div>
+          <div class="mb-6 grid gap-6 md:grid-cols-6">
+            <div class="col-span-3">
               <label
                 for="first_name"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -57,7 +57,7 @@
               </small>
             </div>
 
-            <div>
+            <div class="col-span-3">
               <label
                 for="last_name"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -86,8 +86,57 @@
                 Name Should not be Empty!
               </small>
             </div>
-
-            <div>
+            <div class="col-span-3">
+              <label
+                for="email-address-icon"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Email</label
+              >
+              <div class="relative">
+                <div
+                  class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
+                >
+                  <svg
+                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 16"
+                  >
+                    <path
+                      d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"
+                    />
+                    <path
+                      d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="email"
+                  #email
+                  formControlName="demailId"
+                  class="icon-input"
+                  autocomplete="email"
+                  placeholder="name@company.com"
+                  [ngClass]="{
+                    error:
+                      addDonarForm.get('demailId')?.invalid &&
+                      addDonarForm.get('demailId')?.touched
+                  }"
+                  required
+                />
+              </div>
+              <small
+                *ngIf="
+                  addDonarForm?.get('demailId')?.invalid &&
+                  addDonarForm?.get('demailId')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid Email !
+              </small>
+            </div>
+            <div class="col-span-3">
               <label
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Phone</label
@@ -126,7 +175,43 @@
                 />
               </div>
             </div>
+            <div class="col-span-4">
+              <label
+                for="donarCategory"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Donar Category</label
+              >
+              <select
+                class="input-form"
+                #statevalue
+                formControlName="dcategory"
+                autocomplete="dcategory"
+                [ngClass]="{
+                  error:
+                    addDonarForm.get('state')?.invalid &&
+                    addDonarForm.get('state')?.touched
+                }"
+              >
+                <option null selected disabled>Choose Category</option>
+                <option
+                  *ngFor="let dcat of _donarCategory"
+                  value="{{ dcat.value }}"
+                >
+                  {{ dcat.located }}
+                </option>
+              </select>
+              <small
+                *ngIf="
+                  addDonarForm?.get('state')?.invalid &&
+                  addDonarForm?.get('state')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                State Should not be
+              </small>
+            </div>
           </div>
+
           <div class="mb-2">
             <label
               for="Address"

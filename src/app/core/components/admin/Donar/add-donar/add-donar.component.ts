@@ -12,15 +12,23 @@ export class AddDonarComponent {
   addDonarForm: FormGroup;
   _state: any;
   _city: any;
+
+  _donarCategory: any = [
+    { located: 'Local Donor', value: 125 },
+    { located: 'Existing Donor', value: 126 },
+    { located: 'International Donor', value: 127 },
+  ];
   constructor(
     private fb: FormBuilder,
     private readonly countryStateCity: SharedServiceService,
     private donarService: DonarService,
   ) {
     this.addDonarForm = this.fb.group({
-      dfirstname: ['', [Validators.required]],
-      dlastname: ['', [Validators.required]],
+      dfirstName: ['', [Validators.required]],
+      dlastName: ['', [Validators.required]],
       dcontactNumber: ['', [Validators.required]],
+      demailId: ['', [Validators.required]],
+      dcategory: ['', [Validators.required]],
       daddress1: ['', [Validators.required]],
       daddress2: ['', [Validators.required]],
       dcity: ['', [Validators.required]],
