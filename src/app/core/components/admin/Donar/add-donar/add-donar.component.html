@@ -56,7 +56,6 @@
                 Name Should not be Empty!
               </small>
             </div>
-
             <div class="col-span-3">
               <label
                 for="last_name"
@@ -274,25 +273,23 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Country/Region</label
               >
-              <select
-                class="input-form"
-                #countryvalue
+              <input
+                type="text"
                 formControlName="dcountry"
-                autocomplete="country-name"
-                (change)="fetchState(countryvalue.value)"
+                class="input-form"
+                placeholder="country"
+                appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('country')?.invalid &&
-                    addDonarForm.get('country')?.touched
+                    addDonarForm.get('dcountry')?.invalid &&
+                    addDonarForm.get('dcountry')?.touched
                 }"
-              >
-                <option null selected disabled>Choose Country</option>
-                <option value="India">India</option>
-              </select>
+                required
+              />
               <small
                 *ngIf="
-                  addDonarForm?.get('country')?.invalid &&
-                  addDonarForm?.get('country')?.touched
+                  addDonarForm?.get('dcountry')?.invalid &&
+                  addDonarForm?.get('dcountry')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -305,23 +302,20 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >State</label
               >
-              <select
-                class="input-form"
-                #statevalue
+              <input
+                type="text"
                 formControlName="dstate"
-                autocomplete="state"
-                (change)="fetchCity(statevalue.value)"
+                class="input-form"
+                placeholder="State"
+                appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('state')?.invalid &&
-                    addDonarForm.get('state')?.touched
+                    addDonarForm.get('dstate')?.invalid &&
+                    addDonarForm.get('dstate')?.touched
                 }"
-              >
-                <option null selected disabled>Choose State</option>
-                <option *ngFor="let state of _state" value="{{ state.sname }}">
-                  {{ state.sname }}
-                </option>
-              </select>
+                required
+              />
+
               <small
                 *ngIf="
                   addDonarForm?.get('state')?.invalid &&
@@ -339,23 +333,20 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Town/City</label
               >
-              <select
-                class="input-form"
+              <input
+                type="text"
                 formControlName="dcity"
-                autocomplete="city"
+                class="input-form"
+                placeholder="City"
+                appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addDonarForm.get('city')?.invalid &&
-                    addDonarForm.get('city')?.touched
+                    addDonarForm.get('dcity')?.invalid &&
+                    addDonarForm.get('dcity')?.touched
                 }"
                 required
-              >
-                >
-                <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let city of _city" value="{{ city.name }}">
-                  {{ city.name }}
-                </option>
-              </select>
+              />
+
               <small
                 *ngIf="
                   addDonarForm?.get('city')?.invalid &&
