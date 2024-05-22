@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { DonarService } from '../../../service/Donar/donar.service';
@@ -8,16 +8,18 @@ import { DonarService } from '../../../service/Donar/donar.service';
   templateUrl: './add-donar.component.html',
   styleUrl: './add-donar.component.css',
 })
-export class AddDonarComponent {
+export class AddDonarComponent implements OnInit {
   addDonarForm: FormGroup;
   _state: any;
   _city: any;
 
-  _donarCategory: any = [
+  _donarCategory: any[] = [
     { located: 'Local Donor', value: 125 },
     { located: 'Existing Donor', value: 126 },
     { located: 'International Donor', value: 127 },
   ];
+
+  ngOnInit(): void {}
   constructor(
     private fb: FormBuilder,
     private readonly countryStateCity: SharedServiceService,
@@ -37,6 +39,7 @@ export class AddDonarComponent {
       dpinCode: ['', [Validators.required]],
     });
   }
+
   fetchState(selectedValue: string) {
     console.log(selectedValue);
 
