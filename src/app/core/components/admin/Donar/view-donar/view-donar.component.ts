@@ -47,6 +47,7 @@ export class ViewDonarComponent implements OnInit {
     this.donorService.viewDonor(this.donorId).subscribe((res) => {
       this._donor = res;
       this.updateDonorForm.patchValue({
+        donorId: this._donor.donorId,
         dfirstName: this._donor.dfirstName,
         dlastName: this._donor.dlastName,
         dcontactNumber: this._donor.dcontactNumber,
@@ -66,6 +67,9 @@ export class ViewDonarComponent implements OnInit {
   }
   updateDonor(data: any) {
     console.log(data);
+    this.donorService.updateDonor(this.donorId, data).subscribe((res) => {
+      console.log(res);
+    });
   }
   edit() {
     this.isEdit = false;

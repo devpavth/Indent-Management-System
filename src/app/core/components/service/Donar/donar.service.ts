@@ -16,4 +16,7 @@ export class DonarService {
   viewDonor(donorId: any) {
     return this.http.get(environment.viewDonorDetails + donorId);
   }
+  updateDonor(id: any, data: any) {
+    return this.http.post(environment.updateDonor + id, data);
+  }
 }
