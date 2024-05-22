@@ -8,7 +8,7 @@ import { DonarService } from '../../../service/Donar/donar.service';
 })
 export class DonarListComponent implements OnInit {
   _donar: any;
-  isDonorView: boolean = true;
+  isDonorView: boolean = false;
   donorId: any;
   constructor(private donorService: DonarService) {}
   ngOnInit() {
@@ -23,5 +23,9 @@ export class DonarListComponent implements OnInit {
 
   viewDonar(data: any) {
     this.donorId = data;
+    this.isDonorView = true;
+  }
+  close(data: boolean) {
+    this.isDonorView = data;
   }
 }
