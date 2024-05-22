@@ -80,8 +80,15 @@ export class ViewDonarComponent implements OnInit {
     });
   }
   deleteDonor() {
-    this.donorService.deleteDonor(this.donorId).subscribe((res) => {
-      console.log(res);
-    });
+    this.donorService.deleteDonor(this.donorId).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.closeView.emit(false);
+        }
+      },
+    );
   }
 }
