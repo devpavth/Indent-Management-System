@@ -42,6 +42,7 @@ export const environment = {
   getAllDonor: Url + baseDonarApi + '/getalldonors',
   viewDonorDetails: Url + baseDonarApi + '/getdonor/',
   updateDonor: Url + baseDonarApi + '/updatedonor/',
+  deleteDonor: Url + baseDonarApi + '/deletedonor/',
 
   getHsnCode: Url + baseRequestApi + '/hsncode/',
 

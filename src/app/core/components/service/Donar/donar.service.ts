@@ -19,4 +19,7 @@ export class DonarService {
   updateDonor(id: any, data: any) {
     return this.http.post(environment.updateDonor + id, data);
   }
+  deleteDonor(id: any) {
+    return this.http.post(environment.deleteDonor + id, id);
+  }
 }
