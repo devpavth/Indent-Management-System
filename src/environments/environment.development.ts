@@ -39,6 +39,8 @@ export const environment = {
   updateBranch: Url + baseBranchApi + '/updatebranch',
 
   addDonar: Url + baseDonarApi + '/addnewdonor',
+  getAllDonor: Url + baseDonarApi + '/getalldonors',
+  viewDonorDetails: Url + baseDonarApi + '/getdonor/',
 
   getHsnCode: Url + baseRequestApi + '/hsncode/',
 
