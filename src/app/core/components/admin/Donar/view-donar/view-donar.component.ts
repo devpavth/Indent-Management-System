@@ -19,6 +19,8 @@ export class ViewDonarComponent implements OnInit {
   ];
 
   _donor: any;
+  isEdit: boolean = true;
+  isSave: boolean = false;
   ngOnInit() {
     this.fetchDonorData();
   }
@@ -63,6 +65,12 @@ export class ViewDonarComponent implements OnInit {
     });
   }
   updateDonor(data: any) {}
-  edit() {}
+  edit() {
+    this.isEdit = false;
+    this.isSave = true;
+    Object.keys(this.updateDonorForm.controls).forEach((controlName) => {
+      this.updateDonorForm.get(controlName)?.enable();
+    });
+  }
   deleteDonor() {}
 }
