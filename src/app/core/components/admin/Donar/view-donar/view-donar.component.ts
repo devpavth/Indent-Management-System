@@ -21,6 +21,7 @@ export class ViewDonarComponent implements OnInit {
   _donor: any;
   isEdit: boolean = true;
   isSave: boolean = false;
+  isDelete: boolean = false;
   ngOnInit() {
     this.fetchDonorData();
   }
@@ -78,5 +79,9 @@ export class ViewDonarComponent implements OnInit {
       this.updateDonorForm.get(controlName)?.enable();
     });
   }
-  deleteDonor() {}
+  deleteDonor() {
+    this.donorService.deleteDonor(this.donorId).subscribe((res) => {
+      console.log(res);
+    });
+  }
 }
