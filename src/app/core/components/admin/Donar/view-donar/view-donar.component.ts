@@ -64,7 +64,9 @@ export class ViewDonarComponent implements OnInit {
       });
     });
   }
-  updateDonor(data: any) {}
+  updateDonor(data: any) {
+    console.log(data);
+  }
   edit() {
     this.isEdit = false;
     this.isSave = true;
