@@ -29,5 +29,6 @@ export class DonarListComponent implements OnInit {
   }
   close(data: boolean) {
     this.isDonorView = data;
+    this.fetchAllDonor();
   }
 }
