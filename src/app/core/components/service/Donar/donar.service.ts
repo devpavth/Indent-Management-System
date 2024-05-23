@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DonarService {
   constructor(private http: HttpClient) {}
+
   addDonar(donarData: any) {
     return this.http.post(environment.addDonar, donarData);
   }

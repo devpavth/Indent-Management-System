@@ -1,4 +1,5 @@
 let Url = 'http://192.168.1.102:9010/';
+let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
@@ -11,6 +12,7 @@ export const environment = {
   addEmployee: Url + bassEmployeeApi + '/addnewemp',
   countrySateCity: Url + 'api/',
   login: Url + 'employee/login',
+  allCountry: location + 'countries',
   getUserDetail: Url + bassEmployeeApi + '/getemployee/',
   getAllEmployeeDetails: Url + bassEmployeeApi + '/getallemp',
   verifiedID: Url + bassEmployeeApi + '/verifyempid',
