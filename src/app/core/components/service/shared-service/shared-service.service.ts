@@ -12,6 +12,11 @@ export class SharedServiceService {
   private uniqueToken =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfZW1haWwiOiJqYWdhbmVkaXR6QGdtYWlsLmNvbSIsImFwaV90b2tlbiI6IlhUMWI1a0V4eFhUM25DYzExTXV2cmI1Z2dNbFpsR0J6cWhVMTRUZ1JxX05sTnE2V1drUDlQNFIwOTdWYzJCaEtHT2cifSwiZXhwIjoxNzE2NTIyMzcyfQ.HYLXEKxo5pq2PM-UwScHHTMFCviFLLno4LsaCwVSljU';
 
+  private headers = new HttpHeaders({
+    Accept: 'application/json',
+    Authorization: `Bearer ${this.uniqueToken}`,
+    'Bypass-Common-Token': 'true',
+  });
   getState(data: any) {
     return this.http.get(environment.countrySateCity + 'Country/' + data);
   }
@@ -19,12 +24,16 @@ export class SharedServiceService {
     return this.http.get(environment.countrySateCity + data);
   }
   getAllCountry() {
-    const headers = new HttpHeaders({
-      Accept: 'application/json',
-      Authorization: `Bearer ${this.uniqueToken}`,
-      'Bypass-Common-Token': 'true', // Custom header to bypass the interceptor token
+    return this.http.get(environment.allCountry, { headers: this.headers });
+  }
+  getAllState(data: any) {
+    return this.http.get(environment.allState + data, {
+      headers: this.headers,
     });
-
-    return this.http.get(environment.allCountry, { headers });
+  }
+  getAllCity(data: any) {
+    return this.http.get(environment.allCity + data, {
+      headers: this.headers,
+    });
   }
 }

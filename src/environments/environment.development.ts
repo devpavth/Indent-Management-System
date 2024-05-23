@@ -13,6 +13,8 @@ export const environment = {
   countrySateCity: Url + 'api/',
   login: Url + 'employee/login',
   allCountry: location + 'countries',
+  allState: location + 'states/',
+  allCity: location + 'cities/',
   getUserDetail: Url + bassEmployeeApi + '/getemployee/',
   getAllEmployeeDetails: Url + bassEmployeeApi + '/getallemp',
   verifiedID: Url + bassEmployeeApi + '/verifyempid',
