@@ -273,23 +273,30 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Country/Region</label
               >
-              <input
-                type="text"
-                formControlName="dcountry"
+              <select
                 class="input-form"
-                placeholder="country"
-                appFirstCapLetter
+                #countryvalue
+                formControlName="dcountry"
+                autocomplete="country-name"
+                (change)="fetchState(countryvalue.value)"
                 [ngClass]="{
                   error:
-                    addDonorForm.get('dcountry')?.invalid &&
-                    addDonorForm.get('dcountry')?.touched
+                    addDonorForm.get('country')?.invalid &&
+                    addDonorForm.get('country')?.touched
                 }"
-                required
-              />
+              >
+                <option null selected disabled>Choose Country</option>
+                <option
+                  *ngFor="let country of _country"
+                  value="{{ country.country_name }}"
+                >
+                  {{ country.country_name }}
+                </option>
+              </select>
               <small
                 *ngIf="
-                  addDonorForm?.get('dcountry')?.invalid &&
-                  addDonorForm?.get('dcountry')?.touched
+                  addDonorForm?.get('country')?.invalid &&
+                  addDonorForm?.get('country')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -302,20 +309,25 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >State</label
               >
-              <input
-                type="text"
-                formControlName="dstate"
+              <select
                 class="input-form"
-                placeholder="State"
-                appFirstCapLetter
+                #state
+                formControlName="dstate"
+                (change)="fetchCity(state.value)"
                 [ngClass]="{
                   error:
-                    addDonorForm.get('dstate')?.invalid &&
-                    addDonorForm.get('dstate')?.touched
+                    addDonorForm.get('state')?.invalid &&
+                    addDonorForm.get('state')?.touched
                 }"
-                required
-              />
-
+              >
+                <option null selected disabled>Choose State</option>
+                <option
+                  *ngFor="let state of _state"
+                  value="{{ state.state_name }}"
+                >
+                  {{ state.state_name }}
+                </option>
+              </select>
               <small
                 *ngIf="
                   addDonorForm?.get('state')?.invalid &&
@@ -333,20 +345,23 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Town/City</label
               >
-              <input
-                type="text"
-                formControlName="dcity"
+              <select
                 class="input-form"
-                placeholder="City"
-                appFirstCapLetter
+                formControlName="dcity"
+                autocomplete="city"
                 [ngClass]="{
                   error:
                     addDonorForm.get('dcity')?.invalid &&
                     addDonorForm.get('dcity')?.touched
                 }"
                 required
-              />
-
+              >
+                >
+                <option null selected disabled>Choose Town/City</option>
+                <option *ngFor="let city of _city" value="{{ city.city_name }}">
+                  {{ city.city_name }}
+                </option>
+              </select>
               <small
                 *ngIf="
                   addDonorForm?.get('city')?.invalid &&
@@ -371,8 +386,8 @@
                 placeholder="000 000"
                 [ngClass]="{
                   error:
-                    addDonorForm.get('pin')?.invalid &&
-                    addDonorForm.get('pin')?.touched
+                    addDonorForm.get('dpinCode')?.invalid &&
+                    addDonorForm.get('dpinCode')?.touched
                 }"
                 required
               />
