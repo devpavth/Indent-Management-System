@@ -1,0 +1,551 @@
+<div class="p-4 sm:ml-64">
+  <section class="left-0 right-0 top-0 h-screen">
+    <div class="mx-40">
+      <div class="bg-white">
+        <div class="flex items-center justify-between bg-purple-50">
+          <div class="m-4">
+            <button (click)="closeView.emit(false)">
+              <svg
+                class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  class=""
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18 17.94 6M18 18 6.06 6"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="mr-4">
+            <h1 class="text-xl font-semibold text-purple-800">View Request</h1>
+          </div>
+        </div>
+        <div class="items-center justify-between">
+          <div class=" ">
+            <div class="mx-auto">
+              <!-- Card -->
+              <div class="flex flex-col p-4 sm:p-10">
+                <!-- Grid -->
+                <div class="flex justify-between">
+                  <div>
+                    <img
+                      src="../../../../../assets/Img/logo_apd.png"
+                      alt=""
+                      class="h-32"
+                    />
+
+                    <!-- <h1 class="mt-2 text-lg md:text-xl font-semibold text-blue-600">Preline Inc.</h1> -->
+                  </div>
+                  <!-- Col -->
+
+                  <div class="text-end">
+                    <h2
+                      class="text-2xl font-semibold text-gray-800 md:text-3xl"
+                    >
+                      Request#
+                    </h2>
+                    <span class="mt-1 block text-gray-500">{{
+                      _requestDetails.requestNo
+                    }}</span>
+
+                    <address class="mt-2 font-medium not-italic text-gray-800">
+                      {{ _requestDetails.requisitioner }}<br />
+                      <!-- {{_requestDetails.empDept }}<br> -->
+                    </address>
+                  </div>
+                  <!-- Col -->
+                </div>
+                <div class="mt-8 grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <h3
+                      class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
+                    >
+                      Created By :
+                    </h3>
+                    <h3
+                      class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
+                    >
+                      {{ _requestDetails.empName }}
+                    </h3>
+
+                    <address
+                      class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
+                    >
+                      {{ _requestDetails.empRole }}<br />
+                      {{ _requestDetails.branchName }}<br />
+                      {{ _requestDetails.empDept }}<br />
+                    </address>
+                  </div>
+                  <!-- Col -->
+
+                  <div class="space-y-2 sm:text-end">
+                    <!-- Grid -->
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
+                      <dl class="grid gap-x-3 sm:grid-cols-5">
+                        <dt
+                          class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                        >
+                          Date:
+                        </dt>
+                        <dd
+                          class="col-span-2 text-gray-500 dark:text-neutral-500"
+                        >
+                          {{ _requestDetails.createdOn | date: "dd-MMMM-yyyy" }}
+                        </dd>
+                      </dl>
+                      <dl class="grid gap-x-3 sm:grid-cols-5">
+                        <dt
+                          class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                        >
+                          Time:
+                        </dt>
+                        <dd
+                          class="col-span-2 text-gray-500 dark:text-neutral-500"
+                        >
+                          {{ _requestDetails.createdOn | date: "shortTime" }}
+                        </dd>
+                      </dl>
+                    </div>
+                    <!-- End Grid -->
+                  </div>
+                  <!-- Col -->
+                </div>
+                <!-- Table -->
+                <div class="mt-6 flex flex-col">
+                  <div class="-m-1.5 overflow-x-auto">
+                    <div class="inline-block min-w-full p-1.5 align-middle">
+                      <div class="overflow-hidden rounded-lg border">
+                        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+                          <table
+                            class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
+                          >
+                            <thead
+                              class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+                            >
+                              <tr>
+                                <th scope="col" class="px-6 py-3">Product</th>
+                                <th scope="col" class="px-6 py-3">
+                                  Unit Price
+                                </th>
+                                <th scope="col" class="px-6 py-3">Qty</th>
+                                <th scope="col" class="px-6 py-3">GST %</th>
+                                <th scope="col" class="px-6 py-3">
+                                  Item Price(Incl GST)
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="
+                                  let product of _requestDetails.productDetails
+                                "
+                                class="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
+                              >
+                                <td
+                                  class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
+                                >
+                                  <p class="font-bold text-black">
+                                    {{ product.itemName }}
+                                  </p>
+                                  <p class="text-gray-800">
+                                    {{ product.brandName }} {{ product.model }}
+                                  </p>
+                                  <p class="w-48 text-xs text-gray-400">
+                                    {{ product.description }}
+                                  </p>
+                                </td>
+                                <td
+                                  class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
+                                >
+                                  {{ product.unitPrice | currency: "INR" }}
+                                </td>
+                                <td class="px-6 py-4">
+                                  <div class="flex items-center">
+                                    <button
+                                      (click)="productEdit(product)"
+                                      class="me-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white p-1 text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                                      type="button"
+                                    >
+                                      <span class="sr-only"
+                                        >Quantity button</span
+                                      >
+                                      <svg
+                                        class="h-3 w-3"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 18 2"
+                                      >
+                                        <path
+                                          stroke="currentColor"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M1 1h16"
+                                        />
+                                      </svg>
+                                    </button>
+                                    <div>
+                                      <input
+                                        type="number"
+                                        id="first_product"
+                                        class="block w-14 rounded-lg border border-gray-300 bg-gray-50 px-2.5 py-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                        value="{{ product.qty }}"
+                                        required
+                                      />
+                                    </div>
+                                    <button
+                                      class="ms-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white p-1 text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                                      type="button"
+                                    >
+                                      <span class="sr-only"
+                                        >Quantity button</span
+                                      >
+                                      <svg
+                                        class="h-3 w-3"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 18 18"
+                                      >
+                                        <path
+                                          stroke="currentColor"
+                                          stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M9 1v16M1 9h16"
+                                        />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </td>
+                                <td
+                                  class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
+                                >
+                                  $599
+                                </td>
+                                <td class="px-6 py-4">
+                                  {{ product.itemPrice }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Table -->
+
+                <!-- Flex -->
+                <div class="mt-8 flex sm:justify-end">
+                  <div class="w-full max-w-2xl space-y-2 sm:text-end">
+                    <!-- Grid -->
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
+                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
+                <dt class="col-span-3 font-semibold text-gray-800">Subtotal:</dt>
+                <dd class="col-span-2 text-gray-500">$2750.00</dd>
+              </dl> -->
+
+                      <dl class="grid gap-x-3 sm:grid-cols-5">
+                        <dt class="col-span-3 font-semibold text-gray-800">
+                          Total:
+                        </dt>
+                        <dd class="col-span-2 text-gray-500">
+                          {{ this._requestDetails.totalPrice }}
+                        </dd>
+                      </dl>
+
+                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
+                <dt class="col-span-3 font-semibold text-gray-800">Tax:</dt>
+                <dd class="col-span-2 text-gray-500">$39.00</dd>
+              </dl> -->
+
+                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
+                <dt class="col-span-3 font-semibold text-gray-800">Amount paid:</dt>
+                <dd class="col-span-2 text-gray-500">$2789.00</dd>
+              </dl> -->
+
+                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
+                <dt class="col-span-3 font-semibold text-gray-800">Due balance:</dt>
+                <dd class="col-span-2 text-gray-500">$0.00</dd>
+              </dl> -->
+                    </div>
+                    <!-- End Grid -->
+                  </div>
+                </div>
+                <div
+                  class="my-4 flex rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
+                  role="alert"
+                >
+                  <svg
+                    class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                    />
+                  </svg>
+                  <span class="sr-only">Info</span>
+                  <div>
+                    <span class="font-medium"
+                      >Ensure that these requirements are met:</span
+                    >
+                    <ul class="mt-1.5 list-inside list-disc">
+                      <li>Request Amount and Approval shout be same</li>
+                      <li>
+                        Donor Amount Shout also match with the Requested &
+                        Approval Amount
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div
+                  class="mb-4 rounded-lg border-purple-500/10 bg-white p-4 backdrop-blur-lg"
+                >
+                  <div>
+                    <label
+                      class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                      for="file_input"
+                      >Finance Approval Amount</label
+                    >
+                    <h1 *ngIf="isApprovelAmt">{{ approvelAmt }}</h1>
+                    <div *ngIf="!isApprovelAmt" class="flex">
+                      <input
+                        placeholder="₹"
+                        [(ngModel)]="approvelAmt"
+                        class="block w-80 truncate rounded-l-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                        type="number"
+                      />
+                      <div class="">
+                        <button
+                          (click)="isApprovelAmt = true"
+                          type="button"
+                          class="btn-primary1 whitespace-nowrap rounded-r-lg"
+                        >
+                          <svg
+                            class="h-6 w-6 text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M5 11.917 9.724 16.5 19 7.5"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
+                >
+                  <form
+                    class="flex gap-5"
+                    [formGroup]="form"
+                    (ngSubmit)="onSubmit()"
+                  >
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <label
+                          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                          for="donor_input"
+                        >
+                          Select Donor
+                        </label>
+                        <button class="mb-2 flex items-center gap-1">
+                          <svg
+                            class="h-3 w-3 text-gray-400 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                          <a
+                            routerLink="/home/addDonar"
+                            class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                            >Add Donor</a
+                          >
+                        </button>
+                      </div>
+
+                      <div class="relative">
+                        <input
+                          type="text"
+                          id="donor_input"
+                          class="input-text1 w-full"
+                          placeholder="Choose Donor"
+                          formControlName="donorName"
+                          [value]="selectedDonorName"
+                          (input)="onInput($event)"
+                          (focus)="showDropdown = true"
+                          (blur)="hideDropdown()"
+                        />
+                        <ul
+                          *ngIf="showDropdown && filteredDonors.length > 0"
+                          class="absolute z-10 mt-1 w-full overflow-y-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
+                        >
+                          <li
+                            *ngFor="let donor of filteredDonors.slice(0, 3)"
+                            (mousedown)="selectDonor(donor)"
+                            class="an cursor-pointer p-2 text-sm hover:bg-purple-700 hover:text-white"
+                          >
+                            {{ donor.dfirstName }} {{ donor.dlastName }}
+                          </li>
+                        </ul>
+
+                        <div
+                          *ngIf="showDropdown && filteredDonors.length === 0"
+                          class="absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white p-2 text-gray-500 shadow-lg"
+                        >
+                          No results found
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        >Donated Amount</label
+                      >
+                      <div class="flex">
+                        <div class="flex gap-3">
+                          <input
+                            class="input-text1"
+                            type="text"
+                            formControlName="qty"
+                          />
+                          <div class="">
+                            <button
+                              type="submit"
+                              class="btn-primary whitespace-nowrap"
+                            >
+                              Assign
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <small *ngIf="invalidDonor" class="mt-1 text-sm text-red-500">
+                    Please select a valid donor !
+                  </small>
+                </div>
+
+                <div
+                  *ngIf="assignedDonorList.length > 0"
+                  class="mt-4 overflow-x-auto shadow-md sm:rounded-lg"
+                >
+                  <table
+                    class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
+                  >
+                    <thead
+                      class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+                    >
+                      <tr>
+                        <th scope="col" class="px-6 py-3">S.No</th>
+                        <th scope="col" class="px-6 py-3">Donor</th>
+                        <th scope="col" class="px-6 py-3">Amount</th>
+                        <th scope="col" class="px-6 py-3">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let donor of assignedDonorList; let i = index"
+                        class="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                      >
+                        <th
+                          scope="row"
+                          class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ i + 1 }}
+                        </th>
+                        <td
+                          class="px-6 py-4 font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ donor.dfirstName }} {{ donor.dlastName }}
+                        </td>
+                        <td class="px-6 py-4">{{ donor.qty }}</td>
+                        <td class="px-6 py-4">
+                          <a
+                            href="#"
+                            class="font-medium text-red-600 hover:underline dark:text-red-500"
+                            >Remove</a
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="mt-8 flex gap-3">
+                  <div>
+                    <button
+                      type="submit"
+                      class="me-2 rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+                    >
+                      Approve
+                    </button>
+                  </div>
+                  <div class="">
+                    <button
+                      type="submit"
+                      (click)="this.isRejected = true"
+                      class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+                <!-- 
+        <div class="mt-8 sm:mt-12">
+          <h4 class="text-lg font-semibold text-gray-800">Thank you!</h4>
+          <p class="text-gray-500">If you have any questions concerning this invoice, use the following contact information:</p>
+          <div class="mt-2">
+            <p class="block text-sm font-medium text-gray-800">examplesite.com</p>
+            <p class="block text-sm font-medium text-gray-800">+1 (062) 109-9222</p>
+          </div>
+        </div> -->
+
+                <!-- <p class="mt-5 text-sm text-gray-500">© 2022 Preline.</p> -->
+              </div>
+              <!-- End Card -->
+
+              <!-- Buttons -->
+
+              <!-- End Buttons -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
