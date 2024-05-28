@@ -48,4 +48,7 @@ export class RequestService {
       params: mesgParams,
     });
   }
+  finRequestList(data: any) {
+    return this.http.get(environment.finRequestList + data);
+  }
 }
