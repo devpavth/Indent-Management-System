@@ -21,7 +21,7 @@
   @apply block rounded-lg bg-purple-700 p-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:translate-y-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800;
 }
 .btn-primary1 {
-  @apply block  bg-purple-700 p-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:translate-y-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800;
+  @apply block  bg-purple-700 p-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:scale-90 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800;
 }
 .input-form {
   @apply block w-full rounded-lg border border-purple-300  p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500;

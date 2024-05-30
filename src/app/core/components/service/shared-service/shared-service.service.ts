@@ -37,4 +37,10 @@ export class SharedServiceService {
       headers: this.headers,
     });
   }
+
+  gstCalculation(qty: any, unitPrice: any, gstpercentage: any) {
+    let gstAmt = qty * unitPrice * (gstpercentage / 100);
+    let itemPrice = qty * unitPrice + gstAmt;
+    return itemPrice;
+  }
 }

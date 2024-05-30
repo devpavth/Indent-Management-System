@@ -51,4 +51,10 @@ export class RequestService {
   finRequestList(data: any) {
     return this.http.get(environment.finRequestList + data);
   }
+  commands() {
+    return this.http.get(environment.commend);
+  }
+  updateRequest(id: any, data: any) {
+    return this.http.post(environment.updateRequestList + id, data);
+  }
 }

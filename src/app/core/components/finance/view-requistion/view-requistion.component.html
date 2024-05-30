@@ -1,8 +1,30 @@
-<div class="p-4 sm:ml-64">
-  <section class="left-0 right-0 top-0 h-screen">
+<div class="bg-gradient-to-t from-gray-900 to-purple-950 py-10 sm:ml-64">
+  <button class="fixed ml-24" (click)="closeView.emit(false)">
+    <svg
+      class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        class=""
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18 17.94 6M18 18 6.06 6"
+      />
+    </svg>
+  </button>
+  <section class="left-0 right-0 top-0">
     <div class="mx-40">
-      <div class="bg-white">
-        <div class="flex items-center justify-between bg-purple-50">
+      <div class="rounded-xl bg-white shadow-lg">
+        <!-- <div
+          class="flex items-center justify-between rounded-t-xl bg-purple-50"
+        >
           <div class="m-4">
             <button (click)="closeView.emit(false)">
               <svg
@@ -28,7 +50,7 @@
           <div class="mr-4">
             <h1 class="text-xl font-semibold text-purple-800">View Request</h1>
           </div>
-        </div>
+        </div> -->
         <div class="items-center justify-between">
           <div class=" ">
             <div class="mx-auto">
@@ -49,7 +71,7 @@
 
                   <div class="text-end">
                     <h2
-                      class="text-2xl font-semibold text-gray-800 md:text-3xl"
+                      class="text-2xl font-semibold text-purple-600 md:text-3xl"
                     >
                       Request#
                     </h2>
@@ -67,9 +89,9 @@
                 <div class="mt-8 grid gap-3 sm:grid-cols-2">
                   <div>
                     <h3
-                      class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
+                      class="text-lg font-semibold uppercase text-purple-600 dark:text-neutral-200"
                     >
-                      Created By :
+                      Created By
                     </h3>
                     <h3
                       class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
@@ -129,7 +151,7 @@
                             class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
                           >
                             <thead
-                              class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+                              class="bg-purple-500 text-xs uppercase text-gray-50 dark:bg-gray-700 dark:text-gray-400"
                             >
                               <tr>
                                 <th scope="col" class="px-6 py-3">Product</th>
@@ -140,6 +162,13 @@
                                 <th scope="col" class="px-6 py-3">GST %</th>
                                 <th scope="col" class="px-6 py-3">
                                   Item Price(Incl GST)
+                                </th>
+                                <th
+                                  *ngIf="isAccept"
+                                  scope="col"
+                                  class="px-6 py-3"
+                                >
+                                  Action
                                 </th>
                               </tr>
                             </thead>
@@ -163,78 +192,43 @@
                                     {{ product.description }}
                                   </p>
                                 </td>
-                                <td
-                                  class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
-                                >
+                                <td class="px-6 py-4 dark:text-white">
                                   {{ product.unitPrice | currency: "INR" }}
                                 </td>
-                                <td class="px-6 py-4">
-                                  <div class="flex items-center">
-                                    <button
-                                      (click)="productEdit(product)"
-                                      class="me-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white p-1 text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-                                      type="button"
-                                    >
-                                      <span class="sr-only"
-                                        >Quantity button</span
-                                      >
-                                      <svg
-                                        class="h-3 w-3"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 18 2"
-                                      >
-                                        <path
-                                          stroke="currentColor"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M1 1h16"
-                                        />
-                                      </svg>
-                                    </button>
-                                    <div>
-                                      <input
-                                        type="number"
-                                        id="first_product"
-                                        class="block w-14 rounded-lg border border-gray-300 bg-gray-50 px-2.5 py-1 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                        value="{{ product.qty }}"
-                                        required
-                                      />
-                                    </div>
-                                    <button
-                                      class="ms-3 inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-300 bg-white p-1 text-sm font-medium text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-                                      type="button"
-                                    >
-                                      <span class="sr-only"
-                                        >Quantity button</span
-                                      >
-                                      <svg
-                                        class="h-3 w-3"
-                                        aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 18 18"
-                                      >
-                                        <path
-                                          stroke="currentColor"
-                                          stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M9 1v16M1 9h16"
-                                        />
-                                      </svg>
-                                    </button>
-                                  </div>
+                                <td class="px-6 py-4 dark:text-white">
+                                  {{ product.qty }}
                                 </td>
-                                <td
-                                  class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
-                                >
-                                  $599
+                                <td class="px-6 py-4 dark:text-white">
+                                  {{ product.gstRate }}
                                 </td>
                                 <td class="px-6 py-4">
                                   {{ product.itemPrice }}
+                                </td>
+                                <td *ngIf="isAccept" class="px-6 py-4">
+                                  <button
+                                    (click)="
+                                      productEdit(product);
+                                      this.isEditProduct = true
+                                    "
+                                  >
+                                    <svg
+                                      class="h-6 w-6 text-blue-600"
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="24"
+                                      height="24"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        stroke="currentColor"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                                      />
+                                    </svg>
+                                  </button>
                                 </td>
                               </tr>
                             </tbody>
@@ -261,258 +255,31 @@
                           Total:
                         </dt>
                         <dd class="col-span-2 text-gray-500">
-                          {{ this._requestDetails.totalPrice }}
+                          {{
+                            this._requestDetails.totalPrice | currency: "INR"
+                          }}
                         </dd>
                       </dl>
-
-                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Tax:</dt>
-                <dd class="col-span-2 text-gray-500">$39.00</dd>
-              </dl> -->
-
-                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Amount paid:</dt>
-                <dd class="col-span-2 text-gray-500">$2789.00</dd>
-              </dl> -->
-
-                      <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Due balance:</dt>
-                <dd class="col-span-2 text-gray-500">$0.00</dd>
-              </dl> -->
-                    </div>
-                    <!-- End Grid -->
-                  </div>
-                </div>
-                <div
-                  class="my-4 flex rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
-                  role="alert"
-                >
-                  <svg
-                    class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
-                    />
-                  </svg>
-                  <span class="sr-only">Info</span>
-                  <div>
-                    <span class="font-medium"
-                      >Ensure that these requirements are met:</span
-                    >
-                    <ul class="mt-1.5 list-inside list-disc">
-                      <li>Request Amount and Approval shout be same</li>
-                      <li>
-                        Donor Amount Shout also match with the Requested &
-                        Approval Amount
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div
-                  class="mb-4 rounded-lg border-purple-500/10 bg-white p-4 backdrop-blur-lg"
-                >
-                  <div>
-                    <label
-                      class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                      for="file_input"
-                      >Finance Approval Amount</label
-                    >
-                    <h1 *ngIf="isApprovelAmt">{{ approvelAmt }}</h1>
-                    <div *ngIf="!isApprovelAmt" class="flex">
-                      <input
-                        placeholder="₹"
-                        [(ngModel)]="approvelAmt"
-                        class="block w-80 truncate rounded-l-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
-                        type="number"
-                      />
-                      <div class="">
-                        <button
-                          (click)="isApprovelAmt = true"
-                          type="button"
-                          class="btn-primary1 whitespace-nowrap rounded-r-lg"
-                        >
-                          <svg
-                            class="h-6 w-6 text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke="currentColor"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M5 11.917 9.724 16.5 19 7.5"
-                            />
-                          </svg>
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
-                <div
-                  class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
-                >
-                  <form
-                    class="flex gap-5"
-                    [formGroup]="form"
-                    (ngSubmit)="onSubmit()"
-                  >
-                    <div>
-                      <div class="flex items-center gap-2">
-                        <label
-                          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                          for="donor_input"
-                        >
-                          Select Donor
-                        </label>
-                        <button class="mb-2 flex items-center gap-1">
-                          <svg
-                            class="h-3 w-3 text-gray-400 dark:text-white"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                          <a
-                            routerLink="/home/addDonar"
-                            class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                            >Add Donor</a
-                          >
-                        </button>
-                      </div>
-
-                      <div class="relative">
-                        <input
-                          type="text"
-                          id="donor_input"
-                          class="input-text1 w-full"
-                          placeholder="Choose Donor"
-                          formControlName="donorName"
-                          [value]="selectedDonorName"
-                          (input)="onInput($event)"
-                          (focus)="showDropdown = true"
-                          (blur)="hideDropdown()"
-                        />
-                        <ul
-                          *ngIf="showDropdown && filteredDonors.length > 0"
-                          class="absolute z-10 mt-1 w-full overflow-y-hidden rounded-lg border border-gray-300 bg-white shadow-lg"
-                        >
-                          <li
-                            *ngFor="let donor of filteredDonors.slice(0, 3)"
-                            (mousedown)="selectDonor(donor)"
-                            class="an cursor-pointer p-2 text-sm hover:bg-purple-700 hover:text-white"
-                          >
-                            {{ donor.dfirstName }} {{ donor.dlastName }}
-                          </li>
-                        </ul>
-
-                        <div
-                          *ngIf="showDropdown && filteredDonors.length === 0"
-                          class="absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white p-2 text-gray-500 shadow-lg"
-                        >
-                          No results found
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label
-                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                        >Donated Amount</label
-                      >
-                      <div class="flex">
-                        <div class="flex gap-3">
-                          <input
-                            class="input-text1"
-                            type="text"
-                            formControlName="qty"
-                          />
-                          <div class="">
-                            <button
-                              type="submit"
-                              class="btn-primary whitespace-nowrap"
-                            >
-                              Assign
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <small *ngIf="invalidDonor" class="mt-1 text-sm text-red-500">
-                    Please select a valid donor !
-                  </small>
-                </div>
-
-                <div
-                  *ngIf="assignedDonorList.length > 0"
-                  class="mt-4 overflow-x-auto shadow-md sm:rounded-lg"
-                >
-                  <table
-                    class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
-                  >
-                    <thead
-                      class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
-                    >
-                      <tr>
-                        <th scope="col" class="px-6 py-3">S.No</th>
-                        <th scope="col" class="px-6 py-3">Donor</th>
-                        <th scope="col" class="px-6 py-3">Amount</th>
-                        <th scope="col" class="px-6 py-3">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="let donor of assignedDonorList; let i = index"
-                        class="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <th
-                          scope="row"
-                          class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-                        >
-                          {{ i + 1 }}
-                        </th>
-                        <td
-                          class="px-6 py-4 font-medium text-gray-900 dark:text-white"
-                        >
-                          {{ donor.dfirstName }} {{ donor.dlastName }}
-                        </td>
-                        <td class="px-6 py-4">{{ donor.qty }}</td>
-                        <td class="px-6 py-4">
-                          <a
-                            href="#"
-                            class="font-medium text-red-600 hover:underline dark:text-red-500"
-                            >Remove</a
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div class="mt-8 flex gap-3">
+                <div *ngIf="isAction" class="mt-8 flex justify-end gap-3">
                   <div>
                     <button
+                      (click)="isAccept = true; isAction = false"
                       type="submit"
-                      class="me-2 rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+                      class="rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
                     >
                       Approve
+                    </button>
+                  </div>
+                  <div class="">
+                    <button
+                      type="submit"
+                      (click)="this.isRejected = true"
+                      class="focus:ring-ambg-amber-500 dark:focus:ring-ambg-amber-500 inline-flex items-center rounded-lg bg-amber-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-amber-500 focus:outline-none focus:ring-4 dark:bg-amber-500 dark:hover:bg-amber-500"
+                    >
+                      Hold
                     </button>
                   </div>
                   <div class="">
@@ -525,23 +292,371 @@
                     </button>
                   </div>
                 </div>
-                <!-- 
-        <div class="mt-8 sm:mt-12">
-          <h4 class="text-lg font-semibold text-gray-800">Thank you!</h4>
-          <p class="text-gray-500">If you have any questions concerning this invoice, use the following contact information:</p>
-          <div class="mt-2">
-            <p class="block text-sm font-medium text-gray-800">examplesite.com</p>
-            <p class="block text-sm font-medium text-gray-800">+1 (062) 109-9222</p>
-          </div>
-        </div> -->
+                <section *ngIf="isAccept">
+                  <div
+                    class="my-4 flex rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
+                    role="alert"
+                  >
+                    <svg
+                      class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                      />
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                      <span class="font-medium"
+                        >Ensure that these requirements are met:</span
+                      >
+                      <ul class="mt-1.5 list-inside list-disc">
+                        <li>Request Amount and Approval shout be same</li>
+                        <li>
+                          Donor Amount Shout also match with the Requested &
+                          Approval Amount
+                        </li>
+                        <li>
+                          Above all Condition Must be clear than Only the Save
+                          Button will be Enabled.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="mb-4 py-4">
+                    <div>
+                      <label
+                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                        for="file_input"
+                        >Finance Approval Amount</label
+                      >
+                      <div class="flex gap-2" *ngIf="isApprovelAmt">
+                        <h1 class="text-2xl font-semibold text-green-500">
+                          {{ approvelAmt | currency: "INR" }}
+                        </h1>
+                        <button (click)="isApprovelAmt = false">
+                          <svg
+                            class="h-6 w-6 text-blue-700"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M15.514 3.293a1 1 0 0 0-1.415 0L12.151 5.24a.93.93 0 0 1 .056.052l6.5 6.5a.97.97 0 0 1 .052.056L20.707 9.9a1 1 0 0 0 0-1.415l-5.193-5.193ZM7.004 8.27l3.892-1.46 6.293 6.293-1.46 3.893a1 1 0 0 1-.603.591l-9.494 3.355a1 1 0 0 1-.98-.18l6.452-6.453a1 1 0 0 0-1.414-1.414l-6.453 6.452a1 1 0 0 1-.18-.98l3.355-9.494a1 1 0 0 1 .591-.603Z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
 
-                <!-- <p class="mt-5 text-sm text-gray-500">© 2022 Preline.</p> -->
+                      <div *ngIf="!isApprovelAmt" class="flex">
+                        <input
+                          placeholder="₹"
+                          [(ngModel)]="approvelAmt"
+                          class="block w-80 truncate rounded-l-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                          type="number"
+                        />
+                        <div class="">
+                          <button
+                            (click)="isApprovelAmt = true"
+                            type="button"
+                            class="btn-primary1 whitespace-nowrap rounded-r-lg"
+                          >
+                            <svg
+                              class="h-6 w-6 text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 11.917 9.724 16.5 19 7.5"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
+                  >
+                    <form
+                      class="flex gap-5"
+                      [formGroup]="form"
+                      (ngSubmit)="onSubmit()"
+                    >
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <label
+                            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                            for="donor_input"
+                          >
+                            Select Donor
+                          </label>
+                          <button class="mb-2 flex items-center gap-1">
+                            <svg
+                              class="h-3 w-3 text-gray-400 dark:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                            <a
+                              routerLink="/home/addDonar"
+                              class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                              >Add Donor</a
+                            >
+                          </button>
+                        </div>
+                        <div class="relative">
+                          <input
+                            type="text"
+                            id="donor_input"
+                            class="input-text1 w-full"
+                            placeholder="Choose Donor"
+                            formControlName="donorId"
+                            autocomplete="off"
+                            [value]="selectedDonorName"
+                            (input)="onInput($event)"
+                            (focus)="showDropdown = true"
+                            (blur)="hideDropdown()"
+                          />
+                          <ul
+                            *ngIf="showDropdown && filteredDonors.length > 0"
+                            class="scroll absolute z-10 mt-1 max-h-32 w-full overflow-y-scroll rounded-lg border border-gray-300 bg-white shadow-lg"
+                          >
+                            <li
+                              *ngFor="let donor of filteredDonors"
+                              (mousedown)="selectDonor(donor)"
+                              class="an cursor-pointer p-2 text-sm hover:bg-purple-700 hover:text-white"
+                            >
+                              {{ donor.dfirstName }} {{ donor.dlastName }}
+                            </li>
+                          </ul>
+                          <div
+                            *ngIf="showDropdown && filteredDonors.length === 0"
+                            class="absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white p-2 text-gray-500 shadow-lg"
+                          >
+                            No results found
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                          >Donated Amount</label
+                        >
+                        <div class="flex">
+                          <div class="flex gap-3">
+                            <input
+                              class="input-text1"
+                              type="number"
+                              formControlName="donotedAmt"
+                            />
+                            <div class="">
+                              <button
+                                type="submit"
+                                class="btn-primary1 rounded-full"
+                              >
+                                <svg
+                                  class="h-6 w-6 text-white"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M5 12h14m-7 7V5"
+                                  />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                    <small
+                      *ngIf="invalidDonor"
+                      class="mt-1 text-sm text-red-500"
+                    >
+                      Please select a valid donor !
+                    </small>
+                  </div>
+
+                  <div
+                    *ngIf="assignedDonors.length > 0"
+                    class="mt-4 overflow-x-auto shadow-md sm:rounded-lg"
+                  >
+                    <table
+                      class="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right"
+                    >
+                      <thead
+                        class="bg-purple-500 text-xs uppercase text-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                      >
+                        <tr>
+                          <th scope="col" class="px-6 py-3">S.No</th>
+                          <th scope="col" class="px-6 py-3">Donor</th>
+                          <th scope="col" class="px-6 py-3">Amount</th>
+                          <th scope="col" class="px-6 py-3">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let donor of assignedDonors; let i = index"
+                          class="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                        >
+                          <th
+                            scope="row"
+                            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                          >
+                            {{ i + 1 }}
+                          </th>
+                          <td
+                            class="px-6 py-4 font-medium text-gray-900 dark:text-white"
+                          >
+                            {{ donor.dfirstName }} {{ donor.dlastName }}
+                          </td>
+                          <td class="px-6 py-4">{{ donor.donotedAmt }}</td>
+                          <td class="px-6 py-4">
+                            <a (click)="deleteDonor(donor.donotedAmt)"
+                              ><svg
+                                class="h-6 w-6 cursor-pointer text-red-600"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                                />
+                              </svg>
+                            </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <h1
+                    *ngIf="assignedDonors.length > 0"
+                    class="py-4 text-end font-semibold"
+                  >
+                    Total Amount Donated :
+                    <span class="text-green-600">{{
+                      donorTotal | currency: "INR"
+                    }}</span>
+                  </h1>
+                  <div class="mt-6">
+                    <h2
+                      class="mb-2 text-lg font-semibold text-gray-900 dark:text-white"
+                    >
+                      Please Make Sure the Following Condition are Checked
+                    </h2>
+                    <ul
+                      class="list-inside space-y-1 text-gray-500 dark:text-gray-400"
+                    >
+                      <li class="flex items-center">
+                        <svg
+                          [ngClass]="{
+                            'text-green-500':
+                              approvelAmt === this._requestDetails.totalPrice
+                          }"
+                          class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
+                          />
+                        </svg>
+                        Requested Total & Approval Amount should be Match.
+                      </li>
+                      <li class="flex items-center">
+                        <svg
+                          [ngClass]="{
+                            'text-green-500':
+                              approvelAmt === this._requestDetails.totalPrice &&
+                              approvelAmt === donorTotal
+                          }"
+                          class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
+                          />
+                        </svg>
+                        Donor Total & Approval Amount should be Match
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="mt-8 flex justify-end gap-3">
+                    <div>
+                      <button
+                        [disabled]="
+                          approvelAmt !== this._requestDetails.totalPrice ||
+                          approvelAmt !== donorTotal
+                        "
+                        [ngClass]="{
+                          'bg-gray-500 hover:bg-gray-500':
+                            approvelAmt !== this._requestDetails.totalPrice ||
+                            approvelAmt !== donorTotal
+                        }"
+                        type="submit"
+                        class="me-2 rounded-lg bg-purple-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        type="submit"
+                        class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                </section>
               </div>
-              <!-- End Card -->
-
-              <!-- Buttons -->
-
-              <!-- End Buttons -->
             </div>
           </div>
         </div>
@@ -549,3 +664,9 @@
     </div>
   </section>
 </div>
+<section *ngIf="isEditProduct" class="fixed left-0 right-0 top-0 z-50">
+  <app-edit-product
+    [product]="productData"
+    (close)="closeEdite($event)"
+  ></app-edit-product>
+</section>
