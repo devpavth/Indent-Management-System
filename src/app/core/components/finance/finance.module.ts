@@ -5,9 +5,10 @@ import { FinanceRoutingModule } from './finance-routing.module';
 import { RequisitionListComponent } from './requisition-list/requisition-list.component';
 import { ViewRequistionComponent } from './view-requistion/view-requistion.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditProductComponent } from './edit-product/edit-product.component';
 
 @NgModule({
-  declarations: [RequisitionListComponent, ViewRequistionComponent],
+  declarations: [RequisitionListComponent, ViewRequistionComponent, EditProductComponent],
   imports: [
     CommonModule,
     FinanceRoutingModule,

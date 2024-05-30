@@ -11,18 +11,27 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ViewRequistionComponent implements OnInit {
   @Input() reqId: any;
   @Output() closeView = new EventEmitter<boolean>();
-  _requestDetails: any;
+
+  _requestDetails: any = {};
+  productData: any;
+  donorTotal: number = 0;
+
   isRejected: boolean = true;
+  showDropdown = false;
+  invalidDonor = false;
+  isApprovelAmt: boolean = false;
+  isEditProduct: boolean = false;
+  isAction: boolean = true;
+  isAccept: boolean = false;
+
   donorList: any;
   filteredDonors: any[] = [];
-  showDropdown = false;
+  assignedDonors: any[] = [];
+
   form: FormGroup;
   selectedDonorName = '';
-  invalidDonor = false;
-  assignedDonorList: any[] = [];
-  approvelAmt: number | undefined;
 
-  isApprovelAmt: boolean = false;
+  approvelAmt: number | undefined;
 
   constructor(
     private requestService: RequestService,
@@ -30,8 +39,8 @@ export class ViewRequistionComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.form = this.fb.group({
-      qty: [''],
-      donorName: ['', Validators.required],
+      donotedAmt: [''],
+      donorId: ['', Validators.required],
     });
   }
 
@@ -50,7 +59,6 @@ export class ViewRequistionComponent implements OnInit {
     this.donorService.getAllDonor().subscribe((res) => {
       this.donorList = res;
       console.log(res);
-
       this.filteredDonors = this.donorList;
     });
   }
@@ -65,7 +73,7 @@ export class ViewRequistionComponent implements OnInit {
 
   selectDonor(donor: any): void {
     this.selectedDonorName = `${donor.dfirstName} ${donor.dlastName}`;
-    this.form.controls['donorName'].setValue(donor.donorId);
+    this.form.controls['donorId'].setValue(this.selectedDonorName); // Update this line to set the name
     this.invalidDonor = false;
     this.showDropdown = false;
   }
@@ -75,27 +83,62 @@ export class ViewRequistionComponent implements OnInit {
       this.showDropdown = false;
     }, 200);
   }
-  productEdit(data: any) {
-    console.log(data);
-  }
+
   onSubmit(): void {
-    const donorName = this.form.controls['donorName'].value;
+    const donorName = this.selectedDonorName; // Change this line to use selectedDonorName
     const selectedDonor = this.donorList.find(
-      (donor: any) => donor.donorId === donorName,
+      (donor: any) => `${donor.dfirstName} ${donor.dlastName}` === donorName,
     );
 
     if (!selectedDonor) {
       this.invalidDonor = true;
     } else {
       this.invalidDonor = false;
-      let list = {
-        ...this.form.value,
-        dfirstName: selectedDonor.dfirstName,
-        dlastName: selectedDonor.dlastName,
-      };
-      this.assignedDonorList.push(list);
-      console.log('Form submitted', list);
+
+      const existingDonorIndex = this.assignedDonors.findIndex(
+        (donor: any) => donor.donorId === selectedDonor.donorId,
+      );
+
+      if (existingDonorIndex !== -1) {
+        this.assignedDonors[existingDonorIndex].donotedAmt +=
+          this.form.value.donotedAmt;
+        this.donorTotal += this.form.value.donotedAmt;
+      } else {
+        let list = {
+          ...this.form.value,
+          donorId: selectedDonor.donorId,
+          dfirstName: selectedDonor.dfirstName,
+          dlastName: selectedDonor.dlastName,
+        };
+        this.assignedDonors.push(list);
+        this.donorTotal += list.donotedAmt;
+      }
+
+      console.log(this.donorTotal);
+      console.log('Form submitted', this.assignedDonors);
       this.form.reset();
+      this.selectedDonorName = '';
     }
+  }
+
+  deleteDonor(data: any) {
+    this.assignedDonors.splice(0, 1);
+    this.donorTotal -= data;
+  }
+
+  closeEdite(data: boolean) {
+    this.isEditProduct = data;
+    this.fetchDetails(this.reqId);
+  }
+  productEdit(data: any) {
+    this.isEditProduct = true;
+    console.log(data);
+    let finalProduct = {
+      requestId: this._requestDetails.sno,
+      total: this._requestDetails.totalPrice,
+      ...data,
+    };
+
+    this.productData = finalProduct;
   }
 }
