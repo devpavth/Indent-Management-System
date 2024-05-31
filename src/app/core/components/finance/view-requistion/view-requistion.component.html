@@ -136,6 +136,18 @@
                           {{ _requestDetails.createdOn | date: "shortTime" }}
                         </dd>
                       </dl>
+                      <dl class="grid gap-x-3 sm:grid-cols-5">
+                        <dt
+                          class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                        >
+                          Date Range:
+                        </dt>
+                        <dd
+                          class="col-span-2 text-gray-500 dark:text-neutral-500"
+                        >
+                          {{ caldate }}
+                        </dd>
+                      </dl>
                     </div>
                     <!-- End Grid -->
                   </div>
@@ -266,29 +278,78 @@
                 <div *ngIf="isAction" class="mt-8 flex justify-end gap-3">
                   <div>
                     <button
-                      (click)="isAccept = true; isAction = false"
+                      (click)="
+                        isAccept = true;
+                        isAction = false;
+                        isHolding = false;
+                        isReject = false
+                      "
                       type="submit"
-                      class="rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+                      class=""
                     >
-                      Approve
+                      <svg
+                        class="h-10 w-10 text-green-500 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
                     </button>
                   </div>
                   <div class="">
                     <button
                       type="submit"
-                      (click)="this.isRejected = true"
-                      class="focus:ring-ambg-amber-500 dark:focus:ring-ambg-amber-500 inline-flex items-center rounded-lg bg-amber-500 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-amber-500 focus:outline-none focus:ring-4 dark:bg-amber-500 dark:hover:bg-amber-500"
+                      (click)="
+                        this.isHolding = true;
+                        isAccept = false;
+                        reasonHead = 'Holding'
+                      "
                     >
-                      Hold
+                      <svg
+                        class="h-10 w-10 text-amber-500 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9-3a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0V9Zm4 0a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0V9Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
                     </button>
                   </div>
                   <div class="">
                     <button
                       type="submit"
-                      (click)="this.isRejected = true"
-                      class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                      (click)="isReject = true; reasonHead = 'Rejection'"
                     >
-                      Reject
+                      <svg
+                        class="h-10 w-10 text-red-600 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -359,13 +420,14 @@
                       <div *ngIf="!isApprovelAmt" class="flex">
                         <input
                           placeholder="₹"
-                          [(ngModel)]="approvelAmt"
+                          #appAmt
                           class="block w-80 truncate rounded-l-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                           type="number"
+                          [value]="approvelAmt"
                         />
                         <div class="">
                           <button
-                            (click)="isApprovelAmt = true"
+                            (click)="addApprovalAmt(appAmt.value)"
                             type="button"
                             class="btn-primary1 whitespace-nowrap rounded-r-lg"
                           >
@@ -593,7 +655,8 @@
                         <svg
                           [ngClass]="{
                             'text-green-500':
-                              approvelAmt === this._requestDetails.totalPrice
+                              this.approvelAmt ==
+                              this._requestDetails.totalPrice
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -611,8 +674,8 @@
                         <svg
                           [ngClass]="{
                             'text-green-500':
-                              approvelAmt === this._requestDetails.totalPrice &&
-                              approvelAmt === donorTotal
+                              approvelAmt == this._requestDetails.totalPrice &&
+                              approvelAmt == donorTotal
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -631,14 +694,15 @@
                   <div class="mt-8 flex justify-end gap-3">
                     <div>
                       <button
+                        (click)="submiteDonorList()"
                         [disabled]="
-                          approvelAmt !== this._requestDetails.totalPrice ||
-                          approvelAmt !== donorTotal
+                          approvelAmt != this._requestDetails.totalPrice ||
+                          approvelAmt != donorTotal
                         "
                         [ngClass]="{
                           'bg-gray-500 hover:bg-gray-500':
-                            approvelAmt !== this._requestDetails.totalPrice ||
-                            approvelAmt !== donorTotal
+                            approvelAmt != this._requestDetails.totalPrice ||
+                            approvelAmt != donorTotal
                         }"
                         type="submit"
                         class="me-2 rounded-lg bg-purple-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
@@ -648,13 +712,85 @@
                     </div>
                     <div>
                       <button
+                        (click)="isAction = true; isAccept = false"
                         type="submit"
                         class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                       >
-                        Reject
+                        cancel
                       </button>
                     </div>
                   </div>
+                </section>
+                <section>
+                  <section
+                    *ngIf="isHolding || isReject"
+                    class="rounded-lg dark:bg-gray-900"
+                  >
+                    <div class="mx-auto max-w-screen-xl px-4 py-4">
+                      <div class="mx-auto max-w-screen-md sm:text-center">
+                        <h2
+                          class="mb-4 text-3xl font-semibold text-purple-700 dark:text-white sm:text-xl"
+                        >
+                          Reason For <span>{{ reasonHead }}</span>
+                        </h2>
+
+                        <form action="#">
+                          <div
+                            class="mx-auto mb-3 max-w-screen-sm items-center space-y-4 sm:flex sm:space-y-0"
+                          >
+                            <div class="relative w-full">
+                              <label
+                                for="email"
+                                class="mb-2 hidden text-sm font-medium text-gray-900 dark:text-gray-300"
+                                >Email address</label
+                              >
+                              <div
+                                class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                              >
+                                <svg
+                                  class="h-6 w-6 text-gray-500 dark:text-white"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
+                                    clip-rule="evenodd"
+                                  />
+                                </svg>
+                              </div>
+
+                              <select
+                                #reason
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:rounded-none sm:rounded-l-lg"
+                                placeholder="Enter your email"
+                              >
+                                <option
+                                  *ngFor="let commend of commend"
+                                  value=" {{ commend.commendId }}"
+                                >
+                                  {{ commend.commends }}
+                                </option>
+                              </select>
+                            </div>
+                            <div>
+                              <button
+                                (click)="postReason(reason.value)"
+                                type="submit"
+                                class="w-full cursor-pointer rounded-lg border border-purple-600 bg-purple-700 px-5 py-3 text-center text-sm font-medium text-white hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 sm:rounded-none sm:rounded-r-lg"
+                              >
+                                Submit
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </section>
                 </section>
               </div>
             </div>

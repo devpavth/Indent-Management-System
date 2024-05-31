@@ -40,5 +40,6 @@ export class RequisitionListComponent implements OnInit {
   }
   refresh(data: any) {
     this.isView = data;
+    this.fetchRequestList();
   }
 }
