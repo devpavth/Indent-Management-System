@@ -2,6 +2,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequestService } from '../../service/Request/request.service';
 import { DonarService } from '../../service/Donar/donar.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 
 @Component({
   selector: 'app-view-requistion',
@@ -15,6 +16,7 @@ export class ViewRequistionComponent implements OnInit {
   _requestDetails: any = {};
   productData: any;
   donorTotal: number = 0;
+  caldate: any;
 
   isRejected: boolean = true;
   showDropdown = false;
@@ -23,6 +25,11 @@ export class ViewRequistionComponent implements OnInit {
   isEditProduct: boolean = false;
   isAction: boolean = true;
   isAccept: boolean = false;
+  isHolding: boolean = false;
+  isReject: boolean = false;
+
+  reasonHead: string = '';
+  commend: any;
 
   donorList: any;
   filteredDonors: any[] = [];
@@ -36,6 +43,7 @@ export class ViewRequistionComponent implements OnInit {
   constructor(
     private requestService: RequestService,
     private donorService: DonarService,
+    private shared: SharedServiceService,
     private fb: FormBuilder,
   ) {
     this.form = this.fb.group({
@@ -47,11 +55,13 @@ export class ViewRequistionComponent implements OnInit {
   ngOnInit() {
     this.fetchDetails(this.reqId);
     this.fetchDonorList();
+    this.fetchReason();
   }
 
   fetchDetails(data: any) {
     this.requestService.viewReq(data).subscribe((res) => {
       this._requestDetails = res;
+      this.calculateDate();
     });
   }
 
@@ -82,6 +92,13 @@ export class ViewRequistionComponent implements OnInit {
     setTimeout(() => {
       this.showDropdown = false;
     }, 200);
+  }
+
+  addApprovalAmt(data: any) {
+    this.approvelAmt = Number(data);
+    console.log(this.approvelAmt);
+
+    this.isApprovelAmt = true;
   }
 
   onSubmit(): void {
@@ -140,5 +157,45 @@ export class ViewRequistionComponent implements OnInit {
     };
 
     this.productData = finalProduct;
+  }
+
+  submiteDonorList() {
+    let finalList = {
+      finApprAmount: this.approvelAmt,
+      assignedDonors: this.assignedDonors.map((fin) => ({
+        donorId: fin.donorId,
+        donotedAmt: fin.donotedAmt,
+      })),
+    };
+    this.requestService
+      .finDonorAssign(this.reqId, finalList)
+      .subscribe((res) => {
+        console.log(res);
+      });
+  }
+  fetchReason() {
+    this.requestService.commands().subscribe((res) => {
+      this.commend = res;
+    });
+  }
+  postReason(data: any) {
+    if (this.isHolding == true && this.isReject == false) {
+      this.requestService.commend(this.reqId, data, 1)?.subscribe((res) => {
+        console.log(res);
+      });
+    }
+    if (this.isHolding == false && this.isReject == true) {
+      this.requestService.commend(this.reqId, data, 2)?.subscribe((res) => {
+        console.log(res);
+      });
+    }
+  }
+  calculateDate() {
+    const check = new Date(this._requestDetails.createdOn);
+    let date = check.getTime() / 1000;
+    console.log(date);
+
+    this.caldate = this.shared.calculateDateDifference(date);
+    console.log(this.caldate);
   }
 }

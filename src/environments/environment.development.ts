@@ -69,4 +69,7 @@ export const environment = {
 
   finRequestList: Url + baseRequestApi + '/requestforfinance/',
   updateRequestList: Url + baseRequestApi + '/updaterequest/',
+  finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
+  finHolding: Url + baseRequestApi + '/holdrequest/',
+  finReject: Url + baseRequestApi + '/rejectFauthorize/',
 };

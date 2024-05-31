@@ -43,4 +43,37 @@ export class SharedServiceService {
     let itemPrice = qty * unitPrice + gstAmt;
     return itemPrice;
   }
+
+  calculateDateDifference(timestamp: number): string {
+    console.log(timestamp);
+
+    const currentDate = new Date();
+    const pastDate = new Date(timestamp * 1000); // Convert timestamp to milliseconds
+
+    const differenceInSeconds = Math.floor(
+      (currentDate.getTime() - pastDate.getTime()) / 1000,
+    );
+
+    const days = Math.floor(differenceInSeconds / (60 * 60 * 24));
+    const hours = Math.floor(
+      (differenceInSeconds % (60 * 60 * 24)) / (60 * 60),
+    );
+    const minutes = Math.floor((differenceInSeconds % (60 * 60)) / 60);
+    const seconds = differenceInSeconds % 60;
+
+    let differenceString = '';
+
+    if (days > 0) {
+      differenceString += days + ' days, ';
+    }
+    if (hours > 0 && days == 0) {
+      differenceString += hours + ' Hrs, ';
+    }
+    if (minutes > 0 && days == 0) {
+      differenceString += minutes + ' Min ';
+    }
+    // differenceString += seconds + ' seconds';
+
+    return differenceString;
+  }
 }

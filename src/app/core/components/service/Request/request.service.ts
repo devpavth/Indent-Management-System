@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -56,5 +57,31 @@ export class RequestService {
   }
   updateRequest(id: any, data: any) {
     return this.http.post(environment.updateRequestList + id, data);
+  }
+  finDonorAssign(Id: string, data: any) {
+    return this.http.post(environment.finSubmite + Id, data);
+  }
+  commend(id: any, data: any, check: number) {
+    let commendParams = new HttpParams();
+    commendParams = commendParams.append('commends', data);
+    commendParams = commendParams.append(
+      'notes',
+      'ethula Onnu Illa kizha pottudu',
+    );
+    if (check === 1) {
+      return this.http.post(
+        environment.finHolding + id,
+        {},
+        { params: commendParams },
+      );
+    }
+    if (check === 2) {
+      return this.http.post(
+        environment.finReject + id,
+        {},
+        { params: commendParams },
+      );
+    }
+    return null;
   }
 }
