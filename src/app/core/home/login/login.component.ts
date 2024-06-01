@@ -16,6 +16,9 @@ export class LoginComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.loginForm.get('empPassword')?.disable();
+    if (sessionStorage.getItem('userId')) {
+      this.Router.navigate(['home/dashboard']);
+    }
   }
   //login data name declare
   userData: any;
@@ -69,6 +72,7 @@ export class LoginComponent implements OnInit {
     this.auth.login(loginData).subscribe(
       (res) => {
         this.userData = res;
+        // console.log(res);
 
         if ((res = !null)) {
           this.userid = this.userData?.employeeId;
@@ -81,17 +85,8 @@ export class LoginComponent implements OnInit {
         } else {
           alert('error');
         }
-
-        // });
       },
       (error) => {
-        if (error.status == 200) {
-          this.userid = this.userData?.employeeId;
-          localStorage.setItem('userId', this.userid);
-          sessionStorage.setItem('userId', this.userid);
-
-          this.Router.navigate(['home/dashboard']);
-        }
         if (error.status == 403) {
           this.passwordVerified = 1;
         }

@@ -1,4 +1,6 @@
 let Url = 'http://192.168.1.102:9010/';
+// let Url = 'http://192.168.212.62:9010/';
+let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
@@ -11,6 +13,9 @@ export const environment = {
   addEmployee: Url + bassEmployeeApi + '/addnewemp',
   countrySateCity: Url + 'api/',
   login: Url + 'employee/login',
+  allCountry: location + 'countries',
+  allState: location + 'states/',
+  allCity: location + 'cities/',
   getUserDetail: Url + bassEmployeeApi + '/getemployee/',
   getAllEmployeeDetails: Url + bassEmployeeApi + '/getallemp',
   verifiedID: Url + bassEmployeeApi + '/verifyempid',
@@ -29,6 +34,7 @@ export const environment = {
   addOtherProduct: Url + baseProductApi + '/addotherproduct',
   getAllOtherProduct: Url + baseProductApi + '/getpartialproduct',
   UpdateOtherProduct: Url + baseProductApi + '/updateotherproduct',
+  gstUpdate: Url + baseProductApi + '/updategst/',
 
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
@@ -58,4 +64,12 @@ export const environment = {
   adminAprovalList: Url + baseRequestApi + '/getrequestsforadmin/',
   adminAprovel: Url + baseRequestApi + '/acceptAauthorize/',
   adminRejected: Url + baseRequestApi + '/rejectAauthorize/',
+
+  commend: Url + baseRequestApi + '/getactivecommends',
+
+  finRequestList: Url + baseRequestApi + '/requestforfinance/',
+  updateRequestList: Url + baseRequestApi + '/updaterequest/',
+  finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
+  finHolding: Url + baseRequestApi + '/holdrequest/',
+  finReject: Url + baseRequestApi + '/rejectFauthorize/',
 };

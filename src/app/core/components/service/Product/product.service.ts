@@ -78,4 +78,13 @@ export class ProductService {
   updateOtherProduct(data: any) {
     return this.productHttp.post(environment.UpdateOtherProduct, data);
   }
+  updateGst(sno: any, data: any) {
+    let gstParams = new HttpParams();
+    gstParams = gstParams.append('gstpercentage', data);
+    return this.productHttp.post(
+      environment.gstUpdate + sno,
+      {},
+      { params: gstParams },
+    );
+  }
 }
