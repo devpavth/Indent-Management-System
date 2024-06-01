@@ -15,7 +15,7 @@ export class RequestService {
   getYourReq(data: any) {
     return this.http.get(environment.getYourReq + '/' + data);
   }
-  viewReq(data: any) {
+  viewReq(data: any): Observable<any> {
     return this.http.get(environment.viewYourReq + data);
   }
   reqProduct(data: any) {
@@ -49,7 +49,7 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  finRequestList(data: any) {
+  finRequestList(data: any): Observable<any> {
     return this.http.get(environment.finRequestList + data);
   }
   commands() {

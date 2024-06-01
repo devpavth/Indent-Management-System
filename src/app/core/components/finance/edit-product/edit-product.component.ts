@@ -66,12 +66,10 @@ export class EditProductComponent implements OnInit {
       data.gstpercentage,
     );
     console.log('itemPrice', itemPrice);
-    // let cal = this.product.total - this.product.itemPrice;
-    let total = this.product.total - this.product.itemPrice + itemPrice;
 
     let finalList = {
       productDetails: [{ ...data }],
-      totalPrice: total.toFixed(2),
+
       sno: this.product.requestId,
     };
     console.log(finalList);

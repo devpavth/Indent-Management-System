@@ -1,7 +1,16 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequestService } from '../../service/Request/request.service';
 import { DonarService } from '../../service/Donar/donar.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Location } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  inject,
+  signal,
+} from '@angular/core';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 
 @Component({
@@ -12,8 +21,10 @@ import { SharedServiceService } from '../../service/shared-service/shared-servic
 export class ViewRequistionComponent implements OnInit {
   @Input() reqId: any;
   @Output() closeView = new EventEmitter<boolean>();
+  dataService = inject(RequestService);
 
-  _requestDetails: any = {};
+  // _requestDetails: any = {};
+  _requestDetails = signal<any>(null);
   productData: any;
   donorTotal: number = 0;
   caldate: any;
@@ -32,6 +43,8 @@ export class ViewRequistionComponent implements OnInit {
   commend: any;
 
   donorList: any;
+  dList: any;
+  cList: any[] = [];
   filteredDonors: any[] = [];
   assignedDonors: any[] = [];
 
@@ -45,6 +58,7 @@ export class ViewRequistionComponent implements OnInit {
     private donorService: DonarService,
     private shared: SharedServiceService,
     private fb: FormBuilder,
+    private loc: Location,
   ) {
     this.form = this.fb.group({
       donotedAmt: [''],
@@ -54,23 +68,50 @@ export class ViewRequistionComponent implements OnInit {
 
   ngOnInit() {
     this.fetchDetails(this.reqId);
-    this.fetchDonorList();
+    this.fetchDonorList(1);
     this.fetchReason();
   }
 
   fetchDetails(data: any) {
     this.requestService.viewReq(data).subscribe((res) => {
-      this._requestDetails = res;
+      this._requestDetails.set(res);
       this.calculateDate();
     });
   }
-
-  fetchDonorList() {
+  openInNewTab() {
+    const url = this.loc.prepareExternalUrl('/home/addDonar');
+    window.open(url, '_blank');
+  }
+  fetchDonorList(data: any) {
     this.donorService.getAllDonor().subscribe((res) => {
-      this.donorList = res;
+      this.dList = res;
+      this.cList = this.dList;
+      // this.donorList = res;
       console.log(res);
-      this.filteredDonors = this.donorList;
     });
+    if (data == 1) {
+      this.donorList = this.cList;
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 2) {
+      this.donorList = this.cList.filter(
+        (fin) => fin.dcategoryStatus == 'Local Donor',
+      );
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 3) {
+      this.donorList = this.cList.filter(
+        (fin) => fin.dcategoryStatus == 'International Donor',
+      );
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 4) {
+      this.donorList = this.cList.filter(
+        (fin) => fin.dcategoryStatus == 'Existing Donor',
+      );
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    }
   }
 
   onInput(event: Event): void {
@@ -151,8 +192,8 @@ export class ViewRequistionComponent implements OnInit {
     this.isEditProduct = true;
     console.log(data);
     let finalProduct = {
-      requestId: this._requestDetails.sno,
-      total: this._requestDetails.totalPrice,
+      requestId: this._requestDetails().sno,
+      total: this._requestDetails().totalPrice,
       ...data,
     };
 
@@ -191,7 +232,7 @@ export class ViewRequistionComponent implements OnInit {
     }
   }
   calculateDate() {
-    const check = new Date(this._requestDetails.createdOn);
+    const check = new Date(this._requestDetails().createdOn);
     let date = check.getTime() / 1000;
     console.log(date);
 
