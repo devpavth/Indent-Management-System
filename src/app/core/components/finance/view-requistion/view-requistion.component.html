@@ -76,11 +76,11 @@
                       Request#
                     </h2>
                     <span class="mt-1 block text-gray-500">{{
-                      _requestDetails.requestNo
+                      _requestDetails().requestNo
                     }}</span>
 
                     <address class="mt-2 font-medium not-italic text-gray-800">
-                      {{ _requestDetails.requisitioner }}<br />
+                      {{ _requestDetails().requisitioner }}<br />
                       <!-- {{_requestDetails.empDept }}<br> -->
                     </address>
                   </div>
@@ -96,15 +96,15 @@
                     <h3
                       class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
                     >
-                      {{ _requestDetails.empName }}
+                      {{ _requestDetails().empName }}
                     </h3>
 
                     <address
                       class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
                     >
-                      {{ _requestDetails.empRole }}<br />
-                      {{ _requestDetails.branchName }}<br />
-                      {{ _requestDetails.empDept }}<br />
+                      {{ _requestDetails().empRole }}<br />
+                      {{ _requestDetails().branchName }}<br />
+                      {{ _requestDetails().empDept }}<br />
                     </address>
                   </div>
                   <!-- Col -->
@@ -121,7 +121,9 @@
                         <dd
                           class="col-span-2 text-gray-500 dark:text-neutral-500"
                         >
-                          {{ _requestDetails.createdOn | date: "dd-MMMM-yyyy" }}
+                          {{
+                            _requestDetails().createdOn | date: "dd-MMMM-yyyy"
+                          }}
                         </dd>
                       </dl>
                       <dl class="grid gap-x-3 sm:grid-cols-5">
@@ -133,7 +135,7 @@
                         <dd
                           class="col-span-2 text-gray-500 dark:text-neutral-500"
                         >
-                          {{ _requestDetails.createdOn | date: "shortTime" }}
+                          {{ _requestDetails().createdOn | date: "shortTime" }}
                         </dd>
                       </dl>
                       <dl class="grid gap-x-3 sm:grid-cols-5">
@@ -187,7 +189,8 @@
                             <tbody>
                               <tr
                                 *ngFor="
-                                  let product of _requestDetails.productDetails
+                                  let product of _requestDetails()
+                                    .productDetails
                                 "
                                 class="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                               >
@@ -268,7 +271,7 @@
                         </dt>
                         <dd class="col-span-2 text-gray-500">
                           {{
-                            this._requestDetails.totalPrice | currency: "INR"
+                            this._requestDetails().totalPrice | currency: "INR"
                           }}
                         </dd>
                       </dl>
@@ -456,6 +459,73 @@
                   <div
                     class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
                   >
+                    <div class="mb-6 flex">
+                      <div class="me-4 flex items-center">
+                        <input
+                          id="inline-radio"
+                          #r1
+                          type="radio"
+                          (change)="fetchDonorList(r1.value)"
+                          value="1"
+                          name="inline-radio-group"
+                          class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                        />
+                        <label
+                          for="inline-radio"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >All</label
+                        >
+                      </div>
+                      <div class="me-4 flex items-center">
+                        <input
+                          id="inline-2-radio"
+                          type="radio"
+                          value="2"
+                          #r2
+                          (change)="fetchDonorList(r2.value)"
+                          name="inline-radio-group"
+                          class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                        />
+                        <label
+                          for="inline-2-radio"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >Local</label
+                        >
+                      </div>
+                      <div class="me-4 flex items-center">
+                        <input
+                          id="inline-checked-radio"
+                          #r3
+                          type="radio"
+                          (change)="fetchDonorList(r3.value)"
+                          value="3"
+                          name="inline-radio-group"
+                          class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                        />
+                        <label
+                          for="inline-checked-radio"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >International</label
+                        >
+                      </div>
+                      <div class="me-4 flex items-center">
+                        <input
+                          id="inline-checked-radio"
+                          type="radio"
+                          #r4
+                          value="4"
+                          (change)="fetchDonorList(r4.value)"
+                          name="inline-radio-group"
+                          class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                        />
+                        <label
+                          for="inline-checked-radio"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >Exciting</label
+                        >
+                      </div>
+                    </div>
+
                     <form
                       class="flex gap-5"
                       [formGroup]="form"
@@ -469,7 +539,10 @@
                           >
                             Select Donor
                           </label>
-                          <button class="mb-2 flex items-center gap-1">
+                          <button
+                            (click)="openInNewTab()"
+                            class="mb-2 flex items-center gap-1"
+                          >
                             <svg
                               class="h-3 w-3 text-gray-400 dark:text-white"
                               aria-hidden="true"
@@ -485,8 +558,9 @@
                                 clip-rule="evenodd"
                               />
                             </svg>
+                            <!-- routerLink="/home/addDonar"
+                              target="_blank" -->
                             <a
-                              routerLink="/home/addDonar"
                               class="text-sm text-gray-400 hover:underline dark:text-blue-500"
                               >Add Donor</a
                             >
@@ -607,7 +681,9 @@
                           >
                             {{ donor.dfirstName }} {{ donor.dlastName }}
                           </td>
-                          <td class="px-6 py-4">{{ donor.donotedAmt }}</td>
+                          <td class="px-6 py-4">
+                            {{ donor.donotedAmt | currency: "INR" }}
+                          </td>
                           <td class="px-6 py-4">
                             <a (click)="deleteDonor(donor.donotedAmt)"
                               ><svg
@@ -637,7 +713,7 @@
                     *ngIf="assignedDonors.length > 0"
                     class="py-4 text-end font-semibold"
                   >
-                    Total Amount Donated :
+                    Total Donated Amount :
                     <span class="text-green-600">{{
                       donorTotal | currency: "INR"
                     }}</span>
@@ -656,7 +732,7 @@
                           [ngClass]="{
                             'text-green-500':
                               this.approvelAmt ==
-                              this._requestDetails.totalPrice
+                              this._requestDetails().totalPrice
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -674,7 +750,8 @@
                         <svg
                           [ngClass]="{
                             'text-green-500':
-                              approvelAmt == this._requestDetails.totalPrice &&
+                              approvelAmt ==
+                                this._requestDetails().totalPrice &&
                               approvelAmt == donorTotal
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
@@ -696,12 +773,12 @@
                       <button
                         (click)="submiteDonorList()"
                         [disabled]="
-                          approvelAmt != this._requestDetails.totalPrice ||
+                          approvelAmt != this._requestDetails().totalPrice ||
                           approvelAmt != donorTotal
                         "
                         [ngClass]="{
                           'bg-gray-500 hover:bg-gray-500':
-                            approvelAmt != this._requestDetails.totalPrice ||
+                            approvelAmt != this._requestDetails().totalPrice ||
                             approvelAmt != donorTotal
                         }"
                         type="submit"
