@@ -30,6 +30,13 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../components/finance/finance.module').then(
+            (m) => m.FinanceModule,
+          ),
+      },
     ],
   },
 ];

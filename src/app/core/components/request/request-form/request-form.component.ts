@@ -18,6 +18,7 @@ export class RequestFormComponent implements OnInit {
   _rItemList: any[] = []; //used for addinf request items to array
 
   _productName: any;
+
   _brandName: any;
   _model: any;
   _description: any;
@@ -52,7 +53,7 @@ export class RequestFormComponent implements OnInit {
       unitPrice: [],
       itemPrice: [],
       hsnCode: [],
-      gstRate: [],
+
       description: [],
     });
   }
@@ -139,6 +140,8 @@ export class RequestFormComponent implements OnInit {
       itemPrice: totalwithtax.toFixed(2),
       itemcode: this._product.itemcode,
       productId: this._product.sno,
+      gstpercentage: this._product.gstpercentage,
+
       status: 200,
     };
 

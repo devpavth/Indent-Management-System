@@ -10,6 +10,7 @@ import { DonarService } from '../../../service/Donar/donar.service';
 })
 export class AddDonarComponent implements OnInit {
   addDonorForm: FormGroup;
+  _country: any;
   _state: any;
   _city: any;
 
@@ -19,7 +20,9 @@ export class AddDonarComponent implements OnInit {
     { located: 'International Donor', value: 127 },
   ];
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.fetchCountry();
+  }
   constructor(
     private fb: FormBuilder,
     private readonly countryStateCity: SharedServiceService,
@@ -39,17 +42,28 @@ export class AddDonarComponent implements OnInit {
       dpinCode: ['', [Validators.required]],
     });
   }
-
+  fetchCountry() {
+    this.countryStateCity.getAllCountry().subscribe((res) => {
+      console.log(res);
+      this._country = res;
+    });
+  }
   fetchState(selectedValue: string) {
     console.log(selectedValue);
 
-    this.countryStateCity.getState(selectedValue).subscribe((res) => {
+    this.countryStateCity.getAllState(selectedValue).subscribe((res) => {
+      console.log(res);
+
       this._state = res;
     });
   }
 
-  fetchCity(city: string) {
-    this.countryStateCity.getCity(city).subscribe((res) => {
+  fetchCity(city: any) {
+    console.log(city);
+
+    this.countryStateCity.getAllCity(city).subscribe((res) => {
+      console.log(res);
+
       this._city = res;
     });
   }

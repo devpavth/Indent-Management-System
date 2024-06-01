@@ -17,6 +17,7 @@ import {
 import { SharedModule } from './shared/shared.module';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { tokenInterceptor } from './core/components/service/token.interceptor';
+import { FinanceModule } from './core/components/finance/finance.module';
 
 // const config: SocketIoConfig = { url: 'http://192.168.1.7:9001/', options: {} };
 
@@ -30,6 +31,7 @@ import { tokenInterceptor } from './core/components/service/token.interceptor';
     HomeModule,
     HttpClientModule,
     SharedModule,
+    FinanceModule,
 
     // SocketIoModule.forRoot(config)
   ],
