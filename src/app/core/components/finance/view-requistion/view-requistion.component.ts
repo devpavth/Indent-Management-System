@@ -61,7 +61,7 @@ export class ViewRequistionComponent implements OnInit {
     private loc: Location,
   ) {
     this.form = this.fb.group({
-      donotedAmt: [''],
+      donotedAmt: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
       donorId: ['', Validators.required],
     });
   }
@@ -142,6 +142,43 @@ export class ViewRequistionComponent implements OnInit {
     this.isApprovelAmt = true;
   }
 
+  // onSubmit(): void {
+  //   const donorName = this.selectedDonorName; // Change this line to use selectedDonorName
+  //   const selectedDonor = this.donorList.find(
+  //     (donor: any) => `${donor.dfirstName} ${donor.dlastName}` === donorName,
+  //   );
+
+  //   if (!selectedDonor) {
+  //     this.invalidDonor = true;
+  //   } else {
+  //     this.invalidDonor = false;
+
+  //     const existingDonorIndex = this.assignedDonors.findIndex(
+  //       (donor: any) => donor.donorId === selectedDonor.donorId,
+  //     );
+
+  //     if (existingDonorIndex !== -1) {
+  //       this.assignedDonors[existingDonorIndex].donotedAmt +=
+  //         this.form.value.donotedAmt;
+  //       this.donorTotal += this.form.value.donotedAmt;
+  //     } else {
+  //       let list = {
+  //         ...this.form.value,
+  //         donorId: selectedDonor.donorId,
+  //         dfirstName: selectedDonor.dfirstName,
+  //         dlastName: selectedDonor.dlastName,
+  //       };
+  //       this.assignedDonors.push(list);
+
+  //       this.donorTotal += list.donotedAmt;
+  //     }
+
+  //     console.log(this.donorTotal);
+  //     console.log('Form submitted', this.assignedDonors);
+  //     this.form.reset();
+  //     this.selectedDonorName = '';
+  //   }
+  // }
   onSubmit(): void {
     const donorName = this.selectedDonorName; // Change this line to use selectedDonorName
     const selectedDonor = this.donorList.find(
@@ -157,20 +194,22 @@ export class ViewRequistionComponent implements OnInit {
         (donor: any) => donor.donorId === selectedDonor.donorId,
       );
 
+      const donotedAmt = Number(this.form.value.donotedAmt); // Ensure donotedAmt is a number
+
       if (existingDonorIndex !== -1) {
-        this.assignedDonors[existingDonorIndex].donotedAmt +=
-          this.form.value.donotedAmt;
-        this.donorTotal += this.form.value.donotedAmt;
+        this.assignedDonors[existingDonorIndex].donotedAmt += donotedAmt;
+        this.donorTotal += donotedAmt;
       } else {
         let list = {
           ...this.form.value,
+          donotedAmt: donotedAmt, // Ensure donotedAmt is a number
           donorId: selectedDonor.donorId,
           dfirstName: selectedDonor.dfirstName,
           dlastName: selectedDonor.dlastName,
         };
         this.assignedDonors.push(list);
 
-        this.donorTotal += list.donotedAmt;
+        this.donorTotal += donotedAmt;
       }
 
       console.log(this.donorTotal);
