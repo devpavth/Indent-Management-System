@@ -169,6 +169,7 @@ export class ViewRequistionComponent implements OnInit {
           dlastName: selectedDonor.dlastName,
         };
         this.assignedDonors.push(list);
+
         this.donorTotal += list.donotedAmt;
       }
 
