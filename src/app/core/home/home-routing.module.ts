@@ -37,6 +37,13 @@ const routes: Routes = [
             (m) => m.FinanceModule,
           ),
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../components/procurement/procurement.module').then(
+            (m) => m.ProcurementModule,
+          ),
+      },
     ],
   },
 ];
