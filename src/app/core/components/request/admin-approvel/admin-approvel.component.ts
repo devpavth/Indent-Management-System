@@ -83,5 +83,6 @@ export class AdminApprovelComponent implements OnInit {
 
   closeView(data: any) {
     this.isViewReq = data;
+    this.fetchRequestList();
   }
 }
