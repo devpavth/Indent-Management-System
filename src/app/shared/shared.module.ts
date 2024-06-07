@@ -17,6 +17,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { NetworkErrorComponent } from './network-error/network-error.component';
 import { CdeletePopComponent } from './cdelete-pop/cdelete-pop.component';
+import { PdfUploadComponent } from './pdf-upload/pdf-upload.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { CdeletePopComponent } from './cdelete-pop/cdelete-pop.component';
     UserDetailsComponent,
     NetworkErrorComponent,
     CdeletePopComponent,
+    PdfUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { CdeletePopComponent } from './cdelete-pop/cdelete-pop.component';
     SpinnerComponent,
     UserDetailsComponent,
     CdeletePopComponent,
+    PdfUploadComponent,
   ],
 })
 export class SharedModule {}
