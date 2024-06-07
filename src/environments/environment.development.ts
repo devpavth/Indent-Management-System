@@ -78,4 +78,5 @@ export const environment = {
 
   // vendor End Point Api
   addVendor: Url + baseVendorApi + '/addnewvendor',
+  getAllVendorList: Url + baseVendorApi + '/getactivevendors',
 };
