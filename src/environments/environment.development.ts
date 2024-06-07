@@ -7,6 +7,7 @@ let baseProductApi = 'product';
 let baseRequestApi = 'requestindent';
 let baseBranchApi = 'branch';
 let baseDonarApi = 'donor';
+let baseVendorApi = 'vendor';
 
 export const environment = {
   employee: Url + bassEmployeeApi,
@@ -74,4 +75,7 @@ export const environment = {
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
+
+  // vendor End Point Api
+  addVendor: Url + baseVendorApi + '/addnewvendor',
 };
