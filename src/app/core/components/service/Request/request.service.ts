@@ -84,4 +84,10 @@ export class RequestService {
     }
     return null;
   }
+
+  uploadPdf(data: any, fileName: any) {
+    let name = new HttpParams();
+    name = name.append('selectedQuote', fileName);
+    return this.http.post(environment.comparisonPdf, data, { params: name });
+  }
 }

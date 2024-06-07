@@ -288,6 +288,7 @@ export class RequestFormComponent implements OnInit {
   }
   closeOtherProduct(data: any) {
     this.isOther = data;
+    this.fetchProduct();
   }
 
   getOtherProduct(data: any) {
