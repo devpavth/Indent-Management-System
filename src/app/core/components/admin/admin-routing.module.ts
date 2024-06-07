@@ -13,6 +13,7 @@ import { ViewBranchComponent } from './Branch/view-branch/view-branch.component'
 import { AddDonarComponent } from './Donar/add-donar/add-donar.component';
 import { DonarListComponent } from './Donar/donar-list/donar-list.component';
 import { ViewDonarComponent } from './Donar/view-donar/view-donar.component';
+import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { component: AddDonarComponent, path: 'addDonar' },
   { component: DonarListComponent, path: 'donarList' },
   { component: ViewDonarComponent, path: 'viewDonar' },
+  { component: AddVendorComponent, path: 'addVendor' },
 ];
 
 @NgModule({

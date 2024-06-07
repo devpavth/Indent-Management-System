@@ -352,7 +352,7 @@
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
                         <span class="">Rejected reason :</span
-                        >{{ _requestDetails.commends }}
+                        >{{ _requestDetails.commendDetail }}
                       </p>
                       <span
                         class="mt-1 block text-sm font-semibold text-gray-500"
@@ -455,7 +455,7 @@
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
                         <span class="">Rejected reason :</span
-                        >{{ _requestDetails.commends }}
+                        >{{ _requestDetails.commendDetail }}
                       </p>
                       <span
                         class="mt-1 block text-sm font-semibold text-gray-500"
@@ -556,18 +556,45 @@
       </div>
       <form class="space-y-4 md:space-y-6">
         <div class="sm:col-span-2">
-          <label
-            for="description"
-            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Message</label
-          >
-          <textarea
-            #msg
-            rows="5"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder="Write a description..."
-          ></textarea>
+          <div class="relative w-full">
+            <label
+              for="email"
+              class="mb-2 hidden text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Email address</label
+            >
+            <div
+              class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+            >
+              <svg
+                class="h-6 w-6 text-gray-500 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 5.983C3 4.888 3.895 4 5 4h14c1.105 0 2 .888 2 1.983v8.923a1.992 1.992 0 0 1-2 1.983h-6.6l-2.867 2.7c-.955.899-2.533.228-2.533-1.08v-1.62H5c-1.105 0-2-.888-2-1.983V5.983Zm5.706 3.809a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Zm2.585.002a1 1 0 1 1 .003 1.414 1 1 0 0 1-.003-1.414Zm5.415-.002a1 1 0 1 0-1.412 1.417 1 1 0 1 0 1.412-1.417Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+
+            <select
+              #msg
+              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:rounded-none sm:rounded-l-lg"
+              placeholder="Enter your email"
+            >
+              <option
+                *ngFor="let commend of commend"
+                value=" {{ commend.commendId }}"
+              >
+                {{ commend.commends }}
+              </option>
+            </select>
+          </div>
         </div>
         <small class="pt-3 text-gray-400"
           >*The Request will not get rejected .If the File is unfinished or
