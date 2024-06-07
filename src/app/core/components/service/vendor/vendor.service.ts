@@ -11,4 +11,7 @@ export class VendorService {
   addVendor(data: any) {
     return this.http.post(environment.addVendor, data);
   }
+  getAllVendor() {
+    return this.http.get(environment.getAllVendorList);
+  }
 }
