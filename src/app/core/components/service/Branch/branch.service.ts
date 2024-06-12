@@ -37,4 +37,7 @@ export class BranchService {
   updateBranch(data: any) {
     return this.http.post(environment.updateBranch, data);
   }
+  getAllDepartments() {
+    return this.http.get(environment.getAlldepartment);
+  }
 }

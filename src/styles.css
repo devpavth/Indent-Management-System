@@ -138,7 +138,21 @@
     transform: rotateY(0);
   }
 }
-
+@keyframes anIn {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(100%);
+  }
+}
+.animate-in {
+  animation-name: anIn;
+  animation-duration: 0.8s;
+  animation-fill-mode: both;
+}
 .created {
   @apply me-2 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300;
 }
