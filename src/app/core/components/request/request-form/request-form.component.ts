@@ -36,6 +36,8 @@ export class RequestFormComponent implements OnInit {
   showRequisitioner: boolean = false;
   isRequisitioner: boolean = true;
   isOther: boolean = false;
+  isHeader: boolean = true;
+  isProductAdd: boolean = false;
 
   reqName: any;
 
@@ -61,17 +63,17 @@ export class RequestFormComponent implements OnInit {
     this.fetchProduct();
   }
 
-  RequisitionerFunction(data: any) {
-    this.reqName = data;
-    this.isRequisitioner = false;
-    this.showRequisitioner = true;
-  }
+  // RequisitionerFunction(data: any) {
+  //   this.reqName = data;
+  //   this.isRequisitioner = false;
+  //   this.showRequisitioner = true;
+  // }
 
-  clearReqisition() {
-    this.reqName = '';
-    this.isRequisitioner = true;
-    this.showRequisitioner = false;
-  }
+  // clearReqisition() {
+  //   this.reqName = '';
+  //   this.isRequisitioner = true;
+  //   this.showRequisitioner = false;
+  // }
 
   fetchProduct() {
     this.ProductService.getRequestPoduct().subscribe((res) => {
@@ -116,6 +118,54 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
+<<<<<<< Updated upstream
+=======
+  submitHeader() {
+    this.isHeader = false;
+    this.isProductAdd = true;
+  }
+
+  // addRequestedProductItem(product: any) {
+  //   if (this._rItemList.length > 0) {
+  //     this.visiable = true;
+  //     this.emptyVisiable = false;
+  //   }
+
+  //   this.emptyVisiable = false;
+  //   this.visiable = true;
+  //   let desc = this._product.configuration;
+
+  //   let pTotal = Number(product.unitPrice) * Number(product.qty);
+
+  //   let gstTotal = (this._product.gstpercentage / 100) * pTotal;
+  //   let totalwithtax = gstTotal + pTotal;
+  //   this._totalPrice += totalwithtax;
+  //   console.log(gstTotal);
+  //   console.log(totalwithtax);
+
+  //   const rItem = {
+  //     ...product,
+  //     configration: desc,
+  //     itemPrice: totalwithtax.toFixed(2),
+  //     itemcode: this._product.itemcode,
+  //     productId: this._product.sno,
+  //     gstpercentage: this._product.gstpercentage,
+
+  //     status: 200,
+  //   };
+  //   console.log(product);
+
+  //   const existingProduct = this._rItemList.findIndex(
+  //     (fin: any) => fin.itemName === product.itemName,
+  //   );
+  //   console.log(existingProduct);
+
+  //   this._rItemList.push(rItem);
+  //   console.log(this._rItemList);
+
+  //   this.requestProduct.reset();
+  // }
+>>>>>>> Stashed changes
   addRequestedProductItem(product: any) {
     if (this._rItemList.length > 0) {
       this.visiable = true;

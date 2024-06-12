@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 let Url = 'http://192.168.1.102:9010/';
+=======
+let Url = 'http://192.168.1.16:9010/';
+>>>>>>> Stashed changes
 // let Url = 'http://192.168.212.62:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
@@ -43,6 +47,7 @@ export const environment = {
   getBranchDetails: Url + baseBranchApi + '/getbranchbyid',
   deleteDept: Url + baseBranchApi + '/deletedept',
   updateBranch: Url + baseBranchApi + '/updatebranch',
+  getAlldepartment: Url + baseBranchApi + '/getalldepartment',
 
   addDonar: Url + baseDonarApi + '/addnewdonor',
   getAllDonor: Url + baseDonarApi + '/getalldonors',
@@ -72,4 +77,14 @@ export const environment = {
   finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
   finHolding: Url + baseRequestApi + '/holdrequest/',
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
+<<<<<<< Updated upstream
+=======
+
+  comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
+
+  // vendor End Point Api
+  addVendor: Url + baseVendorApi + '/addnewvendor',
+  getAllVendorList: Url + baseVendorApi + '/getactivevendors',
+  deleteVendor: Url + baseVendorApi + '/deletebyvendorid/',
+>>>>>>> Stashed changes
 };

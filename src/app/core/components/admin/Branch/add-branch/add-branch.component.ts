@@ -8,7 +8,7 @@ import { BranchService } from '../../../service/Branch/branch.service';
   templateUrl: './add-branch.component.html',
   styleUrl: './add-branch.component.css',
 })
-export class AddBranchComponent {
+export class AddBranchComponent implements OnInit {
   constructor(
     private readonly countryStateCity: SharedServiceService,
     private fb: FormBuilder,
@@ -25,7 +25,11 @@ export class AddBranchComponent {
       state: [],
       pinCode: [],
       gstNumber: [],
+      departments: [],
     });
+  }
+  ngOnInit(): void {
+    this.fetchDeptList();
   }
 
   _state: any;
@@ -48,6 +52,18 @@ export class AddBranchComponent {
       this._city = res;
     });
   }
+
+  fetchDeptList() {
+    this.branchService.getAllDepartments().subscribe((res: any) => {
+      this._department = Object.entries(res).map(([id, dName]) => ({
+        id,
+        dName,
+      }));
+      console.log(res);
+      console.log(this._department);
+    });
+  }
+
   addDepartList(data: any) {
     this.isDepartment = true;
     let departlist = { deptName: data, deptStatus: 200 };
@@ -58,11 +74,9 @@ export class AddBranchComponent {
     this._department.splice(index, 1);
   }
   submitBranchForm(data: any) {
-    let list = data;
-    let branchDetails = { ...list, departments: this._department };
-    console.log(branchDetails);
+    console.log(data);
 
-    this.branchService.addBranch(branchDetails).subscribe((res) => {
+    this.branchService.addBranch(data).subscribe((res) => {
       console.log(res);
     });
   }
