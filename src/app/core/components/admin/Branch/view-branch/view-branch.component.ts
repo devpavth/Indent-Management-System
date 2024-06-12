@@ -45,7 +45,6 @@ export class ViewBranchComponent implements OnInit {
   }
   ngOnInit() {
     this.fetchBranchDetails();
-    this.fetchDeptList('');
     console.log(this.getBranchCode);
     this.viewBranchForm.get('branchName')?.disable();
     this.viewBranchForm.get('manager')?.disable();
@@ -87,17 +86,6 @@ export class ViewBranchComponent implements OnInit {
       this.fetchState(this._branch.country);
 
       this.fetchCity(this._branch.state);
-      this.fetchDeptList(this._branch.departments.deptName);
-    });
-  }
-  fetchDeptList(data: any) {
-    this.branchService.getAllDepartments().subscribe((res: any) => {
-      this._department = Object.entries(res).map(([id, dName]) => ({
-        id,
-        dName,
-      }));
-      console.log(res);
-      console.log(this._department);
     });
   }
 
@@ -136,7 +124,19 @@ export class ViewBranchComponent implements OnInit {
         },
       );
   }
-
+  deleteDept(dept: any) {
+    console.log(dept);
+    this.branchService.deleteDepart(dept).subscribe(
+      (res) => {
+        console.log('delete Department');
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.ngOnInit();
+        }
+      },
+    );
+  }
   enableEdit() {
     this.viewBranchForm.get('branchName')?.enable();
     this.viewBranchForm.get('manager')?.enable();
@@ -154,14 +154,16 @@ export class ViewBranchComponent implements OnInit {
   }
   updateBranch(data: any) {
     console.log(data);
+    let list = { ...data, departments: this._department };
+    console.log(list);
 
-    this.branchService.updateBranch(data).subscribe(
+    this.branchService.updateBranch(list).subscribe(
       (res) => {
         console.log(res);
+        // this.closeSuccess.emit(true)
+        // console.log('jjhgh');
       },
       (error) => {
-        console.log(error);
-
         if (error.status == 200) {
           this.closeSuccess.emit(true);
         }
