@@ -84,7 +84,10 @@ export class AddBranchComponent implements OnInit {
     console.log(data);
     let list = {
       ...data,
-      departments: this.selectedDepartments.filter((fil) => fil.selcdDeptId),
+      departments: this.selectedDepartments.map((dept) => ({
+        selcdDeptId: dept.selcdDeptId,
+        deptStatus: 200,
+      })),
     };
     console.log(list);
 
