@@ -118,16 +118,11 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
   submitHeader() {
     this.isHeader = false;
     this.isProductAdd = true;
   }
 
-=======
->>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
   // addRequestedProductItem(product: any) {
   //   if (this._rItemList.length > 0) {
   //     this.visiable = true;
@@ -168,10 +163,7 @@ export class RequestFormComponent implements OnInit {
 
   //   this.requestProduct.reset();
   // }
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
+
   addRequestedProductItem(product: any) {
     if (this._rItemList.length > 0) {
       this.visiable = true;

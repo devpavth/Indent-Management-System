@@ -25,7 +25,6 @@ export class AddBranchComponent implements OnInit {
       state: [],
       pinCode: [],
       gstNumber: [],
-      departments: [],
     });
   }
   ngOnInit(): void {
@@ -35,6 +34,7 @@ export class AddBranchComponent implements OnInit {
   _state: any;
   _city: any;
   _department: any[] = [];
+  selectedDepartments: { selcdDeptId: string; dName: string }[] = [];
   isDepartment = false;
 
   addBranchForm: FormGroup;
@@ -55,8 +55,8 @@ export class AddBranchComponent implements OnInit {
 
   fetchDeptList() {
     this.branchService.getAllDepartments().subscribe((res: any) => {
-      this._department = Object.entries(res).map(([id, dName]) => ({
-        id,
+      this._department = Object.entries(res).map(([selcdDeptId, dName]) => ({
+        selcdDeptId,
         dName,
       }));
       console.log(res);
@@ -64,19 +64,31 @@ export class AddBranchComponent implements OnInit {
     });
   }
 
-  addDepartList(data: any) {
+  addDepartList(data: string) {
     this.isDepartment = true;
-    let departlist = { deptName: data, deptStatus: 200 };
-    this._department.push(departlist);
-    console.log(this._department);
+    let departmentid = this._department.find((dep) => dep.selcdDeptId === data);
+    let alreadyselect = this.selectedDepartments.some(
+      (dep) => dep.selcdDeptId === data,
+    );
+    console.log(departmentid);
+
+    if (departmentid && !alreadyselect) {
+      this.selectedDepartments.push(departmentid);
+      console.log(this.selectedDepartments);
+    }
   }
   removeDepartmentList(index: any) {
-    this._department.splice(index, 1);
+    this.selectedDepartments.splice(index, 1);
   }
   submitBranchForm(data: any) {
     console.log(data);
+    let list = {
+      ...data,
+      departments: this.selectedDepartments.filter((fil) => fil.selcdDeptId),
+    };
+    console.log(list);
 
-    this.branchService.addBranch(data).subscribe((res) => {
+    this.branchService.addBranch(list).subscribe((res) => {
       console.log(res);
     });
   }
