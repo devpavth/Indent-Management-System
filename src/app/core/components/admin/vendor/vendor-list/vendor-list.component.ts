@@ -8,8 +8,11 @@ import { VendorService } from '../../../service/vendor/vendor.service';
 })
 export class VendorListComponent implements OnInit {
   _vendor: any;
+<<<<<<< HEAD
   vendorData: any;
   isVendorView: boolean = false;
+=======
+>>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
   constructor(private vendorService: VendorService) {}
   ngOnInit() {
     this.fetchallvendor();
@@ -28,11 +31,14 @@ export class VendorListComponent implements OnInit {
   }
   viewVendor(data: any) {
     console.log(data);
+<<<<<<< HEAD
     this.vendorData = data;
     this.isVendorView = true;
   }
   closeview(data: any) {
     this.isVendorView = data;
     this.fetchallvendor();
+=======
+>>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
   }
 }

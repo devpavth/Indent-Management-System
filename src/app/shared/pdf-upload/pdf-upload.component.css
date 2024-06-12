@@ -1,0 +1,3 @@
+.disBtn {
+  @apply cursor-not-allowed bg-gray-400;
+}

@@ -14,7 +14,10 @@ export class VendorService {
   getAllVendor() {
     return this.http.get(environment.getAllVendorList);
   }
+<<<<<<< HEAD
   deleteVendor(id: any) {
     return this.http.post(environment.deleteVendor + id, id);
   }
+=======
+>>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
 }

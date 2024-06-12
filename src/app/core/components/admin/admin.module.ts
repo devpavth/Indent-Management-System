@@ -23,6 +23,9 @@ import { SuccessForBranchComponent } from './Branch/success-for-branch/success-f
 import { AddDonarComponent } from './Donar/add-donar/add-donar.component';
 import { DonarListComponent } from './Donar/donar-list/donar-list.component';
 import { ViewDonarComponent } from './Donar/view-donar/view-donar.component';
+import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
+import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
+import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -45,6 +48,9 @@ import { ViewDonarComponent } from './Donar/view-donar/view-donar.component';
     AddDonarComponent,
     DonarListComponent,
     ViewDonarComponent,
+    AddVendorComponent,
+    VendorListComponent,
+    ViewVendorComponent,
   ],
   imports: [
     CommonModule,

@@ -118,6 +118,7 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   submitHeader() {
@@ -125,6 +126,8 @@ export class RequestFormComponent implements OnInit {
     this.isProductAdd = true;
   }
 
+=======
+>>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
   // addRequestedProductItem(product: any) {
   //   if (this._rItemList.length > 0) {
   //     this.visiable = true;
@@ -165,7 +168,10 @@ export class RequestFormComponent implements OnInit {
 
   //   this.requestProduct.reset();
   // }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 2b1d7429cbe2d4e0915b594db79d9708a0631ebf
   addRequestedProductItem(product: any) {
     if (this._rItemList.length > 0) {
       this.visiable = true;
@@ -174,6 +180,7 @@ export class RequestFormComponent implements OnInit {
 
     this.emptyVisiable = false;
     this.visiable = true;
+
     let desc = this._product.configuration;
 
     let pTotal = Number(product.unitPrice) * Number(product.qty);
@@ -191,19 +198,59 @@ export class RequestFormComponent implements OnInit {
       itemcode: this._product.itemcode,
       productId: this._product.sno,
       gstpercentage: this._product.gstpercentage,
-
       status: 200,
     };
+    console.log(product);
 
-    this._rItemList.push(rItem);
+    const existingProductIndex = this._rItemList.findIndex(
+      (fin: any) => fin.itemName === product.itemName,
+    );
+    console.log(existingProductIndex);
+
+    if (existingProductIndex !== -1) {
+      // Update the existing product's quantity and total price
+      let existingProduct = this._rItemList[existingProductIndex];
+      existingProduct.qty += product.qty;
+      let newTotal =
+        Number(existingProduct.unitPrice) * Number(existingProduct.qty);
+      let newGstTotal = (existingProduct.gstpercentage / 100) * newTotal;
+      let newTotalWithTax = newGstTotal + newTotal;
+      existingProduct.itemPrice = newTotalWithTax.toFixed(2);
+      console.log(existingProduct);
+    } else {
+      this._rItemList.push(rItem);
+    }
+
     console.log(this._rItemList);
 
     this.requestProduct.reset();
   }
 
-  deleterItem(index: number, itemTotalPrice: number) {
+  // deleterItem(index: number, itemTotalPrice: number) {
+  //   this._rItemList.splice(index, 1);
+  //   this._totalPrice = this._totalPrice - itemTotalPrice;
+  //   this.successToast = true;
+
+  //   setTimeout(() => {
+  //     this.successToast = false;
+  //   }, 900);
+
+  //   if (this._rItemList.length == 0) {
+  //     this.visiable = false;
+  //     this.emptyVisiable = true;
+  //   }
+  // }
+  deleterItem(index: number) {
+    // Get the item to be deleted
+    const item = this._rItemList[index];
+
+    // Subtract the item's price from the total price
+    const itemTotalPrice = Number(item.itemPrice);
+    this._totalPrice -= itemTotalPrice;
+
+    // Remove the item from the list
     this._rItemList.splice(index, 1);
-    this._totalPrice = this._totalPrice - itemTotalPrice;
+
     this.successToast = true;
 
     setTimeout(() => {
@@ -257,6 +304,7 @@ export class RequestFormComponent implements OnInit {
   }
   closeOtherProduct(data: any) {
     this.isOther = data;
+    this.fetchProduct();
   }
 
   getOtherProduct(data: any) {

@@ -1,0 +1,167 @@
+<div class="bg-gray-700">
+  <!-- Upload Section -->
+  <div
+    *ngIf="pdfSrc.length !== 3"
+    class="flex w-full items-center justify-center"
+  >
+    <label
+      for="dropzone-file"
+      class="dark:hover:bg-bray-800 flex h-20 w-full cursor-pointer flex-col items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+    >
+      <div class="flex flex-col items-center justify-center">
+        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+          <span class="font-semibold">Click to upload PDF</span>
+        </p>
+      </div>
+      <input
+        id="dropzone-file"
+        type="file"
+        class="hidden"
+        (change)="onFileSelected($event)"
+        accept="application/pdf"
+        multiple
+      />
+    </label>
+  </div>
+
+  <!-- PDF Display Section -->
+  <div *ngIf="pdfSrc.length > 0" class="mt-4 flex justify-center">
+    <button
+      class="mx-8"
+      (click)="showPreviousSlide()"
+      [disabled]="currentSlideIndex === 0"
+    >
+      <div
+        [ngClass]="{ disBtn: currentSlideIndex === 0 }"
+        class="rounded-full bg-purple-700 p-2"
+      >
+        <svg
+          class="h-6 w-6 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m15 19-7-7 7-7"
+          />
+        </svg>
+      </div>
+    </button>
+
+    <div>
+      <iframe
+        [src]="pdfSrc[currentSlideIndex]"
+        class="mt-8 h-[1140px] w-[794px]"
+      ></iframe>
+      <div class="my-4 flex items-center justify-end gap-2">
+        <button
+          (click)="deleteSlide(currentSlideIndex)"
+          class="an my-1 flex items-center justify-center rounded-full bg-red-600 p-2 font-semibold text-white hover:bg-red-900"
+        >
+          <svg
+            class="h-5 w-5 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <button
+      (click)="showNextSlide()"
+      class="mx-8"
+      [disabled]="currentSlideIndex === pdfSrc.length - 1"
+    >
+      <div
+        [ngClass]="{ disBtn: currentSlideIndex === pdfSrc.length - 1 }"
+        class="rounded-full bg-purple-700 p-2"
+      >
+        <svg
+          class="h-6 w-6 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="m9 5 7 7-7 7"
+          />
+        </svg>
+      </div>
+    </button>
+  </div>
+
+  <!-- Quote Section -->
+  <section class="bg-white" *ngIf="pdfSrc.length > 0">
+    <div class="mx-auto max-w-screen-md px-4 py-8 lg:py-16">
+      <form action="#" class="grid grid-cols-3 gap-2">
+        <ng-container *ngFor="let file of pdfFiles; let i = index">
+          <div class="col-span-1">
+            <label
+              for="quote{{ i }}"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+              >{{ file.name }}</label
+            >
+            <input
+              type="number"
+              class="input-text1 w-full"
+              [(ngModel)]="quotes[i]"
+              name="quote{{ i }}"
+              required
+              (input)="updateLeastPrice()"
+            />
+          </div>
+        </ng-container>
+      </form>
+      <div class="flex-col justify-end">
+        <p class="mt-4 font-semibold text-purple-700">
+          Least Price: <span>{{ leastPrice }}</span>
+        </p>
+        <button
+          *ngIf="pdfSrc.length == 3"
+          (click)="uploadPdf()"
+          class="an mt-8 rounded-full bg-purple-700 p-2 font-semibold text-white hover:bg-purple-900"
+        >
+          <svg
+            class="h-5 w-5 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
+            />
+            <path
+              d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

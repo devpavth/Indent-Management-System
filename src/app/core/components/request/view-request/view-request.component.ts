@@ -13,11 +13,13 @@ export class ViewRequestComponent implements OnInit {
   isRejected: boolean = false;
   isApproved: boolean = false;
   isRejectPop: boolean = false;
+  commend: any;
 
   date: any = new Date();
   _requestDetails: any;
   constructor(private readonly requstService: RequestService) {}
   ngOnInit(): void {
+    this.fetchReason();
     console.log('hello', this.showID);
 
     console.log(this.IndentID);
@@ -105,5 +107,10 @@ export class ViewRequestComponent implements OnInit {
     this.isApproved = data;
     this.isRejectPop = data;
     this.closeView.emit(false);
+  }
+  fetchReason() {
+    this.requstService.commands().subscribe((res) => {
+      this.commend = res;
+    });
   }
 }
