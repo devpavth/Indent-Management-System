@@ -248,11 +248,16 @@ export class ViewRequistionComponent implements OnInit {
         donotedAmt: fin.donotedAmt,
       })),
     };
-    this.requestService
-      .finDonorAssign(this.reqId, finalList)
-      .subscribe((res) => {
+    this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
+      (res) => {
         console.log(res);
-      });
+      },
+      (error) => {
+        if (error.status) {
+          alert('Successfully Registered');
+        }
+      },
+    );
   }
   fetchReason() {
     this.requestService.commands().subscribe((res) => {
@@ -261,14 +266,30 @@ export class ViewRequistionComponent implements OnInit {
   }
   postReason(data: any) {
     if (this.isHolding == true && this.isReject == false) {
-      this.requestService.commend(this.reqId, data, 1)?.subscribe((res) => {
-        console.log(res);
-      });
+      this.requestService.commend(this.reqId, data, 1)?.subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          if (error.status == 200) {
+            alert('This Request is on Hold');
+            this.closeView.emit(false);
+          }
+        },
+      );
     }
     if (this.isHolding == false && this.isReject == true) {
-      this.requestService.commend(this.reqId, data, 2)?.subscribe((res) => {
-        console.log(res);
-      });
+      this.requestService.commend(this.reqId, data, 2)?.subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          if (error.status == 200) {
+            alert('This Request is Rejected');
+            this.closeView.emit(false);
+          }
+        },
+      );
     }
   }
   calculateDate() {
