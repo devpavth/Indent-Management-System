@@ -15,6 +15,9 @@ export class ViewBranchComponent implements OnInit {
 
   _branch: any;
   _department: any[] = [];
+
+  departmentProvidedList: any;
+  selectedDepartments: { selcdDeptId: string; dName: string }[] = [];
   isSave: boolean = false;
   isEdit: boolean = true;
   date = new Date();
@@ -45,6 +48,7 @@ export class ViewBranchComponent implements OnInit {
   }
   ngOnInit() {
     this.fetchBranchDetails();
+    this.fetchDeptList();
     console.log(this.getBranchCode);
     this.viewBranchForm.get('branchName')?.disable();
     this.viewBranchForm.get('manager')?.disable();
@@ -105,25 +109,60 @@ export class ViewBranchComponent implements OnInit {
       this._city = res;
     });
   }
-  addDepartList(deptlist: any) {
-    console.log(deptlist);
-    let list = [{ deptName: deptlist }];
-    console.log(list);
 
-    this.branchService
-      .addBranchDepartment(this._branch.branchId, list)
-      .subscribe(
-        (res) => {
-          console.log(res);
-        },
-        (error) => {
-          if (error.status == 200) {
-            this.viewBranchForm.get('departments')?.reset();
-            this.ngOnInit();
-          }
-        },
+  fetchDeptList() {
+    this.branchService.getAllDepartments().subscribe((res: any) => {
+      this.departmentProvidedList = Object.entries(res).map(
+        ([selcdDeptId, dName]) => ({
+          selcdDeptId,
+          dName,
+        }),
       );
+      console.log(res);
+      console.log(this._department);
+    });
   }
+  addDepartList(data: string) {
+    let departmentid = this.departmentProvidedList.find(
+      (dep: any) => dep.selcdDeptId === data,
+    );
+    let alreadyselect = this._department.some(
+      (dep) => dep.selcdDeptId === data,
+    );
+    console.log(departmentid);
+
+    if (departmentid && !alreadyselect) {
+      this.selectedDepartments.push(departmentid);
+      console.log(this.selectedDepartments.map((fin) => fin.selcdDeptId));
+      this.branchService
+        .addBranchDepartment(
+          this._branch.branchId,
+          this.selectedDepartments.map((fin) => fin.selcdDeptId),
+        )
+        .subscribe(
+          (res) => {
+            console.log(res);
+          },
+          (error) => {
+            console.log(error);
+
+            if (error.status == 200) {
+              this.selectedDepartments = [];
+              this.viewBranchForm.get('departments')?.reset();
+              this.ngOnInit();
+            }
+            if (error.status == 409) {
+              this.selectedDepartments = [];
+            }
+          },
+        );
+    }
+  }
+  // addDepartList(deptlist: any) {
+  //   console.log(deptlist);
+  //   let list = [{ deptName: deptlist }];
+  //   console.log(list);
+  // }
   deleteDept(dept: any) {
     console.log(dept);
     this.branchService.deleteDepart(dept).subscribe(
