@@ -11,8 +11,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { SearchItemPipe } from './pipes/search-item.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ViewProductComponent } from './Products/view-product/view-product.component';
-import { SuccessComponent } from './Products/success/success.component';
-import { DeleteComponent } from './Products/delete/delete.component';
+
 import { ViewEmployeeComponent } from './Employee/view-employee/view-employee.component';
 import { SuccessPopComponent } from './Employee/success-pop/success-pop.component';
 import { DeletePopComponent } from './Employee/delete-pop/delete-pop.component';
@@ -36,8 +35,7 @@ import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component'
     ProductListComponent,
     SearchItemPipe,
     ViewProductComponent,
-    SuccessComponent,
-    DeleteComponent,
+
     ViewEmployeeComponent,
     SuccessPopComponent,
     DeletePopComponent,

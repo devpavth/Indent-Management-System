@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.13:9010/';
+let Url = 'http://192.168.1.6:9010/';
 // let Url = 'http://192.168.212.62:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
