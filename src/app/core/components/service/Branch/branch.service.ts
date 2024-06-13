@@ -21,9 +21,12 @@ export class BranchService {
     return this.http.get(environment.getBranch + `/${data}`);
   }
   addBranchDepartment(branch: any, department: any) {
+    let departParams = new HttpParams();
+    departParams = departParams.append('selcdDeptId', department);
     return this.http.post(
       environment.addBranchDepartment + `${branch}`,
-      department,
+      {},
+      { params: departParams },
     );
   }
   getBranchDetails(data: any) {
