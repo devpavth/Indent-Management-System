@@ -1,4 +1,4 @@
-<section class="h-screen overflow-scroll bg-black bg-opacity-50">
+<section class="h-full overflow-scroll bg-black bg-opacity-50">
   <div class="flex">
     <div class="w-1/2"></div>
     <div class="animate-slide-in-right w-3/4 border bg-white shadow-xl">
@@ -296,7 +296,7 @@
             </small>
           </div>
         </div>
-        <div class="mt-8 flex gap-4">
+        <div class="mt-8 flex justify-end gap-4">
           <div *ngIf="isEdit">
             <button
               type="submit"
@@ -352,7 +352,7 @@
               Save
             </button>
           </div>
-
+          <div></div>
           <button
             (click)="isDelete = true"
             type="submit"
