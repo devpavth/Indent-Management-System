@@ -6,5 +6,8 @@ import { Component, Output } from '@angular/core';
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent {
-  // @Output() closeView  =
+  isProductList: Boolean = false;
+  closeView(close: Boolean) {
+    this.isProductList = close;
+  }
 }
