@@ -1,1 +1,385 @@
-<p>view-funder works!</p>
+<section class="h-screen overflow-scroll bg-black bg-opacity-50">
+  <div class="flex">
+    <div class="w-1/2"></div>
+    <div class="animate-slide-in-right w-3/4 border bg-white shadow-xl">
+      <div class="flex items-center justify-between border bg-purple-50">
+        <div class="m-4">
+          <button (click)="closeFunderView()">
+            <svg
+              class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                class=""
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="mr-4">
+          <h1 class="text-xl font-semibold text-purple-800">View Funder</h1>
+        </div>
+      </div>
+
+      <!-- form f -->
+
+      <form [formGroup]="updateFunderForm" class="p-8">
+        <div class="mb-4 grid gap-4 sm:grid-cols-8">
+          <div class="col-span-4">
+            <label
+              for="funderName"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Funder Name</label
+            >
+            <input
+              type="text"
+              formControlName="funderName"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('funderName')?.invalid &&
+                  updateFunderForm.get('funderName')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('funderName')?.invalid &&
+                updateFunderForm.get('funderName')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Funder Name is required
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="funderCatg"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Funder Category</label
+            >
+            <select
+              formControlName="funderCatg"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('funderCatg')?.invalid &&
+                  updateFunderForm.get('funderCatg')?.touched
+              }"
+              required
+            >
+              <option value="">Chose Funder</option>
+              <option value="125">Local</option>
+              <option value="126">Donor</option>
+              <option value="127">FCRA</option>
+            </select>
+            <small
+              *ngIf="
+                updateFunderForm.get('funderCatg')?.invalid &&
+                updateFunderForm.get('funderCatg')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Funder Category is required
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="contactNumber"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Contact Number:</label
+            >
+            <input
+              type="text"
+              formControlName="contactNumber"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('contactNumber')?.invalid &&
+                  updateFunderForm.get('contactNumber')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('contactNumber')?.invalid &&
+                updateFunderForm.get('contactNumber')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Contact Number is required and must be 10 digits
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="emailId"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >E-mail</label
+            >
+            <input
+              type="email"
+              formControlName="emailId"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('emailId')?.invalid &&
+                  updateFunderForm.get('emailId')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('emailId')?.invalid &&
+                updateFunderForm.get('emailId')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              A valid E-mail is required
+            </small>
+          </div>
+          <div class="col-span-8">
+            <label
+              for="funderAdd1"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Address Details</label
+            >
+            <input
+              type="text"
+              formControlName="funderAdd1"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              placeholder="Address Line 1"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('funderAdd1')?.invalid &&
+                  updateFunderForm.get('funderAdd1')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('funderAdd1')?.invalid &&
+                updateFunderForm.get('funderAdd1')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Address Line 1 is required
+            </small>
+            <input
+              type="text"
+              formControlName="funderAdd2"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              placeholder="Address Line 2"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('funderAdd2')?.invalid &&
+                  updateFunderForm.get('funderAdd2')?.touched
+              }"
+              required
+            />
+          </div>
+          <div class="col-span-4">
+            <label
+              for="country"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Country</label
+            >
+            <input
+              type="text"
+              formControlName="country"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              placeholder="India"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('country')?.invalid &&
+                  updateFunderForm.get('country')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('country')?.invalid &&
+                updateFunderForm.get('country')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Country is required
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="state"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >State</label
+            >
+            <input
+              type="text"
+              formControlName="state"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('state')?.invalid &&
+                  updateFunderForm.get('state')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('state')?.invalid &&
+                updateFunderForm.get('state')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              State is required
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="city"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >City</label
+            >
+            <input
+              type="text"
+              formControlName="city"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('city')?.invalid &&
+                  updateFunderForm.get('city')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('city')?.invalid &&
+                updateFunderForm.get('city')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              City is required
+            </small>
+          </div>
+          <div class="col-span-4">
+            <label
+              for="pinCode"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Pin Code</label
+            >
+            <input
+              type="number"
+              formControlName="pinCode"
+              class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [ngClass]="{
+                error:
+                  updateFunderForm.get('pinCode')?.invalid &&
+                  updateFunderForm.get('pinCode')?.touched
+              }"
+              required
+            />
+            <small
+              *ngIf="
+                updateFunderForm.get('pinCode')?.invalid &&
+                updateFunderForm.get('pinCode')?.touched
+              "
+              class="text-danger text-red-600"
+            >
+              Pin Code is required and must be 6 digits
+            </small>
+          </div>
+        </div>
+        <div class="mt-8 flex gap-4">
+          <div *ngIf="isEdit">
+            <button
+              type="submit"
+              (click)="edit()"
+              class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              <svg
+                class="mr-1 h-5 w-5 text-white"
+                fill="currentColor"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                />
+              </svg>
+
+              Edit
+            </button>
+          </div>
+          <div *ngIf="isSave">
+            <button
+              type="submit"
+              class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+            >
+              <svg
+                *ngIf="isSaveIcon"
+                class="mr-1 inline-flex h-5 w-5 items-center justify-center text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+
+              Save
+            </button>
+          </div>
+
+          <button
+            (click)="isDelete = true"
+            type="submit"
+            class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+          >
+            <svg
+              class="mr-1 h-5 w-5 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+              />
+            </svg>
+
+            Delete
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
