@@ -1,3 +1,11 @@
+<section class="absolute left-0 right-0 z-20">
+  <app-adding
+    (close)="closeAdding($event)"
+    [addData]="addingData"
+    *ngIf="isCloseAdding"
+  ></app-adding>
+</section>
+
 <section class="h-screen overflow-scroll bg-black bg-opacity-50">
   <div class="flex">
     <div class="w-1/2"></div>
@@ -613,12 +621,3 @@
     </div>
   </div>
 </section>
-
-<!-- <section
-  *ngIf="successToster"
-  class="fixed right-0 top-0 z-40 mt-6 flex w-screen"
->
-  <div class="mx-auto">
-    <app-toster [message]="message"></app-toster>
-  </div>
-</section> -->
