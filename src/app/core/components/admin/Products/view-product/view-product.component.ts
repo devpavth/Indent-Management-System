@@ -13,8 +13,14 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
   styleUrl: './view-product.component.css',
 })
 export class ViewProductComponent {
+  @Output() closeProduct = new EventEmitter<boolean>();
+  @Input() productData: any;
   addingData: any;
   isCloseAdding: boolean = false;
+  isSave = false;
+  isEdit = true;
+  isSaveIcon = true;
+  isDelete = false;
 
   UpdateProductForm: FormGroup;
   constructor(private fb: FormBuilder) {
@@ -52,5 +58,16 @@ export class ViewProductComponent {
   }
   closeAdding(action: boolean) {
     this.isCloseAdding = action;
+  }
+
+  edit() {
+    Object.keys(this.UpdateProductForm.controls).forEach((form) => {
+      this.UpdateProductForm.get(form)?.enable();
+    });
+    this.isSave = true;
+    this.isEdit = false;
+  }
+  closeProductView() {
+    this.closeProduct.emit(false);
   }
 }
