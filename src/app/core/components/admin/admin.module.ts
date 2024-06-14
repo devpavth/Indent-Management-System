@@ -25,6 +25,7 @@ import { ViewDonarComponent } from './Donar/view-donar/view-donar.component';
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component';
+import { AddingComponent } from './Products/adding/adding.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -49,6 +50,7 @@ import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component'
     AddVendorComponent,
     VendorListComponent,
     ViewVendorComponent,
+    AddingComponent,
   ],
   imports: [
     CommonModule,

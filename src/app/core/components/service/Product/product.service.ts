@@ -87,4 +87,7 @@ export class ProductService {
       { params: gstParams },
     );
   }
+  addGroup(data: any) {
+    return this.productHttp.post(environment.addGroup, data);
+  }
 }
