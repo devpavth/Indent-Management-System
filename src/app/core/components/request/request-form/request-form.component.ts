@@ -59,6 +59,7 @@ export class RequestFormComponent implements OnInit {
       description: [],
     });
   }
+
   ngOnInit(): void {
     this.fetchProduct();
   }
