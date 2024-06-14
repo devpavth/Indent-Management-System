@@ -137,6 +137,19 @@
               <label
                 for="Address"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Camp
+              </label>
+              <input
+                type="text"
+                class="input-form"
+                formControlName="add1"
+                required
+              />
+            </div>
+            <div class="col-span-4 mb-2">
+              <label
+                for="Address"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Recommended Vendor
               </label>
               <input
@@ -274,7 +287,6 @@
                 type="date"
                 class="input-form"
                 formControlName="add1"
-                value=""
                 required
               />
             </div>
@@ -306,7 +318,7 @@
               <label
                 for="Address"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Remark If Any
+                >Remark If Any <span class="text-gray-400">(Optional)</span>
               </label>
               <textarea
                 class="input-form h-72"
@@ -517,21 +529,6 @@
                             {{ this._product.configuration }}
                           </p>
                         </td>
-                        <!-- <td
-                        class="px-4 py-3  group-hover/tr:text-black"
-                      >
-                        
-                      </td>
-                      <td
-                      class="px-4 py-3  group-hover/tr:text-black"
-                    >
-                      
-                    </td>
-                      <td
-                        class="px-4 py-3  text-wrap group-hover/tr:text-black"
-                      >
-                     
-                      </td> -->
 
                         <td class="px-4 py-3 group-hover/tr:text-black">
                           {{ rItem.unitPrice | currency: "INR" }}

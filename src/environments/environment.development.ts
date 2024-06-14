@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.13:9010/';
-// let Url = 'http://192.168.212.62:9010/';
+let Url = 'http://192.168.1.20:9010/';
+let Url1 = 'http://192.168.1.12:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -36,6 +36,7 @@ export const environment = {
   getAllOtherProduct: Url + baseProductApi + '/getpartialproduct',
   UpdateOtherProduct: Url + baseProductApi + '/updateotherproduct',
   gstUpdate: Url + baseProductApi + '/updategst/',
+  addGroup: Url1 + baseProductApi + '/addgroup',
 
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
