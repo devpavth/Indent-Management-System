@@ -19,9 +19,7 @@ import { AddBranchComponent } from './Branch/add-branch/add-branch.component';
 import { ViewBranchComponent } from './Branch/view-branch/view-branch.component';
 import { BranchListComponent } from './Branch/branch-list/branch-list.component';
 import { SuccessForBranchComponent } from './Branch/success-for-branch/success-for-branch.component';
-import { AddDonarComponent } from './Donar/add-donar/add-donar.component';
-import { DonarListComponent } from './Donar/donar-list/donar-list.component';
-import { ViewDonarComponent } from './Donar/view-donar/view-donar.component';
+
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component';
@@ -44,9 +42,7 @@ import { AddingComponent } from './Products/adding/adding.component';
     ViewBranchComponent,
     BranchListComponent,
     SuccessForBranchComponent,
-    AddDonarComponent,
-    DonarListComponent,
-    ViewDonarComponent,
+
     AddVendorComponent,
     VendorListComponent,
     ViewVendorComponent,
