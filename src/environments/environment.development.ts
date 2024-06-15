@@ -6,7 +6,7 @@ let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
 let baseRequestApi = 'requestindent';
 let baseBranchApi = 'branch';
-let baseDonarApi = 'donor';
+let baseFunderApi = 'funder';
 let baseVendorApi = 'vendor';
 
 export const environment = {
@@ -25,6 +25,7 @@ export const environment = {
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
 
+  //Product Api
   addProduct: Url + baseProductApi + '/addnewproducts',
   getAllProduct: Url + baseProductApi + '/getallproduct',
   getProductDetails: Url + baseProductApi + '/productbyId/',
@@ -38,6 +39,7 @@ export const environment = {
   gstUpdate: Url + baseProductApi + '/updategst/',
   addGroup: Url1 + baseProductApi + '/addgroup',
 
+  //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
   addNewBranch: Url + baseBranchApi + '/addnewbranch',
@@ -46,13 +48,6 @@ export const environment = {
   deleteDept: Url + baseBranchApi + '/deletedept',
   updateBranch: Url + baseBranchApi + '/updatebranch',
   getAlldepartment: Url + baseBranchApi + '/getalldepartment',
-
-  addDonar: Url + baseDonarApi + '/addnewdonor',
-  getAllDonor: Url + baseDonarApi + '/getalldonors',
-  viewDonorDetails: Url + baseDonarApi + '/getdonor/',
-  updateDonor: Url + baseDonarApi + '/updatedonor/',
-  deleteDonor: Url + baseDonarApi + '/delete/',
-
   getHsnCode: Url + baseRequestApi + '/hsncode/',
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
@@ -82,4 +77,8 @@ export const environment = {
   addVendor: Url + baseVendorApi + '/addnewvendor',
   getAllVendorList: Url + baseVendorApi + '/getactivevendors',
   deleteVendor: Url + baseVendorApi + '/deletebyvendorid/',
+
+  //Funder api
+  addFunder: Url + baseFunderApi + '/addnewfunder',
+  getAllFunderList: Url + baseFunderApi + '/getactivefunders',
 };
