@@ -16,7 +16,7 @@ export class ViewEmployeeComponent implements OnInit {
     private readonly countryStateCity: SharedServiceService,
     private AdminService: AdminProductServiceService,
     private branchService: BranchService,
-  ) { }
+  ) {}
   @Output() closeEmployeePop = new EventEmitter<boolean>();
   @Input() EmployeeCode: any;
   @Output() showSuccess = new EventEmitter<boolean>();
@@ -44,6 +44,8 @@ export class ViewEmployeeComponent implements OnInit {
   isSave = false;
   isSaveIcon = true;
   isLoad = false;
+
+  isStyle = false;
 
   ngOnInit() {
     console.log(this.EmployeeCode);
@@ -185,6 +187,7 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   closeEmployeeView() {
+    this.isStyle = true;
     this.closeEmployeePop.emit(false);
   }
 

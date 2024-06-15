@@ -81,4 +81,7 @@ export const environment = {
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
   getAllFunderList: Url + baseFunderApi + '/getactivefunders',
+  deleteFunder: Url + baseFunderApi + '/delete/',
+  assignFunder: Url + baseFunderApi + '/assignfunder/',
+  AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
 };

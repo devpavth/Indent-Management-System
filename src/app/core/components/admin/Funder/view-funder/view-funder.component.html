@@ -1,3 +1,9 @@
+<section *ngIf="isAddFund" class="absolute left-0 right-0 z-20">
+  <app-fundadd
+    (close)="toggleAddFund(0)"
+    [funderId]="funderData.funderId"
+  ></app-fundadd>
+</section>
 <section class="h-screen bg-black bg-opacity-50">
   <div class="flex">
     <div class="w-1/2"></div>
@@ -298,6 +304,30 @@
             </small>
           </div>
         </div>
+        <div>
+          <button
+            (click)="toggleAddFund(1)"
+            class="mt-4 flex items-center justify-center gap-2 rounded-lg"
+          >
+            <svg
+              class="h-6 w-6 text-green-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-width="2"
+                d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+              />
+            </svg>
+            <p class="font-semibold text-green-500">Add Fund</p>
+          </button>
+        </div>
         <div class="mt-8 flex justify-end gap-4">
           <div *ngIf="isEdit">
             <button
@@ -354,9 +384,9 @@
               Save
             </button>
           </div>
-          <div></div>
+
           <button
-            (click)="isDelete = true"
+            (click)="toggledelete(1, true)"
             type="submit"
             class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >
@@ -384,4 +414,10 @@
       </form>
     </div>
   </div>
+</section>
+<section *ngIf="isDelete">
+  <app-delete
+    [deleteData]="deleteFunder"
+    (close)="toggledelete(0, $event)"
+  ></app-delete>
 </section>
