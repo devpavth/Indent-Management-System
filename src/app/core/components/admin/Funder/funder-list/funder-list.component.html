@@ -218,6 +218,7 @@
 
 <section *ngIf="isFunderList" class="fixed left-0 right-0 top-0 z-40">
   <app-view-funder
-    (closeFunderPop)="toggleView($event, 0, '')"
+    (closeFunderView)="toggleView($event, 0, '')"
+    [funderData]="funderData"
   ></app-view-funder>
 </section>
