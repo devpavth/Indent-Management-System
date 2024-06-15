@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  SimpleChange,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FunderService } from '../../../service/Funder/funder.service';
 
@@ -18,10 +10,16 @@ import { FunderService } from '../../../service/Funder/funder.service';
 export class ViewFunderComponent implements OnInit {
   @Output() closeFunderView = new EventEmitter<boolean>();
   @Input() funderData: any;
-  isSave = false;
-  isEdit = true;
-  isSaveIcon = true;
-  isDelete = false;
+
+  isSave: boolean = false;
+  isEdit: boolean = true;
+  isSaveIcon: boolean = true;
+  isDelete: boolean = false;
+  isConfirmDelet: boolean = false;
+  isAddFund: boolean = false;
+
+  deleteFunder: any;
+
   updateFunderForm: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -57,5 +55,28 @@ export class ViewFunderComponent implements OnInit {
     });
     this.isSave = true;
     this.isEdit = false;
+  }
+
+  toggledelete(check: any, isView: boolean) {
+    if (check == 1) {
+      this.isDelete = isView;
+      this.deleteFunder = {
+        title: 'Funder',
+        action: 1,
+        deleteId: this.funderData.funderId,
+      };
+    } else if (check == 0) {
+      this.isDelete = isView;
+      this.closeFunderView.emit(false);
+    }
+  }
+
+  toggleAddFund(check: number) {
+    if (check == 1) {
+      this.isAddFund = true;
+    }
+    if (check == 0) {
+      this.isAddFund = false;
+    }
   }
 }

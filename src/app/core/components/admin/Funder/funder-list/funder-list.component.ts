@@ -30,6 +30,7 @@ export class FunderListComponent implements OnInit {
     }
     if (check == 0) {
       this.isFunderList = action;
+      this.getAllFunderList();
     }
   }
 }
