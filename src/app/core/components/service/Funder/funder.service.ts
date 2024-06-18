@@ -28,4 +28,8 @@ export class FunderService {
   assignedBranch(id: any) {
     return this.http.get(environment.AssignedBranch + id);
   }
+
+  addFund(data: any, fundId: any) {
+    return this.http.post(environment.addFund + fundId, data);
+  }
 }

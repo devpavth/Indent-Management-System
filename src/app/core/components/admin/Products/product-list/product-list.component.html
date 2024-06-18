@@ -75,7 +75,7 @@
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th scope="col" class="px-4 py-3">
+                <!-- <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <div>Name</div>
                     <button
@@ -97,12 +97,12 @@
                       </svg>
                     </button>
                   </div>
-                </th>
+                </th> -->
 
-                <th scope="col" class="px-4 py-3">Category</th>
-                <th scope="col" class="px-4 py-3">Phone</th>
-                <th scope="col" class="px-4 py-3">Country</th>
-                <th scope="col" class="px-4 py-3">State</th>
+                <th scope="col" class="px-4 py-3">Model</th>
+                <th scope="col" class="px-4 py-3">Group</th>
+                <th scope="col" class="px-4 py-3">Catagories</th>
+                <th scope="col" class="px-4 py-3">Brand</th>
                 <!-- <th scope="col" class="px-4 py-3">GST %</th>
                               <th scope="col" class="px-4 py-3">Price</th> -->
                 <th scope="col" class="px-4 py-3">
@@ -112,16 +112,19 @@
             </thead>
             <tbody>
               <tr
+                *ngFor="let p of productList"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <th
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
-                ></th>
-                <td class="px-4 py-3"></td>
-                <td class="px-4 py-3"></td>
-                <td class="px-4 py-3"></td>
-                <td class="px-4 py-3"></td>
+                >
+                  {{ p.prdmdlName }}
+                </th>
+                <td class="px-4 py-3">{{ p.prdgrpName }}</td>
+                <td class="px-4 py-3">{{ p.prdcatgName }}</td>
+                <td class="px-4 py-3">{{ p.prdbrndName }}</td>
+
                 <!-- <td class="px-4 py-3"></td>
                               <td class="px-4 py-3"></td> -->
                 <td class="flex items-center justify-end px-4 py-3">

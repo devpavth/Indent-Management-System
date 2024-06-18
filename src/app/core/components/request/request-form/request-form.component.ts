@@ -60,9 +60,7 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.fetchProduct();
-  }
+  ngOnInit(): void {}
 
   // RequisitionerFunction(data: any) {
   //   this.reqName = data;
@@ -74,95 +72,6 @@ export class RequestFormComponent implements OnInit {
   //   this.reqName = '';
   //   this.isRequisitioner = true;
   //   this.showRequisitioner = false;
-  // }
-
-  fetchProduct() {
-    this.ProductService.getRequestPoduct().subscribe((res) => {
-      console.log(res);
-      this._productName = res;
-    });
-  }
-
-  fetchBrand(productName: any) {
-    this.ProductService.getRequestBrand(productName).subscribe((res) => {
-      this._brandName = res;
-    });
-  }
-  fetchModel(productName: any, brandName: any) {
-    this.ProductService.getRequestModel(productName, brandName).subscribe(
-      (res) => {
-        this._model = res;
-      },
-    );
-  }
-  fetchDescription(productName: any, brandName: any, modelName: any) {
-    this.ProductService.getRequestDescription(
-      productName,
-      brandName,
-      modelName,
-    ).subscribe((res: any) => {
-      console.log(res);
-      this._description = res;
-    });
-  }
-  fetchProductDetails(desc: any) {
-    console.log(desc);
-
-    this.requestService.reqProduct(desc).subscribe((res) => {
-      console.log(res);
-      this._product = res;
-      this.requestProduct.get('hsnCode')?.patchValue(this._product.hsnCode);
-      this.requestProduct
-        .get('unitPrice')
-        ?.patchValue(this._product.purchasedPrice);
-      this.requestProduct.get('qty')?.patchValue(1);
-    });
-  }
-
-  submitHeader() {
-    this.isHeader = false;
-    this.isProductAdd = true;
-  }
-
-  // addRequestedProductItem(product: any) {
-  //   if (this._rItemList.length > 0) {
-  //     this.visiable = true;
-  //     this.emptyVisiable = false;
-  //   }
-
-  //   this.emptyVisiable = false;
-  //   this.visiable = true;
-  //   let desc = this._product.configuration;
-
-  //   let pTotal = Number(product.unitPrice) * Number(product.qty);
-
-  //   let gstTotal = (this._product.gstpercentage / 100) * pTotal;
-  //   let totalwithtax = gstTotal + pTotal;
-  //   this._totalPrice += totalwithtax;
-  //   console.log(gstTotal);
-  //   console.log(totalwithtax);
-
-  //   const rItem = {
-  //     ...product,
-  //     configration: desc,
-  //     itemPrice: totalwithtax.toFixed(2),
-  //     itemcode: this._product.itemcode,
-  //     productId: this._product.sno,
-  //     gstpercentage: this._product.gstpercentage,
-
-  //     status: 200,
-  //   };
-  //   console.log(product);
-
-  //   const existingProduct = this._rItemList.findIndex(
-  //     (fin: any) => fin.itemName === product.itemName,
-  //   );
-  //   console.log(existingProduct);
-
-  //   this._rItemList.push(rItem);
-  //   console.log(this._rItemList);
-
-  //   this.requestProduct.reset();
   // }
 
   addRequestedProductItem(product: any) {
@@ -297,7 +206,6 @@ export class RequestFormComponent implements OnInit {
   }
   closeOtherProduct(data: any) {
     this.isOther = data;
-    this.fetchProduct();
   }
 
   getOtherProduct(data: any) {
