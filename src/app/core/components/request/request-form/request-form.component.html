@@ -329,7 +329,6 @@
         </form>
         <div class="flex w-full justify-end">
           <button
-            (click)="submitHeader()"
             class="col-span-8 mx-12 mb-4 rounded-lg bg-purple-700 px-4 py-2 font-semibold text-white"
           >
             Submit
@@ -382,7 +381,6 @@
                   #rproduct
                   class="select-option w-30 scroll rounded-l-lg"
                   formControlName="itemName"
-                  (change)="fetchBrand(rproduct.value)"
                 >
                   <option [value]="null" disabled selected>Product</option>
 
@@ -397,7 +395,6 @@
                   #rbrand
                   class="select-option w-30"
                   formControlName="brandName"
-                  (change)="fetchModel(rproduct.value, rbrand.value)"
                 >
                   <option [value]="null" disabled selected>Brand</option>
 
@@ -409,9 +406,6 @@
                   #rmodel
                   class="select-option w-30"
                   formControlName="model"
-                  (change)="
-                    fetchDescription(rproduct.value, rbrand.value, rmodel.value)
-                  "
                 >
                   <option [value]="null" disabled selected>Model</option>
 
@@ -423,7 +417,6 @@
                   #desc
                   class="select-option rounded-r-lg"
                   formControlName="description"
-                  (change)="this.fetchProductDetails(desc.value)"
                 >
                   <option [value]="null" disabled selected>Description</option>
 

@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.20:9010/';
-let Url1 = 'http://192.168.1.12:9010/';
+let Url = 'http://192.168.1.2:9010/';
+let Url1 = 'http://192.168.1.18:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -26,19 +26,14 @@ export const environment = {
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
 
   //Product Api
-  addProduct: Url + baseProductApi + '/addnewproducts',
-  getAllProduct: Url + baseProductApi + '/getallproduct',
-  getProductDetails: Url + baseProductApi + '/productbyId/',
-  updateProduct: Url + baseProductApi + '/update',
-  deleteProduct: Url + baseProductApi + '/deletebyid/',
-  requestGetProductDetails: Url + baseRequestApi + '/productdetails',
-  getDecription: Url + baseRequestApi + '/getproductdata',
-  addOtherProduct: Url + baseProductApi + '/addotherproduct',
-  getAllOtherProduct: Url + baseProductApi + '/getpartialproduct',
-  UpdateOtherProduct: Url + baseProductApi + '/updateotherproduct',
-  gstUpdate: Url + baseProductApi + '/updategst/',
   addGroup: Url1 + baseProductApi + '/addgroup',
-
+  groupList: Url1 + baseProductApi + '/getactivegroup',
+  addCat: Url1 + baseProductApi + '/addcategory/',
+  catList: Url1 + baseProductApi + '/getactivecatg/',
+  addBrand: Url1 + baseProductApi + '/addbrand/',
+  brandList: Url1 + baseProductApi + '/getactivebrand/',
+  postProduct: Url1 + baseProductApi + '/addproductdetails/',
+  getAllProduct: Url1 + baseProductApi + '/getallactivedetails',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
@@ -84,4 +79,5 @@ export const environment = {
   deleteFunder: Url + baseFunderApi + '/delete/',
   assignFunder: Url + baseFunderApi + '/assignfunder/',
   AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
+  addFund: Url + baseFunderApi + '/addfund/',
 };

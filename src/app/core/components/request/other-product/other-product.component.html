@@ -1,38 +1,67 @@
-<div class="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 md:mt-0 xl:p-0">
+<div
+  class="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 md:mt-0 xl:p-0"
+>
   <div class="w-[450px] space-y-4 p-6 sm:p-8 md:space-y-6">
-    <div class="mb-4 flex items-center justify-between rounded-t border-b pb-4 dark:border-gray-600 sm:mb-5">
+    <div
+      class="mb-4 flex items-center justify-between rounded-t border-b pb-4 dark:border-gray-600 sm:mb-5"
+    >
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         Update Product
       </h3>
-      <button (click)="this.closeToggle.emit(false)" type="button"
+      <button
+        (click)="this.closeToggle.emit(false)"
+        type="button"
         class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-        data-modal-toggle="updateProductModal">
-        <svg aria-hidden="true" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
+        data-modal-toggle="updateProductModal"
+      >
+        <svg
+          aria-hidden="true"
+          class="h-5 w-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
             d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"></path>
+            clip-rule="evenodd"
+          ></path>
         </svg>
         <span class="sr-only">Close modal</span>
       </button>
     </div>
     <form class="space-y-4 md:space-y-6" [formGroup]="otherProductForm">
       <div class="sm:col-span-2">
-        <label for="description" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Product
-          Details</label>
-        <textarea formControlName="configuration" rows="5"
+        <label
+          for="description"
+          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          >Product Details</label
+        >
+        <textarea
+          formControlName="configuration"
+          rows="5"
           class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          placeholder="Write a description..."></textarea>
+          placeholder="Write a description..."
+        ></textarea>
       </div>
       <div>
-        <label for="price" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Price</label>
-        <input formControlName="purchasedPrice" type="number"
+        <label
+          for="price"
+          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          >Price</label
+        >
+        <input
+          formControlName="purchasedPrice"
+          type="number"
           class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
-          required="" />
+          required=""
+        />
       </div>
 
-      <button (click)="postOtherProductDetails(otherProductForm.value)" type="submit"
-        class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <button
+        type="submit"
+        class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
         Add Product
       </button>
     </form>
