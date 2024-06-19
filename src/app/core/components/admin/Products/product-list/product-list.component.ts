@@ -9,6 +9,7 @@ import { ProductService } from '../../../service/Product/product.service';
 export class ProductListComponent implements OnInit {
   isProductList: Boolean = false;
   productList: any;
+  productData: any;
   ngOnInit() {
     this.fetchProductList();
   }
@@ -19,7 +20,15 @@ export class ProductListComponent implements OnInit {
       this.productList = res;
     });
   }
-  closeView(close: Boolean) {
-    this.isProductList = close;
+
+  toggleView(action: Boolean, check: number, productData: any) {
+    if (check == 1) {
+      this.isProductList = action;
+      this.productData = productData;
+    }
+    if (check == 0) {
+      this.isProductList = action;
+      this.fetchProductList();
+    }
   }
 }
