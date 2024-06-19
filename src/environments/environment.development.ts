@@ -1,12 +1,12 @@
-let Url = 'http://192.168.1.20:9010/';
-let Url1 = 'http://192.168.1.12:9010/';
+let Url = 'http://192.168.1.6:9010/';
+let Url1 = 'http://192.168.1.18:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
 let baseRequestApi = 'requestindent';
 let baseBranchApi = 'branch';
-let baseDonarApi = 'donor';
+let baseFunderApi = 'funder';
 let baseVendorApi = 'vendor';
 
 export const environment = {
@@ -25,19 +25,17 @@ export const environment = {
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
 
-  addProduct: Url + baseProductApi + '/addnewproducts',
-  getAllProduct: Url + baseProductApi + '/getallproduct',
-  getProductDetails: Url + baseProductApi + '/productbyId/',
-  updateProduct: Url + baseProductApi + '/update',
-  deleteProduct: Url + baseProductApi + '/deletebyid/',
-  requestGetProductDetails: Url + baseRequestApi + '/productdetails',
-  getDecription: Url + baseRequestApi + '/getproductdata',
-  addOtherProduct: Url + baseProductApi + '/addotherproduct',
-  getAllOtherProduct: Url + baseProductApi + '/getpartialproduct',
-  UpdateOtherProduct: Url + baseProductApi + '/updateotherproduct',
-  gstUpdate: Url + baseProductApi + '/updategst/',
+  //Product Api
   addGroup: Url1 + baseProductApi + '/addgroup',
-
+  groupList: Url1 + baseProductApi + '/getactivegroup',
+  addCat: Url1 + baseProductApi + '/addcategory/',
+  catList: Url1 + baseProductApi + '/getactivecatg/',
+  addBrand: Url1 + baseProductApi + '/addbrand/',
+  brandList: Url1 + baseProductApi + '/getactivebrand/',
+  postProduct: Url1 + baseProductApi + '/addproductdetails/',
+  getAllProduct: Url1 + baseProductApi + '/getallactivedetails',
+  deleteProduct: Url1 + baseProductApi + '/deletedetailfromproductid/',
+  //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
   addNewBranch: Url + baseBranchApi + '/addnewbranch',
@@ -46,13 +44,6 @@ export const environment = {
   deleteDept: Url + baseBranchApi + '/deletedept',
   updateBranch: Url + baseBranchApi + '/updatebranch',
   getAlldepartment: Url + baseBranchApi + '/getalldepartment',
-
-  addDonar: Url + baseDonarApi + '/addnewdonor',
-  getAllDonor: Url + baseDonarApi + '/getalldonors',
-  viewDonorDetails: Url + baseDonarApi + '/getdonor/',
-  updateDonor: Url + baseDonarApi + '/updatedonor/',
-  deleteDonor: Url + baseDonarApi + '/delete/',
-
   getHsnCode: Url + baseRequestApi + '/hsncode/',
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
@@ -82,4 +73,12 @@ export const environment = {
   addVendor: Url + baseVendorApi + '/addnewvendor',
   getAllVendorList: Url + baseVendorApi + '/getactivevendors',
   deleteVendor: Url + baseVendorApi + '/deletebyvendorid/',
+
+  //Funder api
+  addFunder: Url + baseFunderApi + '/addnewfunder',
+  getAllFunderList: Url + baseFunderApi + '/getactivefunders',
+  deleteFunder: Url + baseFunderApi + '/delete/',
+  assignFunder: Url + baseFunderApi + '/assignfunder/',
+  AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
+  addFund: Url + baseFunderApi + '/addfund/',
 };

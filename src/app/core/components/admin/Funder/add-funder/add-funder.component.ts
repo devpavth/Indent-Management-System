@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FunderService } from '../../../service/Funder/funder.service';
 
 @Component({
   selector: 'app-add-funder',
@@ -8,7 +9,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AddFunderComponent {
   funderForm: FormGroup;
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private funderService: FunderService,
+  ) {
     this.funderForm = this.fb.group({
       funderName: ['', Validators.required],
       funderCatg: ['', Validators.required],
@@ -28,5 +32,8 @@ export class AddFunderComponent {
   }
   onSubmit(data: any) {
     console.log(data);
+    this.funderService.registerFunder(data).subscribe((res) => {
+      console.log(res);
+    });
   }
 }
