@@ -47,17 +47,7 @@ export class EditProductComponent implements OnInit {
       console.log(res);
     });
   }
-  gstUpdate(data: any) {
-    this.productService.updateGst(this.product.productId, data).subscribe(
-      (res) => {
-        console.log(res);
-      },
-      (error) => {
-        if (error.status == 200) {
-        }
-      },
-    );
-  }
+
   submitChanges(data: any) {
     console.log(data);
     let itemPrice = this.shared.gstCalculation(

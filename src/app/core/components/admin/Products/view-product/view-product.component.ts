@@ -12,7 +12,7 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
   templateUrl: './view-product.component.html',
   styleUrl: './view-product.component.css',
 })
-export class ViewProductComponent {
+export class ViewProductComponent implements OnInit {
   @Output() closeProduct = new EventEmitter<boolean>();
   @Input() productData: any;
   addingData: any;
@@ -21,9 +21,18 @@ export class ViewProductComponent {
   isEdit = true;
   isSaveIcon = true;
   isDelete = false;
+  deleteProduct: any;
+
+  groupList: any;
+  catList: any;
+  brandList: any;
+  gst: any = [0, 5, 12, 18];
 
   UpdateProductForm: FormGroup;
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+  ) {
     this.UpdateProductForm = this.fb.group({
       prdGrpId: [],
       prdCatgId: [],
@@ -39,6 +48,15 @@ export class ViewProductComponent {
       prdTotalValue: [],
       prdStatus: [200],
     });
+  }
+  ngOnInit(): void {
+    this.UpdateProductForm.patchValue(this.productData);
+    Object.keys(this.UpdateProductForm.controls).forEach((form) => {
+      this.UpdateProductForm.get(form)?.disable();
+    });
+    this.fetchGroupList();
+    this.fetchCatList(this.productData.prdCatgId);
+    this.fetchCatList(this.productData.prdBrndId);
   }
 
   addingAction(check: number) {
@@ -67,7 +85,41 @@ export class ViewProductComponent {
     this.isSave = true;
     this.isEdit = false;
   }
-  closeProductView() {
-    this.closeProduct.emit(false);
+  // closeProductView() {
+  //   this.closeProduct.emit(false);
+  // }
+
+  fetchGroupList() {
+    this.productService.groupList().subscribe((res) => {
+      this.groupList = res;
+      console.log(res);
+    });
+  }
+  fetchCatList(Id: any) {
+    this.productService.catagoriesList(Id).subscribe((res) => {
+      this.catList = res;
+      console.log(res);
+    });
+  }
+  fetchBrandList(catId: any) {
+    this.productService.brandList(catId).subscribe((res) => {
+      this.brandList = res;
+      console.log(res);
+    });
+  }
+
+  toggledelete(check: any, isView: boolean) {
+    if (check == 1) {
+      this.isDelete = isView;
+      this.deleteProduct = {
+        title: 'Product',
+        action: 2,
+        deleteId: this.productData.prouctId,
+      };
+      console.log(this.deleteProduct);
+    } else if (check == 0) {
+      this.isDelete = isView;
+      this.closeProduct.emit(false);
+    }
   }
 }

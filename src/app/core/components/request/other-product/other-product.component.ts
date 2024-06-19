@@ -24,13 +24,4 @@ export class OtherProductComponent {
       createdOn: new Date(),
     });
   }
-
-  postOtherProductDetails(data: any) {
-    this.throwOtherProduct.emit(data);
-    this.closeToggle.emit(false);
-    console.log(data);
-    this.pService.addOtherProduct(data).subscribe((res) => {
-      console.log(res);
-    });
-  }
 }
