@@ -215,5 +215,8 @@
   </section>
 </div>
 <section *ngIf="isProductList" class="fixed left-0 right-0 top-0 z-40">
-  <app-view-product (closeProduct)="closeView($event)"></app-view-product>
+  <app-view-product
+    (closeProduct)="closeView($event)"
+    [productData]="productList"
+  ></app-view-product>
 </section>
