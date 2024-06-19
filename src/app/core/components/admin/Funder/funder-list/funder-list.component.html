@@ -41,7 +41,7 @@
           >
             <button
               type="button"
-              routerLink="/home/addProduct"
+              routerLink="/home/addFunder"
               class="flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
             >
               <svg
@@ -63,7 +63,7 @@
                 />
               </svg>
 
-              Add Product
+              Add Funder
             </button>
           </div>
         </div>
@@ -75,7 +75,8 @@
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <!-- <th scope="col" class="px-4 py-3">
+                <th scope="col" class="px-4 py-3">Funder Code</th>
+                <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <div>Name</div>
                     <button
@@ -97,12 +98,12 @@
                       </svg>
                     </button>
                   </div>
-                </th> -->
+                </th>
+                <th scope="col" class="px-4 py-3">Category</th>
+                <th scope="col" class="px-4 py-3">Phone</th>
+                <th scope="col" class="px-4 py-3">E-mail</th>
+                <th scope="col" class="px-4 py-3">Country</th>
 
-                <th scope="col" class="px-4 py-3">Model</th>
-                <th scope="col" class="px-4 py-3">Group</th>
-                <th scope="col" class="px-4 py-3">Catagories</th>
-                <th scope="col" class="px-4 py-3">Brand</th>
                 <!-- <th scope="col" class="px-4 py-3">GST %</th>
                               <th scope="col" class="px-4 py-3">Price</th> -->
                 <th scope="col" class="px-4 py-3">
@@ -112,24 +113,24 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let p of productList"
+                *ngFor="let f of funderList"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <th
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
-                  {{ p.prdmdlName }}
+                  {{ f.funderCode }}
                 </th>
-                <td class="px-4 py-3">{{ p.prdgrpName }}</td>
-                <td class="px-4 py-3">{{ p.prdcatgName }}</td>
-                <td class="px-4 py-3">{{ p.prdbrndName }}</td>
+                <td class="px-4 py-3">{{ f.funderName }}</td>
+                <td class="px-4 py-3">{{ f.funderCatgName }}</td>
+                <td class="px-4 py-3">{{ f.contactNumber }}</td>
+                <td class="px-4 py-3">{{ f.emailId }}</td>
+                <td class="px-4 py-3">{{ f.country }}</td>
 
-                <!-- <td class="px-4 py-3"></td>
-                              <td class="px-4 py-3"></td> -->
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
-                    (click)="isProductList = true"
+                    (click)="toggleView(true, 1, f)"
                     class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -214,9 +215,10 @@
     </div>
   </section>
 </div>
-<section *ngIf="isProductList" class="fixed left-0 right-0 top-0 z-40">
-  <app-view-product
-    (closeProduct)="closeView($event)"
-    [productData]="productList"
-  ></app-view-product>
+
+<section *ngIf="isFunderList" class="fixed left-0 right-0 top-0 z-40">
+  <app-view-funder
+    (closeFunderView)="toggleView($event, 0, '')"
+    [funderData]="funderData"
+  ></app-view-funder>
 </section>

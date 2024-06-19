@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequestService } from '../../service/Request/request.service';
-import { DonarService } from '../../service/Donar/donar.service';
+
 import { Location } from '@angular/common';
 import {
   Component,
@@ -55,7 +55,7 @@ export class ViewRequistionComponent implements OnInit {
 
   constructor(
     private requestService: RequestService,
-    private donorService: DonarService,
+
     private shared: SharedServiceService,
     private fb: FormBuilder,
     private loc: Location,
@@ -68,7 +68,7 @@ export class ViewRequistionComponent implements OnInit {
 
   ngOnInit() {
     this.fetchDetails(this.reqId);
-    this.fetchDonorList(1);
+    // this.fetchDonorList(1);
     this.fetchReason();
   }
 
@@ -82,37 +82,37 @@ export class ViewRequistionComponent implements OnInit {
     const url = this.loc.prepareExternalUrl('/home/addDonar');
     window.open(url, '_blank');
   }
-  fetchDonorList(data: any) {
-    this.donorService.getAllDonor().subscribe((res) => {
-      this.dList = res;
-      this.cList = this.dList;
-      // this.donorList = res;
-      console.log(res);
-    });
-    if (data == 1) {
-      this.donorList = this.cList;
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 2) {
-      this.donorList = this.cList.filter(
-        (fin) => fin.dcategoryStatus == 'Local Donor',
-      );
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 3) {
-      this.donorList = this.cList.filter(
-        (fin) => fin.dcategoryStatus == 'International Donor',
-      );
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 4) {
-      this.donorList = this.cList.filter(
-        (fin) => fin.dcategoryStatus == 'Existing Donor',
-      );
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    }
-  }
+  // fetchDonorList(data: any) {
+  //   this.donorService.getAllDonor().subscribe((res) => {
+  //     this.dList = res;
+  //     this.cList = this.dList;
+  //     // this.donorList = res;
+  //     console.log(res);
+  //   });
+  //   if (data == 1) {
+  //     this.donorList = this.cList;
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 2) {
+  //     this.donorList = this.cList.filter(
+  //       (fin) => fin.dcategoryStatus == 'Local Donor',
+  //     );
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 3) {
+  //     this.donorList = this.cList.filter(
+  //       (fin) => fin.dcategoryStatus == 'International Donor',
+  //     );
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 4) {
+  //     this.donorList = this.cList.filter(
+  //       (fin) => fin.dcategoryStatus == 'Existing Donor',
+  //     );
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   }
+  // }
 
   onInput(event: Event): void {
     const input = (event.target as HTMLInputElement).value.toLowerCase();

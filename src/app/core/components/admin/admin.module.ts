@@ -24,6 +24,10 @@ import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
 import { ViewVendorComponent } from './vendor/view-vendor/view-vendor.component';
 import { AddingComponent } from './Products/adding/adding.component';
+import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
+import { FunderListComponent } from './Funder/funder-list/funder-list.component';
+import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
+import { FundaddComponent } from './Funder/fundadd/fundadd.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -47,6 +51,10 @@ import { AddingComponent } from './Products/adding/adding.component';
     VendorListComponent,
     ViewVendorComponent,
     AddingComponent,
+    AddFunderComponent,
+    FunderListComponent,
+    ViewFunderComponent,
+    FundaddComponent,
   ],
   imports: [
     CommonModule,
