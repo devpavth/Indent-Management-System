@@ -1,18 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ProductService } from '../../../service/Product/product.service';
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css',
 })
-export class AddProductComponent {
+export class AddProductComponent implements OnInit {
   addingData: any;
   isCloseAdding: boolean = false;
 
+  groupList: any;
+  catList: any;
+  brandList: any;
+  gst: any = [0, 5, 12, 18];
+
   ProductForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+  ) {
     this.ProductForm = this.fb.group({
       prdGrpId: [],
       prdCatgId: [],
@@ -24,10 +33,11 @@ export class AddProductComponent {
       prdPurchasedPrice: [],
       prdGstPct: [],
       prdMinQty: [],
-      prdClosingStock: [],
-      prdTotalValue: [],
       prdStatus: [200],
     });
+  }
+  ngOnInit(): void {
+    this.fetchGroupList();
   }
 
   addingAction(check: number) {
@@ -44,6 +54,30 @@ export class AddProductComponent {
       this.addingData = { title: 'Add Brand', Adding: 3 };
       console.log(this.addingData);
     }
+  }
+
+  fetchGroupList() {
+    this.productService.groupList().subscribe((res) => {
+      this.groupList = res;
+      console.log(res);
+    });
+  }
+  fetchCatList(Id: any) {
+    this.productService.catagoriesList(Id).subscribe((res) => {
+      this.catList = res;
+      console.log(res);
+    });
+  }
+  fetchBrandList(catId: any) {
+    this.productService.brandList(catId).subscribe((res) => {
+      this.brandList = res;
+      console.log(res);
+    });
+  }
+  onSubmit(data: any) {
+    this.productService.postProduct(data).subscribe((res) => {
+      console.log(res);
+    });
   }
   closeAdding(action: boolean) {
     this.isCloseAdding = action;

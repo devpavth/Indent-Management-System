@@ -12,7 +12,7 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
   templateUrl: './view-product.component.html',
   styleUrl: './view-product.component.css',
 })
-export class ViewProductComponent {
+export class ViewProductComponent implements OnInit {
   @Output() closeProduct = new EventEmitter<boolean>();
   @Input() productData: any;
   addingData: any;
@@ -38,6 +38,12 @@ export class ViewProductComponent {
       prdClosingStock: [],
       prdTotalValue: [],
       prdStatus: [200],
+    });
+  }
+  ngOnInit(): void {
+    this.UpdateProductForm.patchValue(this.productData);
+    Object.keys(this.UpdateProductForm.controls).forEach((form) => {
+      this.UpdateProductForm.get(form)?.disable();
     });
   }
 

@@ -13,6 +13,9 @@ import { ViewBranchComponent } from './Branch/view-branch/view-branch.component'
 
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
+import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
+import { FunderListComponent } from './Funder/funder-list/funder-list.component';
+import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -24,9 +27,11 @@ const routes: Routes = [
   { component: AddBranchComponent, path: 'addBranch' },
   { component: BranchListComponent, path: 'branchList' },
   { component: ViewBranchComponent, path: 'viewBranch' },
-
   { component: AddVendorComponent, path: 'addVendor' },
   { component: VendorListComponent, path: 'vendorList' },
+  { component: AddFunderComponent, path: 'addFunder' },
+  { component: FunderListComponent, path: 'funderList' },
+  { component: ViewFunderComponent, path: 'viewFunder' },
 ];
 
 @NgModule({
