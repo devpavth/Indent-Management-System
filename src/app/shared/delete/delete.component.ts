@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FunderService } from '../../core/components/service/Funder/funder.service';
+import { ProductService } from '../../core/components/service/Product/product.service';
 
 @Component({
   selector: 'app-delete',
@@ -10,12 +11,30 @@ export class DeleteComponent {
   @Input() deleteData: any;
   @Output() close = new EventEmitter<boolean>();
 
-  constructor(private funderService: FunderService) {}
+  constructor(
+    private funderService: FunderService,
+    private productService: ProductService,
+  ) {}
 
   deleteFunction() {
+    console.log(this.deleteData);
+
     if (this.deleteData.action == 1) {
       console.log(this.deleteData);
-      this.funderService.deleteFunder(this.deleteData.deleteId).subscribe(
+      this.funderService.deleteFunder(this.deleteData?.deleteId).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          if (error.status == 200) {
+            this.close.emit(false);
+          }
+        },
+      );
+    }
+    if (this.deleteData.action == 2) {
+      console.log(this.deleteData);
+      this.productService.deleteProduct(this.deleteData.deleteId).subscribe(
         (res) => {
           console.log(res);
         },

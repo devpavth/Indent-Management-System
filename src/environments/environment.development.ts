@@ -34,6 +34,7 @@ export const environment = {
   brandList: Url1 + baseProductApi + '/getactivebrand/',
   postProduct: Url1 + baseProductApi + '/addproductdetails/',
   getAllProduct: Url1 + baseProductApi + '/getallactivedetails',
+  deleteProduct: Url1 + baseProductApi + '/deletedetailfromproductid/',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',

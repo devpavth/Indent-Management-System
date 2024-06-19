@@ -129,7 +129,7 @@
                               <td class="px-4 py-3"></td> -->
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
-                    (click)="isProductList = true"
+                    (click)="toggleView(true, 1, p)"
                     class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -216,7 +216,7 @@
 </div>
 <section *ngIf="isProductList" class="fixed left-0 right-0 top-0 z-40">
   <app-view-product
-    (closeProduct)="closeView($event)"
-    [productData]="productList"
+    (closeProduct)="toggleView($event, 0, '')"
+    [productData]="productData"
   ></app-view-product>
 </section>
