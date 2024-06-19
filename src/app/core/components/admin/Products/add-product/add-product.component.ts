@@ -28,7 +28,7 @@ export class AddProductComponent implements OnInit {
       prdBrndId: [],
       prdmdlName: [],
       prdDescription: [],
-      prdUnit: [],
+
       prdHsnCode: [],
       prdPurchasedPrice: [],
       prdGstPct: [],
@@ -73,12 +73,6 @@ export class AddProductComponent implements OnInit {
       this.brandList = res;
       console.log(res);
     });
-  }
-
-  ifBox(data: string) {
-    if (data == '1') {
-      console.log('hello');
-    }
   }
 
   onSubmit(data: any) {
