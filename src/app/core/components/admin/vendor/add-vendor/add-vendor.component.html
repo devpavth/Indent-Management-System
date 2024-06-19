@@ -355,7 +355,394 @@
                 Invalid pin!
               </small>
             </div>
+            <div class="col-span-full mb-3 flex justify-between">
+              <h1 class="text-xl font-semibold text-purple-800">
+                Business Details
+              </h1>
+            </div>
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >GST Number</label
+              >
+              <input
+                type="text"
+                formControlName="vdrGstNo"
+                class="input-form"
+                placeholder="22ABCDE1234G8HJ"
+                appFirstCapLetter
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('vdrGstNo')?.invalid &&
+                    addVendorForm.get('vdrGstNo')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrGstNo')?.invalid &&
+                  addVendorForm?.get('vdrGstNo')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                GST Number should not be empty!
+              </small>
+            </div>
+            <div>
+              <label
+                for="Pincode"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >PAN Number</label
+              >
+              <input
+                type="number"
+                formControlName="vdrPanNo"
+                class="input-form"
+                autocomplete="postal-code"
+                placeholder="ABCTY1234D"
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('vdrPanNo')?.invalid &&
+                    addVendorForm.get('vdrPanNo')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrPanNo')?.invalid &&
+                  addVendorForm?.get('vdrPanNo')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid PAN Number!
+              </small>
+            </div>
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >TAN Number</label
+              >
+              <input
+                type="text"
+                formControlName="vdrTanNo"
+                class="input-form"
+                placeholder=""
+                appFirstCapLetter
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('vdrTanNo')?.invalid &&
+                    addVendorForm.get('vdrTanNo')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrTanNo')?.invalid &&
+                  addVendorForm?.get('vdrTanNo')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid Tan Number!
+              </small>
+            </div>
+            <div>
+              <label
+                for="Pincode"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >MSME Number</label
+              >
+              <input
+                type="number"
+                formControlName="vdrMsmeNo"
+                class="input-form"
+                autocomplete="postal-code"
+                placeholder=""
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('vdrMsmeNo')?.invalid &&
+                    addVendorForm.get('vdrMsmeNo')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrMsmeNo')?.invalid &&
+                  addVendorForm?.get('vdrMsmeNo')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid pin!
+              </small>
+            </div>
+            <div class="col-span-full mb-2">
+              <label
+                for="Address"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Service Location</label
+              >
+              <div class="inline-flex items-center gap-5">
+                <div class="flex items-center">
+                  <input
+                    id="disabled-radio-2"
+                    type="radio"
+                    value="496"
+                    name="disabled-radio"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Local</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="disabled-radio-2"
+                    type="radio"
+                    value="497"
+                    name="disabled-radio"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Regional</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="disabled-radio-2"
+                    type="radio"
+                    value="498"
+                    name="disabled-radio"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >National</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="disabled-radio-2"
+                    type="radio"
+                    value="499"
+                    name="disabled-radio"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >International</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Establish Date</label
+              >
+              <input
+                type="date"
+                formControlName="estDate"
+                class="input-form"
+                placeholder=""
+                appFirstCapLetter
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('estDate')?.invalid &&
+                    addVendorForm.get('estDate')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('estDate')?.invalid &&
+                  addVendorForm?.get('estDate')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Business Type should not be empty!
+              </small>
+            </div>
+            <div>
+              <label
+                for="Pincode"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Business Type</label
+              >
+              <input
+                type="number"
+                formControlName="bizType"
+                class="input-form"
+                autocomplete="postal-code"
+                placeholder=""
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('bizType')?.invalid &&
+                    addVendorForm.get('bizType')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('bizType')?.invalid &&
+                  addVendorForm?.get('bizType')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid Business details Name!
+              </small>
+            </div>
+
+            <div class="col-span-full mb-2">
+              <label
+                for="Address"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Business Details</label
+              >
+              <div class="mt-3 inline-flex items-center gap-6">
+                <div class="flex items-center">
+                  <input
+                    id="disabled-checkbox"
+                    type="checkbox"
+                    value="256"
+                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Service</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="disabled-checkbox"
+                    type="checkbox"
+                    value="257"
+                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Material Supply</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    (click)="this.isChecked = !this.isChecked"
+                    id="disabled-checkbox"
+                    type="checkbox"
+                    value="258"
+                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Others</label
+                  >
+                </div>
+              </div>
+              <div *ngIf="isChecked">
+                <label
+                  for="Pincode"
+                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >Business Details Name</label
+                >
+                <input
+                  type="text"
+                  formControlName="bizDetailName"
+                  class="input-form"
+                  autocomplete="postal-code"
+                  placeholder=""
+                  [ngClass]="{
+                    error:
+                      addVendorForm.get('bizDetailName')?.invalid &&
+                      addVendorForm.get('bizDetailName')?.touched
+                  }"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="col-span-full mb-3 flex justify-between">
+              <h1 class="text-xl font-semibold text-purple-800">
+                Bank Details
+              </h1>
+            </div>
+            <div>
+              <label
+                for="city"
+                class="block text-sm font-medium text-gray-900 dark:text-white"
+                >IFSC Code</label
+              >
+              <input
+                type="text"
+                formControlName="ifsCode"
+                class="input-form"
+                placeholder=""
+                appFirstCapLetter
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('ifsCode')?.invalid &&
+                    addVendorForm.get('ifsCode')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('ifsCode')?.invalid &&
+                  addVendorForm?.get('ifsCode')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid IFSC!
+              </small>
+            </div>
+            <div>
+              <label
+                for="Pincode"
+                class="block text-sm font-medium text-gray-900 dark:text-white"
+                >Account Number</label
+              >
+              <input
+                type="number"
+                formControlName="bankAccNo"
+                class="input-form"
+                autocomplete="postal-code"
+                placeholder=""
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('bankAccNo')?.invalid &&
+                    addVendorForm.get('bankAccNo')?.touched
+                }"
+                required
+              />
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('bankAccNo')?.invalid &&
+                  addVendorForm?.get('bankAccNo')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid pin!
+              </small>
+            </div>
           </div>
+
           <div class="mt-6 flex items-center justify-end gap-x-6">
             <button
               type="button"

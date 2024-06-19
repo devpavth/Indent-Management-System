@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './add-vendor.component.css',
 })
 export class AddVendorComponent {
+  isChecked: boolean = false;
   addVendorForm: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -26,8 +27,20 @@ export class AddVendorComponent {
       vdrContactPersonName: [],
       vdrContactPersonPhone: [],
       vdrEmail: [],
+      vdrGstNo: [],
+      vdrPanNo: [],
+      vdrTanNo: [],
+      vdrMsmeNo: [],
+      estDate: [],
+      serviceLocation: [],
+      bizType: [],
+      bizDetailName: [],
+      bizDetails: [],
+      ifsCode: [],
+      bankAccNo: [],
     });
   }
+
   submitVendorDetails(data: any) {
     console.log(data);
     this.vendorService.addVendor(data).subscribe(
