@@ -74,6 +74,13 @@ export class AddProductComponent implements OnInit {
       console.log(res);
     });
   }
+
+  ifBox(data: string) {
+    if (data == '1') {
+      console.log('hello');
+    }
+  }
+
   onSubmit(data: any) {
     this.productService.postProduct(data).subscribe((res) => {
       console.log(res);
