@@ -41,4 +41,7 @@ export class ProductService {
   getAllProduct() {
     return this.productHttp.get(environment.getAllProduct);
   }
+  deleteProduct(id: any) {
+    return this.productHttp.post(environment.deleteProduct + id, '');
+  }
 }
