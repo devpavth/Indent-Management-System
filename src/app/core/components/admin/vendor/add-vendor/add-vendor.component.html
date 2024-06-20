@@ -397,7 +397,7 @@
                 >PAN Number</label
               >
               <input
-                type="number"
+                type="text"
                 formControlName="vdrPanNo"
                 class="input-form"
                 autocomplete="postal-code"
@@ -457,7 +457,7 @@
                 >MSME Number</label
               >
               <input
-                type="number"
+                type="text"
                 formControlName="vdrMsmeNo"
                 class="input-form"
                 autocomplete="postal-code"
@@ -489,10 +489,10 @@
               <div class="inline-flex items-center gap-5">
                 <div class="flex items-center">
                   <input
-                    id="disabled-radio-2"
+                    id="1"
+                    formControlName="serviceLocation"
                     type="radio"
                     value="496"
-                    name="disabled-radio"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -503,10 +503,10 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="disabled-radio-2"
+                    id="2"
+                    formControlName="serviceLocation"
                     type="radio"
                     value="497"
-                    name="disabled-radio"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -517,10 +517,10 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="disabled-radio-2"
+                    id="3"
+                    formControlName="serviceLocation"
                     type="radio"
                     value="498"
-                    name="disabled-radio"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -531,10 +531,10 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="disabled-radio-2"
+                    id="4"
+                    formControlName="serviceLocation"
                     type="radio"
                     value="499"
-                    name="disabled-radio"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -582,7 +582,7 @@
                 >Business Type</label
               >
               <input
-                type="number"
+                type="text"
                 formControlName="bizType"
                 class="input-form"
                 autocomplete="postal-code"
@@ -616,7 +616,8 @@
                 <div class="flex items-center">
                   <input
                     id="disabled-checkbox"
-                    type="checkbox"
+                    formControlName="bizDetails"
+                    type="radio"
                     value="256"
                     class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
@@ -629,7 +630,8 @@
                 <div class="flex items-center">
                   <input
                     id="disabled-checkbox"
-                    type="checkbox"
+                    formControlName="bizDetails"
+                    type="radio"
                     value="257"
                     class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
@@ -642,8 +644,9 @@
                 <div class="flex items-center">
                   <input
                     (click)="this.isChecked = !this.isChecked"
+                    formControlName="bizDetails"
                     id="disabled-checkbox"
-                    type="checkbox"
+                    type="radio"
                     value="258"
                     class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
@@ -654,7 +657,7 @@
                   >
                 </div>
               </div>
-              <div *ngIf="isChecked">
+              <div *ngIf="isChecked" class="mt-4">
                 <label
                   for="Pincode"
                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
