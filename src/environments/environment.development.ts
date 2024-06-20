@@ -1,5 +1,5 @@
 let Url = 'http://192.168.1.6:9010/';
-let Url1 = 'http://192.168.1.18:9010/';
+let Url1 = 'http://192.168.1.5:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -70,9 +70,10 @@ export const environment = {
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
 
   // vendor End Point Api
-  addVendor: Url + baseVendorApi + '/addnewvendor',
-  getAllVendorList: Url + baseVendorApi + '/getactivevendors',
-  deleteVendor: Url + baseVendorApi + '/deletebyvendorid/',
+  addVendor: Url1 + baseVendorApi + '/addnewvendor',
+  getAllVendorList: Url1 + baseVendorApi + '/getactivevendors',
+  deleteVendor: Url1 + baseVendorApi + '/deletebyvendorid/',
+  updateVendor: Url1 + baseVendorApi + '/updatevendor/',
 
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
