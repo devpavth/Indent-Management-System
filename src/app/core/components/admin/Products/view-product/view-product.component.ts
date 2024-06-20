@@ -56,7 +56,7 @@ export class ViewProductComponent implements OnInit {
     });
     this.fetchGroupList();
     this.fetchCatList(this.productData.prdCatgId);
-    this.fetchCatList(this.productData.prdBrndId);
+    this.fetchBrandList(this.productData.prdBrndId);
   }
 
   addingAction(check: number) {
