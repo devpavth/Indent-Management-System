@@ -265,7 +265,37 @@
                   Select Model!
                 </small>
               </div>
-
+              <div class="col-span-2">
+                <label
+                  for="category"
+                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >Unit of Materiel</label
+                >
+                <select
+                  formControlName="prdUnit"
+                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  [ngClass]="{
+                    error:
+                      ProductForm.get('prdUnit')?.invalid &&
+                      ProductForm.get('prdUnit')?.touched
+                  }"
+                  required
+                >
+                  <option *ngFor="let u of units" value="{{ u.id }}">
+                    {{ u.name }}
+                  </option>
+                  <small
+                    *ngIf="
+                      ProductForm?.get('prdUnit')?.invalid &&
+                      ProductForm?.get('prdUnit')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Select GST Percentage!
+                  </small>
+                </select>
+                <small class="text-danger text-red-600"> </small>
+              </div>
               <div class="col-span-2">
                 <label
                   for="price"
