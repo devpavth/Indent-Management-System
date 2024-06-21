@@ -14,15 +14,14 @@ export class StockComponent implements OnInit {
   _branch: any;
   inwardFormHeader: FormGroup;
   inwardForm: FormGroup;
+
   isBox: boolean = false;
   gstPercentages: number[] = [0, 5, 12, 18, 28];
   units: { id: number; name: string }[] = [
     { id: 1, name: 'Kg' },
-    { id: 2, name: 'g' },
-    { id: 3, name: 'L' },
-    { id: 4, name: 'mL' },
-    { id: 5, name: 'm' },
-    { id: 6, name: 'cm' },
+    { id: 2, name: 'L' },
+    { id: 3, name: 'm' },
+    { id: 4, name: 'Unit' },
     { id: 200, name: 'Box' },
   ];
   productData: any;
@@ -33,7 +32,10 @@ export class StockComponent implements OnInit {
 
   header: any;
 
+  headerView: any;
+
   totalItem: number = 0;
+
   constructor(
     private branchService: BranchService,
     private productService: ProductService,
@@ -60,6 +62,7 @@ export class StockComponent implements OnInit {
         this.fb.control(null, Validators.required),
       );
     }
+    this.inwardForm.get('prdUnit')?.disable();
   }
   ngOnInit() {
     this.fetchAllBranch();
@@ -79,12 +82,17 @@ export class StockComponent implements OnInit {
       this.productData = res;
       this.inwardForm.patchValue({
         productId: this.productData.productId,
-        prdUnit: this.productData.prouctId,
+        prdUnit: this.productData.prdUnit,
 
         prdQty: this.productData.prouctId,
         purchasedPrice: this.productData.prdPurchasedPrice,
         gstPercentage: this.productData.prdGstPct,
       });
+
+      if (this.inwardForm.get('prdUnit')?.value == 200) {
+        this.isBox = true;
+        this.updateForm();
+      }
     });
   }
   fetchVendorList() {
@@ -97,6 +105,7 @@ export class StockComponent implements OnInit {
   ifBox(data: any) {
     console.log(data);
     this.isBox = data == 200;
+
     this.updateForm();
   }
   updateForm() {
@@ -111,37 +120,69 @@ export class StockComponent implements OnInit {
   }
 
   calculateBoxItem() {
-    let noofbox = this.inwardForm.get('prdQty')?.value;
-    let noofitem = this.inwardForm.get('itemprebox')?.value;
-    this.totalItem = Number(noofbox) * Number(noofitem);
+    this.totalItem =
+      this.inwardForm.get('prdQty')?.value *
+      this.inwardForm.get('itemprebox')?.value;
     console.log(this.totalItem);
     this.inwardForm.patchValue({ totalPieces: this.totalItem });
   }
 
   addProductList(data: any) {
-    let total = this.shared.gstCalculation(
-      data.prdQty,
-      data.purchasedPrice,
-      data.gstPercentage,
+    console.log(data);
+
+    const existingProductIndex = this.productList.findIndex(
+      (product) => product.productId === data.productId,
     );
-    this.productList.push({
-      ...data,
-      total,
-      productCode: this.productData.prdCode,
-    });
+    if (existingProductIndex !== -1) {
+      // Product exists, update the quantity and total
+      let existingProduct = this.productList[existingProductIndex];
+      existingProduct.prdQty += data.prdQty; // Update quantity
+      existingProduct.total = this.shared.gstCalculation(
+        existingProduct.prdQty,
+        existingProduct.purchasedPrice,
+        existingProduct.gstPercentage,
+      ); // Recalculate total
+
+      // Update the product in the productList array
+      this.productList[existingProductIndex] = existingProduct;
+    } else {
+      let total = this.shared.gstCalculation(
+        data.prdQty,
+        data.purchasedPrice,
+        data.gstPercentage,
+      );
+      this.productList.push({
+        ...data,
+        prdUnit: this.productData.prdUnit,
+        total,
+        productCode: this.productData.prdCode,
+      });
+      console.log(total);
+    }
+
     console.log(this.productList);
-    console.log(total);
 
     this.inwardForm.reset();
     this.productData = '';
     this.isBox = false;
   }
+
   inwardHeader(data: any) {
     this.header = data;
-    console.log(data);
+    let branch: any[] = this._branch;
+    let branchDetails = branch.find((f) => f.branchId == data.branchId);
+    if (branchDetails) {
+      this.header.branchName = branchDetails.branchName;
+    }
+    // this.headerView = { ...data, branchName: branchDetails.branchName };
+    console.log(this.header);
   }
+
   onSubmit() {
     let finalList = { ...this.header, inwardPrdDetails: this.productList };
     console.log(finalList);
+    this.productService.addInward(finalList).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

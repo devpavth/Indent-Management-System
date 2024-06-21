@@ -35,9 +35,11 @@ export const environment = {
   postProduct: Url + baseProductApi + '/addproductdetails/',
   getAllProduct: Url + baseProductApi + '/getallactivedetails',
   deleteProduct: Url + baseProductApi + '/deletedetailfromproductid/',
+  getStockDetails: Url + baseProductApi + '/getstockdetails/',
 
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
+  inward: Url + baseProductApi + '/addprdtrans',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',

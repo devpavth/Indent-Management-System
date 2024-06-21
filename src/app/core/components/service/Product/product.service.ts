@@ -47,4 +47,10 @@ export class ProductService {
   getProductByCode(id: any) {
     return this.productHttp.get(environment.getProductByCode + id);
   }
+  addInward(data: any) {
+    return this.productHttp.post(environment.inward, data);
+  }
+  getStockDetails(id: any) {
+    return this.productHttp.get(environment.getStockDetails + id);
+  }
 }
