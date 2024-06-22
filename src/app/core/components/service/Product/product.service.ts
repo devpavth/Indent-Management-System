@@ -53,4 +53,7 @@ export class ProductService {
   getStockDetails(id: any) {
     return this.productHttp.get(environment.getStockDetails + id);
   }
+  productTransaction(id: any) {
+    return this.productHttp.get(environment.productTransaction + id);
+  }
 }

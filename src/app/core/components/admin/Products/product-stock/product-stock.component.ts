@@ -17,6 +17,7 @@ export class ProductStockComponent implements OnInit {
     { id: 200, name: 'Box' },
   ];
   stockList: any;
+  hasTotalPieces: boolean = false;
   constructor(private productService: ProductService) {}
   ngOnInit() {
     console.log(this.productId);
@@ -31,6 +32,10 @@ export class ProductStockComponent implements OnInit {
           ...stock,
           unitName: this.getUnitName(stock.prdUnit),
         }));
+        this.hasTotalPieces = this.stockList.some(
+          (stock: any) => stock.totalPieces != 0,
+        );
+        console.log(this.stockList.totalPieces);
       });
   }
 

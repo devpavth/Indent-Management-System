@@ -36,6 +36,9 @@ export class StockComponent implements OnInit {
 
   totalItem: number = 0;
 
+  isSuccess: boolean = false;
+  transactionID: object = {};
+
   constructor(
     private branchService: BranchService,
     private productService: ProductService,
@@ -170,19 +173,56 @@ export class StockComponent implements OnInit {
   inwardHeader(data: any) {
     this.header = data;
     let branch: any[] = this._branch;
+    let vendor: any[] = this.vendorList;
     let branchDetails = branch.find((f) => f.branchId == data.branchId);
     if (branchDetails) {
       this.header.branchName = branchDetails.branchName;
     }
-    // this.headerView = { ...data, branchName: branchDetails.branchName };
-    console.log(this.header);
+    let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
+    if (vendorDetails) {
+      this.header.vendorName = vendorDetails.vendorName;
+    }
+  }
+  deleteHeader() {
+    this.header = '';
+  }
+
+  closeSuccess(data: boolean) {
+    this.isSuccess = data;
+    this.resetComponent();
   }
 
   onSubmit() {
     let finalList = { ...this.header, inwardPrdDetails: this.productList };
     console.log(finalList);
-    this.productService.addInward(finalList).subscribe((res) => {
-      console.log(res);
-    });
+    this.productService.addInward(finalList).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          console.log(error);
+
+          this.isSuccess = true;
+          let successData = { show: 2, text: error.error.text };
+          this.transactionID = successData;
+        }
+        console.log(error.error.text);
+      },
+    );
+  }
+  resetComponent() {
+    this.inwardFormHeader.reset();
+    this.inwardForm.reset();
+    this.isBox = false;
+    this.header = null;
+    this.productData = null;
+    this.productList = [];
+    this.totalItem = 0;
+    this.transactionID = {};
+
+    // Fetch initial data if necessary
+    this.fetchAllBranch();
+    this.fetchVendorList();
   }
 }

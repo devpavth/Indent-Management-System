@@ -12,10 +12,14 @@ export class LeftMenuComponent {
   procurement: boolean = false;
   poapproval: boolean = false;
   finance: boolean = false;
+  transaction: boolean = false;
   toggleRequest() {
     this.tRequest = !this.tRequest;
   }
   toggleAdmin() {
     this.tAdmin = !this.tAdmin;
+  }
+  toggleTransaction() {
+    this.transaction = !this.transaction;
   }
 }

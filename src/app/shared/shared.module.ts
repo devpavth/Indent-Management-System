@@ -19,6 +19,7 @@ import { NetworkErrorComponent } from './network-error/network-error.component';
 import { CdeletePopComponent } from './cdelete-pop/cdelete-pop.component';
 import { PdfUploadComponent } from './pdf-upload/pdf-upload.component';
 import { DeleteComponent } from './delete/delete.component';
+import { SuccessComponent } from './success/success.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { DeleteComponent } from './delete/delete.component';
     CdeletePopComponent,
     PdfUploadComponent,
     DeleteComponent,
+    SuccessComponent,
   ],
   imports: [
     CommonModule,
@@ -60,6 +62,7 @@ import { DeleteComponent } from './delete/delete.component';
     CdeletePopComponent,
     PdfUploadComponent,
     DeleteComponent,
+    SuccessComponent,
   ],
 })
 export class SharedModule {}
