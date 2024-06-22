@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class SuccessToastComponent {
   visiable = true;
-
+  message: any;
   toggle() {
     this.visiable = !this.visiable;
   }

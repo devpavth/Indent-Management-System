@@ -2,7 +2,7 @@
   <div class="flex">
     <div class="w-1/2"></div>
     <div
-      class="animate-slide-in-right h-screen w-1/2 border bg-white shadow-xl"
+      class="animate-slide-in-right h-screen w-2/3 border bg-white shadow-xl"
     >
       <div class="flex items-center justify-between border bg-purple-50">
         <div class="m-4">
@@ -249,11 +249,15 @@
                   <th scope="col" class="px-4 py-3">Branch</th>
                   <th scope="col" class="px-4 py-3">Last Updated</th>
                   <th scope="col" class="px-4 py-3">Unit</th>
+                  <th *ngIf="hasTotalPieces" scope="col" class="px-4 py-3">
+                    Total Pieces
+                  </th>
                   <th scope="col" class="px-4 py-3">Quantity</th>
                   <th scope="col" class="px-4 py-3">Total value</th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody *ngIf="stockList.length > 0; else noData">
                 <tr
                   *ngFor="let item of stockList; let i = index"
                   class="border-b dark:border-gray-700"
@@ -270,10 +274,34 @@
                     {{ item.stockUpdTime | date: "dd-MM-yyyy" }}
                   </td>
                   <td class="px-4 py-3">{{ item.unitName }}</td>
+                  <td *ngIf="item.totalPieces" class="px-4 py-3">
+                    {{ item.totalPieces }}
+                  </td>
                   <td class="px-4 py-3">{{ item.prdClosingStock }}</td>
-                  <td class="px-4 py-3">{{ item.totalValue }}</td>
+                  <td class="px-4 py-3">
+                    {{ item.totalValue | currency: "INR" }}
+                  </td>
                 </tr>
               </tbody>
+              <ng-template #noData>
+                <tbody class="h-full">
+                  <tr>
+                    <td colspan="7">
+                      <div
+                        class="flex h-full w-full items-center justify-center py-24"
+                      >
+                        <div>
+                          <img
+                            src="../../../../../assets/Img/9264882.svg"
+                            class="w-52"
+                            alt="No data available"
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </ng-template>
             </table>
           </div>
           <!-- <nav

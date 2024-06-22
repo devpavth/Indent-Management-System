@@ -454,6 +454,65 @@
           </li>
         </ul>
       </li>
+      <li>
+        <button
+          type="button"
+          class="left-menu group"
+          (click)="toggleTransaction()"
+        >
+          <svg
+            class="left-menusvg h-6 w-6"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16.153 19 21 12l-4.847-7H3l4.848 7L3 19h13.153Z"
+            />
+          </svg>
+
+          <span class="ms-3 flex-1 whitespace-nowrap text-left rtl:text-right"
+            >Transaction</span
+          >
+
+          <svg
+            class="h-3 w-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"
+            />
+          </svg>
+        </button>
+        <ul
+          *ngIf="transaction"
+          id="dropdown-example"
+          class="animate__animated animate__fadeIn animate__faster space-y-2 py-2"
+        >
+          <li>
+            <a
+              routerLinkActive="side-menu-active"
+              routerLink="/home/pTransaction"
+              class="left-submenu group"
+              >Product Transaction</a
+            >
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
 </aside>
