@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
+import { EmployeeServiceService } from '../Employee/employee-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,13 @@ export class SharedServiceService {
     Authorization: `Bearer ${this.uniqueToken}`,
     'Bypass-Common-Token': 'true',
   });
+
+  setData(data: any) {
+    this.loginUserData = data;
+  }
+  getData() {
+    return this.loginUserData;
+  }
   getState(data: any) {
     return this.http.get(environment.countrySateCity + 'Country/' + data);
   }

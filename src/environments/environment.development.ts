@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.6:9010/';
-let Url1 = 'http://192.168.1.6:9010/';
+let Url = 'http://192.168.1.13:9010/';
+let Url1 = 'http://192.168.1.13:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -51,6 +51,12 @@ export const environment = {
   getAlldepartment: Url + baseBranchApi + '/getalldepartment',
   getHsnCode: Url + baseRequestApi + '/hsncode/',
 
+  //requestIndent
+  programlist: Url + baseRequestApi + '/getallprogram',
+  headofaccountlist: Url + baseRequestApi + '/getallhoacc',
+
+  //old request api
+
   postRequestIndent: Url + baseRequestApi + '/newrequest',
   getYourReq: Url + baseRequestApi + '/getyourRequest',
   viewYourReq: Url + baseRequestApi + '/getrequestbyid/',
@@ -73,6 +79,8 @@ export const environment = {
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
+
+  //old request end
 
   // vendor End Point Api
   addVendor: Url + baseVendorApi + '/addnewvendor',
