@@ -7,8 +7,13 @@ import { EmployeeServiceService } from '../Employee/employee-service.service';
   providedIn: 'root',
 })
 export class SharedServiceService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private empService: EmployeeServiceService,
+  ) {}
   public loginUserData: any;
+
+  data: any;
 
   public userData: any;
   private uniqueToken =
@@ -20,12 +25,6 @@ export class SharedServiceService {
     'Bypass-Common-Token': 'true',
   });
 
-  setData(data: any) {
-    this.loginUserData = data;
-  }
-  getData() {
-    return this.loginUserData;
-  }
   getState(data: any) {
     return this.http.get(environment.countrySateCity + 'Country/' + data);
   }

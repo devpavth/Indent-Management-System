@@ -42,8 +42,6 @@ export class ViewBranchComponent implements OnInit {
       pinCode: [],
       gstNumber: [],
       departments: [],
-      modifyOn: [this.date],
-      modifyby: [this.countryStateCity.loginUserData.employeeId],
     });
   }
   ngOnInit() {

@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
       this.userDetailService.getEmployeeDetails(this.user).subscribe((res) => {
         console.table(res);
         this.userData = res;
-        this.sharedData.setData(res);
+
         sessionStorage.setItem('branchId', this.userData.branchCode);
       });
     }

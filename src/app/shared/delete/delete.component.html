@@ -4,13 +4,13 @@
     id="deleteModal"
     tabindex="-1"
     aria-hidden="true"
-    class="fixed z-50 mx-auto h-modal w-full items-center justify-center bg-gray-900/50 md:inset-0 md:h-full"
+    class="fixed z-50 mx-auto h-modal w-screen items-center justify-center bg-gray-900/50 md:inset-0 md:h-full"
   >
-    <div class="relative h-full w-full max-w-md p-4 md:h-auto">
+    <div class="relative h-full w-screen p-4 md:h-auto">
       <!-- Modal content -->
-      <div class="flex h-screen w-screen items-center justify-center">
+      <div class="flex h-screen items-center justify-center">
         <div
-          class="animate__animated animate__shakeX relative w-full rounded-lg bg-white px-8 py-4 text-center shadow dark:bg-gray-800"
+          class="animate__animated animate__shakeX relative rounded-lg bg-white px-8 py-4 text-center shadow dark:bg-gray-800"
         >
           <button
             (click)="close.emit(false)"
