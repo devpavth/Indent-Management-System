@@ -1,80 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
+import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 
 @Component({
   selector: 'app-request-form',
   templateUrl: './request-form.component.html',
-  styleUrl: './request-form.component.css',
+  styleUrls: ['./request-form.component.css'], // Fixed typo from `styleUrl` to `styleUrls`
 })
 export class RequestFormComponent implements OnInit {
-  //pipe declaration
-
-  // UI RequestIdent name declaration
-  _totalPrice: number = 0;
-
-  _rItemList: any[] = []; //used for addinf request items to array
-
-  _productName: any;
-
-  _brandName: any;
-  _model: any;
-  _description: any;
-  _hsn: any;
-  _gst: any;
-  _product: any;
-  _indentId: any;
-  requestProduct: FormGroup;
-  //for visiable content declaration here
-
-  visiable: boolean = false;
-  emptyVisiable: boolean = true;
-  successToast: boolean = false;
-  isSuccess: boolean = false;
-  showRequisitioner: boolean = false;
-  isRequisitioner: boolean = true;
-  isOther: boolean = false;
   isHeader: boolean = true;
   isProductAdd: boolean = false;
 
-  reqName: any;
+  groupList: any;
+  catList: any;
+  brandList: any;
+  modelList: any;
+  desList: any;
 
-  //new request indent declare
   requestIndentHead: FormGroup;
+  productForm: FormGroup;
   programList: any;
   headofacc: any;
+  date = Date();
 
   employeeData: any;
+  suggestions: any[] = [];
 
   constructor(
-    private readonly ProductService: ProductService,
+    private productService: ProductService,
     private fb: FormBuilder,
     private requestService: RequestService,
-    private shared: SharedServiceService,
+    private empService: EmployeeServiceService,
   ) {
-    this.requestIndentHead = this.fb.group({});
-    this.requestProduct = this.fb.group({
-      itemName: [],
-      brandName: [],
-      model: [],
+    this.requestIndentHead = this.fb.group({
+      branchCode: [],
+      deptId: [],
+      programId: [],
+      campName: [],
+      headOfAccId: [],
+      requiredDate: [],
+      expenditureId: [],
+      requisitioner: [],
+      notes: [],
+    });
+    this.productForm = this.fb.group({
+      productId: [],
       qty: [],
       unitPrice: [],
-      itemPrice: [],
-      hsnCode: [],
-
-      description: [],
+      gstpercentage: [],
+      status: [200],
     });
   }
 
   ngOnInit() {
     this.fetchProgram();
     this.fetchHeadofAcc();
-    this.employeeData = this.shared.getData();
-    console.log('hello', this.employeeData);
+    this.fetchUser();
+    this.fetchGroupList();
   }
-
+  fetchUser() {
+    this.empService
+      .getEmployeeDetails(sessionStorage.getItem('userId'))
+      .subscribe((res: any) => {
+        this.employeeData = res;
+        console.log('j', res);
+      });
+  }
   fetchProgram() {
     this.requestService.getProgramList().subscribe((res: any) => {
       console.log(res);
@@ -86,6 +80,7 @@ export class RequestFormComponent implements OnInit {
       console.log(this.programList);
     });
   }
+
   fetchHeadofAcc() {
     this.requestService.getHeadofAccList().subscribe((res) => {
       console.log(res);
@@ -95,23 +90,49 @@ export class RequestFormComponent implements OnInit {
       }));
     });
   }
-
-  closeOtherProduct(data: any) {
-    this.isOther = data;
+  fetchGroupList() {
+    this.productService.groupList().subscribe((res) => {
+      this.groupList = res;
+      console.log(res);
+    });
   }
+  fetchCatList(Id: any) {
+    this.productService.catagoriesList(Id).subscribe((res) => {
+      this.catList = res;
+      console.log(res);
+    });
+  }
+  fetchBrandList(catId: any) {
+    this.productService.brandList(catId).subscribe((res) => {
+      this.brandList = res;
+      console.log(res);
+    });
+  }
+  fetchModelList(brdId: any) {
+    this.productService.getModelList(brdId).subscribe((res) => {
+      console.log(res);
+      this.modelList = res;
+    });
+  }
+  fetchProductDetails(brdId: any, modelName: any) {
+    this.productService.getProductDes(brdId, modelName).subscribe((res) => {
+      console.log(res);
+      this.desList = res;
+    });
+  }
+  patchProductData(id: any) {
+    let prdList: any[] = this.desList;
+    let product = prdList.find((f) => f.productId == id);
+    console.log('find', product);
+    this.productForm.patchValue({
+      productId: product.productId,
 
-  getOtherProduct(data: any) {
-    console.log(data);
-    this._product.configuration = data.configuration;
-    console.log(this._product.configuration);
-
-    this._rItemList.push(data);
-    if (this._rItemList.length > 0) {
-      this.visiable = true;
-      this.emptyVisiable = false;
-    }
-
-    this.emptyVisiable = false;
-    this.visiable = true;
+      unitPrice: product.prdPurchasedPrice,
+      gstpercentage: product.prdGstPct,
+    });
+  }
+  onSelectionChanged(selectedValue: any) {
+    console.log('Selected value:', selectedValue);
+    // Implement your logic here
   }
 }

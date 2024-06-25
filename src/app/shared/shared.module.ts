@@ -14,12 +14,13 @@ import { FirstCapLetterDirective } from './Directives/first-cap-letter.directive
 import { SuccessPopComponent } from './success-pop/success-pop.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SpinnerComponent } from './spinner/spinner.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
+
 import { NetworkErrorComponent } from './network-error/network-error.component';
 import { CdeletePopComponent } from './cdelete-pop/cdelete-pop.component';
 import { PdfUploadComponent } from './pdf-upload/pdf-upload.component';
 import { DeleteComponent } from './delete/delete.component';
 import { SuccessComponent } from './success/success.component';
+import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 
 @NgModule({
   declarations: [
@@ -33,12 +34,13 @@ import { SuccessComponent } from './success/success.component';
     SuccessPopComponent,
     PageNotFoundComponent,
     SpinnerComponent,
-    UserDetailsComponent,
+
     NetworkErrorComponent,
     CdeletePopComponent,
     PdfUploadComponent,
     DeleteComponent,
     SuccessComponent,
+    AutoCompleteComponent,
   ],
   imports: [
     CommonModule,
@@ -58,11 +60,12 @@ import { SuccessComponent } from './success/success.component';
     SuccessPopComponent,
     PageNotFoundComponent,
     SpinnerComponent,
-    UserDetailsComponent,
+
     CdeletePopComponent,
     PdfUploadComponent,
     DeleteComponent,
     SuccessComponent,
+    AutoCompleteComponent,
   ],
 })
 export class SharedModule {}

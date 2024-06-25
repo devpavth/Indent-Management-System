@@ -9,11 +9,6 @@ import { Subject, tap } from 'rxjs';
 export class ProductService {
   constructor(private readonly productHttp: HttpClient) {}
 
-  private _refrechData = new Subject<void>();
-  get refrechData() {
-    return this._refrechData;
-  }
-
   addGroup(data: any) {
     return this.productHttp.post(environment.addGroup, data);
   }
@@ -55,5 +50,11 @@ export class ProductService {
   }
   productTransaction(id: any) {
     return this.productHttp.get(environment.productTransaction + id);
+  }
+  getModelList(id: any) {
+    return this.productHttp.get(environment.modelList + id);
+  }
+  getProductDes(brdId: string, mName: string) {
+    return this.productHttp.get(environment.desList + brdId + '/' + mName);
   }
 }

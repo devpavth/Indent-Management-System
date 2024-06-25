@@ -37,6 +37,8 @@ export const environment = {
   deleteProduct: Url + baseProductApi + '/deletedetailfromproductid/',
   getStockDetails: Url + baseProductApi + '/getstockdetails/',
 
+  modelList: Url + baseProductApi + '/getmodelname/',
+  desList: Url + baseProductApi + '/getprddetails/',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdtrans',
