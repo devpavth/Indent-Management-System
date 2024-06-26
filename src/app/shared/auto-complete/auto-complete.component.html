@@ -32,23 +32,19 @@
       required=""
     />
   </div>
-
-  <ul
-    *ngIf="show"
-    class="absolute mt-1 max-h-40 w-full overflow-y-auto rounded border bg-white shadow"
-  >
-    <li
-      *ngIf="filteredSuggestions.length === 0"
-      class="px-4 py-2 text-gray-500"
-    >
-      No data
-    </li>
-    <li
-      *ngFor="let suggestion of filteredSuggestions; let i = index"
-      (click)="selectSuggestion(suggestion)"
-      class="cursor-pointer px-4 py-2 hover:bg-gray-200"
-      [class.hidden]="i >= 10"
-      [innerHTML]="highlight(getDisplayValue(suggestion))"
-    ></li>
-  </ul>
 </div>
+<ul
+  *ngIf="show"
+  class="absolute z-50 mt-1 max-h-40 w-96 overflow-y-auto rounded border bg-white shadow"
+>
+  <li *ngIf="filteredSuggestions.length === 0" class="px-4 py-2 text-gray-500">
+    No data
+  </li>
+  <li
+    *ngFor="let suggestion of filteredSuggestions; let i = index"
+    (click)="selectSuggestion(suggestion)"
+    class="cursor-pointer px-4 py-2 hover:bg-gray-200"
+    [class.hidden]="i >= 10"
+    [innerHTML]="highlight(getDisplayValue(suggestion))"
+  ></li>
+</ul>
