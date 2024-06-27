@@ -42,13 +42,14 @@ export class HeaderComponent implements OnInit {
   }
   ngOnInit(): void {
     this.user = sessionStorage.getItem('userId');
-    this.userDetailService.getEmployeeDetails(this.user).subscribe((res) => {
-      console.table(res);
-      this.userData = res;
-      this.sharedData.loginUserData = res;
+    if (this.user) {
+      this.userDetailService.getEmployeeDetails(this.user).subscribe((res) => {
+        console.table(res);
+        this.userData = res;
 
-      sessionStorage.setItem('branchId', this.userData.branchCode);
-    });
+        sessionStorage.setItem('branchId', this.userData.branchCode);
+      });
+    }
   }
 
   getRandomColor(): string {

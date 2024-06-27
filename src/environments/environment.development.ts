@@ -1,5 +1,6 @@
 let Url = 'http://192.168.1.13:9010/';
-let Url1 = 'http://192.168.1.7:9010/';
+
+
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -26,15 +27,22 @@ export const environment = {
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
 
   //Product Api
-  addGroup: Url1 + baseProductApi + '/addgroup',
-  groupList: Url1 + baseProductApi + '/getactivegroup',
-  addCat: Url1 + baseProductApi + '/addcategory/',
-  catList: Url1 + baseProductApi + '/getactivecatg/',
-  addBrand: Url1 + baseProductApi + '/addbrand/',
-  brandList: Url1 + baseProductApi + '/getactivebrand/',
-  postProduct: Url1 + baseProductApi + '/addproductdetails/',
-  getAllProduct: Url1 + baseProductApi + '/getallactivedetails',
-  deleteProduct: Url1 + baseProductApi + '/deletedetailfromproductid/',
+  addGroup: Url + baseProductApi + '/addgroup',
+  groupList: Url + baseProductApi + '/getactivegroup',
+  addCat: Url + baseProductApi + '/addcategory/',
+  catList: Url + baseProductApi + '/getactivecatg/',
+  addBrand: Url + baseProductApi + '/addbrand/',
+  brandList: Url + baseProductApi + '/getactivebrand/',
+  postProduct: Url + baseProductApi + '/addproductdetails/',
+  getAllProduct: Url + baseProductApi + '/getallactivedetails',
+  deleteProduct: Url + baseProductApi + '/deletedetailfromproductid/',
+  getStockDetails: Url + baseProductApi + '/getstockdetails/',
+
+  modelList: Url + baseProductApi + '/getmodelname/',
+  desList: Url + baseProductApi + '/getprddetails/',
+  //inward
+  getProductByCode: Url + baseProductApi + '/getprdbycode/',
+  inward: Url + baseProductApi + '/addprdtrans',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
@@ -45,6 +53,12 @@ export const environment = {
   updateBranch: Url + baseBranchApi + '/updatebranch',
   getAlldepartment: Url + baseBranchApi + '/getalldepartment',
   getHsnCode: Url + baseRequestApi + '/hsncode/',
+
+  //requestIndent
+  programlist: Url + baseRequestApi + '/getallprogram',
+  headofaccountlist: Url + baseRequestApi + '/getallhoacc',
+
+  //old request api
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
   getYourReq: Url + baseRequestApi + '/getyourRequest',
@@ -69,7 +83,10 @@ export const environment = {
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
 
+  //old request end
+
   // vendor End Point Api
+
   addVendor: Url1 + baseVendorApi + '/addnewvendor',
   getAllVendorList: Url1 + baseVendorApi + '/getactivevendors',
   deleteVendor: Url1 + baseVendorApi + '/deletebyvendorid/',
@@ -78,6 +95,7 @@ export const environment = {
   updateAccount: Url1 + baseVendorApi + '/updateBankDetails/',
   deleteAccount: Url1 + baseVendorApi + '/deletebank/',
 
+
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
   getAllFunderList: Url + baseFunderApi + '/getactivefunders',
@@ -85,4 +103,8 @@ export const environment = {
   assignFunder: Url + baseFunderApi + '/assignfunder/',
   AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
   addFund: Url + baseFunderApi + '/addfund/',
+
+  //transaction  api
+
+  productTransaction: Url + baseProductApi + '/gettransbycode/',
 };

@@ -1,17 +1,16 @@
-.error{
-    @apply w-full pl-12 pr-3  py-2  bg-transparent outline-none   shadow-sm  bg-red-50 border border-red-500 text-red-900 placeholder-red-700  rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block  dark:text-red-500 dark:placeholder-red-500 dark:border-red-500;
-  }
-  .success{
-    @apply w-full pl-12 pr-3 py-2  bg-transparent outline-none   shadow-sm   border border-blue-500 text-gray-50 dark:text-blue-400 placeholder-blue-700 dark:placeholder-blue-500  rounded-lg focus:ring-blue-500 focus:border-blue-500 block  dark:bg-gray-700 dark:border-blue-500
-  }
+.error {
+  @apply block w-full rounded-lg  border  border-red-500 bg-red-50   bg-transparent  py-2 pl-12 pr-3 text-red-900 placeholder-red-700  shadow-sm outline-none focus:border-red-500 focus:ring-red-500 dark:border-red-500  dark:bg-gray-700 dark:text-red-500 dark:placeholder-red-500;
+}
+.success {
+  @apply block w-full rounded-lg border  border-blue-500 bg-transparent   py-2   pl-12 pr-3 text-gray-50 placeholder-blue-700 shadow-sm outline-none  focus:border-blue-500 focus:ring-blue-500 dark:border-blue-500 dark:bg-gray-700  dark:text-blue-400 dark:placeholder-blue-500;
+}
 
-  .error1
-  {
-    @apply w-full  pr-3  py-2  bg-transparent outline-none   shadow-sm  border border-red-500 text-gray-50 placeholder-red-700  rounded-lg focus:ring-red-500 dark:bg-gray-700 focus:border-red-500 block  dark:text-red-500 dark:placeholder-red-500 dark:border-red-500;
-  }
-  .disabled-field{
-    @apply  border border-purple-100 cursor-no-drop	;
-  }
-  .diabale-login{
-    @apply cursor-no-drop hover:scale-100
-  }
+.error1 {
+  @apply block  w-full  rounded-lg  border border-red-500   bg-transparent  py-2 pr-3 text-gray-50 placeholder-red-700  shadow-sm outline-none focus:border-red-500 focus:ring-red-500 dark:border-red-500  dark:bg-gray-700 dark:text-red-500 dark:placeholder-red-500;
+}
+.disabled-field {
+  @apply cursor-no-drop border border-purple-100;
+}
+.diabale-login {
+  @apply cursor-no-drop hover:scale-100;
+}

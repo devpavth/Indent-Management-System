@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-success-toast',
@@ -6,9 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './success-toast.component.css',
 })
 export class SuccessToastComponent {
-  visiable = true;
-
-  toggle() {
-    this.visiable = !this.visiable;
-  }
+  @Input() message: string | undefined;
 }

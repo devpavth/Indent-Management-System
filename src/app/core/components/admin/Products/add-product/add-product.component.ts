@@ -15,6 +15,13 @@ export class AddProductComponent implements OnInit {
   catList: any;
   brandList: any;
   gst: any = [0, 5, 12, 18];
+  units: { id: number; name: string }[] = [
+    { id: 1, name: 'Kg' },
+    { id: 2, name: 'L' },
+    { id: 3, name: 'm' },
+    { id: 4, name: 'Unit' },
+    { id: 200, name: 'Box' },
+  ];
 
   ProductForm: FormGroup;
 
@@ -28,7 +35,7 @@ export class AddProductComponent implements OnInit {
       prdBrndId: [],
       prdmdlName: [],
       prdDescription: [],
-
+      prdUnit: [],
       prdHsnCode: [],
       prdPurchasedPrice: [],
       prdGstPct: [],

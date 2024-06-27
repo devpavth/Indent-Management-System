@@ -90,4 +90,11 @@ export class RequestService {
     name = name.append('selectedQuote', fileName);
     return this.http.post(environment.comparisonPdf, data, { params: name });
   }
+  //new request indent api function
+  getProgramList() {
+    return this.http.get(environment.programlist);
+  }
+  getHeadofAccList() {
+    return this.http.get(environment.headofaccountlist);
+  }
 }
