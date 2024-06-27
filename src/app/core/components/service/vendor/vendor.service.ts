@@ -29,4 +29,7 @@ export class VendorService {
   updateBankAcc(id: any, data: any) {
     return this.http.post(environment.updateAccount + id, data);
   }
+  getVendorName() {
+    return this.http.get(environment.getVendorName);
+  }
 }

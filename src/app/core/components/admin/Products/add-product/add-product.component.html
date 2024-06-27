@@ -77,7 +77,7 @@
                   #catid
                   (change)="fetchCatList(catid.value)"
                   formControlName="prdGrpId"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="select-option1 block w-full rounded-lg"
                   [ngClass]="{
                     error:
                       ProductForm.get('prdGrpId')?.invalid &&
@@ -142,7 +142,7 @@
                   #id
                   (change)="fetchBrandList(id.value)"
                   formControlName="prdCatgId"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="select-option1 block w-full rounded-lg"
                   [ngClass]="{
                     error:
                       ProductForm.get('prdCatgId')?.invalid &&
@@ -206,7 +206,7 @@
                 </div>
                 <select
                   formControlName="prdBrndId"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="select-option1 block w-full rounded-lg"
                   [ngClass]="{
                     error:
                       ProductForm.get('prdBrndId')?.invalid &&
@@ -246,7 +246,7 @@
                 <input
                   type="text"
                   formControlName="prdmdlName"
-                  class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                   placeholder="eg:456789"
                   [ngClass]="{
                     error:
@@ -265,7 +265,37 @@
                   Select Model!
                 </small>
               </div>
-
+              <div class="col-span-2">
+                <label
+                  for="category"
+                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >Unit of Materiel</label
+                >
+                <select
+                  formControlName="prdUnit"
+                  class="select-option1 block w-full rounded-lg"
+                  [ngClass]="{
+                    error:
+                      ProductForm.get('prdUnit')?.invalid &&
+                      ProductForm.get('prdUnit')?.touched
+                  }"
+                  required
+                >
+                  <option *ngFor="let u of units" value="{{ u.id }}">
+                    {{ u.name }}
+                  </option>
+                  <small
+                    *ngIf="
+                      ProductForm?.get('prdUnit')?.invalid &&
+                      ProductForm?.get('prdUnit')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Select GST Percentage!
+                  </small>
+                </select>
+                <small class="text-danger text-red-600"> </small>
+              </div>
               <div class="col-span-2">
                 <label
                   for="price"
@@ -275,7 +305,7 @@
                 <input
                   type="number"
                   formControlName="prdHsnCode"
-                  class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                   placeholder="$2999"
                   [ngClass]="{
                     error:
@@ -303,7 +333,7 @@
                 <input
                   type="number"
                   formControlName="prdPurchasedPrice"
-                  class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                   placeholder="$2999"
                   [ngClass]="{
                     error:
@@ -330,7 +360,7 @@
                 >
                 <select
                   formControlName="prdGstPct"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="select-option1 block w-full rounded-lg border"
                   [ngClass]="{
                     error:
                       ProductForm.get('prdGstPct')?.invalid &&
@@ -359,7 +389,7 @@
                 <input
                   type="text"
                   formControlName="prdMinQty"
-                  class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                   placeholder="eg:456789"
                   [ngClass]="{
                     error:
@@ -387,7 +417,7 @@
                 <textarea
                   formControlName="prdDescription"
                   rows="4"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                   placeholder="Write product description here"
                   appFirstCapLetter
                   [ngClass]="{
@@ -412,7 +442,7 @@
               <button
                 (click)="onSubmit(ProductForm.value)"
                 type="submit"
-                class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
+                class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
               >
                 <svg
                   class="-ml-1 mr-1 h-6 w-6"

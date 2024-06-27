@@ -16,6 +16,8 @@ import { VendorListComponent } from './vendor/vendor-list/vendor-list.component'
 import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
 import { FunderListComponent } from './Funder/funder-list/funder-list.component';
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
+import { StockComponent } from './Products/stock/stock.component';
+import { TProductComponent } from './Transaction/t-product/t-product.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -32,6 +34,8 @@ const routes: Routes = [
   { component: AddFunderComponent, path: 'addFunder' },
   { component: FunderListComponent, path: 'funderList' },
   { component: ViewFunderComponent, path: 'viewFunder' },
+  { component: StockComponent, path: 'inoutstock' },
+  { component: TProductComponent, path: 'pTransaction' },
 ];
 
 @NgModule({
