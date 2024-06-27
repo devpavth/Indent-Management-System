@@ -15,7 +15,19 @@ export class VendorService {
     return this.http.get(environment.getAllVendorList);
   }
   deleteVendor(id: any) {
-    return this.http.post(environment.deleteVendor + id, id);
+    return this.http.post(environment.deleteVendor + id, '');
+  }
+  updateVendor(id: any, data: any) {
+    return this.http.post(environment.updateVendor + id, data);
+  }
+  getBranch() {
+    return this.http.get(environment.getBranchName);
+  }
+  deleteAccount(id: any) {
+    return this.http.post(environment.deleteAccount + id, '');
+  }
+  updateBankAcc(id: any, data: any) {
+    return this.http.post(environment.updateAccount + id, data);
   }
   getVendorName() {
     return this.http.get(environment.getVendorName);
