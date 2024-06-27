@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { Router } from '@angular/router';
+import { BranchService } from '../../../service/Branch/branch.service';
 
 @Component({
   selector: 'app-add-vendor',
   templateUrl: './add-vendor.component.html',
   styleUrl: './add-vendor.component.css',
 })
-export class AddVendorComponent {
+export class AddVendorComponent implements OnInit {
   isChecked: boolean = false;
+  _BranchName: any;
   addVendorForm: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -17,6 +19,7 @@ export class AddVendorComponent {
     private route: Router,
   ) {
     this.addVendorForm = this.fb.group({
+      branchId: [],
       vendorName: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
       vdrAdd1: ['', Validators.required],
       vdrAdd2: ['', Validators.required],
@@ -68,22 +71,33 @@ export class AddVendorComponent {
         [Validators.required, Validators.pattern('[A-Za-z ]+')],
       ],
       bizDetails: ['', Validators.required],
-      ifsCode: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[A-Za-z]{4}0[A-Za-z0-9]{6}$/),
-        ],
-      ],
-      bankAccNo: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^-?\d*\.?\d+$/),
-          Validators.minLength(8),
-          Validators.maxLength(15),
-        ],
-      ],
+      vendorAcccountDetails: this.fb.array([this.showBankData()]),
+    });
+  }
+  ngOnInit(): void {
+    this.getBranchName();
+  }
+
+  get vendorAcccountDetails() {
+    return this.addVendorForm.get('vendorAcccountDetails') as FormArray;
+  }
+
+  showBankData() {
+    return this.fb.group({
+      ifsCode: ['', Validators.required],
+      bankAccNo: ['', Validators.required],
+    });
+  }
+
+  addbank() {
+    this.vendorAcccountDetails.push(this.showBankData());
+  }
+
+  getBranchName() {
+    this.vendorService.getBranch().subscribe((res) => {
+      console.log(res);
+      this._BranchName = res;
+      console.log(this._BranchName);
     });
   }
 

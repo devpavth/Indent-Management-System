@@ -177,6 +177,26 @@
                 />
               </div>
             </div>
+            <div class="col-span-3">
+              <label
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Branch Name</label
+              >
+              <div class="relative">
+                <select
+                  #branchId
+                  formControlName="branchId"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let branch of _BranchName"
+                    value="{{ branch.branchId }}"
+                  >
+                    {{ branch.branchName }}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
 
           <div class="mb-2">
@@ -619,10 +639,10 @@
                     formControlName="bizDetails"
                     type="radio"
                     value="256"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Service</label
                   >
@@ -633,12 +653,26 @@
                     formControlName="bizDetails"
                     type="radio"
                     value="257"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Material Supply</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="2"
+                    formControlName="bizDetails"
+                    type="radio"
+                    value="258"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                    >Service & Material Supply</label
                   >
                 </div>
                 <div class="flex items-center">
@@ -647,11 +681,11 @@
                     formControlName="bizDetails"
                     id="3"
                     type="radio"
-                    value="258"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    value="259"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Others</label
                   >
@@ -678,71 +712,82 @@
                 />
               </div>
             </div>
+          </div>
 
-            <div class="col-span-full mb-3 flex justify-between">
-              <h1 class="text-xl font-semibold text-purple-800">
-                Bank Details
-              </h1>
-            </div>
-            <div>
-              <label
-                for="city"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-                >IFSC Code</label
-              >
-              <input
-                type="text"
-                formControlName="ifsCode"
-                class="input-form"
-                placeholder=""
-                appFirstCapLetter
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('ifsCode')?.invalid &&
-                    addVendorForm.get('ifsCode')?.touched
-                }"
-                required
-              />
+          <div class="col-span-full mb-3 flex justify-between">
+            <h1 class="text-xl font-semibold text-purple-800">Bank Details</h1>
+          </div>
 
-              <small
-                *ngIf="
-                  addVendorForm?.get('ifsCode')?.invalid &&
-                  addVendorForm?.get('ifsCode')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid IFSC!
-              </small>
-            </div>
-            <div>
-              <label
-                for="Pincode"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-                >Account Number</label
-              >
-              <input
-                type="number"
-                formControlName="bankAccNo"
-                class="input-form"
-                autocomplete="postal-code"
-                placeholder=""
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('bankAccNo')?.invalid &&
-                    addVendorForm.get('bankAccNo')?.touched
-                }"
-                required
-              />
-
-              <small
-                *ngIf="
-                  addVendorForm?.get('bankAccNo')?.invalid &&
-                  addVendorForm?.get('bankAccNo')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid pin!
-              </small>
+          <div
+            formArrayName="vendorAcccountDetails"
+            class="flex flex-wrap gap-4"
+          >
+            <div
+              *ngFor="let bank of vendorAcccountDetails.controls; let i = index"
+              class="w-full"
+            >
+              <div [formGroupName]="i" class="flex items-center gap-4">
+                <div class="flex-1">
+                  <label
+                    for="ifscCode"
+                    class="block text-sm font-medium text-gray-900 dark:text-white"
+                    >IFSC Code</label
+                  >
+                  <input
+                    id="ifscCode"
+                    type="text"
+                    formControlName="ifsCode"
+                    class="input-form"
+                    placeholder=""
+                    appFirstCapLetter
+                    [ngClass]="{
+                      error:
+                        addVendorForm.get('ifsCode')?.invalid &&
+                        addVendorForm.get('ifsCode')?.touched
+                    }"
+                    required
+                  />
+                  <small
+                    *ngIf="
+                      addVendorForm?.get('ifsCode')?.invalid &&
+                      addVendorForm?.get('ifsCode')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Invalid IFSC!
+                  </small>
+                </div>
+                <div class="flex-1">
+                  <label
+                    for="bankAccNo"
+                    class="block text-sm font-medium text-gray-900 dark:text-white"
+                    >Account Number</label
+                  >
+                  <input
+                    id="bankAccNo"
+                    type="number"
+                    formControlName="bankAccNo"
+                    class="input-form"
+                    autocomplete="postal-code"
+                    placeholder=""
+                    [ngClass]="{
+                      error:
+                        addVendorForm.get('bankAccNo')?.invalid &&
+                        addVendorForm.get('bankAccNo')?.touched
+                    }"
+                    required
+                  />
+                  <small
+                    *ngIf="
+                      addVendorForm?.get('bankAccNo')?.invalid &&
+                      addVendorForm?.get('bankAccNo')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Invalid pin!
+                  </small>
+                </div>
+              </div>
             </div>
           </div>
 
