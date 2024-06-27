@@ -26,7 +26,7 @@
           </button>
         </div>
         <div class="mr-4">
-          <h1 class="text-xl font-semibold text-purple-800">View Funder</h1>
+          <h1 class="text-xl font-semibold text-purple-800">View Vendor</h1>
         </div>
       </div>
 
@@ -182,6 +182,26 @@
                   }"
                   required
                 />
+              </div>
+            </div>
+            <div class="col-span-3">
+              <label
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Branch Name</label
+              >
+              <div class="relative">
+                <select
+                  #branchId
+                  formControlName="branchId"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let branch of _BranchName"
+                    value="{{ branch.branchId }}"
+                  >
+                    {{ branch.branchName }}
+                  </option>
+                </select>
               </div>
             </div>
           </div>
@@ -496,10 +516,9 @@
               <div class="inline-flex items-center gap-5">
                 <div class="flex items-center">
                   <input
-                    id="1"
                     formControlName="serviceLocation"
                     type="radio"
-                    value="496"
+                    [value]="496"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -510,10 +529,9 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="2"
                     formControlName="serviceLocation"
                     type="radio"
-                    value="497"
+                    [value]="497"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -524,10 +542,9 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="3"
                     formControlName="serviceLocation"
                     type="radio"
-                    value="498"
+                    [value]="498"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -538,10 +555,9 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    id="4"
                     formControlName="serviceLocation"
                     type="radio"
-                    value="499"
+                    [value]="499"
                     class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
@@ -625,11 +641,11 @@
                     id="disabled-checkbox"
                     formControlName="bizDetails"
                     type="radio"
-                    value="256"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    [value]="256"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Service</label
                   >
@@ -639,13 +655,28 @@
                     id="disabled-checkbox"
                     formControlName="bizDetails"
                     type="radio"
-                    value="257"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    [value]="257"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Material Supply</label
+                  >
+                </div>
+                <div class="flex items-center">
+                  <input
+                    id="disabled-checkbox"
+                    formControlName="bizDetails"
+                    type="radio"
+                    [value]="258"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                  />
+                  <label
+                    for="disabled-radio-2"
+                    class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
+                  >
+                    Service & Material Supply</label
                   >
                 </div>
                 <div class="flex items-center">
@@ -654,11 +685,11 @@
                     formControlName="bizDetails"
                     id="disabled-checkbox"
                     type="radio"
-                    value="258"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    [value]="259"
+                    class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   />
                   <label
-                    for="disabled-checkbox"
+                    for="disabled-radio-2"
                     class="ms-2 text-sm font-medium text-gray-400 dark:text-gray-500"
                     >Others</label
                   >
@@ -685,72 +716,157 @@
                 />
               </div>
             </div>
+          </div>
+          <div class="col-span-full mb-3 flex justify-between">
+            <h1 class="text-xl font-semibold text-purple-800">Bank Details</h1>
+          </div>
 
-            <div class="col-span-full mb-3 flex justify-between">
-              <h1 class="text-xl font-semibold text-purple-800">
-                Bank Details
+          <div
+            formArrayName="vendorAcccountDetails"
+            class="flex flex-wrap gap-4"
+          >
+            <div
+              *ngFor="let bank of vendorAcccountDetails.controls; let i = index"
+              class="w-full"
+            >
+              <div [formGroupName]="i" class="flex items-center gap-4">
+                <div class="flex-1">
+                  <label
+                    for="ifscCode"
+                    class="block text-sm font-medium text-gray-900 dark:text-white"
+                    >IFSC Code</label
+                  >
+                  <input
+                    id="ifscCode"
+                    type="text"
+                    formControlName="ifsCode"
+                    class="input-form"
+                    placeholder=""
+                    appFirstCapLetter
+                    [ngClass]="{
+                      error:
+                        UpdateVendorForm.get('ifsCode')?.invalid &&
+                        UpdateVendorForm.get('ifsCode')?.touched
+                    }"
+                    required
+                  />
+                  <small
+                    *ngIf="
+                      UpdateVendorForm?.get('ifsCode')?.invalid &&
+                      UpdateVendorForm?.get('ifsCode')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Invalid IFSC!
+                  </small>
+                </div>
+                <div class="flex-1">
+                  <label
+                    for="bankAccNo"
+                    class="block text-sm font-medium text-gray-900 dark:text-white"
+                    >Account Number</label
+                  >
+                  <input
+                    id="bankAccNo"
+                    type="number"
+                    formControlName="bankAccNo"
+                    class="input-form"
+                    autocomplete="postal-code"
+                    placeholder=""
+                    [ngClass]="{
+                      error:
+                        UpdateVendorForm.get('bankAccNo')?.invalid &&
+                        UpdateVendorForm.get('bankAccNo')?.touched
+                    }"
+                    required
+                  />
+                  <small
+                    *ngIf="
+                      UpdateVendorForm?.get('bankAccNo')?.invalid &&
+                      UpdateVendorForm?.get('bankAccNo')?.touched
+                    "
+                    class="text-danger text-red-600"
+                  >
+                    Invalid pin!
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!-- <div>
+              <h1 class="mb-4 text-sm font-medium text-gray-500">
+                Bank List Added
               </h1>
-            </div>
-            <div>
-              <label
-                for="city"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-                >IFSC Code</label
+              <table
+                class="w-full overflow-hidden rounded-lg border text-left text-sm text-gray-500 dark:text-gray-400"
               >
-              <input
-                type="text"
-                formControlName="ifsCode"
-                class="input-form"
-                placeholder=""
-                appFirstCapLetter
-                [ngClass]="{
-                  error:
-                    UpdateVendorForm.get('ifsCode')?.invalid &&
-                    UpdateVendorForm.get('ifsCode')?.touched
-                }"
-                required
-              />
-
-              <small
-                *ngIf="
-                  UpdateVendorForm?.get('ifsCode')?.invalid &&
-                  UpdateVendorForm?.get('ifsCode')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid IFSC!
-              </small>
-            </div>
-            <div>
-              <label
-                for="Pincode"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-                >Account Number</label
-              >
-              <input
-                type="text"
-                formControlName="bankAccNo"
-                class="input-form"
-                autocomplete="postal-code"
-                placeholder=""
-                [ngClass]="{
-                  error:
-                    UpdateVendorForm.get('bankAccNo')?.invalid &&
-                    UpdateVendorForm.get('bankAccNo')?.touched
-                }"
-                required
-              />
-
-              <small
-                *ngIf="
-                  UpdateVendorForm?.get('bankAccNo')?.invalid &&
-                  UpdateVendorForm?.get('bankAccNo')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid pin!
-              </small>
-            </div>
+                <thead
+                  class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
+                >
+                  <tr>
+                    <th scope="col" class="px-16 py-5">Account Number</th>
+                    <th scope="col" class="px-20 py-5">IFSC Code</th>
+                    <th scope="col" class="px-20 py-5">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
+                    *ngFor="let bank of _bankList"
+                  >
+                    <td class="items-center justify-center px-16 py-5">
+                      {{ bank.bankAccNo }}
+                    </td>
+                    <td class="items-center justify-center px-16 py-5">
+                      {{ bank.ifsCode }}
+                    </td>
+                    <td class="flex items-center justify-center px-4 py-3">
+                      <button
+                        type="submit"
+                        (click)="updateBankAcc(vendorAcccountDetails.value)"
+                      >
+                        <svg
+                          class="mr-1 h-6 w-6 text-blue-700"
+                          fill="currentColor"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                          />
+                        </svg>
+                      </button>
+                      <button (click)="deleteAccount(this.bank.vdrAccId)">
+                        <svg
+                          class="w-6 text-red-600 dark:text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> -->
           </div>
         </div>
         <div class="mt-8 flex justify-end gap-4">

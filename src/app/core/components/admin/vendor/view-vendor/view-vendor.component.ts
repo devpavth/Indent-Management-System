@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { Router } from '@angular/router';
 
@@ -17,6 +17,8 @@ export class ViewVendorComponent {
   isSaveIcon = true;
   deleteVendor: any;
   isDelete: boolean = false;
+  _BranchName: any;
+
   UpdateVendorForm: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -24,6 +26,7 @@ export class ViewVendorComponent {
     private route: Router,
   ) {
     this.UpdateVendorForm = this.fb.group({
+      branchId: [],
       vendorId: [],
       vendorName: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
       vdrAdd1: ['', Validators.required],
@@ -76,30 +79,31 @@ export class ViewVendorComponent {
         [Validators.required, Validators.pattern('[A-Za-z ]+')],
       ],
       bizDetails: ['', Validators.required],
-      ifsCode: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[A-Za-z]{4}0[A-Za-z0-9]{6}$/),
-        ],
-      ],
-      bankAccNo: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^-?\d*\.?\d+$/),
-          Validators.minLength(8),
-          Validators.maxLength(15),
-        ],
-      ],
+      vendorAcccountDetails: this.fb.array([this.showBankData()]),
     });
   }
 
   ngOnInit(): void {
+    this.getBranchName();
     this.UpdateVendorForm.patchValue(this.vendorData);
     Object.keys(this.UpdateVendorForm.controls).forEach((form) => {
       this.UpdateVendorForm.get(form)?.disable();
     });
+  }
+
+  get vendorAcccountDetails() {
+    return this.UpdateVendorForm.get('vendorAcccountDetails') as FormArray;
+  }
+
+  showBankData() {
+    return this.fb.group({
+      ifsCode: ['', Validators.required],
+      bankAccNo: ['', Validators.required],
+    });
+  }
+
+  addbank() {
+    this.vendorAcccountDetails.push(this.showBankData());
   }
   edit() {
     Object.keys(this.UpdateVendorForm.controls).forEach((form) => {
@@ -113,8 +117,23 @@ export class ViewVendorComponent {
     let id = this.UpdateVendorForm.get('vendorId')?.value;
     console.log(id);
 
-    this.vendorService.updateVendor(id, data).subscribe((res) => {
+    this.vendorService.updateVendor(id, data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+        if (error.status == 200) {
+          this.route.navigate(['/home/vendorList']);
+        }
+      },
+    );
+  }
+  getBranchName() {
+    this.vendorService.getBranch().subscribe((res) => {
       console.log(res);
+      this._BranchName = res;
+      console.log(this._BranchName);
     });
   }
 

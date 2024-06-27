@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.6:9010/';
-let Url1 = 'http://192.168.1.5:9010/';
+let Url = 'http://192.168.1.13:9010/';
+let Url1 = 'http://192.168.1.7:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 
 let bassEmployeeApi = 'employee';
@@ -74,6 +74,9 @@ export const environment = {
   getAllVendorList: Url1 + baseVendorApi + '/getactivevendors',
   deleteVendor: Url1 + baseVendorApi + '/deletebyvendorid/',
   updateVendor: Url1 + baseVendorApi + '/updatevendor/',
+  getBranchName: Url + baseBranchApi + '/branchname',
+  updateAccount: Url1 + baseVendorApi + '/updateBankDetails/',
+  deleteAccount: Url1 + baseVendorApi + '/deletebank/',
 
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
