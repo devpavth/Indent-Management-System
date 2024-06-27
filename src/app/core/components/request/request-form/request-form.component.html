@@ -807,7 +807,10 @@
                 <thead class="bg-gray-100 text-xs uppercase text-gray-700">
                   <tr>
                     <th scope="col" class="px-4 py-3">S.no</th>
+                    <th scope="col" class="px-4 py-3">Funder Code</th>
                     <th scope="col" class="px-4 py-3">Funder name</th>
+                    <th scope="col" class="px-4 py-3">Catagories</th>
+                    <th scope="col" class="px-4 py-3">Fund Available</th>
 
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
@@ -824,7 +827,16 @@
                       scope="row"
                       class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                     >
-                      {{ f.funderName }}
+                      {{ f.funderCode }}
+                    </th>
+                    <td class="px-4 py-3">{{ f.funderName }}</td>
+                    <td class="px-4 py-3">{{ f.funderCatgName }}</td>
+
+                    <th
+                      scope="row"
+                      class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                    >
+                      {{ f.fundInHand }}
                     </th>
 
                     <td class="flex items-center justify-end px-4 py-3">

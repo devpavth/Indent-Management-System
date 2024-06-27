@@ -133,18 +133,21 @@ export class RequestFormComponent implements OnInit {
       }));
     });
   }
+
   fetchGroupList() {
     this.productService.groupList().subscribe((res) => {
       this.groupList = res;
       console.log(res);
     });
   }
+
   fetchCatList(Id: any) {
     this.productService.catagoriesList(Id).subscribe((res) => {
       this.catList = res;
       console.log(res);
     });
   }
+
   fetchBrandList(catId: any) {
     this.productService.brandList(catId).subscribe((res) => {
       this.brandList = res;
@@ -163,12 +166,14 @@ export class RequestFormComponent implements OnInit {
       this.desList = res;
     });
   }
+
   fetchFunder() {
     this.funderService.funderList().subscribe((res) => {
       console.log(res);
       this.funder = res;
     });
   }
+
   patchProductData(id: any) {
     let prdList: any[] = this.desList;
     let product = prdList.find((f) => f.productId == id);
@@ -184,12 +189,13 @@ export class RequestFormComponent implements OnInit {
       gstpercentage: product.prdGstPct,
     });
   }
+
   addProductToList(product: any) {
     this.deleteToastMsg = 'Item Added';
     this.isTost = true;
     setTimeout(() => {
       this.isTost = false;
-    }, 3000); // Hide the toast after 3 seconds
+    }, 3000);
     let list = {
       ...product,
       subtotal: this.subtotal,
@@ -239,10 +245,23 @@ export class RequestFormComponent implements OnInit {
 
   onSelectionValue(selectedValue: any) {
     this.selectedFunder = selectedValue;
-    console.log(selectedValue);
+    console.log('selected', selectedValue);
   }
   addFunder() {
-    this.funderList.push(this.selectedFunder);
+    const { funderId, funderCode, funderName, fundDetails, funderCatgName } =
+      this.selectedFunder;
+    let fd: any[] = fundDetails;
+    let branch = fd.filter((f) => f.branchId == this.employeeData.branchId);
+    console.log('branch', branch);
+    const funder = {
+      funderId,
+      funderCode,
+      funderCatgName,
+      funderName,
+      ...branch[0],
+    };
+    this.funderList.push(funder);
+
     console.log(this.funderList);
   }
 }

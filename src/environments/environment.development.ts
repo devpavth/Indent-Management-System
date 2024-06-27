@@ -1,5 +1,5 @@
 let Url = 'http://192.168.1.13:9010/';
-
+let Url1 = 'http://192.168.1.13:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 
@@ -94,8 +94,7 @@ export const environment = {
   getBranchName: Url + baseBranchApi + '/branchname',
   updateAccount: Url1 + baseVendorApi + '/updateBankDetails/',
   deleteAccount: Url1 + baseVendorApi + '/deletebank/',
-
-
+  getVendorName: Url,
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
   getAllFunderList: Url + baseFunderApi + '/getactivefunders',
