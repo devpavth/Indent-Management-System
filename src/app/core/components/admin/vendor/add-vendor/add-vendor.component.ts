@@ -16,6 +16,7 @@ export class AddVendorComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private vendorService: VendorService,
+    private branchService: BranchService,
     private route: Router,
   ) {
     this.addVendorForm = this.fb.group({
@@ -94,7 +95,7 @@ export class AddVendorComponent implements OnInit {
   }
 
   getBranchName() {
-    this.vendorService.getBranch().subscribe((res) => {
+    this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
       console.log(this._BranchName);

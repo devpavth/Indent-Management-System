@@ -5,6 +5,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { FunderService } from '../../service/Funder/funder.service';
+import { VendorService } from '../../service/vendor/vendor.service';
 
 @Component({
   selector: 'app-request-form',
@@ -26,9 +27,11 @@ export class RequestFormComponent implements OnInit {
   productForm: FormGroup;
   programList: any;
   headofacc: any;
-  date = Date();
+  date: Date = new Date();
+  private intervalId: any;
 
   funder: any;
+  vendor: any | undefined;
 
   subtotal: number = 0;
   tax: number = 0;
@@ -41,10 +44,14 @@ export class RequestFormComponent implements OnInit {
 
   deleteToastMsg: any;
 
-  employeeData: any;
+  employeeData: any | undefined;
+
+  headerData: any;
   productList: any[] = [];
   selectedFunder: any;
+  seletedVendor: any;
   funderList: any[] = [];
+  vendorList: any[] = [];
 
   @ViewChild('catid', { static: false }) catid: ElementRef<any> | undefined;
   @ViewChild('id', { static: false }) id: ElementRef<any> | undefined;
@@ -59,10 +66,11 @@ export class RequestFormComponent implements OnInit {
     private empService: EmployeeServiceService,
     private shared: SharedServiceService,
     private funderService: FunderService,
+    private vendorService: VendorService,
   ) {
     this.requestIndentHead = this.fb.group({
-      branchCode: [],
-      deptId: [],
+      branchCode: [this.employeeData?.branchCode],
+      deptId: [this.employeeData?.empDepartment],
       programId: [''],
       campName: [],
       headOfAccId: [''],
@@ -85,6 +93,9 @@ export class RequestFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.intervalId = setInterval(() => {
+      this.date = new Date();
+    }, 1000);
     this.fetchProgram();
     this.fetchHeadofAcc();
     this.fetchUser();
@@ -92,6 +103,7 @@ export class RequestFormComponent implements OnInit {
     this.onChanges();
     this.fetchFunder();
   }
+
   onChanges(): void {
     this.productForm.valueChanges.subscribe((val) => {
       const unitPrice = parseFloat(val.unitPrice) || 0;
@@ -110,6 +122,12 @@ export class RequestFormComponent implements OnInit {
       .subscribe((res: any) => {
         this.employeeData = res;
         console.log('j', res);
+        this.requestIndentHead.patchValue({
+          deptId: this.employeeData.empDepartment,
+          branchCode: this.employeeData.branchCode,
+        });
+        this.fetchVendor();
+        this.fetchFunder1();
       });
   }
   fetchProgram() {
@@ -125,7 +143,7 @@ export class RequestFormComponent implements OnInit {
   }
 
   fetchHeadofAcc() {
-    this.requestService.getHeadofAccList().subscribe((res) => {
+    this.productService.getHeadofAccList().subscribe((res) => {
       console.log(res);
       this.headofacc = Object.entries(res).map(([id, value]) => ({
         id,
@@ -135,8 +153,10 @@ export class RequestFormComponent implements OnInit {
   }
 
   fetchGroupList() {
+    this.desList = '';
     this.productService.groupList().subscribe((res) => {
       this.groupList = res;
+
       console.log(res);
     });
   }
@@ -144,6 +164,9 @@ export class RequestFormComponent implements OnInit {
   fetchCatList(Id: any) {
     this.productService.catagoriesList(Id).subscribe((res) => {
       this.catList = res;
+      this.brandList = [];
+      this.modelList = [];
+      this.desList = [];
       console.log(res);
     });
   }
@@ -151,6 +174,8 @@ export class RequestFormComponent implements OnInit {
   fetchBrandList(catId: any) {
     this.productService.brandList(catId).subscribe((res) => {
       this.brandList = res;
+      this.modelList = [];
+      this.desList = [];
       console.log(res);
     });
   }
@@ -158,6 +183,7 @@ export class RequestFormComponent implements OnInit {
     this.productService.getModelList(brdId).subscribe((res) => {
       console.log(res);
       this.modelList = res;
+      this.desList = [];
     });
   }
   fetchProductDetails(brdId: any, modelName: any) {
@@ -172,6 +198,28 @@ export class RequestFormComponent implements OnInit {
       console.log(res);
       this.funder = res;
     });
+  }
+  fetchFunder1() {
+    this.funderService
+      .branchFunder(this.employeeData?.branchId)
+      .subscribe((res) => {
+        console.log('Branch Funder', res);
+      });
+  }
+  fetchVendor() {
+    this.vendorService.getAllVendor().subscribe((res: any) => {
+      let vendorList: any[] = res;
+
+      this.vendor = vendorList.filter(
+        (f) => f.branchId == this.employeeData?.branchId,
+      );
+      console.log(res, this.vendor);
+    });
+  }
+
+  onSubmitHeader(data: any) {
+    this.headerData = data;
+    console.log(data);
   }
 
   patchProductData(id: any) {
@@ -196,18 +244,30 @@ export class RequestFormComponent implements OnInit {
     setTimeout(() => {
       this.isTost = false;
     }, 3000);
-    let list = {
-      ...product,
-      subtotal: this.subtotal,
-      tax: this.tax,
-      total: this.total,
-    };
-    console.log(list);
-    this.productList.push(list);
-    console.log(this.productList);
+
+    const existingIndex = this.productList.findIndex(
+      (p) => p.productId === product.productId,
+    );
+
+    if (existingIndex !== -1) {
+      this.productList[existingIndex].qty += product.qty;
+      this.productList[existingIndex].subtotal += this.subtotal;
+      this.productList[existingIndex].tax += this.tax;
+      this.productList[existingIndex].total += this.total;
+    } else {
+      let list = {
+        ...product,
+        subtotal: this.subtotal,
+        tax: this.tax,
+        total: this.total,
+      };
+      this.productList.push(list);
+    }
+
     this.calculateSums();
     this.productReset();
   }
+
   calculateSums() {
     this.totalSum = this.productList.reduce(
       (sum, product) => sum + product.total,
@@ -242,16 +302,37 @@ export class RequestFormComponent implements OnInit {
     }, 3000); // Hide the toast after 3 seconds
     this.calculateSums();
   }
+  deleteFunder(i: any) {
+    this.funderList?.splice(i, 1);
+    this.deleteToastMsg = 'Funder Deleted';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
+  }
+  deleteVendor(i: any) {
+    this.vendorList?.splice(i, 1);
+    this.deleteToastMsg = 'Vendor Deleted';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
+  }
 
-  onSelectionValue(selectedValue: any) {
-    this.selectedFunder = selectedValue;
-    console.log('selected', selectedValue);
+  onSelectionValue(selectedValue: any, check: number) {
+    if (check === 1) {
+      this.selectedFunder = selectedValue;
+      console.log('selected', selectedValue);
+    } else if (check === 2) {
+      this.seletedVendor = selectedValue;
+      console.log('selected', selectedValue);
+    }
   }
   addFunder() {
     const { funderId, funderCode, funderName, fundDetails, funderCatgName } =
       this.selectedFunder;
     let fd: any[] = fundDetails;
-    let branch = fd.filter((f) => f.branchId == this.employeeData.branchId);
+    let branch = fd.filter((f) => f.branchId == this.employeeData?.branchId);
     console.log('branch', branch);
     const funder = {
       funderId,
@@ -263,5 +344,40 @@ export class RequestFormComponent implements OnInit {
     this.funderList.push(funder);
 
     console.log(this.funderList);
+  }
+  addVendor() {
+    const {
+      vendorId,
+      vendorName,
+      vdrCountry,
+      vdrContactPersonName,
+      vdrContactPersonPhone,
+      vendorAcccountDetails,
+    } = this.seletedVendor;
+    const vd: any[] = vendorAcccountDetails;
+
+    const vendor = {
+      vendorId,
+      vendorName,
+      vdrCountry,
+      vdrContactPersonName,
+      vdrContactPersonPhone,
+      ...vendorAcccountDetails[0],
+    };
+    console.log(vendor);
+    this.vendorList.push(vendor);
+  }
+  onSubmitIndent() {
+    let indent = {
+      ...this.headerData,
+      totalPrice: this.totalSum,
+      productDetails: this.productList,
+      assgndVendors: this.vendorList,
+      assignedDonors: this.funderList,
+    };
+    console.log(indent);
+    this.requestService.postIndent(indent).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

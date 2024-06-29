@@ -497,7 +497,9 @@
                   <td class="px-4 py-3">{{ p.purchasedPrice }}</td>
                   <td class="px-4 py-3">{{ p.prdQty }}</td>
                   <td class="px-4 py-3">{{ p.gstPercentage }}</td>
-                  <td class="px-4 py-3">{{ p.total | currency: "INR" }}</td>
+                  <td class="px-4 py-3">
+                    {{ p.total.itemPrice | currency: "INR" }}
+                  </td>
                   <td class="flex items-center justify-end px-4 py-3">
                     <button
                       id="benq-ex2710q-dropdown-button"

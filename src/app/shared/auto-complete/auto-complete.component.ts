@@ -26,7 +26,7 @@ export class AutoCompleteComponent<T> {
         }),
       );
     } else {
-      this.filteredSuggestions = this.suggestions.slice();
+      this.filteredSuggestions = this.suggestions?.slice();
     }
     this.show = true;
   }
@@ -45,7 +45,7 @@ export class AutoCompleteComponent<T> {
 
   showSuggestions() {
     if (this.query.trim() === '') {
-      this.filteredSuggestions = this.suggestions.slice();
+      this.filteredSuggestions = this.suggestions?.slice();
     }
     this.show = true;
   }

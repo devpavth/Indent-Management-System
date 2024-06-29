@@ -56,7 +56,8 @@ export const environment = {
 
   //requestIndent
   programlist: Url + baseRequestApi + '/getallprogram',
-  headofaccountlist: Url + baseRequestApi + '/getallhoacc',
+  headofaccountlist: Url + baseProductApi + '/getallhoacc',
+  postIndent: Url + baseRequestApi + '/newrequest',
 
   //old request api
 
@@ -91,10 +92,10 @@ export const environment = {
   getAllVendorList: Url1 + baseVendorApi + '/getactivevendors',
   deleteVendor: Url1 + baseVendorApi + '/deletebyvendorid/',
   updateVendor: Url1 + baseVendorApi + '/updatevendor/',
-  getBranchName: Url + baseBranchApi + '/branchname',
+  getVendorName: Url1 + baseVendorApi + '/getactivevendors',
   updateAccount: Url1 + baseVendorApi + '/updateBankDetails/',
   deleteAccount: Url1 + baseVendorApi + '/deletebank/',
-  getVendorName: Url,
+
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',
   getAllFunderList: Url + baseFunderApi + '/getactivefunders',
@@ -102,6 +103,7 @@ export const environment = {
   assignFunder: Url + baseFunderApi + '/assignfunder/',
   AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
   addFund: Url + baseFunderApi + '/addfund/',
+  branchFunder: Url + baseFunderApi + '/branchfunder/',
 
   //transaction  api
 

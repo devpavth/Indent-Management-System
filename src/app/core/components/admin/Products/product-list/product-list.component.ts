@@ -10,6 +10,7 @@ export class ProductListComponent implements OnInit {
   isProductList: Boolean = false;
   productList: any;
   productData: any;
+  Spinner: boolean = true;
   ngOnInit() {
     this.fetchProductList();
   }
@@ -18,6 +19,7 @@ export class ProductListComponent implements OnInit {
     this.productService.getAllProduct().subscribe((res) => {
       console.log(res);
       this.productList = res;
+      this.Spinner = false;
     });
   }
 
