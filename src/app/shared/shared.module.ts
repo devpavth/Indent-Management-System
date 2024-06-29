@@ -21,6 +21,7 @@ import { PdfUploadComponent } from './pdf-upload/pdf-upload.component';
 import { DeleteComponent } from './delete/delete.component';
 import { SuccessComponent } from './success/success.component';
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
+import { OnlyNumberDirective } from './Directives/only-number.directive';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
     DeleteComponent,
     SuccessComponent,
     AutoCompleteComponent,
+    OnlyNumberDirective,
   ],
   imports: [
     CommonModule,
@@ -66,6 +68,7 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
     DeleteComponent,
     SuccessComponent,
     AutoCompleteComponent,
+    OnlyNumberDirective,
   ],
 })
 export class SharedModule {}

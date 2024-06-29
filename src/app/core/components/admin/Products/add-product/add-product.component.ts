@@ -83,11 +83,25 @@ export class AddProductComponent implements OnInit {
   }
 
   onSubmit(data: any) {
-    this.productService.postProduct(data).subscribe((res) => {
-      console.log(res);
-    });
+    console.log(data);
+
+    this.productService.postProduct(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+
+        if (error.status == 200) {
+          this.ProductForm.reset();
+          this.ProductForm.get('prdStatus')?.patchValue(200);
+        }
+      },
+    );
   }
   closeAdding(action: boolean) {
     this.isCloseAdding = action;
+    this.fetchGroupList();
+    this.ProductForm.reset();
   }
 }

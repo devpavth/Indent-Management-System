@@ -94,7 +94,10 @@ export class RequestService {
   getProgramList() {
     return this.http.get(environment.programlist);
   }
-  getHeadofAccList() {
-    return this.http.get(environment.headofaccountlist);
+
+  //new request indent
+
+  postIndent(data: any) {
+    return this.http.post(environment.postIndent, data);
   }
 }

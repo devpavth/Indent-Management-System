@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { Router } from '@angular/router';
+import { BranchService } from '../../../service/Branch/branch.service';
 
 @Component({
   selector: 'app-view-vendor',
@@ -23,6 +24,7 @@ export class ViewVendorComponent {
   constructor(
     private fb: FormBuilder,
     private vendorService: VendorService,
+    private branchService: BranchService,
     private route: Router,
   ) {
     this.UpdateVendorForm = this.fb.group({
@@ -130,7 +132,7 @@ export class ViewVendorComponent {
     );
   }
   getBranchName() {
-    this.vendorService.getBranch().subscribe((res) => {
+    this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
       console.log(this._BranchName);

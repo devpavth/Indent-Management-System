@@ -9,6 +9,7 @@ import { VendorService } from '../../../service/vendor/vendor.service';
 export class VendorListComponent implements OnInit {
   _vendor: any;
   vendorData: any;
+  Spinner: boolean = true;
 
   isVendorList: Boolean = false;
   constructor(private vendorService: VendorService) {}
@@ -20,6 +21,7 @@ export class VendorListComponent implements OnInit {
     this.vendorService.getAllVendor().subscribe(
       (res) => {
         this._vendor = res;
+        this.Spinner = false;
         console.log(res);
       },
       (error) => {

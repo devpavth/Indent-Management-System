@@ -167,22 +167,29 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   addEmployee(employeeData: any) {
-    // console.table(employeeData);
+    console.table(employeeData);
 
     this.empService.addEmployee(employeeData).subscribe(
       (res) => {
-        console.log(res);
+        console.log('server res', res);
 
-        this.addEmployeeForm.reset();
+        // this.addEmployeeForm.reset();
       },
       (error) => {
+        console.log(error);
+
         if (error.status == 200) {
           this.isSuccess = true;
         } else {
-          console.log(error.error);
+          // alert(error.error);
+        }
+        if (error.status == 500) {
+          this.addEmployeeForm.reset();
+          this.isSuccess = true;
         }
       },
     );
+    this.addEmployeeForm.reset();
   }
 
   fetchState(state: string) {

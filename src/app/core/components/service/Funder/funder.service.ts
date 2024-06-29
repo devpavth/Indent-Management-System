@@ -32,4 +32,8 @@ export class FunderService {
   addFund(data: any, fundId: any) {
     return this.http.post(environment.addFund + fundId, data);
   }
+
+  branchFunder(id: any) {
+    return this.http.get(environment.branchFunder + id);
+  }
 }

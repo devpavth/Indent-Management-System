@@ -57,4 +57,7 @@ export class ProductService {
   getProductDes(brdId: string, mName: string) {
     return this.productHttp.get(environment.desList + brdId + '/' + mName);
   }
+  getHeadofAccList() {
+    return this.productHttp.get(environment.headofaccountlist);
+  }
 }

@@ -20,9 +20,7 @@ export class VendorService {
   updateVendor(id: any, data: any) {
     return this.http.post(environment.updateVendor + id, data);
   }
-  getBranch() {
-    return this.http.get(environment.getBranchName);
-  }
+
   deleteAccount(id: any) {
     return this.http.post(environment.deleteAccount + id, '');
   }

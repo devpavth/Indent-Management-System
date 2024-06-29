@@ -11,6 +11,7 @@ export class BranchListComponent implements OnInit {
   _branch: any;
   branchCode: any;
   isSuccess: boolean = false;
+  Spinner: boolean = true;
   // userid: any = this.userdata.loginUserData.sno
 
   isAuth: boolean = false;
@@ -31,6 +32,7 @@ export class BranchListComponent implements OnInit {
         console.table(res);
 
         this._branch = res;
+        this.Spinner = false;
       },
       (error) => {
         if (error.status == 403) {
