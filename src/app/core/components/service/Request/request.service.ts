@@ -22,7 +22,7 @@ export class RequestService {
     return this.http.get(environment.reqProduct + data);
   }
   branchRequestList(status: any, sno: any) {
-    return this.http.get(environment.branchApprovelList + sno + '/' + status);
+    return this.http.get(environment.branchApprovelList);
   }
   branchApprovel(data: any) {
     return this.http.post(environment.branchApprovel + data, data);
@@ -35,9 +35,7 @@ export class RequestService {
     });
   }
   adminRequestList(status: any, branchId: any) {
-    return this.http.get(
-      environment.adminAprovalList + branchId + '/' + status,
-    );
+    return this.http.get(environment.adminAprovalList);
   }
   adminApprovel(data: any) {
     return this.http.post(environment.adminAprovel + data, data);

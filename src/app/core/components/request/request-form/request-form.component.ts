@@ -73,13 +73,15 @@ export class RequestFormComponent implements OnInit {
       deptId: [this.employeeData?.empDepartment],
       programId: [''],
       campName: [],
-      headOfAccId: [''],
+
       requiredDate: [],
       expenditureId: [],
       requisitioner: [],
       notes: [],
     });
     this.productForm = this.fb.group({
+      headOfAccId: [''],
+      headOfAccName: [''],
       productId: [],
       productBrand: [],
       productCat: [],
@@ -235,6 +237,8 @@ export class RequestFormComponent implements OnInit {
       productModel: product.prdmdlName,
       unitPrice: product.prdPurchasedPrice,
       gstpercentage: product.prdGstPct,
+      headOfAccId: product.headOfAccId,
+      headOfAccName: product.headOfAccName,
     });
   }
 
@@ -263,6 +267,7 @@ export class RequestFormComponent implements OnInit {
       };
       this.productList.push(list);
     }
+    console.log(this.productList);
 
     this.calculateSums();
     this.productReset();
