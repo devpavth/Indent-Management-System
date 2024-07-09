@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.13:9010/';
-let Url1 = 'http://192.168.1.13:9010/';
+let Url = 'http://192.168.1.18:9010/';
+let Url1 = 'http://192.168.1.18:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 
@@ -58,19 +58,18 @@ export const environment = {
   programlist: Url + baseRequestApi + '/getallprogram',
   headofaccountlist: Url + baseProductApi + '/getallhoacc',
   postIndent: Url + baseRequestApi + '/newrequest',
-
+  branchApprovelList: Url + baseRequestApi + '/branchrequest',
+  adminAprovalList: Url + baseRequestApi + '/requestsforadmin',
   //old request api
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
   getYourReq: Url + baseRequestApi + '/getyourRequest',
   viewYourReq: Url + baseRequestApi + '/getrequestbyid/',
   reqProduct: Url + baseRequestApi + '/getproductdata/',
-  branchApprovelList: Url + baseRequestApi + '/getbranchrequest/',
 
   branchApprovel: Url + baseRequestApi + '/acceptBauthorize/',
   branchRejected: Url + baseRequestApi + '/rejectBauthorize/',
 
-  adminAprovalList: Url + baseRequestApi + '/getrequestsforadmin/',
   adminAprovel: Url + baseRequestApi + '/acceptAauthorize/',
   adminRejected: Url + baseRequestApi + '/rejectAauthorize/',
 

@@ -146,28 +146,6 @@
                 required
               />
             </div>
-            <div class="col-span-4 mb-2">
-              <label
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                >Head of Account
-              </label>
-              <select
-                formControlName="headOfAccId"
-                class="select-option1 block w-full rounded-lg"
-              >
-                <option
-                  value=""
-                  disabled
-                  selected
-                  class="bg-purple-700 text-white"
-                >
-                  Choose Head of Account
-                </option>
-                <option *ngFor="let a of headofacc" value="{{ a.id }}">
-                  {{ a.value }}
-                </option>
-              </select>
-            </div>
           </section>
           <section
             class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
@@ -192,7 +170,7 @@
               <label
                 for="Address"
                 class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                >Indent Created Date
+                >Indent Creation Date
               </label>
               <!-- <input type="date" class="input-form" required /> -->
               <div class="flex items-center gap-2">
@@ -527,6 +505,7 @@
                   class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
                 >
                   {{ prd.productModel }} - {{ prd.productBrand }} <br />
+                  Head Of Account - {{ prd.headOfAccName }} <br />
                   <span
                     class="h-20 text-wrap text-xs font-normal text-gray-500"
                     >{{ prd.productDesc }}</span
@@ -618,11 +597,14 @@
           </div>
         </div>
       </section>
-      <section class="rounded-b-lg bg-violet-50 pb-4">
+      <ng-template
+        *ngIf="totalSum < 5000 && totalSum > 0"
+        class="rounded-b-lg bg-violet-50 pb-4"
+      >
         <div class="flex justify-between border-t bg-[#bd68ee] px-4 py-4">
           <h1 class="font-bold text-white">Indent Footer</h1>
         </div>
-        <div class="mt-4 px-4">
+        <!-- <div class="mt-4 px-4">
           <h1 class="my-4 font-semibold text-purple-700">Add Funder</h1>
           <div
             class="overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
@@ -731,9 +713,9 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="mt-16 px-4">
+        <div class="mb-16 px-4">
           <h1 class="my-4 font-semibold text-purple-700">Recommended Vendor</h1>
           <div
             class="overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
@@ -843,7 +825,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </ng-template>
     </div>
     <!-- final save -->
 
