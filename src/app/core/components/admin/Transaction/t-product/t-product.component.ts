@@ -18,9 +18,9 @@ export class TProductComponent implements OnInit {
     this.productService.productTransaction(id).subscribe((res: any) => {
       console.log(res);
       this.transactionData = res;
-      const { inwardPrdDetails } = res;
+      const { transPrdDetails } = res;
 
-      this.inwardPrdDetails = inwardPrdDetails;
+      this.inwardPrdDetails = transPrdDetails;
     });
   }
 }

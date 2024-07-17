@@ -6,6 +6,7 @@ import { SharedServiceService } from '../../service/shared-service/shared-servic
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { FunderService } from '../../service/Funder/funder.service';
 import { VendorService } from '../../service/vendor/vendor.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-request-form',
@@ -16,6 +17,9 @@ export class RequestFormComponent implements OnInit {
   isHeader: boolean = true;
   isProductAdd: boolean = false;
   isTost: boolean = false;
+  isOtherProduct: boolean = false;
+  isEditHeader: boolean = false;
+  isSuccessPop: boolean = false;
 
   groupList: any;
   catList: any;
@@ -52,6 +56,8 @@ export class RequestFormComponent implements OnInit {
   seletedVendor: any;
   funderList: any[] = [];
   vendorList: any[] = [];
+  productData: any;
+  successData: any;
 
   @ViewChild('catid', { static: false }) catid: ElementRef<any> | undefined;
   @ViewChild('id', { static: false }) id: ElementRef<any> | undefined;
@@ -220,8 +226,24 @@ export class RequestFormComponent implements OnInit {
   }
 
   onSubmitHeader(data: any) {
+    this.isEditHeader = true;
+    Object.keys(this.requestIndentHead.controls).forEach((f) => {
+      this.requestIndentHead.get(f)?.disable();
+    });
+    this.deleteToastMsg = 'Header Added Successfully';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
     this.headerData = data;
     console.log(data);
+  }
+
+  onEditHeader() {
+    this.isEditHeader = false;
+    Object.keys(this.requestIndentHead.controls).forEach((f) => {
+      this.requestIndentHead.get(f)?.enable();
+    });
   }
 
   patchProductData(id: any) {
@@ -381,8 +403,50 @@ export class RequestFormComponent implements OnInit {
       assignedDonors: this.funderList,
     };
     console.log(indent);
-    this.requestService.postIndent(indent).subscribe((res) => {
-      console.log(res);
+    this.requestService.postIndent(indent).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+
+        if (error.status == 200) {
+          this.productForm.reset();
+          this.requestIndentHead.reset();
+          this.productList = [];
+          this.vendorList = [];
+          this.togglePop(true);
+          console.log(error.error.text);
+
+          this.successData = { show: 3, text: `${error.error.text}` };
+        }
+      },
+    );
+  }
+  serchByCode(code: string) {
+    console.log(code);
+
+    this.productService.getProductByCode(code).subscribe((product: any) => {
+      console.log(product);
+      this.productData = product;
+      this.productForm.patchValue({
+        productId: product.productId,
+        qty: 1,
+        productBrand: product.prdbrndName,
+        productDesc: product.prdDescription,
+        productCat: product.prdcatgName,
+        productModel: product.prdmdlName,
+        unitPrice: product.prdPurchasedPrice,
+        gstpercentage: product.prdGstPct,
+        headOfAccId: product.headOfAccId,
+        headOfAccName: product.headOfAccName,
+      });
     });
+  }
+  togglePop(data: boolean) {
+    this.isSuccessPop = data;
+  }
+  toggleProduct(data: boolean) {
+    this.isOtherProduct = data;
   }
 }

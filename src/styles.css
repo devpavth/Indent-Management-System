@@ -25,6 +25,9 @@
 .btn-primary {
   @apply block rounded-lg bg-purple-700 p-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:translate-y-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800;
 }
+.btn-gray {
+  @apply block rounded-lg bg-gray-200 p-2.5 text-sm font-medium text-gray-900 transition-all duration-500 hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 active:translate-y-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800;
+}
 .btn-primary1 {
   @apply block  text-nowrap bg-purple-700 p-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:scale-90 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800;
 }

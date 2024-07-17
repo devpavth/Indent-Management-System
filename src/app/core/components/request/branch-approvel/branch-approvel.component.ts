@@ -27,11 +27,14 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == false
     ) {
-      let status = 102;
-      this.rService.branchRequestList(status, this.branch).subscribe(
-        (res) => {
+      this.rService.branchRequestList().subscribe(
+        (res: any) => {
           console.log('jagan', res);
-          this._yourReq = res;
+          let list: any[] = res;
+          list = list.filter((l) => l.requestStatus == 201);
+          console.log(list);
+
+          this._yourReq = list;
         },
         (error) => {
           if (error.status == 204) {
@@ -45,11 +48,12 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      let status = 202;
-      this.rService.branchRequestList(status, this.branch).subscribe(
-        (res) => {
-          console.log('jagan', res);
-          this._yourReq = res;
+      this.rService.branchRequestList().subscribe(
+        (res: any) => {
+          let list: any[] = res;
+          list = list.filter((l) => l.requestStatus == 102);
+          console.log(list);
+          this._yourReq = list;
         },
         (error) => {
           if (error.status == 204) {
@@ -63,11 +67,12 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      let status = 406;
-      this.rService.branchRequestList(status, this.branch).subscribe(
-        (res) => {
-          console.log('jagan', res);
-          this._yourReq = res;
+      this.rService.branchRequestList().subscribe(
+        (res: any) => {
+          let list: any[] = res;
+          list = list.filter((l) => l.requestStatus == 406);
+          console.log(list);
+          this._yourReq = list;
         },
         (error) => {
           if (error.status == 204) {

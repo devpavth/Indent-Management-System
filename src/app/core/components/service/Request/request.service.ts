@@ -11,9 +11,8 @@ export class RequestService {
   postRequestIndent(req: any) {
     return this.http.post(environment.postRequestIndent, req);
   }
-
   getYourReq(data: any) {
-    return this.http.get(environment.getYourReq + '/' + data);
+    return this.http.get(environment.getYourReq);
   }
   viewReq(data: any): Observable<any> {
     return this.http.get(environment.viewYourReq + data);
@@ -21,7 +20,7 @@ export class RequestService {
   reqProduct(data: any) {
     return this.http.get(environment.reqProduct + data);
   }
-  branchRequestList(status: any, sno: any) {
+  branchRequestList() {
     return this.http.get(environment.branchApprovelList);
   }
   branchApprovel(data: any) {
@@ -48,7 +47,7 @@ export class RequestService {
     });
   }
   finRequestList(data: any): Observable<any> {
-    return this.http.get(environment.finRequestList + data);
+    return this.http.get(environment.finRequestList);
   }
   commands() {
     return this.http.get(environment.commend);

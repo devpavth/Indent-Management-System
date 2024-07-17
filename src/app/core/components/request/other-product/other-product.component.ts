@@ -14,14 +14,17 @@ export class OtherProductComponent {
   otherProductForm: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private shared: SharedServiceService,
+
     private pService: ProductService,
   ) {
     this.otherProductForm = this.fb.group({
-      configuration: [],
-      purchasedPrice: [],
-      createdBy: [this.shared?.loginUserData?.employeeId],
-      createdOn: new Date(),
+      prdDescription: [],
+      prdPurchasedPrice: [],
+    });
+  }
+  onsubmit(data: any) {
+    this.pService.addOtherProduct(data).subscribe((res) => {
+      console.log(res);
     });
   }
 }

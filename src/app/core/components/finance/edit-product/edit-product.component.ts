@@ -37,7 +37,7 @@ export class EditProductComponent implements OnInit {
       id: this.product.id,
       unitPrice: this.product.unitPrice,
       qty: this.product.qty,
-      gstpercentage: this.product.gstRate,
+      gstpercentage: this.product.prdGstPct,
     });
     this.fetchCommands();
   }

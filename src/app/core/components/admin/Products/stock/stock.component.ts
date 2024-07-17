@@ -193,7 +193,7 @@ export class StockComponent implements OnInit {
   }
 
   onSubmit() {
-    let finalList = { ...this.header, inwardPrdDetails: this.productList };
+    let finalList = { ...this.header, transPrdDetails: this.productList };
     console.log(finalList);
     this.productService.addInward(finalList).subscribe(
       (res) => {

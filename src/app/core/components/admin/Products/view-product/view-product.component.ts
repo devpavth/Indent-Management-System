@@ -140,4 +140,7 @@ export class ViewProductComponent implements OnInit {
       this.isStockView = isView;
     }
   }
+  onUpdateProduct(data: any) {
+    console.log(data);
+  }
 }
