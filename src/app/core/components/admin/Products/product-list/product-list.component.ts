@@ -8,18 +8,31 @@ import { ProductService } from '../../../service/Product/product.service';
 })
 export class ProductListComponent implements OnInit {
   isProductList: Boolean = false;
-  productList: any;
+  productList: any[] | undefined;
+  otherPrdLen: number = 0;
   productData: any;
   Spinner: boolean = true;
   ngOnInit() {
-    this.fetchProductList();
+    this.fetchProductList(1);
   }
   constructor(private productService: ProductService) {}
-  fetchProductList() {
-    this.productService.getAllProduct().subscribe((res) => {
+  fetchProductList(data: number) {
+    this.productService.getAllProduct().subscribe((res: any) => {
       console.log(res);
-      this.productList = res;
+      let list: any[] = res;
+      this.otherPrdLen = list.filter((m) => m.prdStatus == 303).length;
       this.Spinner = false;
+      switch (data) {
+        case 1: {
+          this.productList = list.filter((m) => m.prdStatus == 200);
+          break;
+        }
+        case 2: {
+          this.productList = list.filter((m) => m.prdStatus == 303);
+          console.log('Hello');
+          break;
+        }
+      }
     });
   }
 
@@ -30,7 +43,7 @@ export class ProductListComponent implements OnInit {
     }
     if (check == 0) {
       this.isProductList = action;
-      this.fetchProductList();
+      this.fetchProductList(1);
     }
   }
 }

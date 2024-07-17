@@ -73,6 +73,8 @@ export class ViewRequestComponent implements OnInit {
     }
   }
   rejected(sno: any, data: any) {
+    console.log(sno, data);
+
     if (this.showID === 2) {
       this.requstService.branchReject(sno, data).subscribe(
         (res) => {

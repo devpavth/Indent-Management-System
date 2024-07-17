@@ -1,8 +1,6 @@
-let Url = 'http://192.168.1.18:9010/';
-let Url1 = 'http://192.168.1.18:9010/';
-
+let Url = 'http://192.168.1.20:9010/';
+let Url1 = 'http://192.168.1.20:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
-
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
 let baseRequestApi = 'requestindent';
@@ -37,12 +35,12 @@ export const environment = {
   getAllProduct: Url + baseProductApi + '/getallactivedetails',
   deleteProduct: Url + baseProductApi + '/deletedetailfromproductid/',
   getStockDetails: Url + baseProductApi + '/getstockdetails/',
-
+  otherProduct: Url + baseProductApi + '/addotherprd',
   modelList: Url + baseProductApi + '/getmodelname/',
   desList: Url + baseProductApi + '/getprddetails/',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
-  inward: Url + baseProductApi + '/addprdtrans',
+  inward: Url + baseProductApi + '/addprdinward',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
@@ -60,10 +58,11 @@ export const environment = {
   postIndent: Url + baseRequestApi + '/newrequest',
   branchApprovelList: Url + baseRequestApi + '/branchrequest',
   adminAprovalList: Url + baseRequestApi + '/requestsforadmin',
+  getYourReq: Url + baseRequestApi + '/yourRequest',
   //old request api
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
-  getYourReq: Url + baseRequestApi + '/getyourRequest',
+
   viewYourReq: Url + baseRequestApi + '/getrequestbyid/',
   reqProduct: Url + baseRequestApi + '/getproductdata/',
 
@@ -75,7 +74,7 @@ export const environment = {
 
   commend: Url + baseRequestApi + '/getactivecommends',
 
-  finRequestList: Url + baseRequestApi + '/requestforfinance/',
+  finRequestList: Url + baseRequestApi + '/requestforfinance',
   updateRequestList: Url + baseRequestApi + '/updaterequest/',
   finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
   finHolding: Url + baseRequestApi + '/holdrequest/',

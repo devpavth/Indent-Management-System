@@ -60,4 +60,7 @@ export class ProductService {
   getHeadofAccList() {
     return this.productHttp.get(environment.headofaccountlist);
   }
+  addOtherProduct(data: any) {
+    return this.productHttp.post(environment.otherProduct, data);
+  }
 }

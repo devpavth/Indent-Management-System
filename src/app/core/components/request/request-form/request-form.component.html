@@ -1,7 +1,18 @@
+<div *ngIf="isSuccessPop">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="togglePop($event)"
+  ></app-success>
+</div>
+<div
+  *ngIf="isOtherProduct"
+  class="fixed z-50 flex h-full w-full items-center justify-center bg-black/50"
+>
+  <app-other-product (closeToggle)="toggleProduct($event)"></app-other-product>
+</div>
 <section class="snap-x snap-mandatory overflow-y-auto scroll-smooth">
   <div class="px-4 sm:ml-64">
     <!-- <div class="p-4 bg-white rounded-lg"></div> -->
-
     <!-- Request form entry start -->
     <div class="my-4 rounded-lg border-purple-500/10 bg-white backdrop-blur-lg">
       <div class="flex justify-between rounded-t-lg bg-[#310055] px-4 py-4">
@@ -210,10 +221,18 @@
         </form>
         <div class="flex w-full justify-end">
           <button
+            *ngIf="!isEditHeader"
             (click)="onSubmitHeader(requestIndentHead.value)"
             class="btn-primary col-span-8 mx-12 mb-4"
           >
             Add Header
+          </button>
+          <button
+            *ngIf="isEditHeader"
+            (click)="onEditHeader()"
+            class="btn-gray col-span-8 mx-12 mb-4"
+          >
+            Edit Header
           </button>
         </div>
       </div>
@@ -225,6 +244,110 @@
         class="flex snap-center snap-normal bg-[#f5ebfa]"
       >
         <section class="mx-8 my-2 grid w-2/3 grid-cols-8">
+          <div class="col-span-8 m-4 flex">
+            <input type="text" #serValue class="input-form" />
+            <button
+              (click)="serchByCode(serValue.value)"
+              class="btn-primary ml-4 text-nowrap"
+            >
+              Search
+            </button>
+          </div>
+          <div *ngIf="productData" class="col-span-full flex flex-col">
+            <div class="overflow-x-auto">
+              <div class="inline-block min-w-full p-1.5 align-middle">
+                <div class="overflow-hidden rounded-lg border">
+                  <table class="min-w-full divide-y divide-gray-200 bg-white">
+                    <tbody class="divide-y divide-gray-200">
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Product Code
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                        >
+                          <span class="font-semibold">{{
+                            productData?.prdCode
+                          }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Head Of Account
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                        >
+                          <span class="font-semibold">{{
+                            productData?.headOfAccName
+                          }}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Product Name
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          <span class="font-semibold">{{
+                            productData?.prdmdlName
+                          }}</span>
+                          -
+                          {{ productData?.prdbrndName }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Description
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdDescription }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Purchased Price
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdPurchasedPrice }}
+                        </td>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          GST
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdGstPct }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-span-8 m-4 flex">
+            <button (click)="toggleProduct(true)">
+              <a class="">Add Product</a>
+            </button>
+          </div>
           <div class="col-span-4 m-4">
             <label
               for="Address"
@@ -375,7 +498,7 @@
           </div>
         </section>
         <div
-          class="m-4 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
+          class="m-4 h-1/2 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
         >
           <h1 class="text-xl font-semibold">Product Summary</h1>
           <div class="flow-root">
@@ -597,7 +720,7 @@
           </div>
         </div>
       </section>
-      <ng-template
+      <section
         *ngIf="totalSum < 5000 && totalSum > 0"
         class="rounded-b-lg bg-violet-50 pb-4"
       >
@@ -825,7 +948,7 @@
             </div>
           </div>
         </div>
-      </ng-template>
+      </section>
     </div>
     <!-- final save -->
 

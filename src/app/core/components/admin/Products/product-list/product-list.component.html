@@ -123,6 +123,25 @@
             </button>
           </div>
         </div>
+        <div class="flex">
+          <button (click)="fetchProductList(1)" class="mx-4 mb-4 flex gap-2">
+            <h1 class="text-sm font-semibold">Active Product</h1>
+            <!-- <span
+              class="me-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-sm text-sm font-semibold text-gray-50"
+            >
+              1
+            </span> -->
+          </button>
+          <button (click)="fetchProductList(2)" class="mx-4 mb-4 flex gap-2">
+            <h1 class="text-sm font-semibold">Other Product</h1>
+            <span
+              class="me-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-sm font-semibold text-gray-50"
+            >
+              {{ otherPrdLen }}
+            </span>
+          </button>
+        </div>
+
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
