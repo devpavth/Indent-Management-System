@@ -9,6 +9,9 @@ import { ProductService } from '../../service/Product/product.service';
   styleUrl: './other-product.component.css',
 })
 export class OtherProductComponent {
+  successData: any;
+  isSuccesPop: boolean = false;
+
   @Output() closeToggle = new EventEmitter<boolean>();
   @Output() throwOtherProduct = new EventEmitter<any>();
   otherProductForm: FormGroup;
@@ -23,8 +26,23 @@ export class OtherProductComponent {
     });
   }
   onsubmit(data: any) {
-    this.pService.addOtherProduct(data).subscribe((res) => {
-      console.log(res);
-    });
+    this.pService.addOtherProduct(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+
+        if (error.status == 200) {
+          this.togglePop(true);
+          this.successData = { show: 2, text: `${error.error.text}` };
+          this.otherProductForm.reset();
+        }
+      },
+    );
+  }
+
+  togglePop(data: any) {
+    this.isSuccesPop = data;
   }
 }

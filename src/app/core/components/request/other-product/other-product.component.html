@@ -1,3 +1,9 @@
+<app-success
+  *ngIf="isSuccesPop"
+  [successData]="successData"
+  (closeSuccess)="togglePop($event)"
+></app-success>
+
 <div
   class="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 md:mt-0 xl:p-0"
 >
@@ -6,7 +12,7 @@
       class="mb-4 flex items-center justify-between rounded-t border-b pb-4 dark:border-gray-600 sm:mb-5"
     >
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Update Product
+        Other Product
       </h3>
       <button
         (click)="this.closeToggle.emit(false)"

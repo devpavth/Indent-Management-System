@@ -110,6 +110,15 @@ export class EmployeeListComponent implements OnInit {
     this.isViewEmployee = data;
   }
 
+  getSerialNumber(index: number): number {
+    return (this.currentPage - 1) * this.itemsPerPage + index + 1;
+  }
+  get startPage(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+  get endPage(): number {
+    return Math.min(this.currentPage * this.itemsPerPage, this.listLength);
+  }
   sortbyname() {
     this.employeeList.sort((a: any, b: any) =>
       a.empFirstName.localeCompare(b.empFirstName),

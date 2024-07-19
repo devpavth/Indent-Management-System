@@ -109,7 +109,6 @@ export class RequestFormComponent implements OnInit {
     this.fetchUser();
     this.fetchGroupList();
     this.onChanges();
-    this.fetchFunder();
   }
 
   onChanges(): void {
@@ -124,6 +123,7 @@ export class RequestFormComponent implements OnInit {
       this.total = gst.itemPrice;
     });
   }
+
   fetchUser() {
     this.empService
       .getEmployeeDetails(sessionStorage.getItem('userId'))
@@ -201,17 +201,12 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
-  fetchFunder() {
-    this.funderService.funderList().subscribe((res) => {
-      console.log(res);
-      this.funder = res;
-    });
-  }
   fetchFunder1() {
     this.funderService
       .branchFunder(this.employeeData?.branchId)
       .subscribe((res) => {
         console.log('Branch Funder', res);
+        this.funderList;
       });
   }
   fetchVendor() {
@@ -290,7 +285,7 @@ export class RequestFormComponent implements OnInit {
       this.productList.push(list);
     }
     console.log(this.productList);
-
+    this.productData = '';
     this.calculateSums();
     this.productReset();
   }
@@ -359,7 +354,7 @@ export class RequestFormComponent implements OnInit {
     const { funderId, funderCode, funderName, fundDetails, funderCatgName } =
       this.selectedFunder;
     let fd: any[] = fundDetails;
-    let branch = fd.filter((f) => f.branchId == this.employeeData?.branchId);
+    let branch = fd.filter((f) => f?.branchId == this.employeeData?.branchId);
     console.log('branch', branch);
     const funder = {
       funderId,
