@@ -16,7 +16,7 @@ export class AutoCompleteComponent<T> {
   onInput() {
     const queryLower = this.query.toLowerCase();
     if (queryLower) {
-      this.filteredSuggestions = this.suggestions.filter((suggestion) =>
+      this.filteredSuggestions = this.suggestions?.filter((suggestion) =>
         this.displayFields.some((field) => {
           const value = suggestion[field];
           return (
