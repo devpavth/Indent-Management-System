@@ -204,9 +204,9 @@ export class RequestFormComponent implements OnInit {
   fetchFunder1() {
     this.funderService
       .branchFunder(this.employeeData?.branchId)
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         console.log('Branch Funder', res);
-        this.funderList;
+        this.funder = res;
       });
   }
   fetchVendor() {
@@ -354,18 +354,17 @@ export class RequestFormComponent implements OnInit {
     const { funderId, funderCode, funderName, fundDetails, funderCatgName } =
       this.selectedFunder;
     let fd: any[] = fundDetails;
-    let branch = fd.filter((f) => f?.branchId == this.employeeData?.branchId);
+    let branch = fd?.filter((f) => f?.branchId == this.employeeData?.branchId);
     console.log('branch', branch);
     const funder = {
       funderId,
       funderCode,
       funderCatgName,
       funderName,
-      ...branch[0],
     };
     this.funderList.push(funder);
 
-    console.log(this.funderList);
+    console.log('list is ok', this.funderList);
   }
   addVendor() {
     const {

@@ -805,14 +805,11 @@
           </div>
         </div>
       </section>
-      <section
-        *ngIf="totalSum < 5000 && totalSum > 0"
-        class="rounded-b-lg bg-violet-50 pb-4"
-      >
+      <section class="rounded-b-lg bg-violet-50 pb-4">
         <div class="flex justify-between border-t bg-[#bd68ee] px-4 py-4">
           <h1 class="font-bold text-white">Indent Footer</h1>
         </div>
-        <!-- <div class="mt-4 px-4">
+        <div class="mt-4 px-4">
           <h1 class="my-4 font-semibold text-purple-700">Add Funder</h1>
           <div
             class="overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
@@ -865,7 +862,6 @@
                     <th scope="col" class="px-4 py-3">Funder Code</th>
                     <th scope="col" class="px-4 py-3">Funder name</th>
                     <th scope="col" class="px-4 py-3">Catagories</th>
-                    <th scope="col" class="px-4 py-3">Fund Available</th>
 
                     <th scope="col" class="px-4 py-3">
                       <span class="sr-only">Actions</span>
@@ -886,13 +882,6 @@
                     </th>
                     <td class="px-4 py-3">{{ f?.funderName }}</td>
                     <td class="px-4 py-3">{{ f?.funderCatgName }}</td>
-
-                    <th
-                      scope="row"
-                      class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
-                    >
-                      {{ f?.fundInHand }}
-                    </th>
 
                     <td class="flex items-center justify-end px-4 py-3">
                       <button
@@ -921,7 +910,7 @@
               </table>
             </div>
           </div>
-        </div> -->
+        </div>
 
         <div class="mb-16 px-4">
           <h1 class="my-4 font-semibold text-purple-700">Recommended Vendor</h1>
