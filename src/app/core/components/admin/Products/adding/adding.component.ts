@@ -73,10 +73,7 @@ export class AddingComponent implements OnInit {
   fetchHeadofAcc() {
     this.productService.getHeadofAccList().subscribe((res) => {
       console.log(res);
-      this.headofacc = Object.entries(res).map(([id, value]) => ({
-        id,
-        value,
-      }));
+      this.headofacc = res;
     });
   }
 

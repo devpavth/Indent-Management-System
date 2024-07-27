@@ -63,4 +63,13 @@ export class ProductService {
   addOtherProduct(data: any) {
     return this.productHttp.post(environment.otherProduct, data);
   }
+  getStockReport(date: any) {
+    let dateRange = new HttpParams();
+    dateRange = dateRange.append('startDate', date.from);
+
+    dateRange = dateRange.append('endDate', date.to);
+    return this.productHttp.get(environment.productReport, {
+      params: dateRange,
+    });
+  }
 }

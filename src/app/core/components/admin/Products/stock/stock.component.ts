@@ -4,6 +4,7 @@ import { ProductService } from '../../../service/Product/product.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
+import { Logger } from 'html2canvas/dist/types/core/logger';
 
 @Component({
   selector: 'app-stock',
@@ -17,12 +18,23 @@ export class StockComponent implements OnInit {
 
   isBox: boolean = false;
   gstPercentages: number[] = [0, 5, 12, 18, 28];
-  units: { id: number; name: string }[] = [
-    { id: 1, name: 'Kg' },
-    { id: 2, name: 'L' },
-    { id: 3, name: 'm' },
-    { id: 4, name: 'Unit' },
-    { id: 200, name: 'Box' },
+  units: { id: number; name: string; term: string }[] = [
+    { id: 1, name: 'Kg', term: 'Kilograms' },
+    { id: 2, name: 'L', term: 'Liters' },
+    { id: 3, name: 'M', term: 'Meter' },
+    { id: 4, name: 'Unit', term: 'Piece' },
+    { id: 5, name: 'Lt', term: 'Liters' },
+    { id: 6, name: 'Feet', term: 'Feet' },
+    { id: 7, name: 'Roll', term: 'Roll' },
+    { id: 8, name: 'Dcm', term: 'Decimeters' },
+    { id: 9, name: 'Bag', term: 'Bag' },
+    { id: 10, name: 'Pair', term: 'Pair' },
+    { id: 11, name: 'Tin', term: 'Tin' },
+    { id: 12, name: 'Sheet', term: 'Sheet' },
+    { id: 13, name: 'Ream', term: 'Ream' },
+    { id: 14, name: 'No', term: 'Number' },
+    { id: 15, name: 'Meter', term: 'Meter' },
+    { id: 200, name: 'Box', term: 'Box' },
   ];
   productData: any;
 
@@ -47,9 +59,10 @@ export class StockComponent implements OnInit {
     private vendorService: VendorService,
   ) {
     this.inwardFormHeader = this.fb.group({
-      tranRefNo: [],
-      branchId: [],
-      vendorId: [],
+      tranRefNo: [''],
+      inwardFromCode: [''],
+      branchId: [''],
+      vendorId: [''],
     });
     this.inwardForm = this.fb.group({
       productId: [],
@@ -170,19 +183,52 @@ export class StockComponent implements OnInit {
     this.isBox = false;
   }
 
+  // inwardHeader(data: any) {
+  //   // console.log(data);
+
+  //   this.header = data;
+  //   let branch: any[] = this._branch;
+  //   let vendor: any[] = this.vendorList;
+  //   let branchDetails = branch.find((f) => f.branchId == data.branchId);
+  //   if (branchDetails) {
+  //     this.header.branchName = branchDetails.branchName;
+  //   }
+  //   let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
+  //   if (this.inwardFormHeader.get('inwardFromCode')?.value == 269) {
+  //     let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
+  //     this.header.vendorName = vendorDetails.vendorName;
+  //   } else if (this.inwardFormHeader.get('inwardFromCode')?.value == 298) {
+  //     let vendorDetails = branch.find((v) => v.branchId == data.vendorId);
+  //     this.header.vendorName = vendorDetails.branchName;
+  //   }
+  //   console.log(this.header);
+  // }
   inwardHeader(data: any) {
+    // console.log(data);
+
     this.header = data;
     let branch: any[] = this._branch;
     let vendor: any[] = this.vendorList;
-    let branchDetails = branch.find((f) => f.branchId == data.branchId);
-    if (branchDetails) {
-      this.header.branchName = branchDetails.branchName;
-    }
+
+    let branchDetails = branch.find((f) => f.branchId == data.vendorId);
     let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
-    if (vendorDetails) {
-      this.header.vendorName = vendorDetails.vendorName;
+    let branchDetails1 = branch.find((f) => f.branchId == data.branchId);
+    if (branchDetails1) {
+      this.header.branchName = branchDetails1.branchName;
     }
+    if (this.inwardFormHeader.get('inwardFromCode')?.value == 269) {
+      if (vendorDetails) {
+        this.header.vendorName = vendorDetails.vendorName;
+      }
+    } else if (this.inwardFormHeader.get('inwardFromCode')?.value == 268) {
+      if (branchDetails) {
+        this.header.vendorName = branchDetails.branchName;
+      }
+    }
+
+    console.log(this.header);
   }
+
   deleteHeader() {
     this.header = '';
   }

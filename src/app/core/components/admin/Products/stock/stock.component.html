@@ -34,7 +34,7 @@
 
           <form *ngIf="!header" [formGroup]="inwardFormHeader">
             <div class="mb-4 grid gap-4 sm:grid-cols-8">
-              <div class="col-span-2">
+              <div class="col-span-4">
                 <div class="flex items-center gap-2">
                   <label
                     for="Branch"
@@ -50,43 +50,42 @@
                   required
                 />
               </div>
-              <div class="col-span-3">
-                <div class="flex items-center gap-2">
+              <div class="col-span-4">
+                <div>
                   <label
                     for="Branch"
                     class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >Branch</label
+                    >Inward From
+                  </label>
+                  <select
+                    #catid
+                    formControlName="inwardFromCode"
+                    class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    required
                   >
+                    <option
+                      value=""
+                      null
+                      disabled
+                      class="bg-purple-700 text-white"
+                    >
+                      Choose Group
+                    </option>
+                    <option value="268 ">Branch</option>
+                    <option value="269 ">Vendor</option>
+                  </select>
                 </div>
-
-                <select
-                  #catid
-                  formControlName="branchId"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                  required
-                >
-                  <option
-                    value=""
-                    null
-                    disabled
-                    class="bg-purple-700 text-white"
-                  >
-                    Choose Group
-                  </option>
-                  <option
-                    *ngFor="let branch of _branch"
-                    value="{{ branch.branchId }}"
-                  >
-                    {{ branch.branchName }}
-                  </option>
-                </select>
               </div>
-              <div class="col-span-3">
+              <div
+                *ngIf="inwardFormHeader.get('inwardFromCode')?.value == 269"
+                class="col-span-4"
+              >
                 <div class="flex items-center gap-2">
                   <label
                     for="Branch"
                     class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >Vendor</label
+                  >
+                    From Vendor</label
                   >
                 </div>
                 <div class="flex gap-2">
@@ -112,28 +111,90 @@
                       {{ v.vendorName }}
                     </option>
                   </select>
-                  <button
-                    (click)="inwardHeader(inwardFormHeader.value)"
-                    type="submit"
-                    class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
-                  >
-                    <svg
-                      class="h-6 w-6"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
                 </div>
+              </div>
+              <div
+                *ngIf="inwardFormHeader.get('inwardFromCode')?.value == 268"
+                class="col-span-4"
+              >
+                <div class="flex items-center gap-2">
+                  <label
+                    for="Branch"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    From Branch</label
+                  >
+                </div>
+                <div class="flex gap-2">
+                  <select
+                    #id
+                    formControlName="vendorId"
+                    class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    required
+                  >
+                    <option
+                      value=""
+                      null
+                      selected
+                      disabled
+                      class="bg-purple-700 text-white"
+                    >
+                      Choose Branch
+                    </option>
+                    <option
+                      *ngFor="let branch of _branch"
+                      value="{{ branch.branchId }}"
+                    >
+                      {{ branch.branchName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div
+                *ngIf="inwardFormHeader.get('inwardFromCode')?.value"
+                class="col-span-4"
+              >
+                <div class="flex items-center gap-2">
+                  <label
+                    for="Branch"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >To Branch</label
+                  >
+                </div>
+
+                <select
+                  #catid
+                  formControlName="branchId"
+                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  required
+                >
+                  <option
+                    value=""
+                    null
+                    disabled
+                    class="bg-purple-700 text-white"
+                  >
+                    Choose Branch
+                  </option>
+                  <option
+                    *ngFor="let branch of _branch"
+                    value="{{ branch.branchId }}"
+                  >
+                    {{ branch.branchName }}
+                  </option>
+                </select>
               </div>
             </div>
           </form>
+          <div class="flex justify-end">
+            <button
+              (click)="inwardHeader(inwardFormHeader.value)"
+              type="submit"
+              class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
+            >
+              Add Header
+            </button>
+          </div>
           <div *ngIf="header" class="col-span-full flex flex-col">
             <div class="-m-1.5 overflow-x-auto">
               <div class="inline-block min-w-full p-1.5 align-middle">

@@ -83,24 +83,58 @@
     <div class="mb-4 flex justify-between">
       <div class="w-2/3">
         <h2 class="font-semibold text-black">
-          {{ transactionData.vendorDto.vendorName }}
+          {{
+            transactionData.vendorDto.vendorName ??
+              transactionData.vendorDto.branchName
+          }}
         </h2>
         <p class="text-black">
-          GSTIN {{ transactionData.vendorDto.vdrGstNo }} | PAN AAGCC3235L
+          GSTIN
+          {{
+            transactionData.vendorDto.vdrGstNo ??
+              transactionData.vendorDto.gstNumber
+          }}
+          | PAN AAGCC3235L
         </p>
-        <p>{{ transactionData.vendorDto.vdrAdd1 }}</p>
         <p>
-          {{ transactionData.vendorDto.vdrAdd2 }} ,
-          {{ transactionData.vendorDto.vdrCity }},{{
-            transactionData.vendorDto.vdrState
+          {{
+            transactionData.vendorDto.vdrAdd1 ?? transactionData.vendorDto.add1
           }}
         </p>
-        <p>Pincode: {{ transactionData.vendorDto.vdrPincode }}</p>
         <p>
-          Name: {{ transactionData.vendorDto.vdrContactPersonName }} | Phone :
-          {{ transactionData.vendorDto.vdrContactPersonPhone }}
+          {{
+            transactionData.vendorDto.vdrAdd2 ?? transactionData.vendorDto.add2
+          }}
+          ,
+          {{
+            transactionData.vendorDto.vdrCity ?? transactionData.vendorDto.city
+          }},{{
+            transactionData.vendorDto.vdrState ??
+              transactionData.vendorDto.state
+          }}
         </p>
-        <p>E-mail : {{ transactionData.vendorDto.vdrEmail }}</p>
+        <p>
+          Pincode:
+          {{
+            transactionData.vendorDto.vdrPincode ??
+              transactionData.vendorDto.pinCode
+          }}
+        </p>
+        <p>
+          Name:
+          {{
+            transactionData.vendorDto.vdrContactPersonName ??
+              transactionData.vendorDto.manager
+          }}
+          | Phone :
+          {{
+            transactionData.vendorDto.vdrContactPersonPhone ??
+              transactionData.vendorDto.branchMobilenumber
+          }}
+        </p>
+        <p *ngIf="transactionData.vendorDto.vdrEmail">
+          E-mail : {{ transactionData.vendorDto.vdrEmail }}
+        </p>
       </div>
       <div class="w-1/3">
         <img

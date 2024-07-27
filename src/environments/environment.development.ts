@@ -1,5 +1,5 @@
-let Url = 'http://192.168.1.10:9010/';
-let Url1 = 'http://192.168.1.10:9010/';
+let Url = 'http://192.168.1.25:9010/';
+let Url1 = 'http://192.168.1.25:9010/';
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
 let baseProductApi = 'product';
@@ -106,4 +106,8 @@ export const environment = {
   //transaction  api
 
   productTransaction: Url + baseProductApi + '/gettransbycode/',
+
+  //report
+
+  productReport: Url + baseProductApi + '/stockreport',
 };

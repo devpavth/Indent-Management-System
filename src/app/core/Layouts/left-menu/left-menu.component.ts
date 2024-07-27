@@ -13,6 +13,7 @@ export class LeftMenuComponent {
   poapproval: boolean = false;
   finance: boolean = false;
   transaction: boolean = false;
+  product: boolean = false;
   toggleRequest() {
     this.tRequest = !this.tRequest;
   }
@@ -21,5 +22,8 @@ export class LeftMenuComponent {
   }
   toggleTransaction() {
     this.transaction = !this.transaction;
+  }
+  toggleProduct() {
+    this.product = !this.product;
   }
 }
