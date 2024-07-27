@@ -18,6 +18,7 @@ import { FunderListComponent } from './Funder/funder-list/funder-list.component'
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 import { StockComponent } from './Products/stock/stock.component';
 import { TProductComponent } from './Transaction/t-product/t-product.component';
+import { RStockComponent } from './report/r-stock/r-stock.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -36,6 +37,7 @@ const routes: Routes = [
   { component: ViewFunderComponent, path: 'viewFunder' },
   { component: StockComponent, path: 'inoutstock' },
   { component: TProductComponent, path: 'pTransaction' },
+  { component: RStockComponent, path: 'stockReport' },
 ];
 
 @NgModule({

@@ -19,6 +19,7 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { tokenInterceptor } from './core/components/service/token.interceptor';
 import { FinanceModule } from './core/components/finance/finance.module';
 import { ProcurementModule } from './core/components/procurement/procurement.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // const config: SocketIoConfig = { url: 'http://192.168.1.7:9001/', options: {} };
 
@@ -34,6 +35,8 @@ import { ProcurementModule } from './core/components/procurement/procurement.mod
     SharedModule,
     FinanceModule,
     ProcurementModule,
+    ReactiveFormsModule,
+    FormsModule,
 
     // SocketIoModule.forRoot(config)
   ],

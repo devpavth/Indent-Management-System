@@ -280,6 +280,7 @@ export class RequestFormComponent implements OnInit {
         ...product,
         subtotal: this.subtotal,
         tax: this.tax,
+
         total: this.total,
       };
       this.productList.push(list);
