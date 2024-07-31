@@ -7,7 +7,7 @@ import { Subject, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private readonly productHttp: HttpClient) {}
+  constructor(private productHttp: HttpClient) {}
 
   addGroup(data: any) {
     return this.productHttp.post(environment.addGroup, data);
@@ -71,5 +71,9 @@ export class ProductService {
     return this.productHttp.get(environment.productReport, {
       params: dateRange,
     });
+  }
+
+  addHeadOfAcc(data: any) {
+    return this.productHttp.post(environment.addHeadOfAcc, data);
   }
 }

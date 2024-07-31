@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class AddProductComponent implements OnInit {
     private productService: ProductService,
   ) {
     this.ProductForm = this.fb.group({
-      prdGrpId: [],
+      prdGrpId: ['',[Validators.required]],
       prdCatgId: [],
       prdBrndId: [],
       prdmdlName: [],

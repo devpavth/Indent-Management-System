@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BranchService } from '../../../service/Branch/branch.service';
-
 @Component({
   selector: 'app-add-branch',
   templateUrl: './add-branch.component.html',
@@ -15,16 +14,24 @@ export class AddBranchComponent implements OnInit {
     private readonly branchService: BranchService,
   ) {
     this.addBranchForm = this.fb.group({
-      branchName: [],
-      manager: [],
-      branchMobilenumber: [],
-      add1: [],
-      add2: [],
-      country: [],
-      city: [],
-      state: [],
-      pinCode: [],
-      gstNumber: [],
+      branchName: [, [Validators.required, Validators.minLength(2)]],
+      manager: [, [Validators.required, Validators.minLength(2)]],
+      branchMobilenumber: [, [Validators.required, Validators.minLength(10)]],
+      add1: [, [Validators.required, Validators.minLength(400)]],
+      add2: [, [Validators.required, Validators.minLength(100)]],
+      country: [, [Validators.required, Validators.minLength(2)]],
+      city: [, [Validators.required, Validators.minLength(2)]],
+      state: [, [Validators.required, Validators.minLength(2)]],
+      pinCode: [, [Validators.required, Validators.minLength(2)]],
+      gstNumber: [
+        ,
+        [
+          Validators.required,
+          Validators.pattern(
+            '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9A-Z]{1}$',
+          ),
+        ],
+      ],
     });
   }
   ngOnInit(): void {

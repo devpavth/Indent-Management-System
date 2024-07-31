@@ -19,6 +19,8 @@ import { ViewFunderComponent } from './Funder/view-funder/view-funder.component'
 import { StockComponent } from './Products/stock/stock.component';
 import { TProductComponent } from './Transaction/t-product/t-product.component';
 import { RStockComponent } from './report/r-stock/r-stock.component';
+import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
+import { AddOnListComponent } from './Branch/add-on-list/add-on-list.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -38,6 +40,8 @@ const routes: Routes = [
   { component: StockComponent, path: 'inoutstock' },
   { component: TProductComponent, path: 'pTransaction' },
   { component: RStockComponent, path: 'stockReport' },
+  { component: HeadOfAccComponent, path: 'headOfAcc' },
+  { component: AddOnListComponent, path: 'branchAddon' },
 ];
 
 @NgModule({

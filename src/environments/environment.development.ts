@@ -38,6 +38,7 @@ export const environment = {
   otherProduct: Url + baseProductApi + '/addotherprd',
   modelList: Url + baseProductApi + '/getmodelname/',
   desList: Url + baseProductApi + '/getprddetails/',
+  addHeadOfAcc: Url + baseProductApi + '/addheadofaccount',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdinward',
