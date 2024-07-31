@@ -38,8 +38,35 @@
                 formControlName="branchName"
                 class="input-form"
                 placeholder="Branch Name"
+                [ngClass]="{
+                  error:
+                    addBranchForm.get('branchName')?.invalid &&
+                    addBranchForm.get('branchName')?.touched
+                }"
                 required
               />
+              <div
+                *ngIf="
+                  (addBranchForm.controls['branchName'].invalid &&
+                    addBranchForm.controls['branchName'].touched) ||
+                  addBranchForm.controls['branchName'].dirty
+                "
+              >
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['branchName'].errors?.['required']
+                  "
+                  >Branch Name is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['branchName'].errors?.['minlength']
+                  "
+                  >Branch Name is min length required !
+                </small>
+              </div>
             </div>
             <div>
               <label
@@ -51,9 +78,34 @@
                 type="text"
                 formControlName="manager"
                 class="input-form"
+                [ngClass]="{
+                  error:
+                    addBranchForm.get('manager')?.invalid &&
+                    addBranchForm.get('manager')?.touched
+                }"
                 placeholder="Manager Name"
                 required
               />
+              <div
+                *ngIf="
+                  (addBranchForm.controls['manager'].invalid &&
+                    addBranchForm.controls['manager'].touched) ||
+                  addBranchForm.controls['manager'].dirty
+                "
+              >
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['manager'].errors?.['required']"
+                  >Branch Manager is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['manager'].errors?.['minlength']
+                  "
+                  >Branch Manager is min length required !
+                </small>
+              </div>
             </div>
             <div>
               <label
@@ -85,7 +137,38 @@
                   formControlName="branchMobilenumber"
                   placeholder="123-456-970"
                   required
+                  [ngClass]="{
+                    error:
+                      addBranchForm.get('branchMobilenumber')?.invalid &&
+                      addBranchForm.get('branchMobilenumber')?.touched
+                  }"
                 />
+                <div
+                  *ngIf="
+                    (addBranchForm.controls['branchMobilenumber'].invalid &&
+                      addBranchForm.controls['branchMobilenumber'].touched) ||
+                    addBranchForm.controls['branchMobilenumber'].dirty
+                  "
+                >
+                  <small
+                    class="text-danger ml-2 text-red-600"
+                    *ngIf="
+                      addBranchForm.controls['branchMobilenumber'].errors?.[
+                        'required'
+                      ]
+                    "
+                    >Branch Mobile Number is Required !
+                  </small>
+                  <small
+                    class="text-danger ml-2 text-red-600"
+                    *ngIf="
+                      addBranchForm.controls['branchMobilenumber'].errors?.[
+                        'minlength'
+                      ]
+                    "
+                    >Mobile Number is Not Valid !
+                  </small>
+                </div>
               </div>
             </div>
 
@@ -99,8 +182,35 @@
                 formControlName="gstNumber"
                 class="input-form"
                 placeholder="Gst"
+                [ngClass]="{
+                  error:
+                    addBranchForm.get('gstNumber')?.invalid &&
+                    addBranchForm.get('gstNumber')?.touched
+                }"
                 required
               />
+              <div
+                *ngIf="
+                  (addBranchForm.controls['gstNumber'].invalid &&
+                    addBranchForm.controls['gstNumber'].touched) ||
+                  addBranchForm.controls['gstNumber'].dirty
+                "
+              >
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['gstNumber'].errors?.['required']
+                  "
+                  >Branch gstNumber is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['gstNumber'].errors?.['pattern']
+                  "
+                  >GST Pattern is invalid !
+                </small>
+              </div>
             </div>
           </div>
           <div class="mb-2">
@@ -116,6 +226,24 @@
               placeholder="Flat, House no., Building, Company, Apartment"
               required
             />
+            <div
+              *ngIf="
+                (addBranchForm.controls['add1'].invalid &&
+                  addBranchForm.controls['add1'].touched) ||
+                addBranchForm.controls['add1'].dirty
+              "
+            >
+              <small
+                class="text-danger ml-2 text-red-600"
+                *ngIf="addBranchForm.controls['add1'].errors?.['required']"
+                >Address is Required !
+              </small>
+              <small
+                class="text-danger ml-2 text-red-600"
+                *ngIf="addBranchForm.controls['add1'].errors?.['minlength']"
+                >Address length out of bound !
+              </small>
+            </div>
           </div>
           <div class="mb-6">
             <input

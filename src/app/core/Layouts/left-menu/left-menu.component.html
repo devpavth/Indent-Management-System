@@ -433,7 +433,7 @@
               (click)="toggleProduct()"
             >
               <span
-                class="ml-9 ms-3 flex-1 whitespace-nowrap text-left rtl:text-right"
+                class="ml-9 flex-1 whitespace-nowrap text-left rtl:text-right"
                 >Product</span
               >
 
@@ -461,19 +461,58 @@
               >
                 Product List
               </li>
-              <li class="left-submenu group ml-3 cursor-pointer">
+              <li
+                routerLink="headOfAcc"
+                class="left-submenu group ml-3 cursor-pointer"
+              >
                 Head of Account
               </li>
             </ul>
           </li>
           <li>
-            <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/branchList"
-              class="left-submenu group"
-              >Branch</a
+            <button
+              type="button"
+              class="left-menu group"
+              (click)="toggleBranch()"
             >
+              <span
+                class="ml-9 flex-1 whitespace-nowrap text-left rtl:text-right"
+                >Branch</span
+              >
+
+              <svg
+                class="h-3 w-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+
+            <ul *ngIf="branch">
+              <li
+                routerLink="/home/branchList"
+                class="left-submenu group ml-3 cursor-pointer"
+              >
+                Branch
+              </li>
+              <li
+                routerLink="/home/branchAddon"
+                class="left-submenu group ml-3 cursor-pointer"
+              >
+                Department
+              </li>
+            </ul>
           </li>
+
           <li>
             <a
               routerLinkActive="side-menu-active"
