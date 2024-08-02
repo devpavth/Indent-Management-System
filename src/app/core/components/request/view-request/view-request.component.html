@@ -60,12 +60,12 @@
                     Request#
                   </h2>
                   <span class="mt-1 block text-gray-500">{{
-                    _requestDetails?.requestNo
+                    _requestDetails?.indentHeaders.requestNo
                   }}</span>
 
                   <address class="mt-2 font-medium not-italic text-gray-800">
-                    {{ _requestDetails.requisitioner }}<br />
-                    <!-- {{_requestDetails.empDept }}<br> -->
+                    {{ _requestDetails?.indentHeaders.requisitioner }}<br />
+                    <!-- {{_requestDetails?.empDept }}<br> -->
                   </address>
                 </div>
                 <!-- Col -->
@@ -80,15 +80,16 @@
                   <h3
                     class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
                   >
-                    {{ _requestDetails.empName }}
+                    {{ _requestDetails?.createdEmpData.empFirstName }}
+                    {{ _requestDetails?.createdEmpData.empLastName }}
                   </h3>
 
                   <address
                     class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
                   >
-                    {{ _requestDetails.empRole }}<br />
-                    {{ _requestDetails.branchName }}<br />
-                    {{ _requestDetails.empDept }}<br />
+                    {{ _requestDetails?.empRole }}<br />
+                    {{ _requestDetails?.indentBranch.branchName }}<br />
+                    {{ _requestDetails?.indentBranch.deptName }}<br />
                   </address>
                 </div>
                 <!-- Col -->
@@ -105,7 +106,10 @@
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
                       >
-                        {{ _requestDetails.createdOn | date: "dd-MMMM-yyyy" }}
+                        {{
+                          _requestDetails?.indentHeaders.requiredDate
+                            | date: "dd-MMMM-yyyy"
+                        }}
                       </dd>
                     </dl>
                     <dl class="grid gap-x-3 sm:grid-cols-5">
@@ -117,7 +121,10 @@
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
                       >
-                        {{ _requestDetails.createdOn | date: "shortTime" }}
+                        {{
+                          _requestDetails?.indentHeaders.requiredDate
+                            | date: "shortTime"
+                        }}
                       </dd>
                     </dl>
                   </div>
@@ -168,20 +175,21 @@
                         <tbody class="divide-y divide-gray-200">
                           <tr
                             *ngFor="
-                              let product of _requestDetails.productDetails
+                              let product of _requestDetails?.productDetails
                             "
                           >
                             <td
                               class="px-6 py-4 text-start text-sm font-medium text-gray-800"
                             >
                               <p class="font-bold text-black">
-                                {{ product.itemName }}
+                                {{ product.prdmdlName }}
                               </p>
                               <p class="text-gray-800">
-                                {{ product.brandName }} {{ product.model }}
+                                {{ product.prdbrndName }} | HoA -
+                                {{ product.headOfAccName }}
                               </p>
                               <p class="w-48 text-xs text-gray-400">
-                                {{ product.description }}
+                                {{ product.prdDescription }}
                               </p>
                             </td>
                             <td
@@ -197,12 +205,12 @@
                             <td
                               class="px-6 py-4 text-center text-sm text-gray-800"
                             >
-                              {{ product.gstRate }}
+                              {{ product.prdGstPct }}
                             </td>
                             <td
                               class="px-6 py-4 text-center text-sm text-gray-800"
                             >
-                              {{ product.itemPrice }}
+                              {{ product.itemTotalPrice }}
                             </td>
                           </tr>
                         </tbody>
@@ -228,7 +236,7 @@
                         Total:
                       </dt>
                       <dd class="col-span-2 text-gray-500">
-                        {{ this._requestDetails.totalPrice }}
+                        {{ this._requestDetails?.indentHeaders.totalPrice }}
                       </dd>
                     </dl>
 
@@ -273,18 +281,30 @@
                     <div class="ml-6">
                       <h4 class="font-bold text-green-500">Request Created</h4>
                       <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
-                        Request Created By {{ _requestDetails.empName }} from
-                        {{ _requestDetails.branchName }}
+                        Request Created By
+                        <span class="font-medium text-black"
+                          >{{ _requestDetails?.createdEmpData.empFirstName }}
+                          {{ _requestDetails?.createdEmpData.empLastName }}
+                        </span>
+                        from
+                        <span class="font-medium text-black">
+                          {{ _requestDetails?.indentBranch.branchName }}
+                        </span>
                       </p>
                       <span
                         class="mt-1 block text-sm font-semibold text-gray-500"
-                        >{{ _requestDetails.createdOn | date: "medium" }}</span
+                        >{{
+                          _requestDetails?.createdEmpData.createdOn
+                            | date: "medium"
+                        }}</span
                       >
                     </div>
                   </div>
                   <div class="relative w-full">
                     <svg
-                      *ngIf="_requestDetails.branchAuthorize == 202"
+                      *ngIf="
+                        _requestDetails?.branchAuthData.authStatusCode == 202
+                      "
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
@@ -297,7 +317,9 @@
                       />
                     </svg>
                     <svg
-                      *ngIf="_requestDetails.branchAuthorize == 102"
+                      *ngIf="
+                        _requestDetails?.branchAuthData.authStatusCode == 102
+                      "
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
@@ -314,7 +336,9 @@
                       />
                     </svg>
                     <svg
-                      *ngIf="_requestDetails.branchAuthorize == 406"
+                      *ngIf="
+                        _requestDetails?.branchAuthData.authStatusCode == 406
+                      "
                       class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
@@ -333,38 +357,64 @@
                     <div class="ml-6">
                       <h4
                         [ngClass]="{
-                          psts: _requestDetails.branchAuthorize == 102,
-                          ssts: _requestDetails.branchAuthorize == 202,
-                          rsts: _requestDetails.branchAuthorize == 406
+                          psts:
+                            _requestDetails?.branchAuthData.authStatusCode ==
+                            102,
+                          ssts:
+                            _requestDetails?.branchAuthData.authStatusCode ==
+                            202,
+                          rsts:
+                            _requestDetails?.branchAuthData.authStatusCode ==
+                            406
                         }"
                         class="font-bold text-gray-500"
                       >
                         Branch Approval
                       </h4>
                       <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
-                        {{ _requestDetails.branchAuthStatus }}
+                        {{ _requestDetails?.branchAuthData.authStatusStr }}
                       </p>
-                      <p
-                        *ngIf="
-                          _requestDetails.commends &&
-                          _requestDetails.branchAuthorize == 406
-                        "
-                        class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
-                      >
-                        <span class="">Rejected reason :</span
-                        >{{ _requestDetails.commendDetail }}
+                      <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
+                        Approved By
+                        <span class="font-medium text-black"
+                          >{{ _requestDetails?.branchAuthData.empFirstName }}
+                          {{ _requestDetails?.branchAuthData.empLastName }}
+                        </span>
+                        from
+                        <span class="font-medium text-black">
+                          {{ _requestDetails?.indentBranch.branchName }}
+                        </span>
                       </p>
                       <span
                         class="mt-1 block text-sm font-semibold text-gray-500"
                         >{{
-                          _requestDetails.branchAuthStatusTime | date: "medium"
+                          _requestDetails?.branchAuthData.authStatusTime
+                            | date: "medium"
+                        }}</span
+                      >
+                      <p
+                        *ngIf="
+                          _requestDetails?.commends &&
+                          _requestDetails?.branchAuthData.authStatusCode == 406
+                        "
+                        class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
+                      >
+                        <span class="">Rejected reason :</span
+                        >{{ _requestDetails?.commendDetail }}
+                      </p>
+                      <span
+                        class="mt-1 block text-sm font-semibold text-gray-500"
+                        >{{
+                          _requestDetails?.branchAuthStatusTime | date: "medium"
                         }}</span
                       >
                     </div>
                   </div>
                   <div class="relative w-full">
                     <svg
-                      *ngIf="_requestDetails.adminAuthorize == 405"
+                      *ngIf="
+                        _requestDetails?.adminAuthData.authStatusCode == 405
+                      "
                       class="-top-0.1 absolute z-10 -ml-3 h-6 w-6 bg-white text-amber-500"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
@@ -381,11 +431,15 @@
                     </svg>
 
                     <div
-                      *ngIf="_requestDetails.adminAuthorize == 426"
+                      *ngIf="
+                        _requestDetails?.adminAuthData.authStatusCode == 426
+                      "
                       class="-top-0.1 absolute z-10 -ml-3 h-[22px] w-[22px] rounded-full bg-gray-300"
                     ></div>
                     <svg
-                      *ngIf="_requestDetails.adminAuthorize == 202"
+                      *ngIf="
+                        _requestDetails?.adminAuthData.authStatusCode == 202
+                      "
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
@@ -398,7 +452,9 @@
                       />
                     </svg>
                     <svg
-                      *ngIf="_requestDetails.adminAuthorize == 406"
+                      *ngIf="
+                        _requestDetails?.adminAuthData.authStatusCode == 406
+                      "
                       class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
@@ -414,7 +470,9 @@
                       />
                     </svg>
                     <svg
-                      *ngIf="_requestDetails.adminAuthorize == 102"
+                      *ngIf="
+                        _requestDetails?.adminAuthData.authStatusCode == 102
+                      "
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
@@ -434,33 +492,57 @@
                       <h4
                         [ngClass]="{
                           psts:
-                            _requestDetails.branchAuthorize == 202 &&
-                            _requestDetails.adminAuthorize == 102,
-                          rsts: _requestDetails.adminAuthorize == 406,
-                          ssts: _requestDetails.adminAuthorize == 202,
-                          nsts: _requestDetails.adminAuthorize == 405
+                            _requestDetails?.branchAuthData.authStatusCode ==
+                              202 &&
+                            _requestDetails?.adminAuthData.authStatusCode ==
+                              102,
+                          rsts:
+                            _requestDetails?.adminAuthData.authStatusCode ==
+                            406,
+                          ssts:
+                            _requestDetails?.adminAuthData.authStatusCode ==
+                            202,
+                          nsts:
+                            _requestDetails?.adminAuthData.authStatusCode == 405
                         }"
                         class="font-bold text-gray-500"
                       >
                         Admin Approval
                       </h4>
                       <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
-                        {{ _requestDetails.adminAuthStatus }}
+                        {{ _requestDetails?.adminAuthData.authStatusStr }}
                       </p>
                       <p
                         *ngIf="
-                          _requestDetails.commends &&
-                          _requestDetails.adminAuthorize == 406
+                          _requestDetails?.commends &&
+                          _requestDetails?.adminAuthorize == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
                         <span class="">Rejected reason :</span
-                        >{{ _requestDetails.commendDetail }}
+                        >{{ _requestDetails?.commendDetail }}
+                      </p>
+                      <p
+                        *ngIf="
+                          _requestDetails?.adminAuthData.authStatusCode == 202
+                        "
+                        class="mt-2 max-w-screen-sm text-sm text-gray-500"
+                      >
+                        Approved By
+                        <span class="font-medium text-black"
+                          >{{ _requestDetails?.adminAuthData.empFirstName }}
+                          {{ _requestDetails?.adminAuthData.empLastName }}
+                        </span>
+                        from
+                        <span class="font-medium text-black">
+                          {{ _requestDetails?.indentBranch.branchName }}
+                        </span>
                       </p>
                       <span
                         class="mt-1 block text-sm font-semibold text-gray-500"
                         >{{
-                          _requestDetails.adminAuthStatusTime | date: "medium"
+                          _requestDetails?.adminAuthData.authStatusTime
+                            | date: "medium"
                         }}</span
                       >
                     </div>
@@ -470,8 +552,10 @@
 
               <div
                 *ngIf="
-                  (showID && this._requestDetails.branchAuthorize === 102) ||
-                  this._requestDetails.adminAuthorize === 102
+                  (showID &&
+                    this._requestDetails?.branchAuthData.authStatusCode ===
+                      102) ||
+                  this._requestDetails?.adminAuthData.authStatusCode === 102
                 "
                 class="mt-8 flex gap-3"
               >
@@ -602,7 +686,7 @@
         >
         <div class="flex gap-3">
           <button
-            (click)="rejected(_requestDetails.sno, msg.value)"
+            (click)="rejected(_requestDetails?.indentHeaders.sno, msg.value)"
             type="submit"
             class="rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >

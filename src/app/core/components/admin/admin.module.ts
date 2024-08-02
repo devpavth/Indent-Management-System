@@ -28,6 +28,14 @@ import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
 import { FunderListComponent } from './Funder/funder-list/funder-list.component';
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 import { FundaddComponent } from './Funder/fundadd/fundadd.component';
+import { StockComponent } from './Products/stock/stock.component';
+import { ProductStockComponent } from './Products/product-stock/product-stock.component';
+import { TProductComponent } from './Transaction/t-product/t-product.component';
+import { RStockComponent } from './report/r-stock/r-stock.component';
+import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
+
+import { ViewListComponent } from './Branch/view-list/view-list.component';
+import { AddListComponent } from './Branch/add-list/add-list.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -55,6 +63,14 @@ import { FundaddComponent } from './Funder/fundadd/fundadd.component';
     FunderListComponent,
     ViewFunderComponent,
     FundaddComponent,
+    StockComponent,
+    ProductStockComponent,
+    TProductComponent,
+    RStockComponent,
+    HeadOfAccComponent,
+
+    ViewListComponent,
+    AddListComponent,
   ],
   imports: [
     CommonModule,

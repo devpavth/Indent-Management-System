@@ -321,7 +321,7 @@
                   {{ req.createdOn | date: "dd-MMMM-yyyy" }}
                 </td>
                 <td class="px-4 py-3">{{ req.branchName }}</td>
-                <td class="px-4 py-3">{{ req.empDept }}</td>
+                <td class="px-4 py-3">{{ req.deptName }}</td>
                 <td class="px-4 py-3">
                   <span
                     [ngClass]="{
@@ -331,14 +331,14 @@
                       completed: req.requestStatus == 200
                     }"
                     class=""
-                    >{{ req.requestStausStr }}</span
+                    >{{ req.requestStatusStr }}</span
                   >
                 </td>
                 <td class="px-4 py-3">
                   <span
                     [ngClass]="{
-                      price1: req.totalPrice < 20000,
-                      price2: req.totalPrice > 20000
+                      price1: req.totalPrice < 10000,
+                      price2: req.totalPrice > 10000
                     }"
                     >{{ req.totalPrice | currency: "INR" }}</span
                   >

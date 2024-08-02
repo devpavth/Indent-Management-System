@@ -1,8 +1,8 @@
-<div class="absolute left-0 right-0 z-20" *ngIf="isVendorView">
-  <!-- <app-view-vendor
-    [vendorDetails]="vendorData"
-    (closeView)="closeview($event)"
-  ></app-view-vendor> -->
+<div
+  *ngIf="Spinner"
+  class="absolute bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-purple-50 p-4 sm:ml-64"
+>
+  <app-spinner></app-spinner>
 </div>
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
@@ -134,7 +134,7 @@
 
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
-                    (click)="viewVendor(ven)"
+                    (click)="toggleView(true, 1, ven)"
                     class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -219,3 +219,9 @@
     </div>
   </section>
 </div>
+<section *ngIf="isVendorList" class="fixed left-0 right-0 top-0 z-40">
+  <app-view-vendor
+    (closeVendor)="toggleView($event, 0, '')"
+    [vendorData]="vendorData"
+  ></app-view-vendor>
+</section>

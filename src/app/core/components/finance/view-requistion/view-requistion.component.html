@@ -76,11 +76,11 @@
                       Request#
                     </h2>
                     <span class="mt-1 block text-gray-500">{{
-                      _requestDetails().requestNo
+                      _requestDetails()?.indentHeaders.requestNo
                     }}</span>
 
                     <address class="mt-2 font-medium not-italic text-gray-800">
-                      {{ _requestDetails().requisitioner }}<br />
+                      {{ _requestDetails()?.indentHeaders.requisitioner }}<br />
                       <!-- {{_requestDetails.empDept }}<br> -->
                     </address>
                   </div>
@@ -96,15 +96,16 @@
                     <h3
                       class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
                     >
-                      {{ _requestDetails().empName }}
+                      {{ _requestDetails()?.createdEmpData.empFirstName }}
+                      {{ _requestDetails()?.createdEmpData.empLastName }}
                     </h3>
 
                     <address
                       class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
                     >
-                      {{ _requestDetails().empRole }}<br />
-                      {{ _requestDetails().branchName }}<br />
-                      {{ _requestDetails().empDept }}<br />
+                      <!-- {{ _requestDetails()?.createdEmpData.empRole }}<br /> -->
+                      {{ _requestDetails()?.indentBranch.branchName }}<br />
+                      {{ _requestDetails()?.indentBranch.deptName }}<br />
                     </address>
                   </div>
                   <!-- Col -->
@@ -122,7 +123,8 @@
                           class="col-span-2 text-gray-500 dark:text-neutral-500"
                         >
                           {{
-                            _requestDetails().createdOn | date: "dd-MMMM-yyyy"
+                            _requestDetails()?.indentHeaders.requiredDate
+                              | date: "dd-MMMM-yyyy"
                           }}
                         </dd>
                       </dl>
@@ -135,7 +137,10 @@
                         <dd
                           class="col-span-2 text-gray-500 dark:text-neutral-500"
                         >
-                          {{ _requestDetails().createdOn | date: "shortTime" }}
+                          {{
+                            _requestDetails()?.indentHeaders.requiredDate
+                              | date: "shortTime"
+                          }}
                         </dd>
                       </dl>
                       <dl class="grid gap-x-3 sm:grid-cols-5">
@@ -168,7 +173,7 @@
                               class="bg-purple-500 text-xs uppercase text-gray-50 dark:bg-gray-700 dark:text-gray-400"
                             >
                               <tr>
-                                <th scope="col" class="px-6 py-3">Product</th>
+                                <th scope="col" class="px-6 py-3">product?</th>
                                 <th scope="col" class="px-6 py-3">
                                   Unit Price
                                 </th>
@@ -198,26 +203,25 @@
                                   class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
                                 >
                                   <p class="font-bold text-black">
-                                    {{ product.itemName }}
+                                    {{ product?.prdmdlName }}
+                                    {{ product?.prdbrndName }}
                                   </p>
-                                  <p class="text-gray-800">
-                                    {{ product.brandName }} {{ product.model }}
-                                  </p>
+                                  <!-- <p class="text-gray-800"></p> -->
                                   <p class="w-48 text-xs text-gray-400">
-                                    {{ product.description }}
+                                    {{ product?.prdDescription }}
                                   </p>
                                 </td>
                                 <td class="px-6 py-4 dark:text-white">
-                                  {{ product.unitPrice | currency: "INR" }}
+                                  {{ product?.unitPrice | currency: "INR" }}
                                 </td>
                                 <td class="px-6 py-4 dark:text-white">
-                                  {{ product.qty }}
+                                  {{ product?.qty }}
                                 </td>
                                 <td class="px-6 py-4 dark:text-white">
-                                  {{ product.gstRate }}
+                                  {{ product?.prdGstPct }}
                                 </td>
                                 <td class="px-6 py-4">
-                                  {{ product.itemPrice }}
+                                  {{ product?.itemTotalPrice }}
                                 </td>
                                 <td *ngIf="isAccept" class="px-6 py-4">
                                   <button
@@ -271,7 +275,8 @@
                         </dt>
                         <dd class="col-span-2 text-gray-500">
                           {{
-                            this._requestDetails().totalPrice | currency: "INR"
+                            this._requestDetails().indentHeaders.totalPrice
+                              | currency: "INR"
                           }}
                         </dd>
                       </dl>
@@ -466,6 +471,7 @@
                           #r1
                           type="radio"
                           value="1"
+                          (change)="this.fetchDonorList(r1.value)"
                           name="inline-radio-group"
                           class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                         />
@@ -480,6 +486,7 @@
                           id="inline-2-radio"
                           type="radio"
                           value="2"
+                          (change)="this.fetchDonorList(r2.value)"
                           #r2
                           name="inline-radio-group"
                           class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
@@ -494,6 +501,7 @@
                         <input
                           id="inline-checked-radio"
                           #r3
+                          (change)="this.fetchDonorList(r3.value)"
                           type="radio"
                           value="3"
                           name="inline-radio-group"
@@ -510,6 +518,7 @@
                           id="inline-checked-radio"
                           type="radio"
                           #r4
+                          (change)="this.fetchDonorList(r4.value)"
                           value="4"
                           name="inline-radio-group"
                           class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
@@ -584,7 +593,7 @@
                               (mousedown)="selectDonor(donor)"
                               class="an cursor-pointer p-2 text-sm hover:bg-purple-700 hover:text-white"
                             >
-                              {{ donor.dfirstName }} {{ donor.dlastName }}
+                              {{ donor.funderName }}
                             </li>
                           </ul>
                           <div
@@ -603,6 +612,7 @@
                         <div class="flex">
                           <div class="flex gap-3">
                             <input
+                              appOnlyNumber
                               class="input-text1"
                               type="number"
                               formControlName="donotedAmt"
@@ -684,7 +694,7 @@
                           <td
                             class="px-6 py-4 font-medium text-gray-900 dark:text-white"
                           >
-                            {{ donor.dfirstName }} {{ donor.dlastName }}
+                            {{ donor.funderName }}
                           </td>
                           <td class="px-6 py-4">
                             {{ donor.donotedAmt | currency: "INR" }}
@@ -737,7 +747,7 @@
                           [ngClass]="{
                             'text-green-500':
                               this.approvelAmt ==
-                              this._requestDetails().totalPrice
+                              this._requestDetails().indentHeaders.totalPrice
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -756,8 +766,8 @@
                           [ngClass]="{
                             'text-green-500':
                               approvelAmt ==
-                                this._requestDetails().totalPrice &&
-                              approvelAmt == donorTotal
+                                this._requestDetails().indentHeaders
+                                  .totalPrice && approvelAmt == donorTotal
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -778,12 +788,14 @@
                       <button
                         (click)="submiteDonorList()"
                         [disabled]="
-                          approvelAmt != this._requestDetails().totalPrice ||
+                          approvelAmt !=
+                            this._requestDetails().indentHeaders.totalPrice ||
                           approvelAmt != donorTotal
                         "
                         [ngClass]="{
                           'bg-gray-500 hover:bg-gray-500':
-                            approvelAmt != this._requestDetails().totalPrice ||
+                            approvelAmt !=
+                              this._requestDetails().indentHeaders.totalPrice ||
                             approvelAmt != donorTotal
                         }"
                         type="submit"
