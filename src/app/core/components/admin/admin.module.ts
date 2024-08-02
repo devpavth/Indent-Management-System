@@ -33,7 +33,9 @@ import { ProductStockComponent } from './Products/product-stock/product-stock.co
 import { TProductComponent } from './Transaction/t-product/t-product.component';
 import { RStockComponent } from './report/r-stock/r-stock.component';
 import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
-import { AddOnListComponent } from './Branch/add-on-list/add-on-list.component';
+
+import { ViewListComponent } from './Branch/view-list/view-list.component';
+import { AddListComponent } from './Branch/add-list/add-list.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -66,7 +68,9 @@ import { AddOnListComponent } from './Branch/add-on-list/add-on-list.component';
     TProductComponent,
     RStockComponent,
     HeadOfAccComponent,
-    AddOnListComponent,
+
+    ViewListComponent,
+    AddListComponent,
   ],
   imports: [
     CommonModule,

@@ -1,21 +1,18 @@
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
-    <section>
-      <div class="mb-4 rounded-lg bg-white px-10 py-5">
-        <form [formGroup]="headOfAccForm">
-          <div>
-            <label
-              for="brand"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >Add New Head of Account</label
-            >
-            <div class="flex gap-4">
-              <input
-                type="text"
-                formControlName="headOfAccName"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
-                required
-              />
+    <div class="mx-auto">
+      <div
+        class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
+      >
+        <div
+          class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+        >
+          <div class="w-full">
+            <div class="flex items-center justify-between">
+              <h1 class="font-semibold text-purple-800">
+                <span *ngIf="activeId == 1"> Department List </span>
+                <span *ngIf="activeId == 2"> Project/Program List </span>
+              </h1>
               <button
                 type="button"
                 (click)="onSubmit(headOfAccForm.value)"
@@ -40,47 +37,52 @@
                   />
                 </svg>
 
-                Add
+                <span *ngIf="activeId == 1"> Department </span>
+                <span *ngIf="activeId == 2"> Project/Program </span>
               </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-    <div class="mx-auto">
-      <div
-        class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
-      >
-        <div
-          class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
-        >
-          <div class="w-full md:w-1/2">
-            <div class="flex items-center">
-              <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative w-full">
-                <div
-                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+              <!-- <form [formGroup]="headOfAccForm">
+                <div>
+                  <label
+                    for="brand"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >Add New Head of Account</label
                   >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clip-rule="evenodd"
+                  <div class="flex gap-4">
+                    <input
+                      type="text"
+                      formControlName="headOfAccName"
+                      class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                      required
                     />
-                  </svg>
+                    <button
+                      type="button"
+                      (click)="onSubmit(headOfAccForm.value)"
+                      class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                    >
+                      <svg
+                        class="mr-2 h-4 w-4"
+                        fill="currentColor"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="3"
+                          d="M5 12h14m-7 7V5"
+                        />
+                      </svg>
+
+                      Add
+                    </button>
+                  </div>
                 </div>
-                <input
-                  type="text"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                  placeholder="Search"
-                />
-              </div>
+              </form> -->
             </div>
           </div>
           <div
@@ -126,7 +128,8 @@
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
-                    <div>Head Of Account</div>
+                    <span *ngIf="activeId == 1"> Department List </span>
+                    <span *ngIf="activeId == 2"> Project/Program List </span>
                     <button
                       class="an rounded-full hover:bg-gray-600 hover:text-white"
                     >
@@ -169,7 +172,7 @@
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
-                  {{ p.headOfAccName }}
+                  {{ p.deptName ?? p.proName }}
                 </th>
 
                 <!-- <td class="px-4 py-3"></td>
