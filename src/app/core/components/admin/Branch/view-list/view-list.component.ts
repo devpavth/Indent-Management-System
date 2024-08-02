@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { ProductService } from '../../../service/Product/product.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ProductService } from '../../../service/Product/product.service';
+import { ActivatedRoute } from '@angular/router';
+import { BranchService } from '../../../service/Branch/branch.service';
 
 @Component({
-  selector: 'app-add-on-list',
-  templateUrl: './add-on-list.component.html',
-  styleUrl: './add-on-list.component.css',
+  selector: 'app-view-list',
+  templateUrl: './view-list.component.html',
+  styleUrl: './view-list.component.css',
 })
-export class AddOnListComponent {
+export class ViewListComponent {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalpage: number = 0;
@@ -15,32 +17,48 @@ export class AddOnListComponent {
 
   headOfAccList: any[] = [];
 
+  activeId: any;
+
   headOfAccForm: FormGroup;
   constructor(
     private productService: ProductService,
     private fb: FormBuilder,
+    private activeLinkId: ActivatedRoute,
+    private branchService: BranchService,
   ) {
     this.headOfAccForm = this.fb.group({
       headOfAccName: [],
     });
   }
   ngOnInit() {
+    this.activeId = this.activeLinkId.snapshot.paramMap.get('id');
+    console.log(this.activeId);
     this.fetchHeadOfAcc();
   }
 
   fetchHeadOfAcc() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.productService.getHeadofAccList().subscribe((res: any) => {
-      console.log(res);
+    if (this.activeId == 1) {
+      this.branchService.getAllDepartments().subscribe((res: any) => {
+        console.log(res);
+        let list: any[] = res;
+        this.headOfAccList = list.slice(startIndex, endIndex);
+        this.listLength = this.headOfAccList.length;
+      });
+    } else if (this.activeId == 2) {
+      this.branchService.getAllProj().subscribe((res: any) => {
+        console.log(res);
 
-      this.headOfAccList = res;
-      this.listLength = this.headOfAccList.length;
-    });
+        this.headOfAccList = res;
+        this.listLength = this.headOfAccList.length;
+      });
+    }
   }
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
+    this.fetchHeadOfAcc();
   }
   getSerialNumber(index: number): number {
     return (this.currentPage - 1) * this.itemsPerPage + index + 1;

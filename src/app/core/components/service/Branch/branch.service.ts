@@ -43,4 +43,8 @@ export class BranchService {
   getAllDepartments() {
     return this.http.get(environment.getAlldepartment);
   }
+
+  getAllProj() {
+    return this.http.get(environment.getProjOrProg);
+  }
 }
