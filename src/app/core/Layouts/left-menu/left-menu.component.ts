@@ -12,10 +12,22 @@ export class LeftMenuComponent {
   procurement: boolean = false;
   poapproval: boolean = false;
   finance: boolean = false;
+  transaction: boolean = false;
+  product: boolean = false;
+  branch: boolean = false;
   toggleRequest() {
     this.tRequest = !this.tRequest;
   }
   toggleAdmin() {
     this.tAdmin = !this.tAdmin;
+  }
+  toggleTransaction() {
+    this.transaction = !this.transaction;
+  }
+  toggleProduct() {
+    this.product = !this.product;
+  }
+  toggleBranch() {
+    this.branch = !this.branch;
   }
 }

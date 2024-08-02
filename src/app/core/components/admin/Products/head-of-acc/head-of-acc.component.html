@@ -1,0 +1,312 @@
+<div class="p-4 sm:ml-64">
+  <section class="dark:bg-gray-900">
+    <section>
+      <div class="mb-4 rounded-lg bg-white px-10 py-5">
+        <form [formGroup]="headOfAccForm">
+          <div>
+            <label
+              for="brand"
+              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              >Add New Head of Account</label
+            >
+            <div class="flex gap-4">
+              <input
+                type="text"
+                formControlName="headOfAccName"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-600 focus:ring-purple-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                required
+              />
+              <button
+                type="button"
+                (click)="onSubmit(headOfAccForm.value)"
+                class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+              >
+                <svg
+                  class="mr-2 h-4 w-4"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                    d="M5 12h14m-7 7V5"
+                  />
+                </svg>
+
+                Add
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <div class="mx-auto">
+      <div
+        class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
+      >
+        <div
+          class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+        >
+          <div class="w-full md:w-1/2">
+            <div class="flex items-center">
+              <label for="simple-search" class="sr-only">Search</label>
+              <div class="relative w-full">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="h-5 w-5 text-gray-500 dark:text-gray-400"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  placeholder="Search"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
+          >
+            <!-- <button
+              type="button"
+              routerLink="/home/addProduct"
+              class="an flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+            >
+              <svg
+                class="mr-2 h-4 w-4"
+                fill="currentColor"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                  d="M5 12h14m-7 7V5"
+                />
+              </svg>
+
+              Add Head of Account
+            </button> -->
+          </div>
+        </div>
+
+        <div class="overflow-x-auto" #test>
+          <table
+            class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
+          >
+            <thead
+              class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
+            >
+              <tr>
+                <th scope="col" class="px-4 py-3">S.No</th>
+                <th scope="col" class="px-4 py-3">
+                  <div class="flex items-center justify-between">
+                    <div>Head Of Account</div>
+                    <button
+                      class="an rounded-full hover:bg-gray-600 hover:text-white"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-4 w-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </th>
+
+                <!-- <th scope="col" class="px-4 py-3">Model</th>
+                <th scope="col" class="px-4 py-3">Group</th>
+                <th scope="col" class="px-4 py-3">Catagories</th>
+                <th scope="col" class="px-4 py-3">Brand</th> -->
+                <!-- <th scope="col" class="px-4 py-3">GST %</th>
+                              <th scope="col" class="px-4 py-3">Price</th> -->
+                <th scope="col" class="px-4 py-3">
+                  <span class="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let p of headOfAccList; let i = index"
+                class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
+              >
+                <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
+                <th
+                  scope="row"
+                  class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                >
+                  {{ p.headOfAccName }}
+                </th>
+
+                <!-- <td class="px-4 py-3"></td>
+                              <td class="px-4 py-3"></td> -->
+
+                <td class="flex items-center justify-end gap-4 px-4 py-3">
+                  <button
+                    class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    type="button"
+                  >
+                    <svg
+                      class="h-5 w-5 text-blue-600 group-hover:text-blue-50 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z"
+                        clip-rule="evenodd"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        d="M19.846 4.318a2.148 2.148 0 0 0-.437-.692 2.014 2.014 0 0 0-.654-.463 1.92 1.92 0 0 0-1.544 0 2.014 2.014 0 0 0-.654.463l-.546.578 2.852 3.02.546-.579a2.14 2.14 0 0 0 .437-.692 2.244 2.244 0 0 0 0-1.635ZM17.45 8.721 14.597 5.7 9.82 10.76a.54.54 0 0 0-.137.27l-.536 2.84c-.07.37.239.696.588.622l2.682-.567a.492.492 0 0 0 .255-.145l4.778-5.06Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    class="group inline-flex items-center justify-center rounded-full bg-red-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    type="button"
+                  >
+                    <svg
+                      class="h-5 w-5 text-red-600 group-hover:text-red-50 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav
+          class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
+          aria-label="Table navigation"
+        >
+          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+            Showing
+            <span class="font-semibold text-gray-900 dark:text-white"
+              >{{ startPage }}-{{ endPage }}</span
+            >
+            of
+            <span class="font-semibold text-gray-900 dark:text-white">{{
+              listLength
+            }}</span>
+          </span>
+          <div class="flex gap-2">
+            <div class="flex items-center gap-2">
+              <p class="text-sm font-semibold">Records per Page</p>
+
+              <input
+                type="number"
+                class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                [(ngModel)]="itemsPerPage"
+              />
+            </div>
+            <ul class="inline-flex items-center">
+              <li>
+                <button
+                  (click)="onPageChange(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                  class="ml-0 flex h-full cursor-pointer items-center justify-center rounded-l-lg bg-white px-3 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Previous</span>
+                  <svg
+                    class="h-5 w-5"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </li>
+              <li>
+                <a
+                  class="flex items-center justify-center bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  >{{ currentPage }}</a
+                >
+              </li>
+
+              <li>
+                <!-- [disabled]="currentPage * itemsPerPage >= productList.length" -->
+                <button
+                  (click)="onPageChange(currentPage + 1)"
+                  [disabled]="endPage == listLength"
+                  class="flex h-full cursor-pointer items-center justify-center rounded-r-lg bg-white px-3 py-1.5 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span class="sr-only">Next</span>
+                  <svg
+                    class="h-5 w-5"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </section>
+</div>

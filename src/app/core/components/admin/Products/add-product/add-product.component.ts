@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
 
 @Component({
@@ -15,6 +15,24 @@ export class AddProductComponent implements OnInit {
   catList: any;
   brandList: any;
   gst: any = [0, 5, 12, 18];
+  units: { id: number; name: string; term: string }[] = [
+    { id: 1, name: 'Kg', term: 'Kilograms' },
+    { id: 2, name: 'L', term: 'Liters' },
+    { id: 3, name: 'M', term: 'Meter' },
+    { id: 4, name: 'Unit', term: 'Piece' },
+    { id: 5, name: 'Lt', term: 'Liters' },
+    { id: 6, name: 'Feet', term: 'Feet' },
+    { id: 7, name: 'Roll', term: 'Roll' },
+    { id: 8, name: 'Dcm', term: 'Decimeters' },
+    { id: 9, name: 'Bag', term: 'Bag' },
+    { id: 10, name: 'Pair', term: 'Pair' },
+    { id: 11, name: 'Tin', term: 'Tin' },
+    { id: 12, name: 'Sheet', term: 'Sheet' },
+    { id: 13, name: 'Ream', term: 'Ream' },
+    { id: 14, name: 'No', term: 'Number' },
+    { id: 15, name: 'Meter', term: 'Meter' },
+    { id: 200, name: 'Box', term: 'Box' },
+  ];
 
   ProductForm: FormGroup;
 
@@ -23,12 +41,12 @@ export class AddProductComponent implements OnInit {
     private productService: ProductService,
   ) {
     this.ProductForm = this.fb.group({
-      prdGrpId: [],
+      prdGrpId: ['',[Validators.required]],
       prdCatgId: [],
       prdBrndId: [],
       prdmdlName: [],
       prdDescription: [],
-
+      prdUnit: [],
       prdHsnCode: [],
       prdPurchasedPrice: [],
       prdGstPct: [],
@@ -76,11 +94,25 @@ export class AddProductComponent implements OnInit {
   }
 
   onSubmit(data: any) {
-    this.productService.postProduct(data).subscribe((res) => {
-      console.log(res);
-    });
+    console.log(data);
+
+    this.productService.postProduct(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+
+        if (error.status == 200) {
+          this.ProductForm.reset();
+          this.ProductForm.get('prdStatus')?.patchValue(200);
+        }
+      },
+    );
   }
   closeAdding(action: boolean) {
     this.isCloseAdding = action;
+    this.fetchGroupList();
+    this.ProductForm.reset();
   }
 }

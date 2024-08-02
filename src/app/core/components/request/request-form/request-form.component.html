@@ -1,15 +1,21 @@
-<section class="overflow-y-auto">
-  <div class="p-4 sm:ml-64">
+<div *ngIf="isSuccessPop">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="togglePop($event)"
+  ></app-success>
+</div>
+<div
+  *ngIf="isOtherProduct"
+  class="fixed z-50 flex h-full w-full items-center justify-center bg-black/50"
+>
+  <app-other-product (closeToggle)="toggleProduct($event)"></app-other-product>
+</div>
+<section class="snap-x snap-mandatory overflow-y-auto scroll-smooth">
+  <div class="px-4 sm:ml-64">
     <!-- <div class="p-4 bg-white rounded-lg"></div> -->
-
     <!-- Request form entry start -->
-    <div
-      class="my-4 mb-4 rounded-lg border-purple-500/10 bg-white backdrop-blur-lg"
-    >
-      <div
-        [ngClass]="{ 'rounded-lg': isProductAdd }"
-        class="flex justify-between rounded-t-lg bg-purple-800 px-4 py-4"
-      >
+    <div class="my-4 rounded-lg border-purple-500/10 bg-white backdrop-blur-lg">
+      <div class="flex justify-between rounded-t-lg bg-[#310055] px-4 py-4">
         <h1 class="font-bold text-white">Indent Header</h1>
         <button
           *ngIf="!isHeader"
@@ -57,19 +63,61 @@
           </svg>
         </button>
       </div>
-      <div *ngIf="isHeader">
-        <form class="my-8 flex">
+
+      <div *ngIf="isHeader" class="snap-center snap-always bg-purple-50 py-8">
+        <form [formGroup]="requestIndentHead" class="flex">
           <section class="mx-auto grid w-1/2 max-w-lg grid-cols-8 gap-2">
+            <div class="col-span-8">
+              <ul class="mb-4 grid w-full gap-6 md:grid-cols-2">
+                <li>
+                  <input
+                    type="radio"
+                    id="hosting-small"
+                    name="hosting"
+                    value="hosting-small"
+                    class="peer hidden"
+                    required
+                  />
+                  <label
+                    for="hosting-small"
+                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                  >
+                    <div class="block">
+                      <div class="w-full text-lg font-semibold">Normal</div>
+                    </div>
+                  </label>
+                </li>
+                <li>
+                  <input
+                    type="radio"
+                    id="hosting-big"
+                    name="hosting"
+                    value="hosting-big"
+                    class="peer hidden"
+                  />
+                  <label
+                    for="hosting-big"
+                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                  >
+                    <div class="block">
+                      <div class="w-full text-lg font-semibold">Urgent</div>
+                    </div>
+                  </label>
+                </li>
+              </ul>
+            </div>
+
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
                 >Requisitioner
               </label>
               <input
+                appFirstCapLetter
+                formControlName="requisitioner"
                 type="text"
                 class="input-form"
-                formControlName="add1"
                 required
               />
             </div>
@@ -77,251 +125,165 @@
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
                 >Required by Date
               </label>
               <input
+                formControlName="requiredDate"
                 type="date"
                 class="input-form"
-                formControlName="add1"
                 required
               />
             </div>
 
-            <div class="col-span-8 mb-4 flex items-center gap-6">
+            <div class="col-span-8 mb-2">
               <label
                 for="Address"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
               >
-                Project/Programme :
+                Capex / Non-capex
               </label>
-
-              <div>
-                <input
-                  id="default-radio-1"
-                  type="radio"
-                  value=""
-                  name="default-radio"
-                  class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  for="default-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Project</label
-                >
+              <div class="flex justify-stretch gap-40">
+                <div class="flex items-center gap-2">
+                  <input
+                    formControlName="expenditureId"
+                    type="radio"
+                    value="51"
+                  />
+                  <label for="">Capex</label>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input
+                    formControlName="expenditureId"
+                    type="radio"
+                    value="52"
+                  />
+                  <label for="">Non-Capex</label>
+                </div>
               </div>
-              <div>
-                <input
-                  id="default-radio-1"
-                  type="radio"
-                  value=""
-                  name="default-radio"
-                  class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  for="default-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Programme</label
-                >
-              </div>
-            </div>
-            <div class="col-span-8 mb-2">
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                required
-              />
             </div>
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+              >
+                Department
+              </label>
+              <select
+                formControlName="programId"
+                class="select-option1 block w-full rounded-lg"
+              >
+                <option
+                  value=""
+                  disabled
+                  selected
+                  class="bg-purple-700 text-white"
+                >
+                  Choose Department
+                </option>
+                <option *ngFor="let i of programList" value="{{ i.id }}">
+                  {{ i.value }}
+                </option>
+              </select>
+            </div>
+            <div class="col-span-4 mb-2">
+              <label
+                for="Address"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+              >
+                Project/Programme
+              </label>
+              <select
+                formControlName="programId"
+                class="select-option1 block w-full rounded-lg"
+              >
+                <option
+                  value=""
+                  disabled
+                  selected
+                  class="bg-purple-700 text-white"
+                >
+                  Choose Project/Programme
+                </option>
+                <option *ngFor="let i of programList" value="{{ i.id }}">
+                  {{ i.value }}
+                </option>
+              </select>
+            </div>
+            <div class="col-span-8 mb-2">
+              <label
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
                 >Camp
               </label>
               <input
+                formControlName="campName"
                 type="text"
                 class="input-form"
-                formControlName="add1"
-                required
-              />
-            </div>
-            <div class="col-span-4 mb-2">
-              <label
-                for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Recommended Vendor
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                required
-              />
-            </div>
-            <div class="col-span-8 mb-2">
-              <label
-                for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Shipping Address
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                required
-              />
-            </div>
-            <div class="col-span-8 mb-4 flex items-center gap-6">
-              <label
-                for="Address"
-                class="block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Funder :</label
-              >
-
-              <div>
-                <input
-                  id="default-radio-1"
-                  type="radio"
-                  value=""
-                  name="default-radio"
-                  class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  for="default-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Local</label
-                >
-              </div>
-              <div>
-                <input
-                  id="default-radio-1"
-                  type="radio"
-                  value=""
-                  name="default-radio"
-                  class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  for="default-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >FCRA</label
-                >
-              </div>
-              <div>
-                <input
-                  id="default-radio-1"
-                  type="radio"
-                  value=""
-                  name="default-radio"
-                  class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-                />
-                <label
-                  for="default-radio-1"
-                  class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Donor</label
-                >
-              </div>
-            </div>
-            <div class="col-span-4 mb-2">
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Funder Name
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                value=""
-                required
-              />
-            </div>
-            <div class="col-span-4 mb-2">
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Fund Available
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                value=""
-                required
-              />
-            </div>
-            <div class="col-span-4 mb-2">
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Utilized Amount
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                value=""
-                required
-              />
-            </div>
-            <div class="col-span-4 mb-2">
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Head of Account
-              </label>
-              <input
-                type="text"
-                class="input-form"
-                formControlName="add1"
-                value=""
                 required
               />
             </div>
           </section>
-          <section class="mx-auto grid w-1/2 max-w-lg grid-cols-8 gap-2">
-            <div class="col-span-5 mb-2">
-              <label
-                for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Indent Created Date
-              </label>
-              <input
-                type="date"
-                class="input-form"
-                formControlName="add1"
-                required
-              />
-            </div>
+          <section
+            class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
+          >
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
                 >Indent raised by Name & Designation
               </label>
-              <div class="flex gap-2">
-                <input
-                  type="text"
-                  class="input-form"
-                  formControlName="add1"
-                  placeholder="Name"
-                  required
-                />
-                <input
-                  type="text"
-                  class="input-form"
-                  formControlName="add1"
-                  placeholder="Designation"
-                  required
-                />
+              <div class="">
+                <p class="text-xl">
+                  {{ employeeData?.empFirstName }}
+                  {{ employeeData?.empLastName }}
+                </p>
+                <p class="text-sm text-gray-500">
+                  ({{ employeeData?.empDesignation }})
+                </p>
+              </div>
+              <div class="mt-1">
+                <p class="text-sm">
+                  Department : {{ employeeData?.empDeptName }}
+                </p>
+              </div>
+            </div>
+            <div class="col-span-5 mb-2">
+              <label
+                for="Address"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                >Indent Creation Date
+              </label>
+              <!-- <input type="date" class="input-form" required /> -->
+              <div class="flex items-center gap-2">
+                <svg
+                  class="h-5 w-5 text-gray-600"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                  />
+                </svg>
+                <p>{{ date | date: "medium" }}</p>
               </div>
             </div>
 
             <div class="col-span-8 mb-2">
               <label
-                for="Address"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
                 >Remark If Any <span class="text-gray-400">(Optional)</span>
               </label>
               <textarea
-                class="input-form h-72"
+                formControlName="notes"
+                class="input-form"
                 placeholder="Remark note"
               ></textarea>
             </div>
@@ -329,435 +291,781 @@
         </form>
         <div class="flex w-full justify-end">
           <button
-            class="col-span-8 mx-12 mb-4 rounded-lg bg-purple-700 px-4 py-2 font-semibold text-white"
+            *ngIf="!isEditHeader"
+            (click)="onSubmitHeader(requestIndentHead.value)"
+            class="btn-primary col-span-8 mx-12 mb-4"
           >
-            Submit
+            Add Header
+          </button>
+          <button
+            *ngIf="isEditHeader"
+            (click)="onEditHeader()"
+            class="btn-gray col-span-8 mx-12 mb-4"
+          >
+            Edit Header
           </button>
         </div>
       </div>
-    </div>
-    <section *ngIf="isProductAdd">
-      <div
-        class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
-      >
-        <form [formGroup]="requestProduct" class="flex gap-5">
-          <div>
-            <div class="flex items-center gap-2">
-              <label
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                for="file_input"
-                >Select Product</label
-              >
-              <button
-                (click)="isOther = true"
-                class="mb-2 flex items-center gap-1"
-              >
-                <svg
-                  class="h-3 w-3 text-gray-400 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-
-                <a
-                  class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                  >Add Product</a
-                >
-              </button>
-            </div>
-
-            <div class="flex">
-              <div class="w- flex">
-                <select
-                  #rproduct
-                  class="select-option w-30 scroll rounded-l-lg"
-                  formControlName="itemName"
-                >
-                  <option [value]="null" disabled selected>Product</option>
-
-                  <option
-                    *ngFor="let product of _productName"
-                    value="{{ product }}"
-                  >
-                    {{ product }}
-                  </option>
-                </select>
-                <select
-                  #rbrand
-                  class="select-option w-30"
-                  formControlName="brandName"
-                >
-                  <option [value]="null" disabled selected>Brand</option>
-
-                  <option *ngFor="let brand of _brandName" value="{{ brand }}">
-                    {{ brand }}
-                  </option>
-                </select>
-                <select
-                  #rmodel
-                  class="select-option w-30"
-                  formControlName="model"
-                >
-                  <option [value]="null" disabled selected>Model</option>
-
-                  <option *ngFor="let model of _model" value="{{ model }}">
-                    {{ model }}
-                  </option>
-                </select>
-                <select
-                  #desc
-                  class="select-option rounded-r-lg"
-                  formControlName="description"
-                >
-                  <option [value]="null" disabled selected>Description</option>
-
-                  <option
-                    class=""
-                    *ngFor="let description of _description"
-                    value="{{ description.productId }}"
-                  >
-                    <span class="truncate">{{
-                      description.configuration
-                    }}</span>
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >Unit Price</label
-            >
-            <div class="flex">
-              <div class="flex">
-                <input
-                  class="input-text"
-                  id="file_input"
-                  type="text"
-                  formControlName="unitPrice"
-                />
-              </div>
-            </div>
-          </div>
-          <div>
-            <label
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >Quantity</label
-            >
-            <div class="flex">
-              <div class="flex gap-3">
-                <input class="input-text" type="text" formControlName="qty" />
-                <div class="">
-                  <button
-                    type="button"
-                    class="btn-primary whitespace-nowrap"
-                    (click)="addRequestedProductItem(requestProduct.value)"
-                  >
-                    Add Items
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+      <div class="flex justify-between border-t bg-[#6818a5] px-4 py-4">
+        <h1 class="font-bold text-white">Indent Body</h1>
       </div>
-
-      <!-- Request form entry end -->
-
-      <!-- Request form display start -->
-      <div class="mt-4 rounded-lg border bg-white">
-        <div>
-          <section class="dark:bg-gray-900">
-            <div class="mx-auto">
-              <div
-                class="relative overflow-hidden bg-white dark:bg-gray-800 sm:rounded-lg"
+      <form
+        [formGroup]="productForm"
+        class="flex snap-center snap-normal bg-[#f5ebfa]"
+      >
+        <section class="mx-8 my-2 grid w-2/3 grid-cols-8">
+          <div class="col-span-8 m-4 flex">
+            <button
+              class="rounded-md bg-gray-50 px-2 py-1 text-sm font-semibold"
+              (click)="toggleProduct(true)"
+            >
+              <a class="">Request New Product</a>
+            </button>
+          </div>
+          <div class="col-span-8 m-4 flex">
+            <input type="text" #serValue class="input-form" />
+            <button
+              (click)="serchByCode(serValue.value)"
+              class="btn-primary ml-4 text-nowrap"
+            >
+              Search
+            </button>
+          </div>
+          <div class="col-span-8 flex w-full justify-center">
+            <div class="relative inline-flex items-center justify-center">
+              <hr
+                class="my-8 h-px w-96 border-0 bg-purple-500 dark:bg-gray-700"
+              />
+              <span
+                class="absolute left-1/2 -translate-x-1/2 bg-[#f5ebfa] px-3 font-medium text-purple-500 dark:bg-gray-900 dark:text-white"
+                >or</span
               >
-                <div class="scroll max-h-96 overflow-y-auto">
-                  <table
-                    class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-                  >
-                    <thead
-                      class="sticky top-0 bg-purple-900 text-xs uppercase text-purple-50 dark:bg-gray-700 dark:text-gray-400"
-                    >
+            </div>
+          </div>
+          <div *ngIf="productData" class="col-span-full flex flex-col">
+            <div class="overflow-x-auto">
+              <div class="inline-block min-w-full p-1.5 align-middle">
+                <div class="overflow-hidden rounded-lg border">
+                  <table class="min-w-full divide-y divide-gray-200 bg-white">
+                    <tbody class="divide-y divide-gray-200">
                       <tr>
-                        <th class="px-4 py-3">Product</th>
-                        <!-- <th class="px-4 py-3">Brand</th>
-                      <th class="px-4 py-3">Model</th>
-                      <th class="px-4 py-3">Description</th> -->
-                        <th class="px-4 py-3">Unit Price</th>
-                        <th class="px-4 py-3">Quantity</th>
-                        <th class="px-4 py-3">Gst %</th>
-                        <th class="px-4 py-3">Item Total</th>
-                        <th class="px-4 py-3">
-                          <span class="sr-only">Actions</span>
-                        </th>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Product Code
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                        >
+                          <span class="font-semibold">{{
+                            productData?.prdCode
+                          }}</span>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody *ngIf="visiable">
-                      <tr
-                        class="group/tr border-b transition-all duration-500 hover:bg-gray-50 dark:border-gray-700"
-                        *ngFor="let rItem of _rItemList; let i = index"
-                      >
+                      <tr>
                         <td
-                          class="space-y-1 text-wrap px-4 py-3 group-hover/tr:text-black"
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
                         >
-                          <p class="font-bold text-black">
-                            {{ rItem.itemName }}
-                          </p>
-                          <p class="text-gray-800">
-                            {{ rItem.brandName }} {{ rItem.model }}
-                          </p>
-                          <p class="w-48 truncate text-xs text-gray-400">
-                            {{ this._product.configuration }}
-                          </p>
-                        </td>
-
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.unitPrice | currency: "INR" }}
-                        </td>
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.qty }}
+                          Head Of Account
                         </td>
                         <td
-                          class="text-wrap px-4 py-3 group-hover/tr:text-black"
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                         >
-                          {{ this._product.gstpercentage }}
+                          <span class="font-semibold">{{
+                            productData?.headOfAccName
+                          }}</span>
                         </td>
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.itemPrice | currency: "INR" }}
-                        </td>
-
+                      </tr>
+                      <tr>
                         <td
-                          class="items-center px-4 py-3 group-hover/tr:font-bold group-hover/tr:text-gray-500"
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
                         >
-                          <button
-                            id="apple-imac-27-dropdown-button"
-                            data-dropdown-toggle="apple-imac-27-dropdown"
-                            class="inline-flex items-center rounded-lg text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                            type="button"
-                            (click)="deleterItem(i)"
-                          >
-                            ds
-                          </button>
-                          =======
-                        </td>
-
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.unitPrice | currency: "INR" }}
-                        </td>
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.qty }}
+                          Product Name
                         </td>
                         <td
-                          class="text-wrap px-4 py-3 group-hover/tr:text-black"
-                          =""
-                          =""
-                          =""
-                          =""
-                          =""
-                          =""
-                          ="(click)"
-                          ="deleterItem(i)"
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                         >
-                          {{ this._product.gstpercentage }}
+                          <span class="font-semibold">{{
+                            productData?.prdmdlName
+                          }}</span>
+                          -
+                          {{ productData?.prdbrndName }}
                         </td>
-                        <td class="px-4 py-3 group-hover/tr:text-black">
-                          {{ rItem.itemPrice | currency: "INR" }}
-                        </td>
-
+                      </tr>
+                      <tr>
                         <td
-                          class="items-center px-4 py-3 group-hover/tr:font-bold group-hover/tr:text-gray-500"
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
                         >
-                          <button
-                            id="apple-imac-27-dropdown-button"
-                            data-dropdown-toggle="apple-imac-27-dropdown"
-                            class="inline-flex items-center rounded-lg text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                            type="button"
-                            (click)="deleterItem(i)"
-                          >
-                            <div
-                              class="group/delete rounded-lg bg-red-100 p-1 transition-all duration-500 hover:bg-red-600 active:translate-y-1"
-                            >
-                              <svg
-                                class="h-4 w-4 text-red-600 group-hover/delete:text-red-100"
-                                aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  stroke="currentColor"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                                />
-                              </svg>
-                            </div>
-                          </button>
+                          Description
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdDescription }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          Purchased Price
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdPurchasedPrice }}
+                        </td>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                        >
+                          GST
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ productData?.prdGstPct }}
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <div
-                    class="col-span-full flex h-80 items-center justify-center bg-purple-100"
-                    *ngIf="emptyVisiable"
-                  >
-                    <tr>
-                      <td class="col-span-12">
-                        <img
-                          src="../../../../../assets/Img/9264882.svg"
-                          class="w-52"
-                          alt=""
-                        />
-                      </td>
-                    </tr>
-                  </div>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </div>
-
-      <div class="mt-4 rounded-lg border bg-white p-4 shadow-lg">
-        <div class="flex items-center">
-          <div class="w-4/5">
-            <div class="flex w-1/2">
-              <div>
-                <h1 class="font-bold text-purple-800">Total Amount:</h1>
-              </div>
-              <div class="ml-6 w-1/2 font-bold text-gray-800">
-                <h1>{{ _totalPrice | currency: "INR" }}</h1>
-              </div>
-            </div>
           </div>
-          <div class="grid w-1/5 grid-cols-2">
-            <div></div>
-            <div>
-              <button
-                type="button"
-                (click)="postRequestDetails()"
-                class="ml-5 inline-flex items-center rounded-lg bg-purple-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 active:translate-y-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+
+          <div class="col-span-4 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              Group
+            </label>
+            <select
+              #catid
+              (change)="fetchCatList(catid.value)"
+              class="select-rose block w-full rounded-lg"
+            >
+              <option value="" disabled selected class="bg-rose-500 text-white">
+                Choose Group
+              </option>
+              <option *ngFor="let g of groupList" [value]="g.prdGrpId">
+                {{ g.prdgrpName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-span-4 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              Category
+            </label>
+            <select
+              #id
+              (change)="fetchBrandList(id.value)"
+              class="select-rose block w-full rounded-lg"
+            >
+              <option value="" selected disabled class="bg-rose-500 text-white">
+                Choose Catagories
+              </option>
+              <option *ngFor="let c of catList" [value]="c.prdCatgId">
+                {{ c.prdcatgName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-span-4 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              Brand
+            </label>
+            <select
+              #brdId
+              (change)="fetchModelList(brdId.value)"
+              class="select-rose block w-full rounded-lg"
+            >
+              <option value="" selected disabled class="bg-rose-500 text-white">
+                Choose Brand
+              </option>
+              <option [value]="b.prdBrndId" *ngFor="let b of brandList">
+                {{ b.prdbrndName }}
+              </option>
+            </select>
+          </div>
+          <div class="col-span-4 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              Model
+            </label>
+            <select
+              #mName
+              (change)="fetchProductDetails(brdId.value, mName.value)"
+              class="select-rose block w-full rounded-lg"
+            >
+              <option value="" selected disabled class="bg-rose-500 text-white">
+                Choose Model
+              </option>
+              <option [value]="m" *ngFor="let m of modelList">
+                {{ m }}
+              </option>
+            </select>
+          </div>
+          <div class="col-span-8 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+            >
+              Description
+            </label>
+            <select
+              #des
+              (change)="patchProductData(des.value)"
+              class="select-rose block w-full rounded-lg"
+            >
+              <option
+                value=""
+                null
+                selected
+                disabled
+                class="bg-rose-500 text-white"
               >
-                <h1 class="font-bold">Save</h1>
-                <svg
-                  class="ms-2 h-3.5 w-3.5 rtl:rotate-180"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 10"
+                Choose Description
+              </option>
+              <option *ngFor="let c of desList" [value]="c.productId">
+                {{ c.prdDescription }}
+              </option>
+            </select>
+          </div>
+          <div class="col-span-3 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+              >Unit Price
+            </label>
+            <input
+              readonly
+              formControlName="unitPrice"
+              type="number"
+              class="input-rose"
+              required
+            />
+          </div>
+          <div class="col-span-3 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+              >Quantity
+            </label>
+            <input
+              appOnlyNumber
+              formControlName="qty"
+              type="number"
+              class="input-rose"
+              required
+            />
+          </div>
+          <div class="col-span-2 m-4">
+            <label
+              for="Address"
+              class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+              >Gst Percentage
+            </label>
+            <input
+              readonly
+              formControlName="gstpercentage"
+              type="number"
+              class="input-rose"
+              required
+            />
+          </div>
+        </section>
+        <div
+          class="m-4 h-1/2 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
+        >
+          <h1 class="text-xl font-semibold">Product Summary</h1>
+          <div class="flow-root">
+            <div class="-my-3 divide-y divide-[#6818a5]">
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M1 5h12m0 0L9 1m4 4L9 9"
-                  />
-                </svg>
+                  Unit Price
+                </dt>
+                <dd class="text-base font-medium text-gray-900">
+                  {{
+                    this.productForm.get("unitPrice")?.value | currency: "INR"
+                  }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
+                >
+                  Quantity
+                </dt>
+                <dd class="text-base font-medium text-gray-900 dark:text-white">
+                  {{ this.productForm.get("qty")?.value }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
+                >
+                  Subtotal
+                </dt>
+                <dd class="text-base font-medium text-gray-900 dark:text-white">
+                  {{ subtotal | currency: "INR" }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt
+                  class="text-base font-normal text-gray-500 dark:text-gray-400"
+                >
+                  Tax
+                </dt>
+                <dd class="text-base font-medium text-gray-900 dark:text-white">
+                  {{ tax | currency: "INR" }}
+                </dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4 py-3">
+                <dt class="text-base font-bold text-violet-700 dark:text-white">
+                  Total
+                </dt>
+                <dd class="text-base font-bold text-violet-700 dark:text-white">
+                  {{ total | currency: "INR" }}
+                </dd>
+              </dl>
+            </div>
+            <div class="mt-5 space-y-3">
+              <button
+                (click)="addProductToList(productForm.value)"
+                type="submit"
+                class="btn-rose w-full rounded-lg"
+              >
+                Add Product
               </button>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </div>
+      </form>
+      <section *ngIf="productList.length > 0">
+        <div class="overflow-x-auto border-t border-rose-300 bg-rose-50 p-4">
+          <div class="flex gap-2">
+            <svg
+              class="h-6 w-6 text-rose-600"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"
+              />
+            </svg>
 
-  <div
-    class="animate__animated animate__fadeIn absolute right-4 top-20 justify-center"
-    *ngIf="successToast"
-  >
-    <app-delete-toast></app-delete-toast>
-  </div>
-</section>
+            <h5 class="mb-4 text-xl font-bold text-rose-600">Product List</h5>
+          </div>
 
-<!-- popup element -->
-<div
-  *ngIf="isSuccess"
-  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
->
-  <div class="relative h-full w-full max-w-md p-4 md:h-auto">
-    <!-- Modal content -->
-    <div
-      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
-    >
-      <button
-        (click)="this.isSuccess = false"
-        type="button"
-        class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-        data-modal-toggle="successModal"
-      >
-        <svg
-          aria-hidden="true"
-          class="h-5 w-5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-      <!-- w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 -->
+          <table class="w-full rounded-lg text-left text-sm text-gray-500">
+            <thead class="bg-rose-600 text-xs uppercase text-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="rounded-tl-lg border-purple-500 px-4 py-3"
+                >
+                  S.no
+                </th>
+                <th scope="col" class="px-4 py-3">Product name</th>
+                <th scope="col" class="px-4 py-3">Category</th>
+                <th scope="col" class="px-4 py-3">Unit Price</th>
+                <th scope="col" class="px-4 py-3">Quantity</th>
+                <th scope="col" class="px-4 py-3">Tax</th>
+                <th scope="col" class="px-4 py-3">Total</th>
+                <th
+                  scope="col"
+                  class="rounded-tr-lg border-purple-500 px-4 py-3"
+                >
+                  <span class="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="border-x border-b border-rose-300"
+                *ngFor="let prd of productList; let i = index"
+              >
+                <td class="px-4 py-3 text-xl font-semibold">{{ i + 1 }}</td>
+                <th
+                  scope="row"
+                  class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
+                >
+                  {{ prd.productModel }} - {{ prd.productBrand }} <br />
+                  Head Of Account - {{ prd.headOfAccName }} <br />
+                  <span
+                    class="h-20 text-wrap text-xs font-normal text-gray-500"
+                    >{{ prd.productDesc }}</span
+                  >
+                </th>
+                <td class="px-4 py-3 font-semibold">{{ prd.productCat }}</td>
+                <td class="px-4 py-3 font-semibold">
+                  {{ prd.unitPrice | currency: "INR" }}
+                </td>
+                <td class="px-4 py-3 font-semibold">{{ prd.qty }}</td>
+                <td class="px-4 py-3 font-semibold">
+                  {{ prd.tax | currency: "INR" }}
+                </td>
+                <td class="px-4 py-3 font-semibold">
+                  {{ prd.total | currency: "INR" }}
+                </td>
+                <td class="flex items-center justify-center px-4 py-16">
+                  <button
+                    (click)="deleteProduct(i)"
+                    id="apple-imac-27-dropdown-button"
+                    data-dropdown-toggle="apple-imac-27-dropdown"
+                    class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-800 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
+                    type="button"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="size-6"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="space-y-6 rounded-b-lg border border-rose-300 p-4">
+            <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Order summary
+            </h4>
+
+            <div class="space-y-4">
+              <div class="space-y-2">
+                <dl class="flex items-center justify-between gap-4">
+                  <dt class="text-gray-500 dark:text-gray-400">
+                    Original price
+                  </dt>
+                  <dd
+                    class="text-base font-medium text-gray-900 dark:text-white"
+                  >
+                    {{ subtotalSum | currency: "INR" }}
+                  </dd>
+                </dl>
+
+                <dl class="flex items-center justify-between gap-4">
+                  <dt class="text-gray-500 dark:text-gray-400">Tax</dt>
+                  <dd
+                    class="text-base font-medium text-gray-900 dark:text-white"
+                  >
+                    {{ taxSum | currency: "INR" }}
+                  </dd>
+                </dl>
+              </div>
+
+              <dl
+                class="flex items-center justify-between gap-4 border-t border-rose-300 pt-2 dark:border-gray-700"
+              >
+                <dt class="text-lg font-bold text-gray-900 dark:text-white">
+                  Total
+                </dt>
+                <dd
+                  class="text-end text-lg font-bold text-gray-900 dark:text-white"
+                >
+                  {{ totalSum | currency: "INR" }} /-
+                  <h1
+                    *ngIf="totalSum"
+                    class="text-end text-xs font-semibold capitalize text-rose-700"
+                  >
+                    {{ inwords }}
+                  </h1>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="rounded-b-lg bg-violet-50 pb-4">
+        <div class="flex justify-between border-t bg-[#bd68ee] px-4 py-4">
+          <h1 class="font-bold text-white">Indent Footer</h1>
+        </div>
+        <div class="mt-4 px-4">
+          <h1 class="my-4 font-semibold text-purple-700">Add Funder</h1>
+          <div
+            class="overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
+          >
+            <div
+              class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+            >
+              <div class="w-full md:w-1/2">
+                <form class="flex items-center">
+                  <label for="simple-search" class="sr-only">Search</label>
+                  <div class="w-full">
+                    <app-auto-complete
+                      [suggestions]="funder"
+                      [displayFields]="['funderName']"
+                      (selectionChanged)="onSelectionValue($event, 1)"
+                    ></app-auto-complete>
+                  </div>
+                </form>
+              </div>
+              <div
+                class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
+              >
+                <button
+                  (click)="addFunder()"
+                  type="button"
+                  class="flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                >
+                  <svg
+                    class="mr-2 h-3.5 w-3.5"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      fill-rule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    />
+                  </svg>
+                  Add Funder
+                </button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full rounded-lg text-left text-sm text-gray-500">
+                <thead class="bg-gray-100 text-xs uppercase text-gray-700">
+                  <tr>
+                    <th scope="col" class="px-4 py-3">S.no</th>
+                    <th scope="col" class="px-4 py-3">Funder Code</th>
+                    <th scope="col" class="px-4 py-3">Funder name</th>
+                    <th scope="col" class="px-4 py-3">Catagories</th>
+
+                    <th scope="col" class="px-4 py-3">
+                      <span class="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b dark:border-gray-700"
+                    *ngFor="let f of funderList; let i = index"
+                  >
+                    <td class="px-4 py-3">{{ i + 1 }}</td>
+                    <th
+                      scope="row"
+                      class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                    >
+                      {{ f?.funderCode }}
+                    </th>
+                    <td class="px-4 py-3">{{ f?.funderName }}</td>
+                    <td class="px-4 py-3">{{ f?.funderCatgName }}</td>
+
+                    <td class="flex items-center justify-end px-4 py-3">
+                      <button
+                        (click)="deleteFunder(i)"
+                        id="apple-imac-27-dropdown-button"
+                        data-dropdown-toggle="apple-imac-27-dropdown"
+                        class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-800 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
+                        type="button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          class="size-6"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-16 px-4">
+          <h1 class="my-4 font-semibold text-purple-700">Recommended Vendor</h1>
+          <div
+            class="overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
+          >
+            <div
+              class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+            >
+              <div class="w-full md:w-1/2">
+                <form class="flex items-center">
+                  <label for="simple-search" class="sr-only">Search</label>
+                  <div class="z-50 w-full">
+                    <app-auto-complete
+                      [suggestions]="vendor"
+                      [displayFields]="['vendorName']"
+                      (selectionChanged)="onSelectionValue($event, 2)"
+                    ></app-auto-complete>
+                  </div>
+                </form>
+              </div>
+              <div
+                class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
+              >
+                <button
+                  (click)="addVendor()"
+                  type="button"
+                  class="flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
+                >
+                  <svg
+                    class="mr-2 h-3.5 w-3.5"
+                    fill="currentColor"
+                    viewbox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      clip-rule="evenodd"
+                      fill-rule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                    />
+                  </svg>
+                  Add Vendor
+                </button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full rounded-lg text-left text-sm text-gray-500">
+                <thead class="bg-gray-100 text-xs uppercase text-gray-700">
+                  <tr>
+                    <th scope="col" class="px-4 py-3">S.no</th>
+                    <th scope="col" class="px-4 py-3">Vendor name</th>
+                    <th scope="col" class="px-4 py-3">Contact Person Name</th>
+                    <th scope="col" class="px-4 py-3">Phone</th>
+                    <th scope="col" class="px-4 py-3">Country</th>
+
+                    <th scope="col" class="px-4 py-3">
+                      <span class="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b dark:border-gray-700"
+                    *ngFor="let v of vendorList; let i = index"
+                  >
+                    <td class="px-4 py-3">{{ i + 1 }}</td>
+                    <th
+                      scope="row"
+                      class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                    >
+                      {{ v.vendorName }}
+                    </th>
+                    <td class="px-4 py-3">{{ v.vdrContactPersonName }}</td>
+                    <td class="px-4 py-3">{{ v.vdrContactPersonPhone }}</td>
+
+                    <th
+                      scope="row"
+                      class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                    >
+                      {{ v.vdrCountry }}
+                    </th>
+
+                    <td class="flex items-center justify-end px-4 py-3">
+                      <button
+                        (click)="deleteVendor(i)"
+                        id="apple-imac-27-dropdown-button"
+                        data-dropdown-toggle="apple-imac-27-dropdown"
+                        class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-800 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
+                        type="button"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          class="size-6"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm3 10.5a.75.75 0 0 0 0-1.5H9a.75.75 0 0 0 0 1.5h6Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- final save -->
+
+    <div class="z-10 mx-auto mb-6 w-full">
+      <!-- Start coding here -->
       <div
-        class="mx-auto mb-3.5 flex h-12 w-12 items-center justify-center p-2"
+        class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
       >
-        <!-- <svg aria-hidden="true" class="w-8 h-8 text-green-500 dark:text-green-400" fill="currentColor"
-          viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-            clip-rule="evenodd"></path>
-        </svg> -->
-        <iframe
-          class="w-20"
-          src="https://lottie.host/embed/dc778159-edb6-41d0-89ee-a87bdc8c96e8/XuNkfRRGgm.json"
-        ></iframe>
-
-        <span class="sr-only">Success</span>
+        <div
+          class="flex-row items-center justify-end space-y-3 p-4 sm:flex sm:space-x-4 sm:space-y-0"
+        >
+          <!-- <div>
+            <h5 class="mr-3 font-semibold dark:text-white"></h5>
+            <p class="text-gray-500 dark:text-gray-400">
+              Manage all your existing users or add a new one
+            </p>
+          </div> -->
+          <button
+            (click)="onSubmitIndent()"
+            type="button"
+            class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="-ml-1 mr-2 h-3.5 w-3.5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
+              />
+            </svg>
+            Save
+          </button>
+        </div>
       </div>
-      <p class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-        Request Successfully Created
-      </p>
-
-      <p class="my-4 font-bold text-green-600">
-        Request ID :
-        <span class="my-3 cursor-pointer font-medium text-blue-600 underline">{{
-          _indentId
-        }}</span>
-      </p>
-      <!-- <button (click)="this.isSuccess=false"   type="button" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900">
-              Continue
-          </button> -->
     </div>
   </div>
-</div>
-
-<div
-  *ngIf="isOther"
-  class="fixed top-0 z-50 flex h-full w-full items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+</section>
+<section
+  *ngIf="isTost"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <section>
-    <app-other-product
-      (closeToggle)="closeOtherProduct($event)"
-      (throwOtherProduct)="getOtherProduct($event)"
-    ></app-other-product>
-  </section>
-</div>
+  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+</section>

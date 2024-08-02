@@ -36,39 +36,45 @@ export class ViewRequestComponent implements OnInit {
   }
   approvel() {
     if (this.showID === 2) {
-      this.requstService.branchApprovel(this._requestDetails.sno).subscribe(
-        (res) => {
-          console.log('branch Approvel succes', res);
-        },
-        (error) => {
-          if (error.status === 202) {
-            this.isApproved = true;
-          }
-          if (error.status === 208) {
-            console.error('Approve error: Action already made');
-          }
-        },
-      );
+      this.requstService
+        .branchApprovel(this._requestDetails.indentHeaders.sno)
+        .subscribe(
+          (res) => {
+            console.log('branch Approvel succes', res);
+          },
+          (error) => {
+            if (error.status === 202) {
+              this.isApproved = true;
+            }
+            if (error.status === 208) {
+              console.error('Approve error: Action already made');
+            }
+          },
+        );
     }
     if (this.showID === 3) {
       console.log('admin');
 
-      this.requstService.adminApprovel(this._requestDetails.sno).subscribe(
-        (res) => {
-          console.log('branch Approvel succes', res);
-        },
-        (error) => {
-          if (error.status === 202) {
-            this.isApproved = true;
-          }
-          if (error.status === 208) {
-            console.error('Approve error: Action already made');
-          }
-        },
-      );
+      this.requstService
+        .adminApprovel(this._requestDetails.indentHeaders.sno)
+        .subscribe(
+          (res) => {
+            console.log('branch Approvel succes', res);
+          },
+          (error) => {
+            if (error.status === 202) {
+              this.isApproved = true;
+            }
+            if (error.status === 208) {
+              console.error('Approve error: Action already made');
+            }
+          },
+        );
     }
   }
   rejected(sno: any, data: any) {
+    console.log(sno, data);
+
     if (this.showID === 2) {
       this.requstService.branchReject(sno, data).subscribe(
         (res) => {

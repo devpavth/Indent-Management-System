@@ -9,19 +9,40 @@ import { ProductService } from '../../service/Product/product.service';
   styleUrl: './other-product.component.css',
 })
 export class OtherProductComponent {
+  successData: any;
+  isSuccesPop: boolean = false;
+
   @Output() closeToggle = new EventEmitter<boolean>();
   @Output() throwOtherProduct = new EventEmitter<any>();
   otherProductForm: FormGroup;
   constructor(
     private fb: FormBuilder,
-    private shared: SharedServiceService,
+
     private pService: ProductService,
   ) {
     this.otherProductForm = this.fb.group({
-      configuration: [],
-      purchasedPrice: [],
-      createdBy: [this.shared?.loginUserData?.employeeId],
-      createdOn: new Date(),
+      prdDescription: [],
+      prdPurchasedPrice: [],
     });
+  }
+  onsubmit(data: any) {
+    this.pService.addOtherProduct(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+
+        if (error.status == 200) {
+          this.togglePop(true);
+          this.successData = { show: 2, text: `${error.error.text}` };
+          this.otherProductForm.reset();
+        }
+      },
+    );
+  }
+
+  togglePop(data: any) {
+    this.isSuccesPop = data;
   }
 }

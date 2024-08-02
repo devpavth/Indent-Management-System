@@ -15,18 +15,29 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
 export class ViewProductComponent implements OnInit {
   @Output() closeProduct = new EventEmitter<boolean>();
   @Input() productData: any;
+
+  productId: string = '';
   addingData: any;
   isCloseAdding: boolean = false;
-  isSave = false;
-  isEdit = true;
-  isSaveIcon = true;
-  isDelete = false;
+  isSave: boolean = false;
+  isEdit: boolean = true;
+  isSaveIcon: boolean = true;
+  isDelete: boolean = false;
+
+  isStockView: boolean = false;
   deleteProduct: any;
 
   groupList: any;
   catList: any;
   brandList: any;
   gst: any = [0, 5, 12, 18];
+  units: { id: number; name: string }[] = [
+    { id: 1, name: 'Kg' },
+    { id: 2, name: 'L' },
+    { id: 3, name: 'm' },
+    { id: 4, name: 'Unit' },
+    { id: 200, name: 'Box' },
+  ];
 
   UpdateProductForm: FormGroup;
   constructor(
@@ -55,8 +66,8 @@ export class ViewProductComponent implements OnInit {
       this.UpdateProductForm.get(form)?.disable();
     });
     this.fetchGroupList();
-    this.fetchCatList(this.productData.prdCatgId);
-    this.fetchCatList(this.productData.prdBrndId);
+    this.fetchCatList(this.productData.prdGrpId);
+    this.fetchBrandList(this.productData.prdCatgId);
   }
 
   addingAction(check: number) {
@@ -85,9 +96,6 @@ export class ViewProductComponent implements OnInit {
     this.isSave = true;
     this.isEdit = false;
   }
-  // closeProductView() {
-  //   this.closeProduct.emit(false);
-  // }
 
   fetchGroupList() {
     this.productService.groupList().subscribe((res) => {
@@ -114,12 +122,25 @@ export class ViewProductComponent implements OnInit {
       this.deleteProduct = {
         title: 'Product',
         action: 2,
-        deleteId: this.productData.prouctId,
+        deleteId: this.productData.productId,
       };
       console.log(this.deleteProduct);
     } else if (check == 0) {
       this.isDelete = isView;
       this.closeProduct.emit(false);
     }
+  }
+
+  toggleStockView(check: number, isView: boolean) {
+    if (check == 1) {
+      this.isStockView = isView;
+      this.productId = this.productData.productId;
+      console.log(this.productId);
+    } else if (check == 0) {
+      this.isStockView = isView;
+    }
+  }
+  onUpdateProduct(data: any) {
+    console.log(data);
   }
 }

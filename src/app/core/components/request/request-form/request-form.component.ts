@@ -1,225 +1,447 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
+import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
+import { FunderService } from '../../service/Funder/funder.service';
+import { VendorService } from '../../service/vendor/vendor.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-request-form',
   templateUrl: './request-form.component.html',
-  styleUrl: './request-form.component.css',
+  styleUrls: ['./request-form.component.css'], // Fixed typo from `styleUrl` to `styleUrls`
 })
 export class RequestFormComponent implements OnInit {
-  //pipe declaration
-
-  // UI RequestIdent name declaration
-  _totalPrice: number = 0;
-
-  _rItemList: any[] = []; //used for addinf request items to array
-
-  _productName: any;
-
-  _brandName: any;
-  _model: any;
-  _description: any;
-  _hsn: any;
-  _gst: any;
-  _product: any;
-  _indentId: any;
-  requestProduct: FormGroup;
-  //for visiable content declaration here
-
-  visiable: boolean = false;
-  emptyVisiable: boolean = true;
-  successToast: boolean = false;
-  isSuccess: boolean = false;
-  showRequisitioner: boolean = false;
-  isRequisitioner: boolean = true;
-  isOther: boolean = false;
   isHeader: boolean = true;
   isProductAdd: boolean = false;
+  isTost: boolean = false;
+  isOtherProduct: boolean = false;
+  isEditHeader: boolean = false;
+  isSuccessPop: boolean = false;
 
-  reqName: any;
+  groupList: any;
+  catList: any;
+  brandList: any;
+  modelList: any;
+  desList: any;
+
+  requestIndentHead: FormGroup;
+  productForm: FormGroup;
+  programList: any;
+  headofacc: any;
+  date: Date = new Date();
+  private intervalId: any;
+
+  funder: any;
+  vendor: any | undefined;
+
+  subtotal: number = 0;
+  tax: number = 0;
+  total: number = 0;
+
+  totalSum: number = 0;
+  taxSum: number = 0;
+  subtotalSum: number = 0;
+  inwords: string = '';
+
+  deleteToastMsg: any;
+
+  employeeData: any | undefined;
+
+  headerData: any;
+  productList: any[] = [];
+  selectedFunder: any;
+  seletedVendor: any;
+  funderList: any[] = [];
+  vendorList: any[] = [];
+  productData: any;
+  successData: any;
+
+  @ViewChild('catid', { static: false }) catid: ElementRef<any> | undefined;
+  @ViewChild('id', { static: false }) id: ElementRef<any> | undefined;
+  @ViewChild('brdId', { static: false }) brdId: ElementRef<any> | undefined;
+  @ViewChild('mName', { static: false }) mName: ElementRef<any> | undefined;
+  @ViewChild('des', { static: false }) des?: ElementRef<any> | undefined;
 
   constructor(
-    private readonly ProductService: ProductService,
+    private productService: ProductService,
     private fb: FormBuilder,
     private requestService: RequestService,
+    private empService: EmployeeServiceService,
     private shared: SharedServiceService,
+    private funderService: FunderService,
+    private vendorService: VendorService,
   ) {
-    this.requestProduct = this.fb.group({
-      itemName: [],
-      brandName: [],
-      model: [],
-      qty: [],
-      unitPrice: [],
-      itemPrice: [],
-      hsnCode: [],
+    this.requestIndentHead = this.fb.group({
+      branchCode: [this.employeeData?.branchCode],
+      deptId: [this.employeeData?.empDepartment],
+      programId: [''],
+      campName: [],
 
-      description: [],
+      requiredDate: [],
+      expenditureId: [],
+      requisitioner: [],
+      notes: [],
+    });
+    this.productForm = this.fb.group({
+      headOfAccId: [''],
+      headOfAccName: [''],
+      productId: [],
+      productBrand: [],
+      productCat: [],
+      productDesc: [],
+      productModel: [],
+      qty: [0],
+      unitPrice: [0],
+      gstpercentage: [],
+      status: [200],
     });
   }
 
-  ngOnInit(): void {}
-
-  // RequisitionerFunction(data: any) {
-  //   this.reqName = data;
-  //   this.isRequisitioner = false;
-  //   this.showRequisitioner = true;
-  // }
-
-  // clearReqisition() {
-  //   this.reqName = '';
-  //   this.isRequisitioner = true;
-  //   this.showRequisitioner = false;
-  // }
-
-  addRequestedProductItem(product: any) {
-    if (this._rItemList.length > 0) {
-      this.visiable = true;
-      this.emptyVisiable = false;
-    }
-
-    this.emptyVisiable = false;
-    this.visiable = true;
-
-    let desc = this._product.configuration;
-
-    let pTotal = Number(product.unitPrice) * Number(product.qty);
-
-    let gstTotal = (this._product.gstpercentage / 100) * pTotal;
-    let totalwithtax = gstTotal + pTotal;
-    this._totalPrice += totalwithtax;
-    console.log(gstTotal);
-    console.log(totalwithtax);
-
-    const rItem = {
-      ...product,
-      configration: desc,
-      itemPrice: totalwithtax.toFixed(2),
-      itemcode: this._product.itemcode,
-      productId: this._product.sno,
-      gstpercentage: this._product.gstpercentage,
-      status: 200,
-    };
-    console.log(product);
-
-    const existingProductIndex = this._rItemList.findIndex(
-      (fin: any) => fin.itemName === product.itemName,
-    );
-    console.log(existingProductIndex);
-
-    if (existingProductIndex !== -1) {
-      // Update the existing product's quantity and total price
-      let existingProduct = this._rItemList[existingProductIndex];
-      existingProduct.qty += product.qty;
-      let newTotal =
-        Number(existingProduct.unitPrice) * Number(existingProduct.qty);
-      let newGstTotal = (existingProduct.gstpercentage / 100) * newTotal;
-      let newTotalWithTax = newGstTotal + newTotal;
-      existingProduct.itemPrice = newTotalWithTax.toFixed(2);
-      console.log(existingProduct);
-    } else {
-      this._rItemList.push(rItem);
-    }
-
-    console.log(this._rItemList);
-
-    this.requestProduct.reset();
+  ngOnInit() {
+    this.intervalId = setInterval(() => {
+      this.date = new Date();
+    }, 1000);
+    this.fetchProgram();
+    this.fetchHeadofAcc();
+    this.fetchUser();
+    this.fetchGroupList();
+    this.onChanges();
   }
 
-  // deleterItem(index: number, itemTotalPrice: number) {
-  //   this._rItemList.splice(index, 1);
-  //   this._totalPrice = this._totalPrice - itemTotalPrice;
-  //   this.successToast = true;
+  onChanges(): void {
+    this.productForm.valueChanges.subscribe((val) => {
+      const unitPrice = parseFloat(val.unitPrice) || 0;
+      const qty = parseInt(val.qty) || 0;
+      const gstpercentage = parseFloat(val.gstpercentage) || 0;
+      let gst = this.shared.gstCalculation(qty, unitPrice, gstpercentage);
 
-  //   setTimeout(() => {
-  //     this.successToast = false;
-  //   }, 900);
+      this.subtotal = unitPrice * qty;
+      this.tax = gst.gstAmt;
+      this.total = gst.itemPrice;
+    });
+  }
 
-  //   if (this._rItemList.length == 0) {
-  //     this.visiable = false;
-  //     this.emptyVisiable = true;
-  //   }
-  // }
-  deleterItem(index: number) {
-    // Get the item to be deleted
-    const item = this._rItemList[index];
+  fetchUser() {
+    this.empService
+      .getEmployeeDetails(sessionStorage.getItem('userId'))
+      .subscribe((res: any) => {
+        this.employeeData = res;
+        console.log('j', res);
+        this.requestIndentHead.patchValue({
+          deptId: this.employeeData.empDepartment,
+          branchCode: this.employeeData.branchCode,
+        });
+        this.fetchVendor();
+        this.fetchFunder1();
+      });
+  }
+  fetchProgram() {
+    this.requestService.getProgramList().subscribe((res: any) => {
+      console.log(res);
+      this.programList = Object.entries(res).map(([id, value]) => ({
+        id,
+        value,
+      }));
 
-    // Subtract the item's price from the total price
-    const itemTotalPrice = Number(item.itemPrice);
-    this._totalPrice -= itemTotalPrice;
+      console.log(this.programList);
+    });
+  }
 
-    // Remove the item from the list
-    this._rItemList.splice(index, 1);
+  fetchHeadofAcc() {
+    this.productService.getHeadofAccList().subscribe((res) => {
+      console.log(res);
+      this.headofacc = Object.entries(res).map(([id, value]) => ({
+        id,
+        value,
+      }));
+    });
+  }
 
-    this.successToast = true;
+  fetchGroupList() {
+    this.desList = '';
+    this.productService.groupList().subscribe((res) => {
+      this.groupList = res;
 
+      console.log(res);
+    });
+  }
+
+  fetchCatList(Id: any) {
+    this.productService.catagoriesList(Id).subscribe((res) => {
+      this.catList = res;
+      this.brandList = [];
+      this.modelList = [];
+      this.desList = [];
+      console.log(res);
+    });
+  }
+
+  fetchBrandList(catId: any) {
+    this.productService.brandList(catId).subscribe((res) => {
+      this.brandList = res;
+      this.modelList = [];
+      this.desList = [];
+      console.log(res);
+    });
+  }
+  fetchModelList(brdId: any) {
+    this.productService.getModelList(brdId).subscribe((res) => {
+      console.log(res);
+      this.modelList = res;
+      this.desList = [];
+    });
+  }
+  fetchProductDetails(brdId: any, modelName: any) {
+    this.productService.getProductDes(brdId, modelName).subscribe((res) => {
+      console.log(res);
+      this.desList = res;
+    });
+  }
+
+  fetchFunder1() {
+    this.funderService
+      .branchFunder(this.employeeData?.branchId)
+      .subscribe((res: any) => {
+        console.log('Branch Funder', res);
+        this.funder = res;
+      });
+  }
+  fetchVendor() {
+    this.vendorService.getAllVendor().subscribe((res: any) => {
+      let vendorList: any[] = res;
+
+      this.vendor = vendorList.filter(
+        (f) => f.branchId == this.employeeData?.branchId,
+      );
+      console.log(res, this.vendor);
+    });
+  }
+
+  onSubmitHeader(data: any) {
+    this.isEditHeader = true;
+    Object.keys(this.requestIndentHead.controls).forEach((f) => {
+      this.requestIndentHead.get(f)?.disable();
+    });
+    this.deleteToastMsg = 'Header Added Successfully';
+    this.isTost = true;
     setTimeout(() => {
-      this.successToast = false;
-    }, 900);
-
-    if (this._rItemList.length == 0) {
-      this.visiable = false;
-      this.emptyVisiable = true;
-    }
+      this.isTost = false;
+    }, 3000);
+    this.headerData = data;
+    console.log(data);
   }
 
-  postRequestDetails() {
-    let date = new Date();
-    console.log(date);
+  onEditHeader() {
+    this.isEditHeader = false;
+    Object.keys(this.requestIndentHead.controls).forEach((f) => {
+      this.requestIndentHead.get(f)?.enable();
+    });
+  }
 
-    let requestList = {
-      requisitioner: this.reqName,
-      branchCode: this.shared.loginUserData.branchCode,
-      empId: this.shared.loginUserData.employeeId,
-      deptId: this.shared.loginUserData.empDepartment,
-      createdOn: date,
-      totalPrice: this._totalPrice.toFixed(2),
-      productDetails: this._rItemList,
+  patchProductData(id: any) {
+    let prdList: any[] = this.desList;
+    let product = prdList.find((f) => f.productId == id);
+    console.log('find', product);
+    this.productForm.patchValue({
+      productId: product.productId,
+      qty: 1,
+      productBrand: product.prdbrndName,
+      productDesc: product.prdDescription,
+      productCat: product.prdcatgName,
+      productModel: product.prdmdlName,
+      unitPrice: product.prdPurchasedPrice,
+      gstpercentage: product.prdGstPct,
+      headOfAccId: product.headOfAccId,
+      headOfAccName: product.headOfAccName,
+    });
+  }
+
+  addProductToList(product: any) {
+    this.deleteToastMsg = 'Item Added';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
+
+    const existingIndex = this.productList.findIndex(
+      (p) => p.productId === product.productId,
+    );
+
+    if (existingIndex !== -1) {
+      this.productList[existingIndex].qty += product.qty;
+      this.productList[existingIndex].subtotal += this.subtotal;
+      this.productList[existingIndex].tax += this.tax;
+      this.productList[existingIndex].total += this.total;
+    } else {
+      let list = {
+        ...product,
+        subtotal: this.subtotal,
+        tax: this.tax,
+
+        total: this.total,
+      };
+      this.productList.push(list);
+    }
+    console.log(this.productList);
+    this.productData = '';
+    this.calculateSums();
+    this.productReset();
+  }
+
+  calculateSums() {
+    this.totalSum = this.productList.reduce(
+      (sum, product) => sum + product.total,
+      0,
+    );
+    this.taxSum = this.productList.reduce(
+      (sum, product) => sum + product.tax,
+      0,
+    );
+    this.subtotalSum = this.productList.reduce(
+      (sum, product) => sum + product.subtotal,
+      0,
+    );
+    this.inwords = this.shared.inWords(this.totalSum);
+  }
+
+  productReset() {
+    this.productForm.reset();
+    this.catid?.nativeElement && (this.catid.nativeElement.value = '');
+    this.id?.nativeElement && (this.id.nativeElement.value = '');
+    this.brdId?.nativeElement && (this.brdId.nativeElement.value = '');
+    this.mName?.nativeElement && (this.mName.nativeElement.value = '');
+    this.des?.nativeElement && (this.des.nativeElement.value = '');
+  }
+
+  deleteProduct(i: any) {
+    this.productList.splice(i, 1);
+    this.deleteToastMsg = 'Item Deleted';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000); // Hide the toast after 3 seconds
+    this.calculateSums();
+  }
+  deleteFunder(i: any) {
+    this.funderList?.splice(i, 1);
+    this.deleteToastMsg = 'Funder Deleted';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
+  }
+  deleteVendor(i: any) {
+    this.vendorList?.splice(i, 1);
+    this.deleteToastMsg = 'Vendor Deleted';
+    this.isTost = true;
+    setTimeout(() => {
+      this.isTost = false;
+    }, 3000);
+  }
+
+  onSelectionValue(selectedValue: any, check: number) {
+    if (check === 1) {
+      this.selectedFunder = selectedValue;
+      console.log('selected', selectedValue);
+    } else if (check === 2) {
+      this.seletedVendor = selectedValue;
+      console.log('selected', selectedValue);
+    }
+  }
+  addFunder() {
+    const { funderId, funderCode, funderName, fundDetails, funderCatgName } =
+      this.selectedFunder;
+    let fd: any[] = fundDetails;
+    let branch = fd?.filter((f) => f?.branchId == this.employeeData?.branchId);
+    console.log('branch', branch);
+    const funder = {
+      funderId,
+      funderCode,
+      funderCatgName,
+      funderName,
     };
-    console.log(this.shared);
+    this.funderList.push(funder);
 
-    console.log(requestList);
+    console.log('list is ok', this.funderList);
+  }
+  addVendor() {
+    const {
+      vendorId,
+      vendorName,
+      vdrCountry,
+      vdrContactPersonName,
+      vdrContactPersonPhone,
+      vendorAcccountDetails,
+    } = this.seletedVendor;
+    const vd: any[] = vendorAcccountDetails;
 
-    this.requestService.postRequestIndent(requestList).subscribe(
+    const vendor = {
+      vendorId,
+      vendorName,
+      vdrCountry,
+      vdrContactPersonName,
+      vdrContactPersonPhone,
+      ...vendorAcccountDetails[0],
+    };
+    console.log(vendor);
+    this.vendorList.push(vendor);
+  }
+  onSubmitIndent() {
+    let indent = {
+      ...this.headerData,
+      totalPrice: this.totalSum,
+      productDetails: this.productList,
+      assgndVendors: this.vendorList,
+      assignedDonors: this.funderList,
+    };
+    console.log(indent);
+    this.requestService.postIndent(indent).subscribe(
       (res) => {
         console.log(res);
       },
       (error) => {
+        console.log(error);
+
         if (error.status == 200) {
-          this._rItemList = [];
-          this._totalPrice = 0;
-          this._indentId = error.error.text;
-          this.isSuccess = true;
-          this.visiable = false;
-          this.emptyVisiable = true;
-          this.reqName = '';
-          this.isRequisitioner = true;
-          this.showRequisitioner = false;
-        }
-        if (error.status == 403) {
-          console.log(error.error);
+          this.productForm.reset();
+          this.requestIndentHead.reset();
+          this.productList = [];
+          this.vendorList = [];
+          this.togglePop(true);
+          console.log(error.error.text);
+
+          this.successData = { show: 3, text: `${error.error.text}` };
         }
       },
     );
   }
-  closeOtherProduct(data: any) {
-    this.isOther = data;
+  serchByCode(code: string) {
+    console.log(code);
+
+    this.productService.getProductByCode(code).subscribe((product: any) => {
+      console.log(product);
+      this.productData = product;
+      this.productForm.patchValue({
+        productId: product.productId,
+        qty: 1,
+        productBrand: product.prdbrndName,
+        productDesc: product.prdDescription,
+        productCat: product.prdcatgName,
+        productModel: product.prdmdlName,
+        unitPrice: product.prdPurchasedPrice,
+        gstpercentage: product.prdGstPct,
+        headOfAccId: product.headOfAccId,
+        headOfAccName: product.headOfAccName,
+      });
+    });
   }
-
-  getOtherProduct(data: any) {
-    console.log(data);
-    this._product.configuration = data.configuration;
-    console.log(this._product.configuration);
-
-    this._rItemList.push(data);
-    if (this._rItemList.length > 0) {
-      this.visiable = true;
-      this.emptyVisiable = false;
-    }
-
-    this.emptyVisiable = false;
-    this.visiable = true;
+  togglePop(data: boolean) {
+    this.isSuccessPop = data;
+  }
+  toggleProduct(data: boolean) {
+    this.isOtherProduct = data;
   }
 }

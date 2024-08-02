@@ -16,6 +16,12 @@ import { VendorListComponent } from './vendor/vendor-list/vendor-list.component'
 import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
 import { FunderListComponent } from './Funder/funder-list/funder-list.component';
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
+import { StockComponent } from './Products/stock/stock.component';
+import { TProductComponent } from './Transaction/t-product/t-product.component';
+import { RStockComponent } from './report/r-stock/r-stock.component';
+import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
+import { ViewListComponent } from './Branch/view-list/view-list.component';
+import { AddListComponent } from './Branch/add-list/add-list.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -32,6 +38,12 @@ const routes: Routes = [
   { component: AddFunderComponent, path: 'addFunder' },
   { component: FunderListComponent, path: 'funderList' },
   { component: ViewFunderComponent, path: 'viewFunder' },
+  { component: StockComponent, path: 'inoutstock' },
+  { component: TProductComponent, path: 'pTransaction' },
+  { component: RStockComponent, path: 'stockReport' },
+  { component: HeadOfAccComponent, path: 'headOfAcc' },
+  { component: ViewListComponent, path: 'viewList/:id' },
+  { component: AddListComponent, path: 'addList/:id' },
 ];
 
 @NgModule({

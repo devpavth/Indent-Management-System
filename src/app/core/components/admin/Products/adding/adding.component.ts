@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
+import { RequestService } from '../../../service/Request/request.service';
 
 @Component({
   selector: 'app-adding',
@@ -13,13 +14,14 @@ export class AddingComponent implements OnInit {
 
   groupList: any;
   catList: any;
-
+  headofacc: any;
   GroupForm: FormGroup;
   CatForm: FormGroup;
   BrandForm: FormGroup;
   ngOnInit() {
     console.log(this.addData);
     this.fetchGroupList();
+    this.fetchHeadofAcc();
   }
 
   constructor(
@@ -27,8 +29,8 @@ export class AddingComponent implements OnInit {
     private productService: ProductService,
   ) {
     this.GroupForm = this.fb.group({
-      prdgrpName: [],
-      prdgrpStatus: [200],
+      headOfAccId: [],
+      productGroups: this.fb.array([this.groupConrtols()]),
     });
 
     this.CatForm = this.fb.group({
@@ -43,6 +45,19 @@ export class AddingComponent implements OnInit {
       prdbrndStatus: [200],
     });
   }
+  groupConrtols() {
+    return this.fb.group({
+      prdgrpName: [''],
+      prdgrpStatus: [200],
+    });
+  }
+  get groupData() {
+    return this.GroupForm.get('productGroups') as FormArray;
+  }
+  pushGroup() {
+    this.groupData.push(this.groupConrtols());
+  }
+
   fetchGroupList() {
     this.productService.groupList().subscribe((res) => {
       this.groupList = res;
@@ -55,24 +70,51 @@ export class AddingComponent implements OnInit {
       console.log(res);
     });
   }
+  fetchHeadofAcc() {
+    this.productService.getHeadofAccList().subscribe((res) => {
+      console.log(res);
+      this.headofacc = res;
+    });
+  }
 
   submitGroup(data: any) {
     console.log(data);
 
-    this.productService.addGroup(data).subscribe((res) => {
-      console.log(res);
-    });
+    this.productService.addGroup(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.close.emit(false);
+        }
+      },
+    );
   }
   onSubmitCat(data: any) {
     console.log(data);
 
-    this.productService.addCat(data).subscribe((res) => {
-      console.log(res);
-    });
+    this.productService.addCat(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.close.emit(false);
+        }
+      },
+    );
   }
   onSubmitBrand(data: any) {
-    this.productService.addBrand(data).subscribe((res) => {
-      console.log(res);
-    });
+    this.productService.addBrand(data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        if (error.status == 200) {
+          this.close.emit(false);
+        }
+      },
+    );
   }
 }

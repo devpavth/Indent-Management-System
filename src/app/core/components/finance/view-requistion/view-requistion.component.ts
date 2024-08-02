@@ -12,6 +12,7 @@ import {
   signal,
 } from '@angular/core';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
+import { FunderService } from '../../service/Funder/funder.service';
 
 @Component({
   selector: 'app-view-requistion',
@@ -55,7 +56,7 @@ export class ViewRequistionComponent implements OnInit {
 
   constructor(
     private requestService: RequestService,
-
+    private donorService: FunderService,
     private shared: SharedServiceService,
     private fb: FormBuilder,
     private loc: Location,
@@ -68,7 +69,7 @@ export class ViewRequistionComponent implements OnInit {
 
   ngOnInit() {
     this.fetchDetails(this.reqId);
-    // this.fetchDonorList(1);
+    this.fetchDonorList(1);
     this.fetchReason();
   }
 
@@ -82,48 +83,46 @@ export class ViewRequistionComponent implements OnInit {
     const url = this.loc.prepareExternalUrl('/home/addDonar');
     window.open(url, '_blank');
   }
-  // fetchDonorList(data: any) {
-  //   this.donorService.getAllDonor().subscribe((res) => {
-  //     this.dList = res;
-  //     this.cList = this.dList;
-  //     // this.donorList = res;
-  //     console.log(res);
-  //   });
-  //   if (data == 1) {
-  //     this.donorList = this.cList;
-  //     this.filteredDonors = this.donorList;
-  //     console.log(this.donorList);
-  //   } else if (data == 2) {
-  //     this.donorList = this.cList.filter(
-  //       (fin) => fin.dcategoryStatus == 'Local Donor',
-  //     );
-  //     this.filteredDonors = this.donorList;
-  //     console.log(this.donorList);
-  //   } else if (data == 3) {
-  //     this.donorList = this.cList.filter(
-  //       (fin) => fin.dcategoryStatus == 'International Donor',
-  //     );
-  //     this.filteredDonors = this.donorList;
-  //     console.log(this.donorList);
-  //   } else if (data == 4) {
-  //     this.donorList = this.cList.filter(
-  //       (fin) => fin.dcategoryStatus == 'Existing Donor',
-  //     );
-  //     this.filteredDonors = this.donorList;
-  //     console.log(this.donorList);
-  //   }
-  // }
+  fetchDonorList(data: any) {
+    this.donorService.funderList().subscribe((res) => {
+      this.dList = res;
+      this.cList = this.dList;
+      // this.donorList = res;
+      console.log(res);
+    });
+    if (data == 1) {
+      this.donorList = this.cList;
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 2) {
+      this.donorList = this.cList.filter(
+        (fin) => fin.funderCatgName == 'Local',
+      );
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 3) {
+      this.donorList = this.cList.filter((fin) => fin.funderCatgName == 'FCRA');
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    } else if (data == 4) {
+      this.donorList = this.cList.filter(
+        (fin) => fin.funderCatgName == 'Donor',
+      );
+      this.filteredDonors = this.donorList;
+      console.log(this.donorList);
+    }
+  }
 
   onInput(event: Event): void {
     const input = (event.target as HTMLInputElement).value.toLowerCase();
     this.filteredDonors = this.donorList.filter((donor: any) =>
-      `${donor.dfirstName} ${donor.dlastName}`.toLowerCase().includes(input),
+      `${donor.funderName}`.toLowerCase().includes(input),
     );
     this.showDropdown = true;
   }
 
   selectDonor(donor: any): void {
-    this.selectedDonorName = `${donor.dfirstName} ${donor.dlastName}`;
+    this.selectedDonorName = `${donor.funderName} `;
     this.form.controls['donorId'].setValue(this.selectedDonorName); // Update this line to set the name
     this.invalidDonor = false;
     this.showDropdown = false;
@@ -179,10 +178,13 @@ export class ViewRequistionComponent implements OnInit {
   //     this.selectedDonorName = '';
   //   }
   // }
+  calculateDonorTotal(donors: any[]): number {
+    return donors.reduce((total, donor) => total + donor.donotedAmt, 0);
+  }
   onSubmit(): void {
-    const donorName = this.selectedDonorName; // Change this line to use selectedDonorName
+    const donorName = this.selectedDonorName; // Use selectedDonorName
     const selectedDonor = this.donorList.find(
-      (donor: any) => `${donor.dfirstName} ${donor.dlastName}` === donorName,
+      (donor: any) => `${donor.funderName} ` === donorName,
     );
 
     if (!selectedDonor) {
@@ -191,26 +193,24 @@ export class ViewRequistionComponent implements OnInit {
       this.invalidDonor = false;
 
       const existingDonorIndex = this.assignedDonors.findIndex(
-        (donor: any) => donor.donorId === selectedDonor.donorId,
+        (donor: any) => donor.funderId === selectedDonor.funderId,
       );
 
       const donotedAmt = Number(this.form.value.donotedAmt); // Ensure donotedAmt is a number
 
       if (existingDonorIndex !== -1) {
         this.assignedDonors[existingDonorIndex].donotedAmt += donotedAmt;
-        this.donorTotal += donotedAmt;
       } else {
         let list = {
           ...this.form.value,
           donotedAmt: donotedAmt, // Ensure donotedAmt is a number
-          donorId: selectedDonor.donorId,
-          dfirstName: selectedDonor.dfirstName,
-          dlastName: selectedDonor.dlastName,
+          funderId: selectedDonor.funderId,
+          funderName: selectedDonor.funderName,
         };
         this.assignedDonors.push(list);
-
-        this.donorTotal += donotedAmt;
       }
+
+      this.donorTotal = this.calculateDonorTotal(this.assignedDonors);
 
       console.log(this.donorTotal);
       console.log('Form submitted', this.assignedDonors);
@@ -221,7 +221,7 @@ export class ViewRequistionComponent implements OnInit {
 
   deleteDonor(data: any) {
     this.assignedDonors.splice(0, 1);
-    this.donorTotal -= data;
+    this.donorTotal = this.calculateDonorTotal(this.assignedDonors);
   }
 
   closeEdite(data: boolean) {
@@ -244,8 +244,8 @@ export class ViewRequistionComponent implements OnInit {
     let finalList = {
       finApprAmount: this.approvelAmt,
       assignedDonors: this.assignedDonors.map((fin) => ({
-        donorId: fin.donorId,
-        donotedAmt: fin.donotedAmt,
+        funderId: fin.funderId,
+        contribAmt: fin.donotedAmt,
       })),
     };
     this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
@@ -253,6 +253,8 @@ export class ViewRequistionComponent implements OnInit {
         console.log(res);
       },
       (error) => {
+        console.error(error);
+
         if (error.status) {
           alert('Successfully Registered');
         }
@@ -293,7 +295,7 @@ export class ViewRequistionComponent implements OnInit {
     }
   }
   calculateDate() {
-    const check = new Date(this._requestDetails().createdOn);
+    const check = new Date(this._requestDetails().indentHeaders.requiredDate);
     let date = check.getTime() / 1000;
     console.log(date);
 
