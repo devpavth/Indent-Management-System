@@ -21,6 +21,7 @@ import { BranchService } from '../../../service/Branch/branch.service';
 })
 export class AddEmployeeComponent implements OnInit {
   maxDate: string;
+  designation: any;
   constructor(
     private readonly empService: EmployeeServiceService,
     private readonly http: HttpClient,
@@ -32,6 +33,7 @@ export class AddEmployeeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.fetchAllBranch();
+    this.fetchDesignation();
   }
 
   fetchAllBranch() {
@@ -48,15 +50,8 @@ export class AddEmployeeComponent implements OnInit {
   //select option arrays
   _gender: any = ['Male', 'Female', 'Non-Binary'];
   _role: any = ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5'];
-  _designation: any = [
-    'Admin',
-    'Branch Manager',
-    'Sales ',
-    'Finance',
-    'Human Resource',
-  ];
+
   _branch: any;
-  _department: any;
 
   isSuccess = false;
   isVerifiedEmail = false;
@@ -102,8 +97,8 @@ export class AddEmployeeComponent implements OnInit {
     country: new FormControl('', [Validators.required]),
     empRole: new FormControl('', [Validators.required]),
     empBranch: new FormControl('', [Validators.required]),
-    empDepartment: new FormControl('', [Validators.required]),
-    empDesignation: new FormControl('', [Validators.required]),
+
+    empDesig: new FormControl('', [Validators.required]),
     empJoiningDate: new FormControl('', [Validators.required]),
     empFlag: new FormControl('Authorized'),
   });
@@ -210,6 +205,37 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
+  fetchDesignation() {
+    this.empService.getDesignation().subscribe((res: any) => {
+      console.log(res);
+      let check = this.addEmployeeForm.get('empRole')?.value;
+      if (check == 'Level 1') {
+        this.designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 1')
+          .map((key) => ({ index: key, name: res[key][0] }));
+        console.log(this.designation);
+      } else if (check == 'Level 2') {
+        this.designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 2')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 3') {
+        this.designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 3')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 4') {
+        this.designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 4')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 5') {
+        this.designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 5')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else {
+        this.designation = [{ index: 0, name: 'Not Data' }];
+      }
+    });
+  }
+
   verifyEmailId(data: any) {
     this.empService.verifyEmail(data).subscribe(
       (res) => {
@@ -241,19 +267,6 @@ export class AddEmployeeComponent implements OnInit {
     );
   }
 
-  viewAddDepartment(data: any) {
-    this.isDepartment = !this.isDepartment;
-    this.department(data);
-  }
-
-  department(data: any) {
-    this.branchService.getBranchDepartment(data).subscribe((res) => {
-      console.log(res);
-
-      this._department = res;
-    });
-  }
-
   addBranchDepartment(branch: any, department: any) {
     console.log(department);
     let list = [{ deptName: department, deptStatus: 200 }];
@@ -266,7 +279,6 @@ export class AddEmployeeComponent implements OnInit {
       (error) => {
         if (error.status == 200) {
           this.isDepartment = !this.isDepartment;
-          this.department(branch);
         }
       },
     );

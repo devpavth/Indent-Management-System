@@ -18,25 +18,28 @@ export class ViewListComponent {
   headOfAccList: any[] = [];
 
   activeId: any;
+  isDelete: boolean = false;
+  isUpdate: boolean = false;
+  deleteItem: { title: string; action: number; deleteId: any } = {
+    title: '',
+    action: 0,
+    deleteId: undefined,
+  };
 
-  headOfAccForm: FormGroup;
+  updateId: any;
   constructor(
     private productService: ProductService,
     private fb: FormBuilder,
     private activeLinkId: ActivatedRoute,
     private branchService: BranchService,
-  ) {
-    this.headOfAccForm = this.fb.group({
-      headOfAccName: [],
-    });
-  }
+  ) {}
   ngOnInit() {
     this.activeId = this.activeLinkId.snapshot.paramMap.get('id');
     console.log(this.activeId);
-    this.fetchHeadOfAcc();
+    this.fetchDepartNProj();
   }
 
-  fetchHeadOfAcc() {
+  fetchDepartNProj() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     if (this.activeId == 1) {
@@ -58,7 +61,7 @@ export class ViewListComponent {
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;
-    this.fetchHeadOfAcc();
+    this.fetchDepartNProj();
   }
   getSerialNumber(index: number): number {
     return (this.currentPage - 1) * this.itemsPerPage + index + 1;
@@ -70,19 +73,32 @@ export class ViewListComponent {
     return Math.min(this.currentPage * this.itemsPerPage, this.listLength);
   }
 
-  onSubmit(accData: string) {
-    this.productService.addHeadOfAcc(accData).subscribe(
-      (res: any) => {
-        console.log(res);
-      },
-      (error) => {
-        console.log(error);
+  toggledelete(check: any, isView: boolean, Id: any) {
+    if (check == 1) {
+      this.isDelete = isView;
+      this.deleteItem = {
+        title: 'Department',
+        action: 4,
+        deleteId: Id,
+      };
+      console.log(this.deleteItem);
+    } else if (check == 2) {
+      this.isDelete = isView;
+      this.deleteItem = {
+        title: 'Project/Program',
+        action: 5,
+        deleteId: Id,
+      };
+      console.log(this.deleteItem);
+    } else if (check == 0) {
+      this.isDelete = isView;
+      this.fetchDepartNProj();
+    }
+  }
 
-        if (error.status == 200) {
-          this.fetchHeadOfAcc();
-          this.headOfAccForm.reset();
-        }
-      },
-    );
+  update(id: any, isUpdate: boolean) {
+    console.log(id);
+    this.updateId = id;
+    this.isUpdate = isUpdate;
   }
 }

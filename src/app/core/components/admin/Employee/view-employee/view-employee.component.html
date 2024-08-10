@@ -498,7 +498,6 @@
                 #branch
                 class="input-form"
                 formControlName="empBranch"
-                (change)="fetchDepartemnt(branch.value)"
                 [ngClass]="{
                   error:
                     viewEmployeeForm.get('empBranch')?.invalid &&
@@ -526,64 +525,31 @@
 
             <div>
               <label
-                for="Department"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Department</label
-              >
-              <select
-                class="input-form"
-                formControlName="empDepartment"
-                [ngClass]="{
-                  error:
-                    viewEmployeeForm.get('empDepartment')?.invalid &&
-                    viewEmployeeForm.get('empDepartment')?.touched
-                }"
-              >
-                <option null selected disabled>Choose Department</option>
-                <option
-                  *ngFor="let Department of _department"
-                  value="{{ Department.deptId }}"
-                >
-                  {{ Department.deptName }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  viewEmployeeForm?.get('empDepartment')?.invalid &&
-                  viewEmployeeForm?.get('empDepartment')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Department should not be null!
-              </small>
-            </div>
-            <div>
-              <label
                 for="Designation"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Designation</label
               >
               <select
                 class="input-form"
-                formControlName="empDesignation"
+                formControlName="empDesig"
                 [ngClass]="{
                   error:
-                    viewEmployeeForm.get('empDesignation')?.invalid &&
-                    viewEmployeeForm.get('empDesignation')?.touched
+                    viewEmployeeForm.get('empDesig')?.invalid &&
+                    viewEmployeeForm.get('empDesig')?.touched
                 }"
               >
                 <option null selected disabled>Choose Designation</option>
                 <option
                   *ngFor="let designation of _designation"
-                  value="{{ designation }}"
+                  value="{{ designation.index }}"
                 >
-                  {{ designation }}
+                  {{ designation.name }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  viewEmployeeForm?.get('empDesignation')?.invalid &&
-                  viewEmployeeForm?.get('empDesignation')?.touched
+                  viewEmployeeForm?.get('empDesig')?.invalid &&
+                  viewEmployeeForm?.get('empDesig')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -639,7 +605,7 @@
               </small>
             </div>
           </div>
-          <div class="flex gap-4">
+          <div class="flex justify-end gap-4">
             <div *ngIf="isEdit">
               <button
                 type="submit"

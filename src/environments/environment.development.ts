@@ -1,6 +1,4 @@
-
-let Url = 'http://192.168.1.32:9010/';
-let Url1 = 'http://192.168.1.32:9010/';
+let Url = 'http://192.168.1.17:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -25,7 +23,7 @@ export const environment = {
   deleteEmployee: Url + bassEmployeeApi + '/deleteemployee',
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
-
+  getDesignation: Url + bassEmployeeApi + '/empDesignation',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',
@@ -57,6 +55,11 @@ export const environment = {
   getProjOrProg: Url + baseBranchApi + '/getallprg',
 
   //departmentd
+  addNewDepartment: Url + baseBranchApi + '/adddepartment',
+  addNewProject: Url + baseBranchApi + '/addprogram',
+  deletProj: Url + baseBranchApi + '/deleteprogram/',
+  updateDepartment: Url + baseBranchApi + '/getdeptidname/',
+  deleteDepart: Url + baseBranchApi + '/deletedept/',
 
   //requestIndent
   programlist: Url + baseRequestApi + '/getallprogram',
@@ -92,13 +95,13 @@ export const environment = {
 
   // vendor End Point Api
 
-  addVendor: Url1 + baseVendorApi + '/addnewvendor',
-  getAllVendorList: Url1 + baseVendorApi + '/getactivevendors',
-  deleteVendor: Url1 + baseVendorApi + '/deletebyvendorid/',
-  updateVendor: Url1 + baseVendorApi + '/updatevendor/',
-  getVendorName: Url1 + baseVendorApi + '/getactivevendors',
-  updateAccount: Url1 + baseVendorApi + '/updateBankDetails/',
-  deleteAccount: Url1 + baseVendorApi + '/deletebank/',
+  addVendor: Url + baseVendorApi + '/addnewvendor',
+  getAllVendorList: Url + baseVendorApi + '/getactivevendors',
+  deleteVendor: Url + baseVendorApi + '/deletebyvendorid/',
+  updateVendor: Url + baseVendorApi + '/updatevendor/',
+  getVendorName: Url + baseVendorApi + '/getactivevendors',
+  updateAccount: Url + baseVendorApi + '/updateBankDetails/',
+  deleteAccount: Url + baseVendorApi + '/deletebank/',
 
   //Funder api
   addFunder: Url + baseFunderApi + '/addnewfunder',

@@ -22,6 +22,7 @@ import { RStockComponent } from './report/r-stock/r-stock.component';
 import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
 import { ViewListComponent } from './Branch/view-list/view-list.component';
 import { AddListComponent } from './Branch/add-list/add-list.component';
+import { EditListComponent } from './Branch/edit-list/edit-list.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -44,6 +45,7 @@ const routes: Routes = [
   { component: HeadOfAccComponent, path: 'headOfAcc' },
   { component: ViewListComponent, path: 'viewList/:id' },
   { component: AddListComponent, path: 'addList/:id' },
+  { component: EditListComponent, path: 'editList/:id' },
 ];
 
 @NgModule({

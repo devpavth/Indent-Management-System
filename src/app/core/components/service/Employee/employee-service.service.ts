@@ -53,4 +53,8 @@ export class EmployeeServiceService {
     phoneParams = phoneParams.append('empPhone', phone);
     return this.http.get(environment.verifyPhoneNo, { params: phoneParams });
   }
+
+  getDesignation() {
+    return this.http.get(environment.getDesignation);
+  }
 }
