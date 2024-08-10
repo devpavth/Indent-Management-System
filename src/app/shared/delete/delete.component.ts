@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FunderService } from '../../core/components/service/Funder/funder.service';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { VendorService } from '../../core/components/service/vendor/vendor.service';
+import { BranchService } from '../../core/components/service/Branch/branch.service';
 
 @Component({
   selector: 'app-delete',
@@ -16,6 +17,7 @@ export class DeleteComponent {
     private funderService: FunderService,
     private productService: ProductService,
     private vendorService: VendorService,
+    private branchService: BranchService,
   ) {}
 
   deleteFunction() {
@@ -54,6 +56,39 @@ export class DeleteComponent {
           console.log(res);
         },
         (error) => {
+          if (error.status == 200) {
+            this.close.emit(false);
+          }
+        },
+      );
+    }
+
+    ///action 4
+    if (this.deleteData.action == 4) {
+      console.log(this.deleteData);
+      this.branchService.deleteDepartment(this.deleteData.deleteId).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          console.log(error);
+
+          if (error.status == 200) {
+            this.close.emit(false);
+          }
+        },
+      );
+    }
+
+    if (this.deleteData.action == 5) {
+      console.log(this.deleteData);
+      this.branchService.deleteProj(this.deleteData.deleteId).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (error) => {
+          console.log(error);
+
           if (error.status == 200) {
             this.close.emit(false);
           }

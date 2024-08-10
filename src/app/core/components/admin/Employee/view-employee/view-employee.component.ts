@@ -28,13 +28,7 @@ export class ViewEmployeeComponent implements OnInit {
   //select option arrays
   _gender: any = ['Male', 'Female', 'Non-Binary'];
   _role: any = ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5'];
-  _designation: any = [
-    'Admin',
-    'Branch Manager',
-    'Sales ',
-    'Finance',
-    'Human Resource',
-  ];
+  _designation: any;
   _branch: any;
   _department: any;
   viewEmployeeForm: any;
@@ -107,13 +101,10 @@ export class ViewEmployeeComponent implements OnInit {
           empBranch: new FormControl(this._employeeDetails.empBranch, [
             Validators.required,
           ]),
-          empDepartment: new FormControl(this._employeeDetails.empDepartment, [
+
+          empDesig: new FormControl(this._employeeDetails.empDesig, [
             Validators.required,
           ]),
-          empDesignation: new FormControl(
-            this._employeeDetails.empDesignation,
-            [Validators.required],
-          ),
           empFlag: new FormControl(this._employeeDetails.empFlag.toString(), [
             Validators.required,
           ]),
@@ -137,25 +128,11 @@ export class ViewEmployeeComponent implements OnInit {
         this.fetchState(this._employeeDetails.country);
         this.fetchCity(this._employeeDetails.state);
         this.fetchAllBranch();
-        this.fetchDepartemnt(this._employeeDetails.empBranch);
 
-        this.viewEmployeeForm.get('empFirstName').disable();
-        this.viewEmployeeForm.get('empLastName').disable();
-        this.viewEmployeeForm.get('empPhone').disable();
-        this.viewEmployeeForm.get('empGender').disable();
-        this.viewEmployeeForm.get('empEmail').disable();
-        this.viewEmployeeForm.get('empDateofBirth').disable();
-        this.viewEmployeeForm.get('addressLine1').disable();
-        this.viewEmployeeForm.get('addressLine2').disable();
-        this.viewEmployeeForm.get('state').disable();
-        this.viewEmployeeForm.get('city').disable();
-        this.viewEmployeeForm.get('pin').disable();
-        this.viewEmployeeForm.get('country').disable();
-        this.viewEmployeeForm.get('empRole').disable();
-        this.viewEmployeeForm.get('empBranch').disable();
-        this.viewEmployeeForm.get('empDepartment').disable();
-        this.viewEmployeeForm.get('empDesignation').disable();
-        this.viewEmployeeForm.get('empFlag').disable();
+        this.fetchDesignation();
+        Object.keys(this.viewEmployeeForm.controls).forEach((form) => {
+          this.viewEmployeeForm.get(form)?.disable();
+        });
       },
     );
   }
@@ -167,13 +144,7 @@ export class ViewEmployeeComponent implements OnInit {
       this._branch = res;
     });
   }
-  fetchDepartemnt(data: any) {
-    this.branchService.getBranchDepartment(data).subscribe((res) => {
-      console.log(res);
 
-      this._department = res;
-    });
-  }
   fetchState(selectedValue: string) {
     this.countryStateCity.getState(selectedValue).subscribe((res) => {
       this._state = res;
@@ -192,28 +163,45 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   enableEdit() {
-    this.viewEmployeeForm.get('empFirstName').enable();
-    this.viewEmployeeForm.get('empLastName').enable();
-    this.viewEmployeeForm.get('empPhone').enable();
-    this.viewEmployeeForm.get('empGender').enable();
-    this.viewEmployeeForm.get('empEmail').enable();
-    this.viewEmployeeForm.get('empDateofBirth').enable();
-    this.viewEmployeeForm.get('addressLine1').enable();
-    this.viewEmployeeForm.get('addressLine2').enable();
-    this.viewEmployeeForm.get('state').enable();
-    this.viewEmployeeForm.get('city').enable();
-    this.viewEmployeeForm.get('pin').enable();
-    this.viewEmployeeForm.get('country').enable();
-    this.viewEmployeeForm.get('empRole').enable();
-    this.viewEmployeeForm.get('empBranch').enable();
-    this.viewEmployeeForm.get('empDepartment').enable();
-    this.viewEmployeeForm.get('empDesignation').enable();
-    this.viewEmployeeForm.get('empFlag').enable();
+    Object.keys(this.viewEmployeeForm.controls).forEach((form) => {
+      this.viewEmployeeForm.get(form)?.enable();
+    });
 
     this.isSave = true;
     this.isEdit = false;
     this.isSaveIcon = true;
     this.isLoad = false;
+  }
+
+  fetchDesignation() {
+    this.EmployeeService.getDesignation().subscribe((res: any) => {
+      console.log(res);
+      let check = this.viewEmployeeForm.get('empRole')?.value;
+      if (check == 'Level 1') {
+        this._designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 1')
+          .map((key) => ({ index: key, name: res[key][0] }));
+        console.log(this._designation);
+      } else if (check == 'Level 2') {
+        this._designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 2')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 3') {
+        this._designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 3')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 4') {
+        this._designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 4')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else if (check == 'Level 5') {
+        this._designation = Object.keys(res)
+          .filter((key) => res[key][1] === 'Level 5')
+          .map((key) => ({ index: key, name: res[key][0] }));
+      } else {
+        this._designation = [{ index: 0, name: 'Not Data' }];
+      }
+    });
   }
 
   updateEmployeeDetails(data: any) {

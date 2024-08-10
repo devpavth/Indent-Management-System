@@ -1,3 +1,6 @@
+<div *ngIf="isUpdate" class="fixed left-0 right-0 top-0 z-40">
+  <app-edit-list [id]="updateId"></app-edit-list>
+</div>
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
     <div class="mx-auto">
@@ -15,7 +18,7 @@
               </h1>
               <button
                 type="button"
-                (click)="onSubmit(headOfAccForm.value)"
+                routerLink="/home/addList/{{ activeId }}"
                 class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
               >
                 <svg
@@ -180,6 +183,7 @@
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
+                    (click)="update(p.departId, true)"
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -205,6 +209,9 @@
                     </svg>
                   </button>
                   <button
+                    (click)="
+                      toggledelete(activeId, true, p.programId ?? p.departId)
+                    "
                     class="group inline-flex items-center justify-center rounded-full bg-red-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -313,3 +320,9 @@
     </div>
   </section>
 </div>
+
+<app-delete
+  *ngIf="isDelete"
+  [deleteData]="deleteItem"
+  (close)="toggledelete(0, false, '')"
+></app-delete>

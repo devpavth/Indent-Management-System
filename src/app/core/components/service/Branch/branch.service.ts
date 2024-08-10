@@ -47,4 +47,21 @@ export class BranchService {
   getAllProj() {
     return this.http.get(environment.getProjOrProg);
   }
+
+  addNewDepart(data: any) {
+    return this.http.post(environment.addNewDepartment, data);
+  }
+
+  addNewProj(data: any) {
+    return this.http.post(environment.addNewProject, data);
+  }
+  deleteProj(id: string) {
+    return this.http.post(environment.deletProj + id, id);
+  }
+  updateDepartment(data: any) {
+    return this.http.post(environment.updateDepartment + data.departId, data);
+  }
+  deleteDepartment(id: any) {
+    return this.http.post(environment.deleteDepart + id, id);
+  }
 }

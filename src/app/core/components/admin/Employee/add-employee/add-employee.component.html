@@ -472,38 +472,6 @@
               />
             </div>
             <div class="col-span-3">
-              <label
-                for="Role"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Role</label
-              >
-              <select
-                class="input-form"
-                formControlName="empRole"
-                [ngClass]="{
-                  error:
-                    addEmployeeForm.get('empRole')?.invalid &&
-                    addEmployeeForm.get('empRole')?.touched
-                }"
-              >
-                <option null selected disabled class="bg-purple-800 text-white">
-                  Choose Role
-                </option>
-                <option class="" *ngFor="let role of _role" value="{{ role }}">
-                  {{ role }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  addEmployeeForm?.get('empRole')?.invalid &&
-                  addEmployeeForm?.get('empRole')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Field should not be Empty!
-              </small>
-            </div>
-            <div class="col-span-3">
               <div class="flex items-center gap-2">
                 <label
                   for="Branch"
@@ -538,7 +506,6 @@
                 class="input-form"
                 #BranchName
                 formControlName="empBranch"
-                (click)="department(BranchName.value)"
                 [ngClass]="{
                   error:
                     addEmployeeForm.get('empBranch')?.invalid &&
@@ -563,67 +530,41 @@
                 Branch should not be Empty!
               </small>
             </div>
-
             <div class="col-span-3">
-              <div class="flex items-center gap-2">
-                <label
-                  for="Department"
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Department</label
-                >
-                <button class="mb-2 flex items-center gap-1">
-                  <svg
-                    class="h-3 w-3 text-gray-400 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-
-                  <a
-                    (click)="viewAddDepartment('')"
-                    class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                    >Add Department</a
-                  >
-                </button>
-              </div>
-
+              <label
+                for="Role"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Role</label
+              >
               <select
+                (change)="fetchDesignation()"
                 class="input-form"
-                formControlName="empDepartment"
+                formControlName="empRole"
                 [ngClass]="{
                   error:
-                    addEmployeeForm.get('empDepartment')?.invalid &&
-                    addEmployeeForm.get('empDepartment')?.touched
+                    addEmployeeForm.get('empRole')?.invalid &&
+                    addEmployeeForm.get('empRole')?.touched
                 }"
               >
-                <option null selected disabled>Choose Department</option>
-                <option
-                  *ngFor="let Department of _department"
-                  value="{{ Department.deptId }}"
-                >
-                  {{ Department.deptName }}
+                <option null selected disabled class="bg-purple-800 text-white">
+                  Choose Role
+                </option>
+                <option class="" *ngFor="let role of _role" value="{{ role }}">
+                  {{ role }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  addEmployeeForm?.get('empDepartment')?.invalid &&
-                  addEmployeeForm?.get('empDepartment')?.touched
+                  addEmployeeForm?.get('empRole')?.invalid &&
+                  addEmployeeForm?.get('empRole')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Department should not be null!
+                Field should not be Empty!
               </small>
             </div>
-            <div class="col-span-4">
+
+            <div class="col-span-3">
               <label
                 for="Designation"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -631,25 +572,25 @@
               >
               <select
                 class="input-form"
-                formControlName="empDesignation"
+                formControlName="empDesig"
                 [ngClass]="{
                   error:
-                    addEmployeeForm.get('empDesignation')?.invalid &&
-                    addEmployeeForm.get('empDesignation')?.touched
+                    addEmployeeForm.get('empDesig')?.invalid &&
+                    addEmployeeForm.get('empDesig')?.touched
                 }"
               >
                 <option null selected disabled>Choose Designation</option>
                 <option
-                  *ngFor="let designation of _designation"
-                  value="{{ designation }}"
+                  *ngFor="let designation of designation"
+                  value="{{ designation.index }}"
                 >
-                  {{ designation }}
+                  {{ designation.name }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  addEmployeeForm?.get('empDesignation')?.invalid &&
-                  addEmployeeForm?.get('empDesignation')?.touched
+                  addEmployeeForm?.get('empDesig')?.invalid &&
+                  addEmployeeForm?.get('empDesig')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -775,69 +716,4 @@
           </button>
       </div>
   </div> -->
-</div>
-
-<div
-  *ngIf="isDepartment"
-  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
->
-  <div class="relative h-full w-full max-w-md p-4 md:h-auto">
-    <!-- Modal content -->
-    <div
-      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 shadow dark:bg-gray-800 sm:p-5"
-    >
-      <div class="flex">
-        <div
-          class="left-2.5 top-2.5 bg-transparent text-lg font-semibold text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <h1>Add Department</h1>
-        </div>
-        <button
-          (click)="viewAddDepartment(BranchName.value)"
-          type="button"
-          class="right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-toggle="successModal"
-        >
-          <svg
-            aria-hidden="true"
-            class="h-5 w-5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          <span class="sr-only">Close modal</span>
-        </button>
-      </div>
-
-      <div class="mt-4 text-lg text-gray-900">
-        <label
-          for="pinCode"
-          class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-          >Department</label
-        >
-        <input
-          type="text"
-          #branchDepart
-          class="w-3/4 rounded-l-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-          required
-        />
-        <button
-          (click)="addBranchDepartment(BranchName.value, branchDepart.value)"
-          class="w-1/4 rounded-r-lg border border-blue-300 bg-blue-600 p-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
-        >
-          Add
-        </button>
-      </div>
-
-      <!-- <button   type="button" class="py-2 mt-4 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900">
-              Continue
-          </button> -->
-    </div>
-  </div>
 </div>
