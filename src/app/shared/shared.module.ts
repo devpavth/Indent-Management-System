@@ -22,6 +22,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { SuccessComponent } from './success/success.component';
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { OnlyNumberDirective } from './Directives/only-number.directive';
+import { OtpComponent } from './otp/otp.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { OnlyNumberDirective } from './Directives/only-number.directive';
     SuccessComponent,
     AutoCompleteComponent,
     OnlyNumberDirective,
+    OtpComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ import { OnlyNumberDirective } from './Directives/only-number.directive';
     SuccessComponent,
     AutoCompleteComponent,
     OnlyNumberDirective,
+    OtpComponent,
   ],
 })
 export class SharedModule {}

@@ -326,11 +326,12 @@
           <div class="mb-4 grid grid-cols-2 items-center gap-6">
             <div>
               <select class="input-form" type="text" #department required>
+                <option value="">Choose department</option>
                 <option
                   *ngFor="let department of _department; let i = index"
-                  value="{{ department.selcdDeptId }}"
+                  value="{{ department.departId }}"
                 >
-                  {{ department.dName }}
+                  {{ department.deptName }}
                 </option>
               </select>
             </div>
@@ -354,7 +355,7 @@
                 class="mb-1 rounded-lg border bg-gray-100 p-2.5 transition-all duration-500 hover:border-gray-300 hover:bg-gray-200"
               >
                 <div class="flex items-center justify-between">
-                  <div>{{ department.dName }}</div>
+                  <div>{{ department.deptName }}</div>
 
                   <button (click)="removeDepartmentList(i)">
                     <svg

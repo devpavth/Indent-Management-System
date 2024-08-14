@@ -41,7 +41,7 @@ export class AddBranchComponent implements OnInit {
   _state: any;
   _city: any;
   _department: any[] = [];
-  selectedDepartments: { selcdDeptId: string; dName: string }[] = [];
+  selectedDepartments: any[] = [];
   isDepartment = false;
 
   addBranchForm: FormGroup;
@@ -62,10 +62,7 @@ export class AddBranchComponent implements OnInit {
 
   fetchDeptList() {
     this.branchService.getAllDepartments().subscribe((res: any) => {
-      this._department = Object.entries(res).map(([selcdDeptId, dName]) => ({
-        selcdDeptId,
-        dName,
-      }));
+      this._department = res;
       console.log(res);
       console.log(this._department);
     });
@@ -73,9 +70,13 @@ export class AddBranchComponent implements OnInit {
 
   addDepartList(data: string) {
     this.isDepartment = true;
-    let departmentid = this._department.find((dep) => dep.selcdDeptId === data);
+    // console.log('hello', data);
+
+    let departmentid = this._department.find((dep) => dep.departId == data);
+    console.log(departmentid);
+
     let alreadyselect = this.selectedDepartments.some(
-      (dep) => dep.selcdDeptId === data,
+      (dep: any) => dep.departId == data,
     );
     console.log(departmentid);
 
@@ -92,7 +93,7 @@ export class AddBranchComponent implements OnInit {
     let list = {
       ...data,
       departments: this.selectedDepartments.map((dept) => ({
-        selcdDeptId: dept.selcdDeptId,
+        selcdDeptId: dept.departId,
         deptStatus: 200,
       })),
     };

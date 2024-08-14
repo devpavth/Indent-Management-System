@@ -64,4 +64,7 @@ export class BranchService {
   deleteDepartment(id: any) {
     return this.http.post(environment.deleteDepart + id, id);
   }
+  getActiveProgram(id: any) {
+    return this.http.get(environment.getActiveProg + id);
+  }
 }

@@ -22,6 +22,9 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
         if (error.status === 408) {
           router.navigate(['/login']);
         }
+        // if (error.status === 0) {
+        //   router.navigate(['networkerror']);
+        // }
         return throwError(error);
       }),
     );
@@ -40,6 +43,9 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 408) {
         router.navigate(['/login']);
       }
+      // if (error.status === 0) {
+      //   router.navigate(['networkerror']);
+      // }
       return throwError(error);
     }),
   );

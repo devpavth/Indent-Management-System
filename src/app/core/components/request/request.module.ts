@@ -10,6 +10,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { YourRequestComponent } from './your-request/your-request.component';
 import { ViewRequestComponent } from './view-request/view-request.component';
 import { OtherProductComponent } from './other-product/other-product.component';
+import { VerificationComponent } from './verification/verification.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { OtherProductComponent } from './other-product/other-product.component';
     YourRequestComponent,
     ViewRequestComponent,
     OtherProductComponent,
+    VerificationComponent,
   ],
   imports: [
     CommonModule,
