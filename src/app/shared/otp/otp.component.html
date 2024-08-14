@@ -1,0 +1,98 @@
+<div
+  class="max-w-md overflow-hidden rounded-xl bg-white px-4 py-10 text-center shadow backdrop-blur-lg sm:px-8"
+>
+  <div
+    class="absolute left-0 right-0 top-0 h-[3px] rounded-full bg-gradient-to-t from-blue-800 to-blue-500"
+    [style.width.%]="remainingTime"
+  ></div>
+  <header class="mb-8">
+    <h1 class="mb-1 text-2xl font-bold text-gray-800">Email Verification</h1>
+    <p class="text-[15px] text-slate-500">
+      Enter the 6-digit verification code that was sent to your email.
+    </p>
+  </header>
+
+  <form>
+    <div class="flex items-center justify-center gap-3">
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        pattern="\d*"
+        maxlength="1"
+        [(ngModel)]="otp.first"
+        (input)="moveFocus($event, 'second')"
+        maxlength="1"
+        #firstOtp
+        name="first"
+      />
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        maxlength="1"
+        [(ngModel)]="otp.second"
+        (input)="moveFocus($event, 'third')"
+        maxlength="1"
+        #secondOtp
+        name="second"
+      />
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        maxlength="1"
+        [(ngModel)]="otp.third"
+        (input)="moveFocus($event, 'fourth')"
+        maxlength="1"
+        #thirdOtp
+        name="third"
+      />
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        maxlength="1"
+        [(ngModel)]="otp.fourth"
+        (input)="moveFocus($event, 'fifth')"
+        maxlength="1"
+        #fourthOtp
+        name="fourth"
+      />
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        maxlength="1"
+        [(ngModel)]="otp.fifth"
+        (input)="moveFocus($event, 'sixth')"
+        maxlength="1"
+        #fifthOtp
+        name="fifth"
+      />
+      <input
+        type="password"
+        class="h-12 w-12 appearance-none rounded border border-transparent bg-slate-100 p-4 text-center text-2xl font-extrabold text-slate-900 outline-none hover:border-slate-200 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        maxlength="1"
+        [(ngModel)]="otp.sixth"
+        maxlength="1"
+        #sixthOtp
+        name="sixth"
+      />
+    </div>
+    <small class="text-red-500" *ngIf="errorMessage">{{ errorMessage }}</small>
+    <div class="mx-auto mt-4 max-w-[260px]">
+      <button
+        (click)="onSubmit()"
+        [disabled]="isButtonDisabled"
+        type="submit"
+        class="inline-flex w-full justify-center whitespace-nowrap rounded-lg bg-blue-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-blue-950/10 transition-colors duration-150 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-blue-300"
+      >
+        Verify Account
+      </button>
+    </div>
+  </form>
+  <div class="mt-4 text-sm text-slate-500">
+    Didn't receive code?
+    <a
+      (click)="resendOTP()"
+      class="cursor-pointer font-medium text-blue-500 hover:text-blue-600"
+      >Resend</a
+    >
+  </div>
+</div>

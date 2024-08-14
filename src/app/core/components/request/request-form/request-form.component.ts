@@ -7,6 +7,7 @@ import { EmployeeServiceService } from '../../service/Employee/employee-service.
 import { FunderService } from '../../service/Funder/funder.service';
 import { VendorService } from '../../service/vendor/vendor.service';
 import { from } from 'rxjs';
+import { BranchService } from '../../service/Branch/branch.service';
 
 @Component({
   selector: 'app-request-form',
@@ -20,6 +21,7 @@ export class RequestFormComponent implements OnInit {
   isOtherProduct: boolean = false;
   isEditHeader: boolean = false;
   isSuccessPop: boolean = false;
+  isNeed: boolean = false;
 
   groupList: any;
   catList: any;
@@ -59,6 +61,9 @@ export class RequestFormComponent implements OnInit {
   productData: any;
   successData: any;
 
+  _department: any;
+  program: any;
+
   @ViewChild('catid', { static: false }) catid: ElementRef<any> | undefined;
   @ViewChild('id', { static: false }) id: ElementRef<any> | undefined;
   @ViewChild('brdId', { static: false }) brdId: ElementRef<any> | undefined;
@@ -73,10 +78,12 @@ export class RequestFormComponent implements OnInit {
     private shared: SharedServiceService,
     private funderService: FunderService,
     private vendorService: VendorService,
+    private branchService: BranchService,
   ) {
     this.requestIndentHead = this.fb.group({
+      need: [],
       branchCode: [this.employeeData?.branchCode],
-      deptId: [this.employeeData?.empDepartment],
+      deptId: [''],
       programId: [''],
       campName: [],
 
@@ -104,11 +111,12 @@ export class RequestFormComponent implements OnInit {
     this.intervalId = setInterval(() => {
       this.date = new Date();
     }, 1000);
-    this.fetchProgram();
+
     this.fetchHeadofAcc();
     this.fetchUser();
     this.fetchGroupList();
     this.onChanges();
+    this.fetchDeptList();
   }
 
   onChanges(): void {
@@ -124,6 +132,12 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
+  need(data: any) {
+    if (data == 1) {
+      this.isNeed = true;
+    }
+  }
+
   fetchUser() {
     this.empService
       .getEmployeeDetails(sessionStorage.getItem('userId'))
@@ -137,17 +151,6 @@ export class RequestFormComponent implements OnInit {
         this.fetchVendor();
         this.fetchFunder1();
       });
-  }
-  fetchProgram() {
-    this.requestService.getProgramList().subscribe((res: any) => {
-      console.log(res);
-      this.programList = Object.entries(res).map(([id, value]) => ({
-        id,
-        value,
-      }));
-
-      console.log(this.programList);
-    });
   }
 
   fetchHeadofAcc() {
@@ -443,5 +446,18 @@ export class RequestFormComponent implements OnInit {
   }
   toggleProduct(data: boolean) {
     this.isOtherProduct = data;
+  }
+  fetchDeptList() {
+    this.branchService.getAllDepartments().subscribe((res: any) => {
+      this._department = res;
+      console.log(res);
+      console.log(this._department);
+    });
+  }
+  fetchProg(id: any) {
+    this.branchService.getActiveProgram(id).subscribe((res: any) => {
+      console.log(res);
+      this.program = res.departProgram;
+    });
   }
 }

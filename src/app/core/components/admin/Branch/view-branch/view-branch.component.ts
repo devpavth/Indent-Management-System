@@ -63,7 +63,6 @@ export class ViewBranchComponent implements OnInit {
 
   fetchBranchDetails() {
     console.log(this.getBranchCode);
-
     this.branchService.getBranchDetails(this.getBranchCode).subscribe((res) => {
       console.log(res);
       this._branch = res;
@@ -111,13 +110,13 @@ export class ViewBranchComponent implements OnInit {
   fetchDeptList() {
     this.branchService.getAllDepartments().subscribe((res: any) => {
       this.departmentProvidedList = Object.entries(res).map(
-        ([selcdDeptId, dName]) => ({
+        ([selcdDeptId, deptName]) => ({
           selcdDeptId,
-          dName,
+          deptName,
         }),
       );
       console.log(res);
-      console.log(this._department);
+      console.log(this.departmentProvidedList);
     });
   }
   addDepartList(data: string) {

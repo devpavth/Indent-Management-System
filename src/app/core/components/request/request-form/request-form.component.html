@@ -5,6 +5,12 @@
   ></app-success>
 </div>
 <div
+  *ngIf="isNeed"
+  class="fixed z-50 flex h-screen w-full items-center justify-center bg-black/50"
+>
+  <app-otp></app-otp>
+</div>
+<div
   *ngIf="isOtherProduct"
   class="fixed z-50 flex h-full w-full items-center justify-center bg-black/50"
 >
@@ -73,8 +79,9 @@
                   <input
                     type="radio"
                     id="hosting-small"
-                    name="hosting"
-                    value="hosting-small"
+                    formControlName="need"
+                    value="0"
+                    (change)="need(this.requestIndentHead.get('need')?.value)"
                     class="peer hidden"
                     required
                   />
@@ -91,9 +98,10 @@
                   <input
                     type="radio"
                     id="hosting-big"
-                    name="hosting"
-                    value="hosting-big"
+                    formControlName="need"
+                    value="1"
                     class="peer hidden"
+                    (change)="need(this.requestIndentHead.get('need')?.value)"
                   />
                   <label
                     for="hosting-big"
@@ -170,7 +178,10 @@
                 Department
               </label>
               <select
-                formControlName="programId"
+                (change)="
+                  fetchProg(this.requestIndentHead.get('deptId')?.value)
+                "
+                formControlName="deptId"
                 class="select-option1 block w-full rounded-lg"
               >
                 <option
@@ -181,8 +192,11 @@
                 >
                   Choose Department
                 </option>
-                <option *ngFor="let i of programList" value="{{ i.id }}">
-                  {{ i.value }}
+                <option
+                  *ngFor="let department of _department; let i = index"
+                  value="{{ department.departId }}"
+                >
+                  {{ department.deptName }}
                 </option>
               </select>
             </div>
@@ -198,15 +212,15 @@
                 class="select-option1 block w-full rounded-lg"
               >
                 <option
-                  value=""
+                  value=" "
                   disabled
                   selected
                   class="bg-purple-700 text-white"
                 >
                   Choose Project/Programme
                 </option>
-                <option *ngFor="let i of programList" value="{{ i.id }}">
-                  {{ i.value }}
+                <option *ngFor="let i of program" value="{{ i.programId }}">
+                  {{ i.proName }}
                 </option>
               </select>
             </div>
@@ -239,11 +253,6 @@
                 </p>
                 <p class="text-sm text-gray-500">
                   ({{ employeeData?.empDesignation }})
-                </p>
-              </div>
-              <div class="mt-1">
-                <p class="text-sm">
-                  Department : {{ employeeData?.empDeptName }}
                 </p>
               </div>
             </div>

@@ -149,6 +149,7 @@
                 class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
               >
                 <tr>
+                  <th scope="col" class="px-4 py-3">S.no</th>
                   <th scope="col" class="px-4 py-3">
                     <div class="flex items-center justify-between">
                       <div>Branch ID</div>
@@ -197,10 +198,8 @@
                   </th>
 
                   <th scope="col" class="px-4 py-3">Manager</th>
-                  <th scope="col" class="px-4 py-3">Phone</th>
-                  <th scope="col" class="px-4 py-3">Gst Number</th>
-                  <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                              <th scope="col" class="px-4 py-3">Price</th> -->
+                  <th scope="col" class="px-4 py-3">City</th>
+
                   <th scope="col" class="px-4 py-3">
                     <span class="sr-only">Actions</span>
                   </th>
@@ -209,8 +208,9 @@
               <tbody>
                 <tr
                   class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
-                  *ngFor="let bch of _branch"
+                  *ngFor="let bch of _branch; let i = index"
                 >
+                  <td class="px-4 py-3">{{ i + 1 }}</td>
                   <th
                     scope="row"
                     class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
@@ -220,10 +220,8 @@
                   <td class="px-4 py-3">{{ bch.branchName }}</td>
 
                   <td class="px-4 py-3">{{ bch.manager }}</td>
-                  <td class="px-4 py-3">{{ bch.branchMobilenumber }}</td>
-                  <td class="px-4 py-3">{{ bch.gstNumber }}</td>
-                  <!-- <td class="px-4 py-3"></td>
-                              <td class="px-4 py-3"></td> -->
+                  <td class="px-4 py-3">{{ bch.city }}</td>
+
                   <td class="flex items-center justify-end px-4 py-3">
                     <button
                       (click)="viewBranch(bch.branchCode)"
