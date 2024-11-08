@@ -1,5 +1,5 @@
 <div *ngIf="isUpdate" class="fixed left-0 right-0 top-0 z-40">
-  <app-edit-list [id]="updateId"></app-edit-list>
+  <app-edit-list [Id]="updateId"></app-edit-list>
 </div>
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
@@ -183,7 +183,7 @@
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
-                    (click)="update(p.departId, true)"
+                    (click)="update(p.departId ?? p.programId, true)"
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >

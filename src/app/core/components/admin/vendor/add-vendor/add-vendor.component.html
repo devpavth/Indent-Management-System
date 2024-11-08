@@ -105,7 +105,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                Invalid Email !
+                Invalid Email!
               </small>
             </div>
             <div class="col-span-3">
@@ -175,7 +175,14 @@
                   }"
                   required
                 />
-              </div>
+                </div>
+                <small *ngIf="
+                  addVendorForm.get('vdrContactPersonPhone')?.invalid &&
+                  addVendorForm.get('vdrContactPersonPhone')?.touched
+                "
+                class="text-danger text-red-600">
+                Contact Person Number must be 10 digits.
+                </small>     
             </div>
             <div class="col-span-3">
               <label
@@ -250,7 +257,7 @@
               "
               class="text-danger text-red-600"
             >
-              Address line 2 Should be empty !
+              Address line 2 Should not be empty!
             </small>
           </div>
 
@@ -311,7 +318,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                State Should not be
+                State Should not be empty!
               </small>
             </div>
 
@@ -372,7 +379,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                Invalid pin!
+                Invalid pincode!
               </small>
             </div>
             <div class="col-span-full mb-3 flex justify-between">
@@ -452,15 +459,9 @@
                 class="input-form"
                 placeholder=""
                 appFirstCapLetter
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('vdrTanNo')?.invalid &&
-                    addVendorForm.get('vdrTanNo')?.touched
-                }"
-                required
               />
 
-              <small
+              <!-- <small
                 *ngIf="
                   addVendorForm?.get('vdrTanNo')?.invalid &&
                   addVendorForm?.get('vdrTanNo')?.touched
@@ -468,7 +469,7 @@
                 class="text-danger text-red-600"
               >
                 Invalid Tan Number!
-              </small>
+              </small> -->
             </div>
             <div>
               <label
@@ -482,15 +483,9 @@
                 class="input-form"
                 autocomplete="postal-code"
                 placeholder=""
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('vdrMsmeNo')?.invalid &&
-                    addVendorForm.get('vdrMsmeNo')?.touched
-                }"
-                required
               />
 
-              <small
+              <!-- <small
                 *ngIf="
                   addVendorForm?.get('vdrMsmeNo')?.invalid &&
                   addVendorForm?.get('vdrMsmeNo')?.touched
@@ -498,7 +493,7 @@
                 class="text-danger text-red-600"
               >
                 Invalid pin!
-              </small>
+              </small> -->
             </div>
             <div class="col-span-full mb-2">
               <label
@@ -577,15 +572,9 @@
                 class="input-form"
                 placeholder=""
                 appFirstCapLetter
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('estDate')?.invalid &&
-                    addVendorForm.get('estDate')?.touched
-                }"
-                required
               />
 
-              <small
+              <!-- <small
                 *ngIf="
                   addVendorForm?.get('estDate')?.invalid &&
                   addVendorForm?.get('estDate')?.touched
@@ -593,7 +582,7 @@
                 class="text-danger text-red-600"
               >
                 Business Type should not be empty!
-              </small>
+              </small> -->
             </div>
             <div>
               <label
@@ -607,15 +596,9 @@
                 class="input-form"
                 autocomplete="postal-code"
                 placeholder=""
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('bizType')?.invalid &&
-                    addVendorForm.get('bizType')?.touched
-                }"
-                required
               />
 
-              <small
+              <!-- <small
                 *ngIf="
                   addVendorForm?.get('bizType')?.invalid &&
                   addVendorForm?.get('bizType')?.touched
@@ -623,7 +606,7 @@
                 class="text-danger text-red-600"
               >
                 Invalid Business details Name!
-              </small>
+              </small> -->
             </div>
 
             <div class="col-span-full mb-2">
@@ -710,6 +693,15 @@
                   }"
                   required
                 />
+                <small
+                *ngIf="
+                  addVendorForm?.get('bizDetailName')?.invalid &&
+                  addVendorForm?.get('bizDetailName')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Invalid Business details Name!
+              </small>
               </div>
             </div>
           </div>
@@ -784,7 +776,7 @@
                     "
                     class="text-danger text-red-600"
                   >
-                    Invalid pin!
+                    Invalid Account Number!
                   </small>
                 </div>
               </div>
@@ -802,6 +794,7 @@
 
             <button
               type="button"
+              [disabled]="addVendorForm.invalid"
               (click)="submitVendorDetails(addVendorForm.value)"
               class="rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >

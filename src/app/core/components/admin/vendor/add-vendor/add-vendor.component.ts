@@ -61,12 +61,12 @@ export class AddVendorComponent implements OnInit {
       ],
       vdrTanNo: [
         '',
-        [Validators.required, Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
+        // [Validators.required, Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
       ],
       vdrMsmeNo: [],
-      estDate: ['', Validators.required],
+      estDate: [''],
       serviceLocation: ['', Validators.required],
-      bizType: ['', Validators.required],
+      bizType: [''],
       bizDetailName: [
         '',
         [Validators.required, Validators.pattern('[A-Za-z ]+')],

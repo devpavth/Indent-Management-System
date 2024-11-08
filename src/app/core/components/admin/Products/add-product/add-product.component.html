@@ -112,7 +112,7 @@
                   <label
                     for="Branch"
                     class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >Catagories</label
+                    >Categories</label
                   >
                   <div class="mb-2 flex cursor-pointer items-center gap-1">
                     <svg
@@ -134,7 +134,7 @@
                     <a
                       (click)="addingAction(2)"
                       class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                      >Add Catagories</a
+                      >Add Categories</a
                     >
                   </div>
                 </div>
@@ -157,7 +157,7 @@
                     disabled
                     class="bg-purple-700 text-white"
                   >
-                    Choose Catagories
+                    Choose Categories
                   </option>
                   <option *ngFor="let c of catList" value="{{ c.prdCatgId }}">
                     {{ c.prdcatgName }}
@@ -269,7 +269,7 @@
                 <label
                   for="category"
                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Unit of Materiel</label
+                  >Unit of Material</label
                 >
                 <select
                   formControlName="prdUnit"
