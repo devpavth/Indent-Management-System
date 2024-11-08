@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
 import { RequestService } from '../../../service/Request/request.service';
 
@@ -35,13 +35,16 @@ export class AddingComponent implements OnInit {
 
     this.CatForm = this.fb.group({
       grpId: [],
-      prdcatgName: [],
+      prdcatgName: ['', [Validators.required,
+        Validators.pattern('[a-zA-Z]+')]],
       prdcatgStatus: [200],
     });
 
     this.BrandForm = this.fb.group({
       catId: [],
-      prdbrndName: [],
+      prdbrndName: ['', [Validators.required,
+        Validators.pattern('[a-zA-Z]+')
+      ]],
       prdbrndStatus: [200],
     });
   }

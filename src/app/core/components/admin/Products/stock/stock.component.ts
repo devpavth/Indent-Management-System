@@ -104,7 +104,7 @@ export class StockComponent implements OnInit {
         purchasedPrice: this.productData.prdPurchasedPrice,
         gstPercentage: this.productData.prdGstPct,
       });
-
+      
       if (this.inwardForm.get('prdUnit')?.value == 200) {
         this.isBox = true;
         this.updateForm();

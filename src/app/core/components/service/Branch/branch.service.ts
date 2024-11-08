@@ -67,4 +67,13 @@ export class BranchService {
   getActiveProgram(id: any) {
     return this.http.get(environment.getActiveProg + id);
   }
+  updateProj(data: any) {
+    return this.http.post(environment.updateProj + data.programId, data);
+  }
+  editProj(id: any) {
+    return this.http.get(environment.editProj + id);
+  }
+  updateAssignProj(id: any, data: any) {
+    return this.http.post(environment.updateDepart + id, data);
+  }
 }

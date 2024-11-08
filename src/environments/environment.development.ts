@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.8:9010/';
+let Url = 'http://192.168.1.5:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -61,6 +61,9 @@ export const environment = {
   deletProj: Url + baseBranchApi + '/deleteprogram/',
   updateDepartment: Url + baseBranchApi + '/getdeptidname/',
   deleteDepart: Url + baseBranchApi + '/deletedept/',
+  updateProj: Url + baseBranchApi + '/updateprogram/',
+  editProj: Url + baseBranchApi + '/getById/',
+  updateDepart: Url + baseBranchApi + '/addprgusedepartid/',
 
   //requestIndent
   programlist: Url + baseRequestApi + '/getallprogram',

@@ -17,7 +17,7 @@ export class ViewBranchComponent implements OnInit {
   _department: any[] = [];
 
   departmentProvidedList: any;
-  selectedDepartments: { selcdDeptId: string; dName: string }[] = [];
+  selectedDepartments: any[] = [];
   isSave: boolean = false;
   isEdit: boolean = true;
   date = new Date();
@@ -109,32 +109,31 @@ export class ViewBranchComponent implements OnInit {
 
   fetchDeptList() {
     this.branchService.getAllDepartments().subscribe((res: any) => {
-      this.departmentProvidedList = Object.entries(res).map(
-        ([selcdDeptId, deptName]) => ({
-          selcdDeptId,
-          deptName,
-        }),
-      );
+      this.departmentProvidedList = res;
       console.log(res);
       console.log(this.departmentProvidedList);
     });
   }
   addDepartList(data: string) {
+    console.log(data);
+
     let departmentid = this.departmentProvidedList.find(
-      (dep: any) => dep.selcdDeptId === data,
+      (dep: any) => dep.departId == data,
     );
-    let alreadyselect = this._department.some(
-      (dep) => dep.selcdDeptId === data,
-    );
-    console.log(departmentid);
+    let alreadyselect = this._department.some((dep) => dep.departId == data);
+    // console.log(departmentid);
+    console.log(alreadyselect);
 
     if (departmentid && !alreadyselect) {
+      console.log(departmentid);
+      console.log(alreadyselect);
+
       this.selectedDepartments.push(departmentid);
-      console.log(this.selectedDepartments.map((fin) => fin.selcdDeptId));
+      console.log(this.selectedDepartments.map((fin) => fin.departId));
       this.branchService
         .addBranchDepartment(
           this._branch.branchId,
-          this.selectedDepartments.map((fin) => fin.selcdDeptId),
+          this.selectedDepartments.map((fin) => fin.departId),
         )
         .subscribe(
           (res) => {
