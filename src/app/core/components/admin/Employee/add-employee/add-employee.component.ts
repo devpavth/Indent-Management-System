@@ -53,8 +53,11 @@ export class AddEmployeeComponent implements OnInit {
 
   _branch: any;
 
+  isToast: boolean = false;
+  warningToastMsg: any;
+
   isSuccess = false;
-  isVerifiedEmail = false;
+  isVerifiedEmail: boolean = false;
   isPhoneNo = false;
   isDepartment = false;
   date = new Date();
@@ -68,6 +71,7 @@ export class AddEmployeeComponent implements OnInit {
     empLastName: new FormControl('', [Validators.required]),
     empPhone: new FormControl('', [
       Validators.required,
+      Validators.minLength(10),
       Validators.maxLength(10),
     ]),
     empGender: new FormControl('Male', [Validators.required]),
@@ -180,7 +184,11 @@ export class AddEmployeeComponent implements OnInit {
         }
         if (error.status == 500) {
           this.addEmployeeForm.reset();
-          this.isSuccess = true;
+          this.warningToastMsg = 'Employee added successfully, but unable to send email.';
+          this.isToast = true;
+          setTimeout(() => {
+            this.isToast = false;
+          }, 3000);
         }
       },
     );
@@ -237,13 +245,15 @@ export class AddEmployeeComponent implements OnInit {
   }
 
   verifyEmailId(data: any) {
+    console.log('verifyEmailId called with:', data);
     this.empService.verifyEmail(data).subscribe(
       (res) => {
-        console.log(res);
+        console.log("Email Response:",res);
+        this.isVerifiedEmail = true;
       },
       (error) => {
         if (error.status == 208) {
-          console.log(error);
+          console.log("Email error response:",error);
           this.isVerifiedEmail = true;
         } else if (error.statusText == 'OK') {
           this.isVerifiedEmail = false;
@@ -256,6 +266,7 @@ export class AddEmployeeComponent implements OnInit {
     this.empService.verifyPhoneNo(data).subscribe(
       (res) => {
         console.log(res);
+        this.isPhoneNo = true;
       },
       (error) => {
         if (error.status == 208) {

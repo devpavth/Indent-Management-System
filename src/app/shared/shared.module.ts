@@ -23,6 +23,7 @@ import { SuccessComponent } from './success/success.component';
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { OnlyNumberDirective } from './Directives/only-number.directive';
 import { OtpComponent } from './otp/otp.component';
+import { WarningComponent } from './warning/warning.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { OtpComponent } from './otp/otp.component';
     AutoCompleteComponent,
     OnlyNumberDirective,
     OtpComponent,
+    WarningComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +57,7 @@ import { OtpComponent } from './otp/otp.component';
   exports: [
     SuccessToastComponent,
     DeleteToastComponent,
+    WarningComponent,
     FormsModule,
     ReactiveFormsModule,
     DpPicPipe,
