@@ -29,10 +29,11 @@
         <span class="sr-only">Success</span>
       </div>
       <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        Successfully Updated Employee.
+        Employee Added Successfully.
       </p>
       <button
         (click)="closeSuccessPop.emit(false)"
+        routerLink="/home/employeeList"
         type="button"
         class="rounded-lg bg-blue-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
       >

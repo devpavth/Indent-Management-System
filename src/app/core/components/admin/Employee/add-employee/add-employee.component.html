@@ -381,7 +381,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                State Should not be
+                State Should not be empty!
               </small>
             </div>
 
@@ -446,7 +446,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                Invalid pin!
+                Invalid pincode!
               </small>
             </div>
           </div>
@@ -673,17 +673,17 @@
               (click)="addEmployee(addEmployeeForm.value)"
               [disabled]="
                 addEmployeeForm.invalid ||
-                isVerifiedEmail == true ||
+                this.isVerifiedEmail == true ||
                 this.isPhoneNo == true
               "
               [ngClass]="{
                 'bg-gray-400':
                   addEmployeeForm.invalid ||
-                  isVerifiedEmail == true ||
+                  this.isVerifiedEmail == true ||
                   this.isPhoneNo == true,
                 'hover:bg-gray-400':
                   addEmployeeForm.invalid ||
-                  isVerifiedEmail == true ||
+                  this.isVerifiedEmail == true ||
                   this.isPhoneNo == true
               }"
               class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -701,7 +701,7 @@
   *ngIf="isSuccess"
   class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
 >
-  <app-success-pop></app-success-pop>
+  <app-success-pop-employee></app-success-pop-employee>
   <!-- <div class="relative p-4 w-full max-w-md h-full md:h-auto">
     
       <div class="relative p-4 text-center bg-white rounded-lg animate__animated animate__bounceIn animate__faster shadow dark:bg-gray-800 sm:p-5">
@@ -717,3 +717,10 @@
       </div>
   </div> -->
 </div>
+<section
+  *ngIf="isToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+</section>
+

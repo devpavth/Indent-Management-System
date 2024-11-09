@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-success-pop',
+  selector: 'app-success-pop-employee',
   templateUrl: './success-pop.component.html',
   styleUrl: './success-pop.component.css',
 })

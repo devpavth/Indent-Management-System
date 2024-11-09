@@ -214,7 +214,7 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   deleteEmployeeDetails(test: any) {
-    console.log(test);
+    console.log("deleting employee details:",test);
 
     this.isDeletePop.emit(true);
     this.AdminService.employeeCode = test;
