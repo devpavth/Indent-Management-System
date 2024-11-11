@@ -20,7 +20,7 @@ export const environment = {
   getAllEmployeeDetails: Url + bassEmployeeApi + '/getallemp',
   verifiedID: Url + bassEmployeeApi + '/verifyempid',
   updateEmployee: Url + bassEmployeeApi + '/updateemployee',
-  deleteEmployee: Url + bassEmployeeApi + '/deleteemployee',
+  deleteEmployee: Url + bassEmployeeApi + '/deleteemployee/',
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
