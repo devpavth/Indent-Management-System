@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 
 @Component({
   selector: 'app-success-pop-employee',
@@ -7,4 +7,5 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SuccessPopComponent {
   @Output() closeSuccessPop = new EventEmitter<boolean>();
+  @Input() message: string | undefined;
 }

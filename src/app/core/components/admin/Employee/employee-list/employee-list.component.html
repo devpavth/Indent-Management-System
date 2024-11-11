@@ -9,7 +9,7 @@
   ></app-view-employee>
 </div>
 <div *ngIf="isSuccess">
-  <app-success-pop-employee (closeSuccessPop)="closeSucessPop($event)"></app-success-pop-employee>
+  <app-success-pop-employee [message]="empPopUpMsg" (closeSuccessPop)="closeSucessPop($event)"></app-success-pop-employee>
 </div>
 <div *ngIf="isDelete">
   <app-delete-pop (closeDeletePop)="closeDeletePop($event)"></app-delete-pop>

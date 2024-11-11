@@ -56,6 +56,7 @@ export class AddEmployeeComponent implements OnInit {
   isToast: boolean = false;
   warningToastMsg: any;
 
+  empPopUpMsg: any;
   isSuccess = false;
   isVerifiedEmail: boolean = false;
   isPhoneNo = false;
@@ -178,6 +179,7 @@ export class AddEmployeeComponent implements OnInit {
         console.log(error);
 
         if (error.status == 200) {
+          this.empPopUpMsg= "Employee added Successfully.";
           this.isSuccess = true;
         } else {
           // alert(error.error);
