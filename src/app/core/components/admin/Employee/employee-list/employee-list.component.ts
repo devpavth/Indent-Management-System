@@ -37,6 +37,7 @@ export class EmployeeListComponent implements OnInit {
   listLength: any;
   employeeID: any;
 
+  empPopUpMsg: any;
   _branch: any;
   isSuccess: boolean = false;
   isDelete: boolean = false;
@@ -515,6 +516,7 @@ export class EmployeeListComponent implements OnInit {
   }
 
   showSuccess(data: boolean) {
+    this.empPopUpMsg = 'Successfully Updated Employee.';
     this.isSuccess = data;
     this.isViewEmployee = !data;
     // this.fetchEmployeeList();
@@ -530,16 +532,23 @@ export class EmployeeListComponent implements OnInit {
     this.isViewEmployee = !this.isViewEmployee;
     this.isDelete = !this.isDelete;
     if (data == 1) {
-      let empId = this.Admin.employeeCode;
+      let empId = this.Admin.employeeCode.employeeId;
+      console.log("Employee ID to delete:", empId);
 
       this.employeeService.deleteEmployee(empId).subscribe(
         (res) => {
-          console.log(res);
+          if(res !== null){
+            console.log("deleting employee:",res);
+          }else{
+            console.log("Employee deleted successfully, no response data.");
+          }
         },
         (error) => {
           if (error.status == 200) {
             this.fetchEmployeeList(this.userid);
             console.log('Delete Success');
+          }else{
+            console.error('Delete failed:', error);
           }
         },
       );

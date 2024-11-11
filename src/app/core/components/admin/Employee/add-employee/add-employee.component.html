@@ -701,7 +701,7 @@
   *ngIf="isSuccess"
   class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
 >
-  <app-success-pop-employee></app-success-pop-employee>
+  <app-success-pop-employee [message]="empPopUpMsg"></app-success-pop-employee>
   <!-- <div class="relative p-4 w-full max-w-md h-full md:h-auto">
     
       <div class="relative p-4 text-center bg-white rounded-lg animate__animated animate__bounceIn animate__faster shadow dark:bg-gray-800 sm:p-5">

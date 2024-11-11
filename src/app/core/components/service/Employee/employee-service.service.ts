@@ -35,12 +35,19 @@ export class EmployeeServiceService {
     );
   }
 
-  deleteEmployee(data: any) {
-    return this.http.post(environment.deleteEmployee, data).pipe(
-      tap(() => {
-        this.refrechData.next();
-      }),
-    );
+  // deleteEmployee(employeeId: string) {
+  //   console.log("Sending delete request with data:", employeeId);
+  //   return this.http.post(environment.deleteEmployee, {employeeId}).pipe(
+  //     tap((res) => {
+  //       console.log("Server response:", res);
+  //       this.refrechData.next();
+  //     }),
+  //   );
+  // }
+
+  deleteEmployee(employeeId: string){
+    console.log("Sending delete request with data:", employeeId);
+    return this.http.post(environment.deleteEmployee, {employeeId});
   }
   verifyEmail(email: any) {
     let emailParams = new HttpParams();
