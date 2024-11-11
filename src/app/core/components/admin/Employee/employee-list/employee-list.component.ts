@@ -546,6 +546,7 @@ export class EmployeeListComponent implements OnInit {
         (error) => {
           if (error.status == 200) {
             this.fetchEmployeeList(this.userid);
+            console.log("userid:",this.userid);
             console.log('Delete Success');
           }else{
             console.error('Delete failed:', error);

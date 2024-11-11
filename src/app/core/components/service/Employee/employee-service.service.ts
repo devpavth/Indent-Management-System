@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { catchError, Observable, Subject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -42,13 +42,19 @@ export class EmployeeServiceService {
   //       console.log("Server response:", res);
   //       this.refrechData.next();
   //     }),
+  //     catchError((error) => {
+  //       console.error("Error deleting employee:", error);
+  //       throw error;
+  //     })
   //   );
   // }
 
   deleteEmployee(employeeId: string){
-    console.log("Sending delete request with data:", employeeId);
-    return this.http.post(environment.deleteEmployee, {employeeId});
+    console.log("Sending delete request for employee ID:", employeeId);
+    console.log('Delete URL:', environment.deleteEmployee + employeeId);
+    return this.http.post(environment.deleteEmployee + employeeId, '');
   }
+
   verifyEmail(email: any) {
     let emailParams = new HttpParams();
     emailParams = emailParams.append('empEmailid', email);
