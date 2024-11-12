@@ -24,6 +24,8 @@ import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { OnlyNumberDirective } from './Directives/only-number.directive';
 import { OtpComponent } from './otp/otp.component';
 import { WarningComponent } from './warning/warning.component';
+import { ConfirmBranchDetailsComponent } from './confirm-branch-details/confirm-branch-details.component';
+import { ConfirmOtpComponent } from './confirm-otp/confirm-otp.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { WarningComponent } from './warning/warning.component';
     OnlyNumberDirective,
     OtpComponent,
     WarningComponent,
+    ConfirmBranchDetailsComponent,
+    ConfirmOtpComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +62,7 @@ import { WarningComponent } from './warning/warning.component';
     SuccessToastComponent,
     DeleteToastComponent,
     WarningComponent,
+    ConfirmBranchDetailsComponent,
     FormsModule,
     ReactiveFormsModule,
     DpPicPipe,

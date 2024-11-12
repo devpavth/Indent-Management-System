@@ -1,0 +1,54 @@
+<div
+  class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
+>
+  <div class="relative h-full w-full max-w-md p-4 md:h-auto">
+
+    <div
+      class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
+    >
+
+      <h2 class="mb-4 mt-3 text-xl font-bold text-gray-900 dark:text-white">
+        Confirm your branch details
+      </h2>
+
+      <div *ngFor="let item of branchDetails" class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+        <div class="flex justify-center mb-2 ml-4">
+          <span class="w-60 text-left font-medium">Branch Mobile Number:</span>
+          <span class="flex-1 text-left">{{ item.branchMobilenumber }}</span>
+        </div>
+        <div class="flex justify-center mb-2 ml-4">
+          <span class="w-60 text-left font-medium">Manager:</span>
+          <span class="flex-1 text-left">{{ item.manager }}</span>
+        </div>
+        <div class="flex justify-center mb-2 ml-4">
+          <span class="w-60 text-left font-medium">Branch Name:</span>
+          <span class="flex-1 text-left">{{ item.branchName }}</span>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-4 mt-4">
+        <button
+          type="button"
+          (click)="confirmBranchDetailsBtn()"
+          class="rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
+        >
+          Confirm
+        </button>
+        <button
+          routerLink="/home/request"
+          type="button"
+          class="rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="isConfirm"
+  class="fixed z-50 flex h-screen w-full items-center justify-center bg-black/50"
+>
+  <app-confirm-otp [number]="branchDetails[0]?.branchMobilenumber"></app-confirm-otp>
+</div>

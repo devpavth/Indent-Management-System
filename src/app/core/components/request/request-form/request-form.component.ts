@@ -52,6 +52,7 @@ export class RequestFormComponent implements OnInit {
 
   employeeData: any | undefined;
 
+  branchDetails: any;
   headerData: any;
   productList: any[] = [];
   selectedFunder: any;
@@ -149,7 +150,7 @@ export class RequestFormComponent implements OnInit {
           branchCode: this.employeeData.branchCode,
         });
         this.fetchVendor();
-        this.fetchFunder1();
+        // this.fetchFunder1();
       });
   }
 
@@ -204,14 +205,15 @@ export class RequestFormComponent implements OnInit {
     });
   }
 
-  fetchFunder1() {
-    this.funderService
-      .branchFunder(this.employeeData?.branchId)
-      .subscribe((res: any) => {
-        console.log('Branch Funder', res);
-        this.funder = res;
-      });
-  }
+  // fetchFunder1() {
+  //   this.funderService
+  //     .branchFunder(this.employeeData?.branchId)
+  //     .subscribe((res: any) => {
+  //       console.log('Branch Funder', res);
+  //       this.funder = res;
+  //     });
+  // }
+
   fetchVendor() {
     this.vendorService.getAllVendor().subscribe((res: any) => {
       let vendorList: any[] = res;

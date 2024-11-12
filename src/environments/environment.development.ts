@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.10:9010/';
+let Url = 'http://192.168.1.7:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -94,6 +94,10 @@ export const environment = {
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
+
+  confirmBranchDetails: Url + baseRequestApi + '/urgent/getbranch',
+  confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',
+  // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end
 

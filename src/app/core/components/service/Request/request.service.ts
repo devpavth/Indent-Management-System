@@ -97,4 +97,17 @@ export class RequestService {
   postIndent(data: any) {
     return this.http.post(environment.postIndent, data);
   }
+
+  getBranchDetails(){
+    console.log("Test");
+    console.log("Sending request.");
+    console.log('Get URL:', environment.confirmBranchDetails);
+    return this.http.get(environment.confirmBranchDetails);
+  }
+
+  getConfirmOtp(){
+    console.log("Sending request for OTP.");
+    console.log('Get URL:', environment.confirmOtp);
+    return this.http.get(environment.confirmOtp);
+  }
 }
