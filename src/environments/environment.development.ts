@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.7:9010/';
+let Url = 'http://192.168.1.10:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -24,6 +24,7 @@ export const environment = {
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
+  searchPincode: Url + 'api/searchPincode/',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',

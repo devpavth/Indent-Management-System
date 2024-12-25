@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -11,6 +11,8 @@ import { EmployeeServiceService } from '../../../service/Employee/employee-servi
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment.development';
 import { BranchService } from '../../../service/Branch/branch.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 
 // If all conditions met, return no error
 
@@ -22,6 +24,11 @@ import { BranchService } from '../../../service/Branch/branch.service';
 export class AddEmployeeComponent implements OnInit {
   maxDate: string;
   designation: any;
+  isPincodeSelected: boolean = false;
+  noPincode: boolean = false;
+  pincodeList: any[] = [];
+
+  private sharedService = inject(SharedServiceService);
   constructor(
     private readonly empService: EmployeeServiceService,
     private readonly http: HttpClient,
@@ -32,6 +39,38 @@ export class AddEmployeeComponent implements OnInit {
     this.maxDate = currentDate.toISOString().split('T')[0];
   }
   ngOnInit(): void {
+
+    this.addEmployeeForm.get('pin')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((pincode)=>{
+        if(this.isPincodeSelected){
+          return of([]);
+        }
+        this.noPincode = false;
+        if(!pincode?.trim()){
+          this.pincodeList = [];
+          return of([]);
+        }
+        return this.sharedService.fetchPincode(pincode).pipe(
+          catchError((error)=>{
+            if(error.status === 404){
+              console.log("Customer API Error:", error);
+              this.noPincode = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        this.pincodeList = response.postOffice;
+        console.log("reponse from pincode:", response);
+        console.log("fetching postOffice from pincode:", response.postOffice);
+        this.isPincodeSelected = false;
+      }
+    )
     this.fetchAllBranch();
     this.fetchDesignation();
   }
@@ -185,7 +224,7 @@ export class AddEmployeeComponent implements OnInit {
           // alert(error.error);
         }
         if (error.status == 500) {
-          this.addEmployeeForm.reset();
+          // this.addEmployeeForm.reset();
           this.warningToastMsg = 'Employee added successfully, but unable to send email.';
           this.isToast = true;
           setTimeout(() => {
@@ -194,7 +233,7 @@ export class AddEmployeeComponent implements OnInit {
         }
       },
     );
-    this.addEmployeeForm.reset();
+    // this.addEmployeeForm.reset();
   }
 
   fetchState(state: string) {

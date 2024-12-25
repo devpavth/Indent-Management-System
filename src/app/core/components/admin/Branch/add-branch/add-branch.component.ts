@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BranchService } from '../../../service/Branch/branch.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-branch',
   templateUrl: './add-branch.component.html',
@@ -17,8 +18,8 @@ export class AddBranchComponent implements OnInit {
       branchName: [, [Validators.required, Validators.minLength(2)]],
       manager: [, [Validators.required, Validators.minLength(2)]],
       branchMobilenumber: [, [Validators.required, Validators.minLength(10)]],
-      add1: [, [Validators.required, Validators.minLength(400)]],
-      add2: [, [Validators.required, Validators.minLength(100)]],
+      add1: [, [Validators.required, Validators.minLength(50), Validators.maxLength(150)]],
+      add2: [, [Validators.required, Validators.minLength(50), Validators.maxLength(100)]],
       country: [, [Validators.required, Validators.minLength(2)]],
       city: [, [Validators.required, Validators.minLength(2)]],
       state: [, [Validators.required, Validators.minLength(2)]],
@@ -43,6 +44,8 @@ export class AddBranchComponent implements OnInit {
   _department: any[] = [];
   selectedDepartments: any[] = [];
   isDepartment = false;
+
+  private route = inject(Router);
 
   addBranchForm: FormGroup;
 
@@ -100,7 +103,13 @@ export class AddBranchComponent implements OnInit {
     console.log(list);
 
     this.branchService.addBranch(list).subscribe((res) => {
-      console.log(res);
+      console.log("adding branch details:",res);
+      
+    },(error) => {
+      if(error.status === 200){
+        console.log("status 200 ok:", error);
+        this.route.navigate(["home/branchList"]);
+      }
     });
   }
 }

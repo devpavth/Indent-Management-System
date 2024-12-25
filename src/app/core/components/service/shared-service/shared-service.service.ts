@@ -80,6 +80,11 @@ export class SharedServiceService {
     });
   }
 
+  fetchPincode(pincode: any){
+    console.log("environment.searchPincode + pincode:", environment.searchPincode + pincode);
+    return this.http.get(environment.searchPincode + pincode);
+  }
+
   gstCalculation(qty: any, unitPrice: any, gstpercentage: any) {
     let gstAmt = qty * unitPrice * (gstpercentage / 100);
     let itemPrice = qty * unitPrice + gstAmt;

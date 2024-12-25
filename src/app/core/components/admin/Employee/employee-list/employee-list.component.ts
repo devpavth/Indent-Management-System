@@ -84,7 +84,7 @@ export class EmployeeListComponent implements OnInit {
 
         this.totalpage += this.employeeList.length;
 
-        console.log(res);
+        console.log("fetching employee list:",res);
       },
       (error) => {
         if (error.status == 403) {
