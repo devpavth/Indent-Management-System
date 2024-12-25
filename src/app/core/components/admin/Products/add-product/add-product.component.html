@@ -440,8 +440,15 @@
             </div>
             <div class="flex items-center justify-end">
               <button
+                [disabled]="ProductForm.invalid"
                 (click)="onSubmit(ProductForm.value)"
                 type="submit"
+                [ngClass]="{
+                  'bg-gray-400':
+                    ProductForm.invalid,
+                  'hover:bg-gray-400':
+                    ProductForm.invalid
+                }"
                 class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
               >
                 <svg
