@@ -28,6 +28,8 @@ export class AddEmployeeComponent implements OnInit {
   noPincode: boolean = false;
   pincodeList: any[] = [];
 
+  cityDropDownOptions: any;
+
   private sharedService = inject(SharedServiceService);
   constructor(
     private readonly empService: EmployeeServiceService,
@@ -55,7 +57,7 @@ export class AddEmployeeComponent implements OnInit {
         return this.sharedService.fetchPincode(pincode).pipe(
           catchError((error)=>{
             if(error.status === 404){
-              console.log("Customer API Error:", error);
+              console.log("Employee API Error:", error);
               this.noPincode = true;
             }
             return of([]);
@@ -65,9 +67,31 @@ export class AddEmployeeComponent implements OnInit {
     )
     .subscribe(
       (response: any) => {
-        this.pincodeList = response.postOffice;
+        const postOfficeArray = response?.[0]?.postOffice ?? [];
+        console.log("postOfficeArray:", postOfficeArray);
+        this.pincodeList = postOfficeArray;
         console.log("reponse from pincode:", response);
         console.log("fetching postOffice from pincode:", response.postOffice);
+        console.log("fetching pincode with live search:", this.pincodeList);
+        if(this.pincodeList.length > 0){
+          const cityDropDownOptions = this.pincodeList.map(
+            (address) => ({
+              label: `${address.name}, ${address.city}`,
+              value: `${address.name}, ${address.city}`
+            })
+          );
+          console.log("City dropdown options:", cityDropDownOptions);
+
+            this.addEmployeeForm.patchValue(
+              {
+                city: cityDropDownOptions[0].value,
+                state: this.pincodeList[0].state,
+                country: this.pincodeList[0].country,
+              },
+              {emitEvent: false}
+            )
+            this.cityDropDownOptions = cityDropDownOptions;
+          }
         this.isPincodeSelected = false;
       }
     )
@@ -127,13 +151,13 @@ export class AddEmployeeComponent implements OnInit {
     ]),
     addressLine1: new FormControl('', [
       Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(80),
+      Validators.minLength(20),
+      Validators.maxLength(150),
     ]),
     addressLine2: new FormControl('', [
       Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(80),
+      Validators.minLength(20),
+      Validators.maxLength(100),
     ]),
     state: new FormControl('', [Validators.required]),
     city: new FormControl('', [Validators.required]),
@@ -207,6 +231,7 @@ export class AddEmployeeComponent implements OnInit {
 
   addEmployee(employeeData: any) {
     console.table(employeeData);
+    console.log("employee created successfully:", employeeData);
 
     this.empService.addEmployee(employeeData).subscribe(
       (res) => {
