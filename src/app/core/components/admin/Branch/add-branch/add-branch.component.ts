@@ -3,6 +3,7 @@ import { SharedServiceService } from '../../../service/shared-service/shared-ser
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { Router } from '@angular/router';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 @Component({
   selector: 'app-add-branch',
   templateUrl: './add-branch.component.html',
@@ -18,8 +19,8 @@ export class AddBranchComponent implements OnInit {
       branchName: [, [Validators.required, Validators.minLength(2)]],
       manager: [, [Validators.required, Validators.minLength(2)]],
       branchMobilenumber: [, [Validators.required, Validators.minLength(10)]],
-      add1: [, [Validators.required, Validators.minLength(50), Validators.maxLength(150)]],
-      add2: [, [Validators.required, Validators.minLength(50), Validators.maxLength(100)]],
+      add1: [, [Validators.required, Validators.minLength(20), Validators.maxLength(150)]],
+      add2: [, [Validators.required, Validators.minLength(20), Validators.maxLength(100)]],
       country: [, [Validators.required, Validators.minLength(2)]],
       city: [, [Validators.required, Validators.minLength(2)]],
       state: [, [Validators.required, Validators.minLength(2)]],
@@ -36,6 +37,59 @@ export class AddBranchComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.addBranchForm.get('pinCode')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((pincode) => {
+        if(this.isPincodeSelected){
+          return of([]);
+        }
+        this.noPincode = false;
+        if(!pincode?.trim()){
+          this.pincodeList = [];
+          return of([]);
+        }
+        return this.countryStateCity.fetchPincode(pincode).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("Branch API Error:", error);
+              this.noPincode = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        const postOfficeArray = response?.[0]?.postOffice ?? [];
+        console.log("postOfficeArray:", postOfficeArray);
+
+        this.pincodeList = postOfficeArray;
+        console.log("reponse from pincode:", response);
+        console.log("fetching pincode with live search:", this.pincodeList);
+
+        if(this.pincodeList.length > 0){
+          const cityDropDownOptions = this.pincodeList.map(
+            (address) => ({
+              label: `${address.name}, ${address.city}`,
+              value: `${address.name}, ${address.city}`
+            })
+          )
+          console.log("cityDropDownOptions:", cityDropDownOptions);
+
+          this.addBranchForm.patchValue({
+            city: cityDropDownOptions[0].value,
+            state: this.pincodeList[0].state,
+            country: this.pincodeList[0].country
+          },
+          {emitEvent: false}
+        )
+        this.cityDropDownOptions = cityDropDownOptions;
+        }
+        this.isPincodeSelected = false;
+      }
+    )
     this.fetchDeptList();
   }
 
@@ -44,6 +98,11 @@ export class AddBranchComponent implements OnInit {
   _department: any[] = [];
   selectedDepartments: any[] = [];
   isDepartment = false;
+
+  isPincodeSelected: boolean = false;
+  noPincode: boolean = false;
+  pincodeList: any[] = [];
+  cityDropDownOptions: any;
 
   private route = inject(Router);
 

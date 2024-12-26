@@ -284,17 +284,17 @@
                   <option *ngFor="let u of units" value="{{ u.id }}">
                     {{ u.name }}
                   </option>
-                  <small
+  
+                </select>
+                <small
                     *ngIf="
                       ProductForm?.get('prdUnit')?.invalid &&
                       ProductForm?.get('prdUnit')?.touched
                     "
                     class="text-danger text-red-600"
                   >
-                    Select GST Percentage!
-                  </small>
-                </select>
-                <small class="text-danger text-red-600"> </small>
+                  Select Unit of Material!
+                </small>
               </div>
               <div class="col-span-2">
                 <label
@@ -369,7 +369,9 @@
                   required
                 >
                   <option *ngFor="let g of gst" value="{{ g }}">{{ g }}</option>
-                  <small
+                  
+                </select>
+                <small
                     *ngIf="
                       ProductForm?.get('prdGstPct')?.invalid &&
                       ProductForm?.get('prdGstPct')?.touched
@@ -377,9 +379,7 @@
                     class="text-danger text-red-600"
                   >
                     Select GST Percentage!
-                  </small>
-                </select>
-                <small class="text-danger text-red-600"> </small>
+                </small>
               </div>
               <div class="col-span-2">
                 <label

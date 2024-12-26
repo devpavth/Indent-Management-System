@@ -322,104 +322,6 @@
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
               <label
-                for="Country"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Country/Region</label
-              >
-              <select
-                class="input-form"
-                #countryvalue
-                formControlName="country"
-                autocomplete="country-name"
-                (change)="fetchState(countryvalue.value)"
-                [ngClass]="{
-                  error:
-                    addEmployeeForm.get('country')?.invalid &&
-                    addEmployeeForm.get('country')?.touched
-                }"
-              >
-                <option null selected disabled>Choose Country</option>
-                <option value="India">India</option>
-              </select>
-              <small
-                *ngIf="
-                  addEmployeeForm?.get('country')?.invalid &&
-                  addEmployeeForm?.get('country')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Country Should not be Empty!
-              </small>
-            </div>
-            <div>
-              <label
-                for="State"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >State</label
-              >
-              <select
-                class="input-form"
-                #statevalue
-                formControlName="state"
-                autocomplete="address-level1"
-                (change)="fetchCity(statevalue.value)"
-                [ngClass]="{
-                  error:
-                    addEmployeeForm.get('state')?.invalid &&
-                    addEmployeeForm.get('state')?.touched
-                }"
-              >
-                <option null selected disabled>Choose State</option>
-                <option *ngFor="let state of _state" value="{{ state.sname }}">
-                  {{ state.sname }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  addEmployeeForm?.get('state')?.invalid &&
-                  addEmployeeForm?.get('state')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                State Should not be empty!
-              </small>
-            </div>
-
-            <div>
-              <label
-                for="city"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Town/City</label
-              >
-              <select
-                class="input-form"
-                formControlName="city"
-                autocomplete="city"
-                [ngClass]="{
-                  error:
-                    addEmployeeForm.get('city')?.invalid &&
-                    addEmployeeForm.get('city')?.touched
-                }"
-                required
-              >
-                >
-                <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let city of _city" value="{{ city.name }}">
-                  {{ city.name }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  addEmployeeForm?.get('city')?.invalid &&
-                  addEmployeeForm?.get('city')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                City should not be empty!
-              </small>
-            </div>
-            <div>
-              <label
                 for="Pincode"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Pincode</label
@@ -449,6 +351,108 @@
                 Invalid pincode!
               </small>
             </div>
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Town/City</label
+              >
+              <select
+                class="input-form"
+                formControlName="city"
+                autocomplete="city"
+                [ngClass]="{
+                  error:
+                    addEmployeeForm.get('city')?.invalid &&
+                    addEmployeeForm.get('city')?.touched
+                }"
+                required
+              >
+                >
+                <!-- <option null selected disabled>Choose Town/City</option> -->
+                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value}}">
+                  {{ option.label }}
+                </option>
+              </select>
+              <small
+                *ngIf="
+                  addEmployeeForm?.get('city')?.invalid &&
+                  addEmployeeForm?.get('city')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                City should not be empty!
+              </small>
+            </div>
+
+            <div>
+              <label
+                for="State"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >State</label
+              >
+              <input
+                class="input-form"
+                #statevalue
+                formControlName="state"
+                autocomplete="address-level1"
+                (change)="fetchCity(statevalue.value)"
+                [ngClass]="{
+                  error:
+                    addEmployeeForm.get('state')?.invalid &&
+                    addEmployeeForm.get('state')?.touched
+                }"
+                readonly
+              />
+                <!-- <option null selected disabled>Choose State</option>
+                <option *ngFor="let state of _state" value="{{ state.sname }}">
+                  {{ state.sname }}
+                </option> -->
+              <small
+                *ngIf="
+                  addEmployeeForm?.get('state')?.invalid &&
+                  addEmployeeForm?.get('state')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                State Should not be empty!
+              </small>
+            </div>
+            
+            <div>
+              <label
+                for="Country"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Country/Region</label
+              >
+              <input
+                class="input-form"
+                #countryvalue
+                formControlName="country"
+                autocomplete="country-name"
+                (change)="fetchState(countryvalue.value)"
+                [ngClass]="{
+                  error:
+                    addEmployeeForm.get('country')?.invalid &&
+                    addEmployeeForm.get('country')?.touched
+                }"
+                readonly
+              />
+                <!-- <option null selected disabled>Choose Country</option>
+                <option value="India">India</option> -->
+              <small
+                *ngIf="
+                  addEmployeeForm?.get('country')?.invalid &&
+                  addEmployeeForm?.get('country')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Country Should not be Empty!
+              </small>
+            </div>
+            
+
+            
           </div>
         </div>
         <div
@@ -470,6 +474,15 @@
                 formControlName="empJoiningDate"
                 required
               />
+              <small
+                *ngIf="
+                  addEmployeeForm?.get('empJoiningDate')?.invalid &&
+                  addEmployeeForm?.get('empJoiningDate')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Joining Date is required!
+              </small>
             </div>
             <div class="col-span-3">
               <div class="flex items-center gap-2">
