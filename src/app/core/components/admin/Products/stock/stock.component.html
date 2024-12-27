@@ -303,13 +303,30 @@
                       <input
                         type="text"
                         #key
+                        formControlName="productId"
                         class="w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                         placeholder="Search"
                         required=""
                       />
+                      <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
+                        <small>No Products found.</small>
+                      </div>
+                      <ul
+                        *ngIf="storeProductData &&
+                        storeProductData.length > 0"
+                        class="absolute border-none z-10 w-full mt-1 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
+                        >
+                          <li
+                            *ngFor="let prod of storeProductData"
+                            (click)="onSelectProduct(prod)"
+                            class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                            >
+                            {{prod.prdcatgName}} - {{prod.prdbrndName}} - {{prod.prdmdlName}} - {{prod.prdDescription}}
+                          </li>
+                      </ul>
                     </div>
 
-                    <div>
+                    <!-- <div>
                       <button
                         (click)="fetchProductData(key.value)"
                         type="button"
@@ -317,18 +334,18 @@
                       >
                         Search
                       </button>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
-              <div *ngIf="productData" class="col-span-full flex flex-col">
+              <div *ngIf="productData && !noResults && isProductSelected" class="col-span-full flex flex-col">
                 <div class="-m-1.5 overflow-x-auto">
                   <div class="inline-block min-w-full p-1.5 align-middle">
                     <div class="overflow-hidden rounded-lg border">
                       <table
                         class="min-w-full divide-y divide-gray-200 bg-white"
                       >
-                        <tbody class="divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-200" *ngFor="let pro of productData">
                           <tr>
                             <td
                               class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
@@ -339,7 +356,7 @@
                               class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                             >
                               <span class="font-semibold">{{
-                                productData?.prdCode
+                                pro.prdCode
                               }}</span>
                             </td>
                           </tr>
@@ -353,10 +370,10 @@
                               class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                             >
                               <span class="font-semibold">{{
-                                productData?.prdmdlName
+                                pro.prdmdlName
                               }}</span>
                               -
-                              {{ productData?.prdbrndName }}
+                              {{ pro.prdbrndName }}
                             </td>
                           </tr>
                           <tr>
@@ -368,7 +385,7 @@
                             <td
                               class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                             >
-                              {{ productData?.prdDescription }}
+                              {{ pro.prdDescription }}
                             </td>
                           </tr>
                           <tr>
@@ -380,7 +397,7 @@
                             <td
                               class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                             >
-                              {{ productData?.prdPurchasedPrice }}
+                              {{ pro.prdPurchasedPrice }}
                             </td>
                             <td
                               class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
@@ -390,7 +407,7 @@
                             <td
                               class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                             >
-                              {{ productData?.prdGstPct }}
+                              {{ pro.prdGstPct }}
                             </td>
                           </tr>
                         </tbody>

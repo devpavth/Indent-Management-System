@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.10:9010/';
+let Url = 'http://192.168.1.6:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -34,7 +34,7 @@ export const environment = {
   brandList: Url + baseProductApi + '/getactivebrand/',
   postProduct: Url + baseProductApi + '/addproductdetails/',
   getAllProduct: Url + baseProductApi + '/getallactivedetails',
-  deleteProduct: Url + baseProductApi + '/deletedetailfromproductid/',
+  deleteProduct: Url + baseProductApi + '/deletetprd/',
   getStockDetails: Url + baseProductApi + '/getstockdetails/',
   otherProduct: Url + baseProductApi + '/addotherprd',
   modelList: Url + baseProductApi + '/getmodelname/',
@@ -43,6 +43,7 @@ export const environment = {
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdinward',
+  fetchLiveProductDetails: Url + baseProductApi + '/getallactivedetails',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
