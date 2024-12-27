@@ -37,12 +37,13 @@ export class DeleteComponent {
       );
     }
     if (this.deleteData.action == 2) {
-      console.log(this.deleteData);
+      console.log("deleting consoling product data:",this.deleteData);
       this.productService.deleteProduct(this.deleteData.deleteId).subscribe(
         (res) => {
-          console.log(res);
+          console.log("deleting product data:",res);
         },
         (error) => {
+          console.log("error while deleting product data:", error);
           if (error.status == 200) {
             this.close.emit(false);
           }

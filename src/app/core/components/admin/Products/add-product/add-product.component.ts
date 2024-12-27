@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -33,6 +34,8 @@ export class AddProductComponent implements OnInit {
     { id: 15, name: 'Meter', term: 'Meter' },
     { id: 200, name: 'Box', term: 'Box' },
   ];
+
+  private route = inject(Router);
 
   ProductForm: FormGroup;
 
@@ -94,18 +97,19 @@ export class AddProductComponent implements OnInit {
   }
 
   onSubmit(data: any) {
-    console.log(data);
+    console.log("product data:",data);
 
     this.productService.postProduct(data).subscribe(
       (res) => {
-        console.log(res);
+        console.log("successfully product data saved:",res);
       },
       (error) => {
-        console.log(error);
+        console.log("error while saving data:",error);
 
         if (error.status == 200) {
           this.ProductForm.reset();
           this.ProductForm.get('prdStatus')?.patchValue(200);
+          this.route.navigate(['home/productList'])
         }
       },
     );

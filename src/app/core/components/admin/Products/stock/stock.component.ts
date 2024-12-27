@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { Logger } from 'html2canvas/dist/types/core/logger';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-stock',
@@ -51,6 +52,10 @@ export class StockComponent implements OnInit {
   isSuccess: boolean = false;
   transactionID: object = {};
 
+  isProductSelected: boolean = false;
+  noResults: boolean = false;
+  storeProductData: any[] = [];
+
   constructor(
     private branchService: BranchService,
     private productService: ProductService,
@@ -81,6 +86,42 @@ export class StockComponent implements OnInit {
     this.inwardForm.get('prdUnit')?.disable();
   }
   ngOnInit() {
+    this.inwardForm.get('productId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((productName) => {
+        console.log(`Product Name Changed for Index:`, productName);
+        if(this.isProductSelected){
+          return of([]);
+        }
+        this.noResults = false;
+        this.storeProductData = [];
+        if(!productName?.trim()){
+          return of([]);
+        }
+        return this.productService.fetchLiveProductDetails({productName}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              this.noResults = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    ).subscribe(
+      (response: any) => {
+        this.storeProductData = response;
+        console.log("fetching product data from backend:", response);
+
+        this.isProductSelected = false;
+
+        if (this.inwardForm.get('prdUnit')?.value == 200) {
+          this.isBox = true;
+          this.updateForm();
+        }
+      }
+    )
+
     this.fetchAllBranch();
     this.fetchVendorList();
   }
@@ -92,25 +133,42 @@ export class StockComponent implements OnInit {
     });
   }
 
-  fetchProductData(data: string) {
-    this.productService.getProductByCode(data).subscribe((res) => {
-      console.log(res);
-      this.productData = res;
-      this.inwardForm.patchValue({
-        productId: this.productData.productId,
-        prdUnit: this.productData.prdUnit,
+  onSelectProduct(product: any){
+    this.isProductSelected = true;
+    
+    this.productData = [product];
+    console.log("productData:", this.productData);
 
-        prdQty: this.productData.prouctId,
-        purchasedPrice: this.productData.prdPurchasedPrice,
-        gstPercentage: this.productData.prdGstPct,
-      });
-      
-      if (this.inwardForm.get('prdUnit')?.value == 200) {
-        this.isBox = true;
-        this.updateForm();
-      }
+    this.storeProductData = [];
+
+    this.inwardForm.patchValue({
+      productId: this.productData.productId,
+      prdUnit: this.productData.prdUnit,
+
+      prdQty: this.productData.prdMinQty,
+      purchasedPrice: this.productData.prdPurchasedPrice,
+      gstPercentage: this.productData.prdGstPct,
     });
+
+    console.log("Form values updated with selected product data:", this.inwardForm.value);
   }
+
+  // fetchProductData(data: string) {
+  //   this.productService.getProductByCode(data).subscribe((res) => {
+  //     console.log(res);
+  //     this.productData = res;
+  //     this.inwardForm.patchValue({
+  //       productId: this.productData.productId,
+  //       prdUnit: this.productData.prdUnit,
+
+  //       prdQty: this.productData.prouctId,
+  //       purchasedPrice: this.productData.prdPurchasedPrice,
+  //       gstPercentage: this.productData.prdGstPct,
+  //     });
+      
+      
+  //   });
+  // }
   fetchVendorList() {
     this.vendorService.getVendorName().subscribe((res) => {
       console.log(res);

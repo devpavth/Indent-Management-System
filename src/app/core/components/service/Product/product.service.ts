@@ -37,7 +37,8 @@ export class ProductService {
     return this.productHttp.get(environment.getAllProduct);
   }
   deleteProduct(id: any) {
-    return this.productHttp.post(environment.deleteProduct + id, '');
+    console.log("environment.deleteProduct + id:", environment.deleteProduct + id);
+    return this.productHttp.delete(environment.deleteProduct + id);
   }
   getProductByCode(id: any) {
     return this.productHttp.get(environment.getProductByCode + id);
@@ -75,5 +76,17 @@ export class ProductService {
 
   addHeadOfAcc(data: any) {
     return this.productHttp.post(environment.addHeadOfAcc, data);
+  }
+
+  fetchLiveProductDetails(params: {[key: string]: string}){
+    let httpParams = new HttpParams();
+
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.append(key, params[key]);
+    });
+
+    console.log("httpParams:", httpParams.toString());
+
+    return this.productHttp.get(environment.fetchLiveProductDetails, {params: httpParams});
   }
 }
