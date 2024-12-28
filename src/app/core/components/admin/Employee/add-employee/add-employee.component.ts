@@ -236,6 +236,8 @@ export class AddEmployeeComponent implements OnInit {
     this.empService.addEmployee(employeeData).subscribe(
       (res) => {
         console.log('server res', res);
+        this.empPopUpMsg= "Employee added Successfully.";
+        this.isSuccess = true;
 
         // this.addEmployeeForm.reset();
       },
@@ -243,8 +245,7 @@ export class AddEmployeeComponent implements OnInit {
         console.log(error);
 
         if (error.status == 200) {
-          this.empPopUpMsg= "Employee added Successfully.";
-          this.isSuccess = true;
+          console.log("200 status for creating employee:", error);
         } else {
           // alert(error.error);
         }

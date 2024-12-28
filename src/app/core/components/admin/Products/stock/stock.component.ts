@@ -92,11 +92,12 @@ export class StockComponent implements OnInit {
       switchMap((productName) => {
         console.log(`Product Name Changed for Index:`, productName);
         if(this.isProductSelected){
+          this.isProductSelected = false;
           return of([]);
         }
         this.noResults = false;
         this.storeProductData = [];
-        if(!productName?.trim()){
+        if(!productName?.trim() || !isNaN(productName)){
           return of([]);
         }
         return this.productService.fetchLiveProductDetails({productName}).pipe(
@@ -134,23 +135,30 @@ export class StockComponent implements OnInit {
   }
 
   onSelectProduct(product: any){
+    console.log("after selecting the product from the list", product);
     this.isProductSelected = true;
     
     this.productData = [product];
     console.log("productData:", this.productData);
+    console.log("product data prdQty:", this.productData[0].prdMinQty);
 
-    this.storeProductData = [];
+    // 
 
     this.inwardForm.patchValue({
-      productId: this.productData.productId,
-      prdUnit: this.productData.prdUnit,
+      // productId: product.productId,
+      prdUnit: product.prdUnit,
 
-      prdQty: this.productData.prdMinQty,
-      purchasedPrice: this.productData.prdPurchasedPrice,
-      gstPercentage: this.productData.prdGstPct,
+      prdQty: product.prdMinQty,
+      purchasedPrice: product.prdPurchasedPrice,
+      gstPercentage: product.prdGstPct,
     });
 
+    // this.inwardForm.
+
     console.log("Form values updated with selected product data:", this.inwardForm.value);
+
+
+    this.storeProductData = [];
   }
 
   // fetchProductData(data: string) {
@@ -229,7 +237,7 @@ export class StockComponent implements OnInit {
         ...data,
         prdUnit: this.productData.prdUnit,
         total,
-        productCode: this.productData.prdCode,
+        productCode: this.productData[0].prdCode,
       });
       console.log(total);
     }
