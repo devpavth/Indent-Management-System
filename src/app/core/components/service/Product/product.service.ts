@@ -89,4 +89,16 @@ export class ProductService {
 
     return this.productHttp.get(environment.fetchLiveProductDetails, {params: httpParams});
   }
+
+  fetchLiveVendorDetails(params: {[key: string]: string}){
+    let httpParams = new HttpParams();
+
+    Object.keys(params).forEach((key) => {
+      httpParams = httpParams.append(key, params[key]);
+    });
+
+    console.log("httpParams:", httpParams.toString());
+
+    return this.productHttp.get(environment.fetchLiveVendorDetails, {params: httpParams});
+  }
 }

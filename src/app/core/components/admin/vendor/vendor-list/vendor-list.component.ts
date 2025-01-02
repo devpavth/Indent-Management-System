@@ -26,6 +26,10 @@ export class VendorListComponent implements OnInit {
       },
       (error) => {
         console.log(error);
+        this.Spinner = false;
+        // if(error.status === 404){
+        //   alert("No Vendor Data");
+        // }
       },
     );
   }

@@ -56,6 +56,12 @@ export class StockComponent implements OnInit {
   noResults: boolean = false;
   storeProductData: any[] = [];
 
+  isVendorSelected: boolean = false;
+  noVendor: boolean = false;
+  vendorSearchList: any[] = [];
+
+  vendorData: any;
+
   constructor(
     private branchService: BranchService,
     private productService: ProductService,
@@ -89,18 +95,18 @@ export class StockComponent implements OnInit {
     this.inwardForm.get('productId')?.valueChanges
     .pipe(
       debounceTime(300),
-      switchMap((productName) => {
-        console.log(`Product Name Changed for Index:`, productName);
+      switchMap((searchTerm) => {
+        console.log(`Product Name Changed for Index:`, searchTerm);
         if(this.isProductSelected){
           this.isProductSelected = false;
           return of([]);
         }
         this.noResults = false;
         this.storeProductData = [];
-        if(!productName?.trim() || !isNaN(productName)){
+        if(!searchTerm?.trim() || !isNaN(searchTerm)){
           return of([]);
         }
-        return this.productService.fetchLiveProductDetails({productName}).pipe(
+        return this.productService.fetchLiveProductDetails({searchTerm}).pipe(
           catchError((error) => {
             if(error.status === 404){
               this.noResults = true;
@@ -114,17 +120,68 @@ export class StockComponent implements OnInit {
         this.storeProductData = response;
         console.log("fetching product data from backend:", response);
 
+        
+        // if (this.inwardForm.get('prdUnit')?.value == 200) {
+        //   this.isBox = true;
+        //   this.updateForm();
+        // }
+
         this.isProductSelected = false;
 
-        if (this.inwardForm.get('prdUnit')?.value == 200) {
-          this.isBox = true;
-          this.updateForm();
-        }
       }
     )
 
+    this.inwardFormHeader.get('vendorId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((searchTerm) =>{
+        if(this.isVendorSelected){
+          return of([]);
+        }
+        this.noVendor = false;
+        if(!searchTerm?.trim() || searchTerm.length < 3){
+          this.vendorSearchList = [];
+          return of([]);
+        }
+        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("Vendor API Error:", error);
+              this.noVendor = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        console.log("fetching vendor data from backend:", response);
+
+        this.vendorSearchList = response;
+
+        this.isVendorSelected = false;
+      }
+    )
+
+    // const inwardFromCodeValue = Number(this.inwardFormHeader.get('inwardFromCode')?.value);
+
+    // // Debugging to ensure correct value and type
+    // console.log("Value of inwardFromCode:", inwardFromCodeValue);
+    // console.log("Type of inwardFromCode:", typeof inwardFromCodeValue);
+
+    // if (inwardFromCodeValue === 268) {
+    //   console.log("Branch selected: inwardFromCode =", inwardFromCodeValue);
+    //   this.fetchAllBranch(); // Call branch API
+    // } else if (inwardFromCodeValue === 269) {
+    //   console.log("Vendor selected: inwardFromCode =", inwardFromCodeValue);
+    //   this.fetchVendorList(); // Call vendor API
+    // } else {
+    //   console.log("No matching condition for inwardFromCode:", inwardFromCodeValue);
+    // }
+
     this.fetchAllBranch();
-    this.fetchVendorList();
+    // this.fetchVendorList();
   }
   fetchAllBranch() {
     this.branchService.getBranch().subscribe((res) => {
@@ -155,10 +212,25 @@ export class StockComponent implements OnInit {
 
     // this.inwardForm.
 
+      if (this.inwardForm.get('prdUnit')?.value == 200) {
+        this.isBox = true;
+        this.updateForm();
+      }
+
     console.log("Form values updated with selected product data:", this.inwardForm.value);
 
 
     this.storeProductData = [];
+  }
+
+  onSelectVendor(vendor: any){
+    console.log("after selecting the product from the list", vendor);
+    this.isVendorSelected = true;
+    this.inwardFormHeader.get('vendorId')?.setValue(vendor.vendorName);
+
+    // this.vendorData = [vendor];
+    // console.log("vendorData:", this.vendorData);
+    this.vendorSearchList = [];
   }
 
   // fetchProductData(data: string) {
@@ -192,6 +264,7 @@ export class StockComponent implements OnInit {
   }
   updateForm() {
     if (this.isBox && !this.inwardForm.contains('totalPieces')) {
+      console.log("Adding 'totalPieces' control to the form");
       this.inwardForm.addControl(
         'totalPieces',
         this.fb.control(null, Validators.required),
@@ -235,14 +308,15 @@ export class StockComponent implements OnInit {
       );
       this.productList.push({
         ...data,
-        prdUnit: this.productData.prdUnit,
+        prdUnit: this.productData[0].prdUnit,
         total,
         productCode: this.productData[0].prdCode,
+        productId: this.productData[0].productId
       });
       console.log(total);
     }
 
-    console.log(this.productList);
+    console.log("this.productList:",this.productList);
 
     this.inwardForm.reset();
     this.productData = '';
@@ -270,7 +344,7 @@ export class StockComponent implements OnInit {
   //   console.log(this.header);
   // }
   inwardHeader(data: any) {
-    // console.log(data);
+    console.log("inwardHeader add header btn:",data);
 
     this.header = data;
     let branch: any[] = this._branch;
@@ -292,7 +366,7 @@ export class StockComponent implements OnInit {
       }
     }
 
-    console.log(this.header);
+    console.log("this.header:",this.header);
   }
 
   deleteHeader() {
@@ -306,14 +380,14 @@ export class StockComponent implements OnInit {
 
   onSubmit() {
     let finalList = { ...this.header, transPrdDetails: this.productList };
-    console.log(finalList);
+    console.log("finalList:", finalList);
     this.productService.addInward(finalList).subscribe(
       (res) => {
-        console.log(res);
+        console.log("successfully submitting inward data:",res);
       },
       (error) => {
         if (error.status == 200) {
-          console.log(error);
+          console.log("error while saving inward data:",error);
 
           this.isSuccess = true;
           let successData = { show: 2, text: error.error.text };

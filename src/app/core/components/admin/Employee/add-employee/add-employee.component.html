@@ -277,22 +277,35 @@
               formControlName="addressLine1"
               autocomplete="street-address"
               placeholder="Flat, House no., Building, Company, Apartment"
-              [ngClass]="{
-                error:
-                  addEmployeeForm.get('addressLine1')?.invalid &&
-                  addEmployeeForm.get('addressLine1')?.touched
-              }"
+              minlength="20"
+              maxlength="150"
               required
             />
-            <small
+
+            <div
               *ngIf="
-                addEmployeeForm?.get('addressLine1')?.invalid &&
-                addEmployeeForm?.get('addressLine1')?.touched
+                (addEmployeeForm.controls['addressLine1'].invalid &&
+                addEmployeeForm.controls['addressLine1'].touched) ||
+                addEmployeeForm.controls['addressLine1'].dirty
               "
-              class="text-danger text-red-600"
             >
-              Address Should be atleast 10 characters!
-            </small>
+              <small
+              *ngIf="
+                addEmployeeForm?.get('addressLine1')?.errors?.['required']
+              "
+                class="text-danger text-red-600"
+              > 
+                Address-1 is Required !
+              </small>
+              <small
+              *ngIf="
+                addEmployeeForm?.get('addressLine1')?.errors?.['minlength']
+              "
+                class="text-danger text-red-600"
+              > 
+                Address Should be atleast 20 characters!
+              </small>
+            </div>
           </div>
           <div class="mb-6">
             <input
@@ -301,22 +314,35 @@
               autocomplete="street-address-level2"
               class="input-form"
               placeholder="Area, Street, Sector, Village"
-              [ngClass]="{
-                error:
-                  addEmployeeForm.get('addressLine2')?.invalid &&
-                  addEmployeeForm.get('addressLine2')?.touched
-              }"
+              minlength="20"
+              maxlength="100"
               required
             />
-            <small
+
+            <div
               *ngIf="
-                addEmployeeForm?.get('addressLine2')?.invalid &&
-                addEmployeeForm?.get('addressLine2')?.touched
+                (addEmployeeForm.controls['addressLine2'].invalid &&
+                addEmployeeForm.controls['addressLine2'].touched) ||
+                addEmployeeForm.controls['addressLine2'].dirty
               "
-              class="text-danger text-red-600"
             >
-              Address Should be atleast 10 characters!
-            </small>
+              <small
+                *ngIf="
+                addEmployeeForm?.get('addressLine2')?.errors?.['required']
+                "
+                class="text-danger text-red-600"
+              >
+                Address-2 is Required !  
+              </small>
+              <small
+                *ngIf="
+                addEmployeeForm?.get('addressLine2')?.errors?.['minlength']
+                "
+                class="text-danger text-red-600"
+              > 
+                Address Should be atleast 20 characters!
+              </small>
+            </div>
           </div>
 
           <div class="mb-6 grid gap-6 md:grid-cols-2">

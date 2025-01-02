@@ -54,9 +54,11 @@ export class DeleteComponent {
       console.log(this.deleteData);
       this.vendorService.deleteVendor(this.deleteData.deleteId).subscribe(
         (res) => {
-          console.log(res);
+          console.log("successfully deleting the vendor:",res);
+          this.close.emit(false);
         },
         (error) => {
+          console.log("error while deleting the vendor:", error);
           if (error.status == 200) {
             this.close.emit(false);
           }
