@@ -219,22 +219,36 @@
               formControlName="vdrAdd1"
               autocomplete="street-address"
               placeholder="Flat, House no., Building, Company, Apartment"
-              [ngClass]="{
-                error:
-                  addVendorForm.get('vdrAdd1')?.invalid &&
-                  addVendorForm.get('vdrAdd1')?.touched
-              }"
+              minlength="20"
+              maxlength="150"
               required
             />
-            <small
+
+            <div
               *ngIf="
-                addVendorForm?.get('vdrAdd1')?.invalid &&
-                addVendorForm?.get('vdrAdd1')?.touched
+                (addVendorForm.controls['vdrAdd1'].invalid &&
+                addVendorForm.controls['vdrAdd1'].touched) ||
+                addVendorForm.controls['vdrAdd1'].dirty
               "
-              class="text-danger text-red-600"
             >
-              Address Should be atleast 10 characters!
-            </small>
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrAdd1')?.errors?.['required']
+                "
+                class="text-danger text-red-600"
+              > 
+                Address-1 is Required !             
+              </small>
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrAdd1')?.errors?.['minlength']
+                "
+                class="text-danger text-red-600"
+              > 
+                Address Should be atleast 20 characters!
+              </small>
+            </div>
           </div>
           <div class="mb-6">
             <input
@@ -243,52 +257,107 @@
               autocomplete="street-address-level2"
               class="input-form"
               placeholder="Area, Street, Sector, Village"
-              [ngClass]="{
-                error:
-                  addVendorForm.get('vdrAdd2')?.invalid &&
-                  addVendorForm.get('vdrAdd2')?.touched
-              }"
+              minlength="20"
+              maxlength="100"
               required
             />
-            <small
+
+            <div
               *ngIf="
-                addVendorForm?.get('vdrAdd2')?.invalid &&
-                addVendorForm?.get('vdrAdd2')?.touched
+                (addVendorForm.controls['vdrAdd2'].invalid &&
+                addVendorForm.controls['vdrAdd2'].touched) ||
+                addVendorForm.controls['vdrAdd2'].dirty
               "
-              class="text-danger text-red-600"
             >
-              Address line 2 Should not be empty!
-            </small>
+              <small
+                *ngIf="
+                addVendorForm?.get('vdrAdd2')?.errors?.['required']
+                "
+                class="text-danger text-red-600"
+              > 
+                Address-2 is Required !   
+              </small>
+              <small
+                *ngIf="
+                addVendorForm?.get('vdrAdd2')?.errors?.['minlength']
+                "
+                class="text-danger text-red-600"
+              >   
+              Address Should be atleast 20 characters!
+              </small>
+            </div>
           </div>
 
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
               <label
-                for="Country"
+                for="Pincode"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Country/Region</label
+                >Pincode</label
               >
               <input
-                type="text"
-                formControlName="vdrCountry"
+                type="number"
+                formControlName="vdrPincode"
                 class="input-form"
-                placeholder="country"
-                appFirstCapLetter
+                autocomplete="postal-code"
+                placeholder="000 000"
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrCountry')?.invalid &&
-                    addVendorForm.get('vdrCountry')?.touched
+                    addVendorForm.get('vdrPincode')?.invalid &&
+                    addVendorForm.get('vdrPincode')?.touched
                 }"
                 required
               />
+
+              <div *ngIf="noPincode && addVendorForm.get('vdrPincode')?.value?.toString().length === 6" 
+                class="absolute mt-1 text-sm text-red-600">
+                  <small>No Pincode found.</small>
+              </div>
+
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrCountry')?.invalid &&
-                  addVendorForm?.get('vdrCountry')?.touched
+                  addVendorForm?.get('vdrPincode')?.invalid &&
+                  addVendorForm?.get('vdrPincode')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Country Should not be Empty!
+                Invalid pincode!
+              </small>
+            </div>
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Town/City</label
+              >
+              <select
+                type="text"
+                formControlName="vdrCity"
+                class="input-form"
+                placeholder="City"
+                appFirstCapLetter
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('vdrCity')?.invalid &&
+                    addVendorForm.get('vdrCity')?.touched
+                }"
+                required
+                
+              >
+                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                  {{ option.label }}
+                </option>
+              </select>
+
+
+              <small
+                *ngIf="
+                  addVendorForm?.get('vdrCity')?.invalid &&
+                  addVendorForm?.get('vdrCity')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                City should not be empty!
               </small>
             </div>
             <div>
@@ -321,67 +390,39 @@
                 State Should not be empty!
               </small>
             </div>
-
             <div>
               <label
-                for="city"
+                for="Country"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Town/City</label
+                >Country/Region</label
               >
               <input
                 type="text"
-                formControlName="vdrCity"
+                formControlName="vdrCountry"
                 class="input-form"
-                placeholder="City"
+                placeholder="country"
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrCity')?.invalid &&
-                    addVendorForm.get('vdrCity')?.touched
+                    addVendorForm.get('vdrCountry')?.invalid &&
+                    addVendorForm.get('vdrCountry')?.touched
                 }"
                 required
               />
-
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrCity')?.invalid &&
-                  addVendorForm?.get('vdrCity')?.touched
+                  addVendorForm?.get('vdrCountry')?.invalid &&
+                  addVendorForm?.get('vdrCountry')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                City should not be empty!
+                Country Should not be Empty!
               </small>
             </div>
-            <div>
-              <label
-                for="Pincode"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Pincode</label
-              >
-              <input
-                type="number"
-                formControlName="vdrPincode"
-                class="input-form"
-                autocomplete="postal-code"
-                placeholder="000 000"
-                [ngClass]="{
-                  error:
-                    addVendorForm.get('vdrPincode')?.invalid &&
-                    addVendorForm.get('vdrPincode')?.touched
-                }"
-                required
-              />
+            
 
-              <small
-                *ngIf="
-                  addVendorForm?.get('vdrPincode')?.invalid &&
-                  addVendorForm?.get('vdrPincode')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid pincode!
-              </small>
-            </div>
+            
+           
             <div class="col-span-full mb-3 flex justify-between">
               <h1 class="text-xl font-semibold text-purple-800">
                 Business Details

@@ -52,7 +52,7 @@ export class AddBranchComponent implements OnInit {
         return this.countryStateCity.fetchPincode(pincode).pipe(
           catchError((error) => {
             if(error.status === 404){
-              console.log("Branch API Error:", error);
+              console.log("Pincode API Error:", error);
               this.noPincode = true;
             }
             return of([]);
