@@ -60,6 +60,10 @@ export class StockComponent implements OnInit {
   noVendor: boolean = false;
   vendorSearchList: any[] = [];
 
+  selectedVendorId: any;
+
+
+
   vendorData: any;
 
   constructor(
@@ -109,6 +113,7 @@ export class StockComponent implements OnInit {
         return this.productService.fetchLiveProductDetails({searchTerm}).pipe(
           catchError((error) => {
             if(error.status === 404){
+              console.log("error while fetching product data:", error);
               this.noResults = true;
             }
             return of([]);
@@ -131,38 +136,20 @@ export class StockComponent implements OnInit {
       }
     )
 
-    this.inwardFormHeader.get('vendorId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) =>{
-        if(this.isVendorSelected){
-          return of([]);
+    this.inwardFormHeader.get('inwardFromCode')?.valueChanges.subscribe(
+      (optionValue) => {
+        this.inwardFormHeader.get('vendorId')?.setValue(null);
+        if(optionValue === '269'){
+          this.setupVendorSearch();
         }
-        this.noVendor = false;
-        if(!searchTerm?.trim() || searchTerm.length < 3){
-          this.vendorSearchList = [];
-          return of([]);
+        else if(optionValue === '268'){
+          // this.inwardFormHeader.get('vendorId')?.setValue(null);
+          this.fetchAllBranch();
         }
-        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("Vendor API Error:", error);
-              this.noVendor = true;
-            }
-            return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
-        console.log("fetching vendor data from backend:", response);
-
-        this.vendorSearchList = response;
-
-        this.isVendorSelected = false;
       }
     )
+
+    
 
     // const inwardFromCodeValue = Number(this.inwardFormHeader.get('inwardFromCode')?.value);
 
@@ -183,9 +170,44 @@ export class StockComponent implements OnInit {
     this.fetchAllBranch();
     // this.fetchVendorList();
   }
+
+  setupVendorSearch(){
+    this.inwardFormHeader.get('vendorId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((searchTerm) =>{
+        if(this.isVendorSelected){
+          return of([]);
+        }
+        this.noVendor = false;
+        if(!searchTerm || searchTerm.length < 3){
+          this.vendorSearchList = [];
+          return of([]);
+        }
+        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("Vendor API Error:", error);
+              this.noVendor = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        console.log("fetching vendor data from backend:", response);
+
+        this.vendorSearchList = response;
+        this.isVendorSelected = false;
+      }
+    )
+  }
+
   fetchAllBranch() {
     this.branchService.getBranch().subscribe((res) => {
-      console.log(res);
+      console.log("fetching branch details:", res);
 
       this._branch = res;
     });
@@ -205,7 +227,7 @@ export class StockComponent implements OnInit {
       // productId: product.productId,
       prdUnit: product.prdUnit,
 
-      prdQty: product.prdMinQty,
+      // prdQty: product.prdMinQty,
       purchasedPrice: product.prdPurchasedPrice,
       gstPercentage: product.prdGstPct,
     });
@@ -228,8 +250,12 @@ export class StockComponent implements OnInit {
     this.isVendorSelected = true;
     this.inwardFormHeader.get('vendorId')?.setValue(vendor.vendorName);
 
-    // this.vendorData = [vendor];
-    // console.log("vendorData:", this.vendorData);
+    console.log("logging vendorId");
+    this.selectedVendorId = vendor.vendorId;
+    this.vendorData = [vendor];
+  
+    
+    console.log("vendorData:", this.vendorData);
     this.vendorSearchList = [];
   }
 
@@ -249,12 +275,12 @@ export class StockComponent implements OnInit {
       
   //   });
   // }
-  fetchVendorList() {
-    this.vendorService.getVendorName().subscribe((res) => {
-      console.log(res);
-      this.vendorList = res;
-    });
-  }
+  // fetchVendorList() {
+  //   this.vendorService.getVendorName().subscribe((res) => {
+  //     console.log(res);
+  //     this.vendorList = res;
+  //   });
+  // }
 
   ifBox(data: any) {
     console.log(data);
@@ -318,7 +344,7 @@ export class StockComponent implements OnInit {
 
     console.log("this.productList:",this.productList);
 
-    this.inwardForm.reset();
+    this.inwardForm.reset(); 
     this.productData = '';
     this.isBox = false;
   }
@@ -347,11 +373,18 @@ export class StockComponent implements OnInit {
     console.log("inwardHeader add header btn:",data);
 
     this.header = data;
+
+    if(this.inwardFormHeader.get('inwardFromCode')?.value === '269'){
+      this.header.vendorId = this.selectedVendorId;
+    }
+    
     let branch: any[] = this._branch;
-    let vendor: any[] = this.vendorList;
+    let vendor: any[] = this.vendorData;
+
+    console.log("vendor:", vendor);
 
     let branchDetails = branch.find((f) => f.branchId == data.vendorId);
-    let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
+    let vendorDetails = vendor?.find((v) => v.vendorId == data.vendorId);
     let branchDetails1 = branch.find((f) => f.branchId == data.branchId);
     if (branchDetails1) {
       this.header.branchName = branchDetails1.branchName;
@@ -366,11 +399,14 @@ export class StockComponent implements OnInit {
       }
     }
 
-    console.log("this.header:",this.header);
+    console.log("this.header:", this.header);
   }
 
   deleteHeader() {
     this.header = '';
+    console.log("while deleting the header:", this.header);
+    // this.inwardFormHeader.get('vendorId')?.setValue(null);
+    this.inwardFormHeader.reset();
   }
 
   closeSuccess(data: boolean) {
@@ -409,6 +445,6 @@ export class StockComponent implements OnInit {
 
     // Fetch initial data if necessary
     this.fetchAllBranch();
-    this.fetchVendorList();
+    // this.fetchVendorList();
   }
 }

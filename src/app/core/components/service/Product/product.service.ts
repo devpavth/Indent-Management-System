@@ -101,4 +101,8 @@ export class ProductService {
 
     return this.productHttp.get(environment.fetchLiveVendorDetails, {params: httpParams});
   }
+
+  fetchOtherProductDetails(){
+    return this.productHttp.get(environment.fetchOtherProductDetails);
+  }
 }
