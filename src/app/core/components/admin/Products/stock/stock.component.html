@@ -118,14 +118,16 @@
                   <ul
                     *ngIf="vendorSearchList &&
                     vendorSearchList.length > 0"
-                    class="absolute border-none z-10 w-full mt-12 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
+                    class="absolute border-none z-10 w-96 mt-12 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
                     >
                       <li
                         *ngFor="let ven of vendorSearchList"
                         (click)="onSelectVendor(ven)"
                         class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                        
                         >
-                        {{ven.vendorName}}
+  
+                          {{ven.vendorName}}
                       </li>
                   </ul>
                 </div>
@@ -160,10 +162,12 @@
                     </option>
                     <option
                       *ngFor="let branch of _branch"
-                      value="{{ branch.branchId }}"
-                    >
+                        [ngValue]="branch.branchId"
+                      >
                       {{ branch.branchName }}
                     </option>
+
+                    
                   </select>
                 </div>
               </div>
@@ -195,7 +199,7 @@
                   </option>
                   <option
                     *ngFor="let branch of _branch"
-                    value="{{ branch.branchId }}"
+                    [ngValue]="branch.branchId"
                   >
                     {{ branch.branchName }}
                   </option>
@@ -203,9 +207,16 @@
               </div>
             </div>
           </form>
-          <div class="flex justify-end">
+          <div class="flex justify-end" *ngIf="!header">
             <button
+              [disabled]="inwardFormHeader.invalid"
               (click)="inwardHeader(inwardFormHeader.value)"
+              [ngClass]="{
+                'bg-gray-400':
+                  inwardFormHeader.invalid,
+                'hover:bg-gray-400':
+                  inwardFormHeader.invalid
+              }"
               type="submit"
               class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
             >
@@ -232,28 +243,44 @@
                           }}</span>
                         </td>
                       </tr>
+                      
                       <tr>
                         <td
                           class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
-                        >
-                          Branch
-                        </td>
-                        <td
-                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
-                        >
-                          {{ header?.branchName }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                          *ngIf="inwardFormHeader.get('inwardFromCode')?.value === '269'"
                         >
                           Vendor
+                        </td>
+                    
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                          *ngIf="inwardFormHeader.get('inwardFromCode')?.value === '268'"
+                        >
+                          From Branch
                         </td>
                         <td
                           class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
                         >
                           {{ header?.vendorName }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                          *ngIf="inwardFormHeader.get('inwardFromCode')?.value === '269'"
+                        >
+                          Branch
+                        </td>
+                        <td
+                          class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
+                          *ngIf="inwardFormHeader.get('inwardFromCode')?.value === '268'"
+                        >
+                          To Branch
+                        </td>
+                        <td
+                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                        >
+                          {{ header?.branchName }}
                         </td>
                       </tr>
                     </tbody>
@@ -325,7 +352,7 @@
                         placeholder="Search"
                         required=""
                       />
-                      <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
+                      <div *ngIf="noResults" class="absolute mt-3 text-sm text-red-600">
                         <small>No Products found.</small>
                       </div>
                       <ul
@@ -457,7 +484,7 @@
 
                     <ng-container *ngFor="let u of units">
                       <option
-                        *ngIf="u.id === productData?.[0].prdUnit"
+                        *ngIf="u.id === productData?.[0]?.prdUnit"
                         [value]="u.id"
                       >
                         {{ u.name }}
