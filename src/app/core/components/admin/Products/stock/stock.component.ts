@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ProductService } from '../../../service/Product/product.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
-import { Logger } from 'html2canvas/dist/types/core/logger';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 
 @Component({
   selector: 'app-stock',
@@ -16,6 +16,8 @@ export class StockComponent implements OnInit {
   _branch: any;
   inwardFormHeader: FormGroup;
   inwardForm: FormGroup;
+
+  private employeeService = inject(EmployeeServiceService);
 
   isBox: boolean = false;
   gstPercentages: number[] = [0, 5, 12, 18, 28];
@@ -62,9 +64,14 @@ export class StockComponent implements OnInit {
 
   selectedVendorId: any;
 
-
+  filteredBranch: any;
 
   vendorData: any;
+
+  user: any;
+  userData: any;
+  isLevelView: boolean = true;
+  isAddTransactionView: boolean = false;
 
   constructor(
     private branchService: BranchService,
@@ -149,23 +156,26 @@ export class StockComponent implements OnInit {
       }
     )
 
+
+    this.user = sessionStorage.getItem('userId');
+    if (this.user) {
+      this.employeeService.getEmployeeDetails(this.user).subscribe((res) => {
+        console.table(res);
+        this.userData = res;
+
+        console.log("this.userData:", this.userData);
+        console.log("this.userData with empRole:", typeof this.userData.empRole);
+
+        if(this.userData.empRole !== "Level 4"){
+          console.log("logging");
+          this.isLevelView = false;
+        }
+
+        // sessionStorage.setItem('branchId', this.userData.branchCode);
+      });
+    }
+
     
-
-    // const inwardFromCodeValue = Number(this.inwardFormHeader.get('inwardFromCode')?.value);
-
-    // // Debugging to ensure correct value and type
-    // console.log("Value of inwardFromCode:", inwardFromCodeValue);
-    // console.log("Type of inwardFromCode:", typeof inwardFromCodeValue);
-
-    // if (inwardFromCodeValue === 268) {
-    //   console.log("Branch selected: inwardFromCode =", inwardFromCodeValue);
-    //   this.fetchAllBranch(); // Call branch API
-    // } else if (inwardFromCodeValue === 269) {
-    //   console.log("Vendor selected: inwardFromCode =", inwardFromCodeValue);
-    //   this.fetchVendorList(); // Call vendor API
-    // } else {
-    //   console.log("No matching condition for inwardFromCode:", inwardFromCodeValue);
-    // }
 
     this.fetchAllBranch();
     // this.fetchVendorList();
@@ -210,6 +220,8 @@ export class StockComponent implements OnInit {
       console.log("fetching branch details:", res);
 
       this._branch = res;
+
+      this.filteredBranch = this._branch.slice(0, 1);
     });
   }
 
@@ -288,6 +300,7 @@ export class StockComponent implements OnInit {
 
     this.updateForm();
   }
+  
   updateForm() {
     if (this.isBox && !this.inwardForm.contains('totalPieces')) {
       console.log("Adding 'totalPieces' control to the form");

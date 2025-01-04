@@ -91,7 +91,7 @@
               }"
               required
             >
-              <option *ngFor="let g of groupList" value="{{ g.prdGrpId }}">
+              <option *ngFor="let g of groupList" [value]="g.prdGrpId">
                 {{ g.prdgrpName }}
               </option>
             </select>
@@ -148,7 +148,7 @@
               }"
               required
             >
-              <option *ngFor="let c of catList" value="{{ c.prdCatgId }}">
+              <option *ngFor="let c of catList" [value]="c.prdCatgId">
                 {{ c.prdcatgName }}
               </option>
             </select>
@@ -203,7 +203,7 @@
               }"
               required
             >
-              <option *ngFor="let b of brandList" value="{{ b.prdBrndId }}">
+              <option *ngFor="let b of brandList" [value]="b.prdBrndId">
                 {{ b.prdbrndName }}
               </option>
             </select>
@@ -472,6 +472,7 @@
           <div *ngIf="isSave">
             <button
               (click)="onUpdateProduct(UpdateProductForm.value)"
+              [disabled]="UpdateProductForm.invalid"
               type="submit"
               class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
             >

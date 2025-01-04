@@ -163,6 +163,7 @@ export class AddBranchComponent implements OnInit {
 
     this.branchService.addBranch(list).subscribe((res) => {
       console.log("adding branch details:",res);
+      this.route.navigate(["home/branchList"]);
       
     },(error) => {
       if(error.status === 200){
