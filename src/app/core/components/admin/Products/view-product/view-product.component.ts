@@ -31,12 +31,23 @@ export class ViewProductComponent implements OnInit {
   catList: any;
   brandList: any;
   gst: any = [0, 5, 12, 18];
-  units: { id: number; name: string }[] = [
-    { id: 1, name: 'Kg' },
-    { id: 2, name: 'L' },
-    { id: 3, name: 'm' },
-    { id: 4, name: 'Unit' },
-    { id: 200, name: 'Box' },
+  units: { id: number; name: string; term: string }[] = [
+    { id: 1, name: 'Kg', term: 'Kilograms' },
+    { id: 2, name: 'L', term: 'Liters' },
+    { id: 3, name: 'M', term: 'Meter' },
+    { id: 4, name: 'Unit', term: 'Piece' },
+    { id: 5, name: 'Lt', term: 'Liters' },
+    { id: 6, name: 'Feet', term: 'Feet' },
+    { id: 7, name: 'Roll', term: 'Roll' },
+    { id: 8, name: 'Dcm', term: 'Decimeters' },
+    { id: 9, name: 'Bag', term: 'Bag' },
+    { id: 10, name: 'Pair', term: 'Pair' },
+    { id: 11, name: 'Tin', term: 'Tin' },
+    { id: 12, name: 'Sheet', term: 'Sheet' },
+    { id: 13, name: 'Ream', term: 'Ream' },
+    { id: 14, name: 'No', term: 'Number' },
+    { id: 15, name: 'Meter', term: 'Meter' },
+    { id: 200, name: 'Box', term: 'Box' },
   ];
 
   UpdateProductForm: FormGroup;
@@ -62,6 +73,9 @@ export class ViewProductComponent implements OnInit {
   }
   ngOnInit(): void {
     this.UpdateProductForm.patchValue(this.productData);
+    console.log("getting productData:", this.productData);
+    console.log("getting productData with prdbrndName:", this.productData.prdbrndName);
+
     Object.keys(this.UpdateProductForm.controls).forEach((form) => {
       this.UpdateProductForm.get(form)?.disable();
     });
@@ -100,19 +114,24 @@ export class ViewProductComponent implements OnInit {
   fetchGroupList() {
     this.productService.groupList().subscribe((res) => {
       this.groupList = res;
-      console.log(res);
+      console.log("fetching group details:", res);
     });
   }
   fetchCatList(Id: any) {
     this.productService.catagoriesList(Id).subscribe((res) => {
       this.catList = res;
-      console.log(res);
+      console.log("fetching category list for selected product group:", res);
+      
+      // this.brandList = [];
+      // return this.productService.brandList(this.productData.prdCatgId);
+      // this.UpdateProductForm.get('prdBrndId')?.patchValue(null);
+      // this.UpdateProductForm.get('prdBrndId')?.updateValueAndValidity(); 
     });
   }
   fetchBrandList(catId: any) {
     this.productService.brandList(catId).subscribe((res) => {
       this.brandList = res;
-      console.log(res);
+      console.log("fetching brand details for selected product group:", res);
     });
   }
 
@@ -141,6 +160,6 @@ export class ViewProductComponent implements OnInit {
     }
   }
   onUpdateProduct(data: any) {
-    console.log(data);
+    console.log("successfully updated product data:", data);
   }
 }
