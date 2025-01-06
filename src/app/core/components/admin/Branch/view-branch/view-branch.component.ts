@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { BranchService } from '../../../service/Branch/branch.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-view-branch',
@@ -22,6 +23,11 @@ export class ViewBranchComponent implements OnInit {
   isEdit: boolean = true;
   date = new Date();
   isclose = true;
+
+  isPincodeSelected: boolean = false;
+  noPincode: boolean = false;
+  pincodeList: any[] = [];
+  cityDropDownOptions: any;
 
   constructor(
     private fb: FormBuilder,
@@ -47,18 +53,84 @@ export class ViewBranchComponent implements OnInit {
   ngOnInit() {
     this.fetchBranchDetails();
     this.fetchDeptList();
-    console.log(this.getBranchCode);
-    this.viewBranchForm.get('branchName')?.disable();
-    this.viewBranchForm.get('manager')?.disable();
-    this.viewBranchForm.get('branchMobilenumber')?.disable();
-    this.viewBranchForm.get('add1')?.disable();
-    this.viewBranchForm.get('add2')?.disable();
-    this.viewBranchForm.get('country')?.disable();
-    this.viewBranchForm.get('city')?.disable();
-    this.viewBranchForm.get('state')?.disable();
-    this.viewBranchForm.get('pinCode')?.disable();
-    this.viewBranchForm.get('gstNumber')?.disable();
-    this.viewBranchForm.get('departments')?.disable();
+    console.log("getting branch details:",this.getBranchCode);
+    
+
+    Object.keys(this.viewBranchForm.controls).forEach((form) => {
+      this.viewBranchForm.get(form)?.disable();
+    });
+
+    this.viewBranchForm.get('pinCode')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((pincode) => {
+        if(this.isPincodeSelected){
+          return of([]);
+        }
+        this.noPincode = false;
+        if(!pincode || pincode.toString().length !== 6){
+          this.pincodeList = [];
+          return of([]);
+        }
+        return this.countryStateCity.fetchPincode(pincode).pipe(
+          catchError((error) =>{
+            if(error.status === "Error"){
+              console.log("Pincode API Error:", error);
+              this.noPincode = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        const postOfficeArray = response?.[0]?.postOffice ?? [];
+        console.log("postOfficeArray:", postOfficeArray);
+
+        this.pincodeList = postOfficeArray;
+        console.log("reponse from pincode:", response);
+        console.log("typeof Pincode API Error:", typeof response?.[0]?.status);
+
+        if(response?.[0]?.status === "Error"
+          && this.pincodeList.length === 0
+        ){
+          console.log("Pincode API Error:", response?.[0]?.status);
+          this.noPincode = true;
+
+          this.viewBranchForm.patchValue({
+            city: '',
+            state: '',
+            country: '',
+          },
+          {emitEvent: false}
+        )
+        
+        }
+        console.log("fetching pincode with live search:", this.pincodeList);
+
+        if(this.pincodeList.length > 0){
+          const cityDropDownOptions = this.pincodeList.map(
+            (address) => ({
+              label: `${address.name}, ${address.city}`,
+              value: `${address.name}, ${address.city}`
+            })
+          )
+
+          console.log("cityDropDownOptions:", cityDropDownOptions);
+
+          this.viewBranchForm.patchValue({
+            city: cityDropDownOptions[0].value,
+            state: this.pincodeList[0].state,
+            country: this.pincodeList[0].country
+          },
+          {emitEvent: false}
+        )
+        this.cityDropDownOptions = cityDropDownOptions;
+        }
+        this.isPincodeSelected = false;
+      }
+    )
   }
 
   fetchBranchDetails() {
@@ -173,17 +245,10 @@ export class ViewBranchComponent implements OnInit {
     );
   }
   enableEdit() {
-    this.viewBranchForm.get('branchName')?.enable();
-    this.viewBranchForm.get('manager')?.enable();
-    this.viewBranchForm.get('branchMobilenumber')?.enable();
-    this.viewBranchForm.get('add1')?.enable();
-    this.viewBranchForm.get('add2')?.enable();
-    this.viewBranchForm.get('country')?.enable();
-    this.viewBranchForm.get('city')?.enable();
-    this.viewBranchForm.get('state')?.enable();
-    this.viewBranchForm.get('pinCode')?.enable();
-    this.viewBranchForm.get('gstNumber')?.enable();
-    this.viewBranchForm.get('departments')?.enable();
+    Object.keys(this.viewBranchForm.controls).forEach((form) => {
+      this.viewBranchForm.get(form)?.enable();
+    });
+
     this.isEdit = false;
     this.isSave = true;
   }

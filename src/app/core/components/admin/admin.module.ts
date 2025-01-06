@@ -37,6 +37,7 @@ import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component
 import { ViewListComponent } from './Branch/view-list/view-list.component';
 import { AddListComponent } from './Branch/add-list/add-list.component';
 import { EditListComponent } from './Branch/edit-list/edit-list.component';
+import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -73,6 +74,7 @@ import { EditListComponent } from './Branch/edit-list/edit-list.component';
     ViewListComponent,
     AddListComponent,
     EditListComponent,
+    InwardAlertComponent,
   ],
   imports: [
     CommonModule,

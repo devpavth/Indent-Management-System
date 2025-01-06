@@ -280,6 +280,7 @@
                     UpdateVendorForm.get('vdrCountry')?.touched
                 }"
                 required
+                readonly
               />
               <small
                 *ngIf="
@@ -309,6 +310,7 @@
                     UpdateVendorForm.get('vdrState')?.touched
                 }"
                 required
+                readonly
               />
 
               <small
@@ -318,7 +320,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                State Should not be
+                State Should not be empty!
               </small>
             </div>
 
@@ -328,7 +330,7 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Town/City</label
               >
-              <input
+              <select
                 type="text"
                 formControlName="vdrCity"
                 class="input-form"
@@ -340,7 +342,11 @@
                     UpdateVendorForm.get('vdrCity')?.touched
                 }"
                 required
-              />
+              >
+                <option *ngFor="let option of cityDropDownOptions" [value]="option.value">
+                  {{option.label}}
+                </option>
+              </select>
 
               <small
                 *ngIf="
@@ -371,6 +377,11 @@
                 }"
                 required
               />
+
+              <div *ngIf="noPincode && UpdateVendorForm.get('vdrPincode')?.value?.toString().length === 6" 
+                class="absolute mt-1 text-sm text-red-600">
+                <small>No Pincode found.</small>
+              </div>
 
               <small
                 *ngIf="

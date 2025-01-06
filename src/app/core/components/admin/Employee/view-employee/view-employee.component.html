@@ -316,69 +316,38 @@
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
               <label
-                for="Country"
+                for="Pincode"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Country/Region</label
+                >Pincode</label
               >
-              <select
+              <input
+                type="text"
+                formControlName="pin"
                 class="input-form"
-                formControlName="country"
-                #countryValue
-                [value]="this._employeeDetails.country"
-                (change)="fetchState(countryValue.value)"
+                placeholder="000 000"
                 [ngClass]="{
                   error:
-                    viewEmployeeForm.get('country')?.invalid &&
-                    viewEmployeeForm.get('country')?.touched
+                    viewEmployeeForm.get('pin')?.invalid &&
+                    viewEmployeeForm.get('pin')?.touched
                 }"
-              >
-                <option disabled selected hidden>Choose Country</option>
-                <option value="India">India</option>
-              </select>
+                required
+              />
+
+              <div *ngIf="noPincode && viewEmployeeForm.get('pin')?.value?.toString().length === 6" 
+                class="absolute mt-1 text-sm text-red-600">
+                  <small>No Pincode found.</small>
+              </div>
 
               <small
                 *ngIf="
-                  viewEmployeeForm?.get('country')?.invalid &&
-                  viewEmployeeForm?.get('country')?.touched
+                  viewEmployeeForm?.get('pin')?.invalid &&
+                  viewEmployeeForm?.get('pin')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Country Should not be Empty!
+                Invalid pincode!
               </small>
             </div>
-            <div>
-              <label
-                for="State"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >State</label
-              >
-              <select
-                class="input-form"
-                #statevalue
-                formControlName="state"
-                (change)="fetchCity(statevalue.value)"
-                [ngClass]="{
-                  error:
-                    viewEmployeeForm.get('state')?.invalid &&
-                    viewEmployeeForm.get('state')?.touched
-                }"
-              >
-                <option null selected disabled>Choose State</option>
-                <option *ngFor="let state of _state" value="{{ state.sname }}">
-                  {{ state.sname }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  viewEmployeeForm?.get('state')?.invalid &&
-                  viewEmployeeForm?.get('state')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                State Should not be empty!
-              </small>
-            </div>
-
             <div>
               <label
                 for="city"
@@ -397,8 +366,8 @@
               >
                 >
                 <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let city of _city" value="{{ city.name }}">
-                  {{ city.name }}
+                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                  {{ option.label }}
                 </option>
               </select>
               <small
@@ -413,32 +382,74 @@
             </div>
             <div>
               <label
-                for="Pincode"
+                for="State"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Pincode</label
+                >State</label
               >
               <input
-                type="text"
-                formControlName="pin"
                 class="input-form"
-                placeholder="000 000"
+                #statevalue
+                formControlName="state"
+                (change)="fetchCity(statevalue.value)"
                 [ngClass]="{
                   error:
-                    viewEmployeeForm.get('pin')?.invalid &&
-                    viewEmployeeForm.get('pin')?.touched
+                    viewEmployeeForm.get('state')?.invalid &&
+                    viewEmployeeForm.get('state')?.touched
                 }"
-                required
+                readonly
               />
+                <!-- <option null selected disabled>Choose State</option>
+                <option *ngFor="let state of _state" value="{{ state.sname }}">
+                  {{ state.sname }}
+                </option> -->
+              <!-- </select> -->
               <small
                 *ngIf="
-                  viewEmployeeForm?.get('pin')?.invalid &&
-                  viewEmployeeForm?.get('pin')?.touched
+                  viewEmployeeForm?.get('state')?.invalid &&
+                  viewEmployeeForm?.get('state')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Invalid pincode!
+                State Should not be empty!
               </small>
             </div>
+            <div>
+              <label
+                for="Country"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Country/Region</label
+              >
+              <input
+                class="input-form"
+                formControlName="country"
+                #countryValue
+                [value]="this._employeeDetails.country"
+                (change)="fetchState(countryValue.value)"
+                [ngClass]="{
+                  error:
+                    viewEmployeeForm.get('country')?.invalid &&
+                    viewEmployeeForm.get('country')?.touched
+                }"
+                readonly
+              />
+                <!-- <option disabled selected hidden>Choose Country</option>
+                <option value="India">India</option> -->
+              <!-- </select> -->
+
+              <small
+                *ngIf="
+                  viewEmployeeForm?.get('country')?.invalid &&
+                  viewEmployeeForm?.get('country')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Country Should not be Empty!
+              </small>
+            </div>
+            
+
+            
+            
           </div>
         </div>
         <div

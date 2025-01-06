@@ -136,54 +136,6 @@
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
               <label
-                for="country"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Country/Region</label
-              >
-              <select
-                class="input-form"
-                #countryvalue
-                formControlName="country"
-                (change)="fetchState(countryvalue.value)"
-              >
-                <option null selected disabled>Choose Country</option>
-                <option value="India">India</option>
-              </select>
-            </div>
-            <div>
-              <label
-                for="State"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >State</label
-              >
-              <select
-                class="input-form"
-                #statevalue
-                formControlName="state"
-                (change)="fetchCity(statevalue.value)"
-              >
-                <option null selected disabled>Choose State</option>
-                <option *ngFor="let state of _state" value="{{ state.sname }}">
-                  {{ state.sname }}
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label
-                for="city"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Town/City</label
-              >
-              <select class="input-form" formControlName="city" required>
-                <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let city of _city" value="{{ city.name }}">
-                  {{ city.name }}
-                </option>
-              </select>
-            </div>
-            <div>
-              <label
                 for="pinCode"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Pincode</label
@@ -195,7 +147,66 @@
                 placeholder="000 000"
                 required
               />
+              <div *ngIf="noPincode && viewBranchForm.get('pinCode')?.value?.toString().length === 6" 
+                class="absolute mt-1 text-sm text-red-600">
+                  <small>No Pincode found.</small>
+              </div>
             </div>
+
+            <div>
+              <label
+                for="city"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Town/City</label
+              >
+              <select class="input-form" formControlName="city" required>
+                <option null selected disabled>Choose Town/City</option>
+                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                for="State"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >State</label
+              >
+              <input
+                class="input-form"
+                #statevalue
+                formControlName="state"
+                (change)="fetchCity(statevalue.value)"
+                readonly
+              />
+                <!-- <option null selected disabled>Choose State</option>
+                <option *ngFor="let state of _state" value="{{ state.sname }}">
+                  {{ state.sname }}
+                </option> -->
+              <!-- </select> -->
+            </div>
+            
+            <div>
+              <label
+                for="country"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Country/Region</label
+              >
+              <input
+                class="input-form"
+                #countryvalue
+                formControlName="country"
+                (change)="fetchState(countryvalue.value)"
+                readonly
+              />
+                <!-- <option null selected disabled>Choose Country</option>
+                <option value="India">India</option> -->
+              <!-- </select> -->
+            </div>
+            
+
+            
           </div>
           <!-- <label
             for="Pincode"
