@@ -46,6 +46,11 @@ export class ProductService {
   addInward(data: any) {
     return this.productHttp.post(environment.inward, data);
   }
+
+  saveOutward(data: any){
+    return this.productHttp.post(environment.saveOutward, data);
+  }
+
   getStockDetails(id: any) {
     return this.productHttp.get(environment.getStockDetails + id);
   }

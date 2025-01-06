@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { Router } from '@angular/router';
 import { BranchService } from '../../../service/Branch/branch.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 
 @Component({
   selector: 'app-view-vendor',
@@ -19,6 +21,12 @@ export class ViewVendorComponent {
   deleteVendor: any;
   isDelete: boolean = false;
   _BranchName: any;
+  isPincodeSelected: boolean = false;
+  noPincode: boolean = false;
+  pincodeList: any[] = [];
+  cityDropDownOptions: any;
+
+  private sharedService = inject(SharedServiceService);
 
   UpdateVendorForm: FormGroup;
   constructor(
@@ -88,9 +96,87 @@ export class ViewVendorComponent {
   ngOnInit(): void {
     this.getBranchName();
     this.UpdateVendorForm.patchValue(this.vendorData);
+    console.log("this.vendorData:", this.vendorData);
+    console.log("this.vendorData:", this.vendorData.vdrCity);
     Object.keys(this.UpdateVendorForm.controls).forEach((form) => {
       this.UpdateVendorForm.get(form)?.disable();
     });
+
+
+    // this.UpdateVendorForm.patchValue({
+    //   vdrCity: this.vendorData.vdrCity
+    // })
+
+    this.UpdateVendorForm.get('vdrPincode')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((pincode) => {
+        if(this.isPincodeSelected){
+          return of([]);
+        }
+        this.noPincode = false;
+        if(!pincode || pincode.toString().length !==6){
+          this.pincodeList = [];
+          return of([]);
+        }
+        return this.sharedService.fetchPincode(pincode).pipe(
+          catchError((error)=>{
+            if(error.status === "Error"){
+              console.log("Pincode API Error:", error);
+              this.noPincode = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        const postOfficeArray = response?.[0]?.postOffice ?? [];
+        console.log("postOfficeArray:", postOfficeArray);
+
+        this.pincodeList = postOfficeArray;
+        console.log("reponse from pincode:", response);
+        console.log("typeof Pincode API Error:", typeof response?.[0]?.status);
+
+        if(response?.[0]?.status === "Error"
+          && this.pincodeList.length === 0
+        ){
+          console.log("Pincode API Error:", response?.[0]?.status);
+          this.noPincode = true;
+
+          this.UpdateVendorForm.patchValue({
+            vdrCity: '',
+            vdrState: '',
+            vdrCountry: ''
+          },{emitEvent: false})
+        }
+        console.log("fetching pincode with live search:", this.pincodeList);
+
+        if(this.pincodeList.length > 0){
+          const cityDropDownOptions = this.pincodeList.map(
+            (address) => ({
+              label: `${address.name}, ${address.city}`,
+              value: `${address.name}, ${address.city}`
+            })
+          )
+
+          console.log("cityDropDownOptions:", cityDropDownOptions);
+
+          this.cityDropDownOptions = cityDropDownOptions;
+
+          this.UpdateVendorForm.patchValue({
+            vdrCity: cityDropDownOptions[0].value,
+            vdrState: this.pincodeList[0].state,
+            vdrCountry: this.pincodeList[0].country
+          },
+        {emitEvent: false}
+      )
+        
+        }
+        this.isPincodeSelected = false;
+      }
+    )
   }
 
   get vendorAcccountDetails() {

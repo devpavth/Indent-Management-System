@@ -4,6 +4,7 @@ import { EmployeeServiceService } from '../../../service/Employee/employee-servi
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { AdminProductServiceService } from '../../admin-services/admin-product-service.service';
 import { BranchService } from '../../../service/Branch/branch.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-view-employee',
@@ -40,6 +41,10 @@ export class ViewEmployeeComponent implements OnInit {
   isLoad = false;
 
   isStyle = false;
+  isPincodeSelected: boolean = false;
+  noPincode: boolean = false;
+  pincodeList: any[] = [];
+  cityDropDownOptions: any;
 
   ngOnInit() {
     console.log(this.EmployeeCode);
@@ -124,6 +129,80 @@ export class ViewEmployeeComponent implements OnInit {
           modifiedTime: new FormControl(new Date()),
           modifyby: new FormControl(sessionStorage.getItem('userId')),
         });
+
+        this.viewEmployeeForm.get('pin').valueChanges
+        .pipe(
+          debounceTime(300),
+          switchMap((pincode) => {
+            if(this.isPincodeSelected){
+              return of([]);
+            }
+            this.noPincode = false;
+            if(!pincode || pincode.toString().length !== 6){
+              this.pincodeList = [];
+              return of([]);
+            }
+            return this.countryStateCity.fetchPincode(pincode).pipe(
+              catchError((error) => {
+                if(error.status === 404){
+                  console.log("Pincode API Error:", error);
+                  this.noPincode = true;
+                }
+                return of([]);
+              })
+            )
+          })
+        )
+        .subscribe(
+          (response: any) => {
+            const postOfficeArray = response?.[0]?.postOffice ?? [];
+            console.log("postOfficeArray:", postOfficeArray);
+            this.pincodeList = postOfficeArray;
+            console.log("reponse from pincode:", response);
+            console.log("fetching postOffice from pincode:", response.postOffice);
+            console.log("fetching pincode with live search:", this.pincodeList);
+
+            if(response?.[0]?.status === "Error"
+                && this.pincodeList.length === 0
+            ){
+              console.log("Pincode API Error:", response?.[0]?.status);
+              this.noPincode = true;
+
+              this.viewEmployeeForm.patchValue({
+                city: '',
+                state: '',
+                country: ''
+              },
+              {emitEvent: false}
+            )
+            }
+
+            console.log("fetching pincode with live search:", this.pincodeList);
+
+
+            if(this.pincodeList.length > 0){
+              const cityDropDownOptions = this.pincodeList.map(
+                (address) => ({
+                  label: `${address.name}, ${address.city}`,
+                  value: `${address.name}, ${address.city}`
+                })
+              );
+              console.log("City dropdown options:", cityDropDownOptions);
+
+              this.viewEmployeeForm.patchValue(
+                {
+                  city: cityDropDownOptions[0].value,
+                  state: this.pincodeList[0].state,
+                  country: this.pincodeList[0].country,
+                },
+                {emitEvent: false}
+              )
+
+              this.cityDropDownOptions = cityDropDownOptions;
+            }
+            this.isPincodeSelected = false;
+          }
+        )
 
         this.fetchState(this._employeeDetails.country);
         this.fetchCity(this._employeeDetails.state);

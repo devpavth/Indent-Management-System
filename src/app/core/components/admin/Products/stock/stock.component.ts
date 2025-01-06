@@ -428,23 +428,59 @@ export class StockComponent implements OnInit {
   }
 
   onSubmit() {
+    const inwardFromCode = this.inwardFormHeader.get('inwardFromCode')?.value;
+
     let finalList = { ...this.header, transPrdDetails: this.productList };
     console.log("finalList:", finalList);
-    this.productService.addInward(finalList).subscribe(
-      (res) => {
-        console.log("successfully submitting inward data:",res);
-      },
-      (error) => {
-        if (error.status == 200) {
-          console.log("error while saving inward data:",error);
 
+    if(inwardFromCode === '269'){
+      console.log("checking inward transaction");
+      this.productService.addInward(finalList).subscribe(
+        (res: any) => {
+          console.log("successfully submitting inward data:",res);
+          
           this.isSuccess = true;
-          let successData = { show: 2, text: error.error.text };
+          let successData = { show: 2, text: res.error };
           this.transactionID = successData;
-        }
-        console.log(error.error.text);
-      },
-    );
+          
+        },
+        (error) => {
+          console.log("error while saving inward data:",error);
+          // if (error.status == 200) {
+  
+          //   this.isSuccess = true;
+          //   let successData = { show: 2, text: error.error.text };
+          //   this.transactionID = successData;
+          // }
+          // console.log(error.error.text);
+        },
+      );
+    }else if(inwardFromCode === '268'){
+      console.log("checking outward transaction");
+      this.productService.saveOutward(finalList).subscribe(
+        (res: any) => {
+          console.log("successfully submitting outward data:",res);
+          console.log("successfully submitting outward data:",res.error);
+          this.isSuccess = true;
+          let successData = { show: 2, text: res.error };
+          this.transactionID = successData;
+        },
+        (error) => {
+          console.log("error while saving outward data:",error);
+          // if (error.status == 200) {
+  
+          //   this.isSuccess = true;
+          //   let successData = { show: 2, text: error.error.text };
+          //   this.transactionID = successData;
+          // }
+          // console.log(error.error.text);
+        },
+      );
+    }
+    else{
+      console.log("Error: Invalid inwardFromCode value");
+    }
+    
   }
   resetComponent() {
     this.inwardFormHeader.reset();
