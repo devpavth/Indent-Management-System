@@ -47,6 +47,7 @@ export const environment = {
   fetchLiveVendorDetails: Url + baseVendorApi + '/getactivevendors',
   fetchOtherProductDetails: Url + baseProductApi + '/getotherprd',
   saveOutward: Url + baseProductApi + '/addprdoutward',
+  fetchInwardForBranch: Url + baseProductApi + '/getinwardforbranch/',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',

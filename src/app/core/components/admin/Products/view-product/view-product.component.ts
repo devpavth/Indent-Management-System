@@ -14,6 +14,7 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
 })
 export class ViewProductComponent implements OnInit {
   @Output() closeProduct = new EventEmitter<boolean>();
+  @Output() productDeleted = new EventEmitter<number>();
   @Input() productData: any;
 
   productId: string = '';
@@ -143,7 +144,10 @@ export class ViewProductComponent implements OnInit {
         action: 2,
         deleteId: this.productData.productId,
       };
-      console.log(this.deleteProduct);
+      console.log("this.deleteProduct:",this.deleteProduct);
+
+      this.productDeleted.emit(this.deleteProduct.deleteId);
+      console.log("this.deleteProduct.deletedId:", this.deleteProduct.deleteId);
     } else if (check == 0) {
       this.isDelete = isView;
       this.closeProduct.emit(false);

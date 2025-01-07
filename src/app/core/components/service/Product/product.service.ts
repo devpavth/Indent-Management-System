@@ -110,4 +110,9 @@ export class ProductService {
   fetchOtherProductDetails(){
     return this.productHttp.get(environment.fetchOtherProductDetails);
   }
+
+  fetchInwardForBranch(id: any){
+    console.log("environment.fetchInwardForBranch + id:", environment.fetchInwardForBranch + id);
+    return this.productHttp.get(environment.fetchInwardForBranch + id);
+  }
 }
