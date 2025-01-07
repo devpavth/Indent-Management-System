@@ -48,6 +48,7 @@ export class HeaderComponent implements OnInit {
         this.userData = res;
 
         console.log("this.userData:", this.userData);
+        console.log("this.userData:", this.userData.branchId);
 
         sessionStorage.setItem('branchId', this.userData.branchCode);
       });

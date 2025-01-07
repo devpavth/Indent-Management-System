@@ -483,6 +483,7 @@
                     viewEmployeeForm.get('empRole')?.invalid &&
                     viewEmployeeForm.get('empRole')?.touched
                 }"
+                (change)="fetchDesignation()"
               >
                 <option null selected disabled>Choose Role</option>
                 <option *ngFor="let role of _role" value="{{ role }}">
@@ -548,11 +549,12 @@
                     viewEmployeeForm.get('empDesig')?.invalid &&
                     viewEmployeeForm.get('empDesig')?.touched
                 }"
+                
               >
                 <option null selected disabled>Choose Designation</option>
                 <option
                   *ngFor="let designation of _designation"
-                  value="{{ designation.index }}"
+                  [value]="designation.index"
                 >
                   {{ designation.name }}
                 </option>
@@ -560,7 +562,7 @@
               <small
                 *ngIf="
                   viewEmployeeForm?.get('empDesig')?.invalid &&
-                  viewEmployeeForm?.get('empDesig')?.touched
+                  viewEmployeeForm?.get('empDesig')?.touched 
                 "
                 class="text-danger text-red-600"
               >
@@ -651,6 +653,8 @@
                 type="submit"
                 *ngIf="isSave"
                 class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+                [disabled]="viewEmployeeForm.invalid || 
+                      !viewEmployeeForm.get('empDesig')?.value"
               >
                 <svg
                   aria-hidden="true"

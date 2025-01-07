@@ -6,6 +6,7 @@ import { SharedServiceService } from '../../../service/shared-service/shared-ser
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stock',
@@ -16,6 +17,8 @@ export class StockComponent implements OnInit {
   _branch: any;
   inwardFormHeader: FormGroup;
   inwardForm: FormGroup;
+
+  route = inject(Router);
 
   private employeeService = inject(EmployeeServiceService);
 
@@ -65,6 +68,7 @@ export class StockComponent implements OnInit {
   selectedVendorId: any;
 
   filteredBranch: any;
+  filteredToBranch: any;
 
   vendorData: any;
 
@@ -222,7 +226,42 @@ export class StockComponent implements OnInit {
       this._branch = res;
 
       this.filteredBranch = this._branch.slice(0, 1);
+
+      // if(this._branch && Array.isArray(this._branch)){
+      //   this.filteredToBranch = this._branch.filter(
+      //     branch => branch.branchName !== this.filteredBranch[0].branchName
+      //   )
+      //   console.log("Filtered Branches (excluding 'Head Office'):", this.filteredToBranch);
+      // }
+
+      // if(this._branch[0]?.branchName === "Head Office"){
+      //   this.filteredToBranch = this._branch.slice(1);
+      // }
     });
+  }
+
+  onFromBranchChange(selectedBranchId: any){
+    console.log("selectedBranchId before conversion:", selectedBranchId); 
+
+    if (typeof selectedBranchId === 'string') {
+      selectedBranchId = selectedBranchId.split(':')[1]; 
+    }
+  
+    selectedBranchId = +selectedBranchId;
+
+    console.log("Converted selectedBranchId to number:", selectedBranchId);
+
+    if (isNaN(selectedBranchId)) {
+      console.log("Error: Invalid selectedBranchId:", selectedBranchId);
+      return; 
+    }
+
+    this.filteredToBranch = this._branch.filter(
+      (branch: any) => { 
+        console.log("Comparing with branchId:", branch.branchId);
+        return branch.branchId !== selectedBranchId;
+      }
+    )
   }
 
   onSelectProduct(product: any){
@@ -425,6 +464,13 @@ export class StockComponent implements OnInit {
   closeSuccess(data: boolean) {
     this.isSuccess = data;
     this.resetComponent();
+    this.route.navigate(['/home/pTransaction']);
+  }
+
+  deleteItem(product: any){
+    this.productList = this.productList.filter(
+      p => p.productId !== product.productId
+    )
   }
 
   onSubmit() {

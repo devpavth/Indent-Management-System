@@ -130,6 +130,8 @@ export class ViewEmployeeComponent implements OnInit {
           modifyby: new FormControl(sessionStorage.getItem('userId')),
         });
 
+        // this.viewEmployeeForm.markAllAsTouched();
+
         this.viewEmployeeForm.get('pin').valueChanges
         .pipe(
           debounceTime(300),
@@ -253,32 +255,51 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   fetchDesignation() {
+    // this.viewEmployeeForm.get('empDesig')?.reset();
+    // this.viewEmployeeForm.get('empDesig')?.setValue('');
+    // this.viewEmployeeForm.get('empDesig')?.disable();
+    // this.viewEmployeeForm.get('empDesig')?.clearValidators();
+    // this.viewEmployeeForm.get('empDesig').Validators().required;
+    // this.viewEmployeeForm.get('empDesig')?.clearValidators();
+    // this.viewEmployeeForm.get('empDesig')?.updateValueAndValidity();
+    
+    // this.viewEmployeeForm.get('empDesig').m
+
     this.EmployeeService.getDesignation().subscribe((res: any) => {
-      console.log(res);
+      console.log("fetching designation:",res);
       let check = this.viewEmployeeForm.get('empRole')?.value;
       if (check == 'Level 1') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 1')
           .map((key) => ({ index: key, name: res[key][0] }));
-        console.log(this._designation);
+        console.log("fetching designation in level 1:",this._designation);
       } else if (check == 'Level 2') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 2')
           .map((key) => ({ index: key, name: res[key][0] }));
+        console.log("fetching designation in level 2:",this._designation);
       } else if (check == 'Level 3') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 3')
           .map((key) => ({ index: key, name: res[key][0] }));
+          console.log("fetching designation in level 3:",this._designation);
       } else if (check == 'Level 4') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 4')
           .map((key) => ({ index: key, name: res[key][0] }));
+          console.log("fetching designation in level 4:",this._designation);
       } else if (check == 'Level 5') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 5')
           .map((key) => ({ index: key, name: res[key][0] }));
+          console.log("fetching designation in level 5:",this._designation);
       } else {
         this._designation = [{ index: 0, name: 'Not Data' }];
+      }
+      console.log("Designation fetched:", this._designation);
+
+      if(this._designation.length > 0){
+        this.viewEmployeeForm.get('empDesig').setValue(this._designation[0].index)
       }
     });
   }

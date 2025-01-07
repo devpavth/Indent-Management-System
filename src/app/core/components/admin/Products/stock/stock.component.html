@@ -149,6 +149,7 @@
                     #id
                     formControlName="vendorId"
                     class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    (change)="onFromBranchChange(id.value)"
                     required
                   >
                     <option
@@ -198,7 +199,7 @@
                     Choose Branch
                   </option>
                   <option
-                    *ngFor="let branch of _branch"
+                    *ngFor="let branch of filteredToBranch"
                     [ngValue]="branch.branchId"
                   >
                     {{ branch.branchName }}
@@ -628,6 +629,32 @@
                   <td class="px-4 py-3">{{ p.gstPercentage }}</td>
                   <td class="px-4 py-3">
                     {{ p.total.itemPrice | currency: "INR" }}
+                  </td>
+                  <td class="flex items-center justify-end px-2 py-3">
+                    <button
+                      (click)="deleteItem(p)"
+                      type="submit"
+                      class="inline-flex items-center rounded-lg bg-red-600 px-2 py-2 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                    >
+                      <svg
+                        class="mr-1 h-5 w-5 text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                        />
+                      </svg>
+          
+                    </button>
                   </td>
                   <!-- <td class="flex items-center justify-end px-4 py-3">
                     <button

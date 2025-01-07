@@ -53,13 +53,17 @@ export class ProductListComponent implements OnInit {
 
       // this.list = res;
       const currentList = productType === 'active' ? this.activeProductList : this.otherProductList;
+      
       this.listLength = currentList.length;
+      console.log("this.listLength:", this.listLength);
 
       // this.isActiveProductView = productType === 'active';
       // this.isOtherProductView = productType === 'other';
 
       let list: any[] = res;
       this.otherPrdLen = this.otherProductList.filter((m) => m.prdStatus == 303).length || 0;
+      console.log("this.otherPrdLen:", this.otherPrdLen);
+
       this.Spinner = false;
       switch (data) {
         case 1: {
@@ -77,6 +81,22 @@ export class ProductListComponent implements OnInit {
         }
       }
     });
+  }
+
+  onProductDeleted(productId: number){
+    console.log("Deleted product ID:", productId);
+
+    this.activeProductList = this.activeProductList.filter(
+      product => product.productId !== productId
+    )
+
+    this.otherProductList = this.otherProductList.filter(
+      product => product.productId !== productId
+    )
+
+    this.otherPrdLen = this.otherProductList.filter(
+      m => m.prdStatus === 303
+    ).length;
   }
 
   // fetchOtherProductList(data: number){
