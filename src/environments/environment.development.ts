@@ -130,6 +130,7 @@ export const environment = {
   // fetchTransactionInfo: Url + baseProductApi + '/gettransbycode/',
 
   productTransaction: Url + baseProductApi + '/gettransbycode/',
+  confirmInward: Url + baseProductApi + '/confirminward/',
 
   //report
 

@@ -200,7 +200,7 @@
 
     <table
       class="mb-4 w-full overflow-hidden rounded-lg border border-black bg-gray-50 shadow-md"
-    >
+      >
       <thead>
         <tr class="bg-blue-500 text-white">
           <th class="p-2 text-left">#</th>
@@ -229,10 +229,10 @@
               >Product Code : {{ item.transProductData.prdCode }}</span
             >
           </td>
-          <td class="p-2 text-right">{{ item.purchasedPrice }}</td>
+          <td class="p-2 text-right">{{ item.purchasedPrice | currency:'INR'}}</td>
           <td class="p-2 text-right">{{ item.prdQty }}</td>
           <td class="p-2 text-right">{{ item.gstPercentage }} %</td>
-          <td class="p-2 text-right">{{ item.itemTotalPrice }}</td>
+          <td class="p-2 text-right">{{ item.itemTotalPrice | currency:'INR'}}</td>
         </tr>
       </tbody>
     </table>
@@ -272,7 +272,7 @@
     <div class="w-full text-end">
       <h1 class="font-semibold">
         Total Price :
-        <span class="text-gray-700">{{ transactionData.totalPrice }}</span>
+        <span class="text-gray-700">{{ transactionData.totalPrice | currency:'INR'}}</span>
       </h1>
     </div>
     <!-- <div class="mb-12 mt-12">
