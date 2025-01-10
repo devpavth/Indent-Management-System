@@ -298,7 +298,7 @@ export class ViewEmployeeComponent implements OnInit {
       }
       console.log("Designation fetched:", this._designation);
 
-      if(this._designation.length > 0){
+      if(this._designation.length > 0 && this.isSave){
         this.viewEmployeeForm.get('empDesig').setValue(this._designation[0].index)
       }
     });

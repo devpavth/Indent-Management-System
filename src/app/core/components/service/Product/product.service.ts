@@ -115,4 +115,8 @@ export class ProductService {
     console.log("environment.fetchInwardForBranch + id:", environment.fetchInwardForBranch + id);
     return this.productHttp.get(environment.fetchInwardForBranch + id);
   }
+
+  confirmInward(code: any){
+    return this.productHttp.post(environment.confirmInward + code, '');
+  }
 }

@@ -227,12 +227,12 @@ export class StockComponent implements OnInit {
 
       this.filteredBranch = this._branch.slice(0, 1);
 
-      // if(this._branch && Array.isArray(this._branch)){
-      //   this.filteredToBranch = this._branch.filter(
-      //     branch => branch.branchName !== this.filteredBranch[0].branchName
-      //   )
-      //   console.log("Filtered Branches (excluding 'Head Office'):", this.filteredToBranch);
-      // }
+      if(this._branch && Array.isArray(this._branch) && this.userData?.empDesig === 15){
+        this._branch = this._branch.filter(
+          branch => branch.branchName !== this.filteredBranch[0].branchName
+        )
+        console.log("Filtered Branches (excluding 'Head Office'):", this.filteredToBranch);
+      }
 
       // if(this._branch[0]?.branchName === "Head Office"){
       //   this.filteredToBranch = this._branch.slice(1);
@@ -240,29 +240,29 @@ export class StockComponent implements OnInit {
     });
   }
 
-  onFromBranchChange(selectedBranchId: any){
-    console.log("selectedBranchId before conversion:", selectedBranchId); 
+  // onFromBranchChange(selectedBranchId: any){
+  //   console.log("selectedBranchId before conversion:", selectedBranchId); 
 
-    if (typeof selectedBranchId === 'string') {
-      selectedBranchId = selectedBranchId.split(':')[1]; 
-    }
+  //   if (typeof selectedBranchId === 'string') {
+  //     selectedBranchId = selectedBranchId.split(':')[1]; 
+  //   }
   
-    selectedBranchId = +selectedBranchId;
+  //   selectedBranchId = +selectedBranchId;
 
-    console.log("Converted selectedBranchId to number:", selectedBranchId);
+  //   console.log("Converted selectedBranchId to number:", selectedBranchId);
 
-    if (isNaN(selectedBranchId)) {
-      console.log("Error: Invalid selectedBranchId:", selectedBranchId);
-      return; 
-    }
+  //   if (isNaN(selectedBranchId)) {
+  //     console.log("Error: Invalid selectedBranchId:", selectedBranchId);
+  //     return; 
+  //   }
 
-    this.filteredToBranch = this._branch.filter(
-      (branch: any) => { 
-        console.log("Comparing with branchId:", branch.branchId);
-        return branch.branchId !== selectedBranchId;
-      }
-    )
-  }
+  //   this.filteredToBranch = this._branch.filter(
+  //     (branch: any) => { 
+  //       console.log("Comparing with branchId:", branch.branchId);
+  //       return branch.branchId !== selectedBranchId;
+  //     }
+  //   )
+  // }
 
   onSelectProduct(product: any){
     console.log("after selecting the product from the list", product);

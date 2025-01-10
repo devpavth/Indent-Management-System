@@ -28,6 +28,7 @@ export class ViewTransactionComponent {
   cityDropDownOptions: any;
 
   transactionList: any;
+  inwardPrdDetails: any;
 
   private productService = inject(ProductService);
 
@@ -44,60 +45,59 @@ export class ViewTransactionComponent {
     this.TransactionForm = this.fb.group({
       prdtrnsCode: [],
       inwardFromCode: [],
-      transType: [],
       tranRefNo: [],
       totalPrice: [],
       tranUpdBy: [],
       tranUpdOn: [],
       
-      branchDto: this.fb.group({
-        branchName: [],
-        add1: [],
-        add2: [],
-        city: [],
-        state: [],
-        pinCode: [],
-        gstNumber: [],
-        manager: [],
-        branchMobilenumber: []
-      }),
-      vendorDto: this.fb.group({
-        branchName: [],
-        add1: [],
-        add2: [],
-        city: [],
-        state: [],
-        pinCode: [],
-        gstNumber: [],
-        manager: [],
-        branchMobilenumber: []
-      }),
-      transPrdDetails: this.fb.array([this.showTransactionDetails()]),
+      // branchDto: this.fb.group({
+      //   branchName: [],
+      //   add1: [],
+      //   add2: [],
+      //   city: [],
+      //   state: [],
+      //   pinCode: [],
+      //   gstNumber: [],
+      //   manager: [],
+      //   branchMobilenumber: []
+      // }),
+      // vendorDto: this.fb.group({
+      //   branchName: [],
+      //   add1: [],
+      //   add2: [],
+      //   city: [],
+      //   state: [],
+      //   pinCode: [],
+      //   gstNumber: [],
+      //   manager: [],
+      //   branchMobilenumber: []
+      // }),
+      // transPrdDetails: this.fb.array([this.showTransactionDetails()]),
     });
   }
 
-  showTransactionDetails(){
-    return this.fb.group({
-      transProductData: this.fb.group({
-        prdmdlName: [],
-        prdDescription: [],
-        prdCode: [],
-        prdHsnCode: [],
-        prdbrndName: [],
-        prdgrpName: [],
-        prdcatgName: [],
-        headOfAccName: []
-      }),
-      prdUnit: [],
-      totalPieces: [],
-      prdQty: [],
-      purchasedPrice: [],
-      gstPercentage: [],
-      itemTotalPrice: [],
-      updatedBy: [],
-      updateOn: [],
-    })
-  }
+  // showTransactionDetails(){
+  //   return this.fb.group({
+  //     transProductData: this.fb.group({
+  //       prdmdlName: [],
+  //       prdDescription: [],
+  //       prdCode: [],
+  //       prdHsnCode: [],
+  //       prdbrndName: [],
+  //       prdgrpName: [],
+  //       prdcatgName: [],
+  //       headOfAccName: []
+  //     }),
+  //     prdUnit: [],
+  //     totalPieces: [],
+  //     prdQty: [],
+  //     purchasedPrice: [],
+  //     gstPercentage: [],
+  //     itemTotalPrice: [],
+  //     updatedBy: [],
+  //     updateOn: [],
+  //   })
+  // }
 
   ngOnInit(): void {
     // this.getBranchName();
@@ -111,6 +111,8 @@ export class ViewTransactionComponent {
       (res) =>{
         console.log("fetching transaction details:", res);
         this.transactionList = res;
+
+        this.inwardPrdDetails = this.transactionList.transPrdDetails;
       },
       (error) => {
         console.log("error while fetching transaction details:", error);
@@ -132,26 +134,17 @@ export class ViewTransactionComponent {
   }
 
   acceptTransactionDetails(code: any){
-    
-  }
-
-  updateVendorDetails(data: any) {
-    console.log(data);
-    let id = this.TransactionForm.get('vendorId')?.value;
-    console.log(id);
-
-    this.vendorService.updateVendor(id, data).subscribe(
+    this.productService.confirmInward(code).subscribe(
       (res) => {
-        console.log(res);
+        console.log("accepting inward alert transaction:", res);
+        this.closeVendor.emit(false);
       },
       (error) => {
-        console.log(error);
-        if (error.status == 200) {
-          this.route.navigate(['/home/vendorList']);
-        }
-      },
-    );
+        console.log("error while accepting inward alert transaction:", error);
+      }
+    )
   }
+
   // getBranchName() {
   //   this.branchService.getBranch().subscribe((res) => {
   //     console.log(res);
