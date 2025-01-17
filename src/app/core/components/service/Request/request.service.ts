@@ -28,7 +28,7 @@ export class RequestService {
   }
   branchReject(sno: any, data: any) {
     let mesgParams = new HttpParams();
-    mesgParams = mesgParams.append('commends', data);
+    mesgParams = mesgParams.append('comments', data);
     return this.http.post(environment.branchRejected + sno, data, {
       params: mesgParams,
     });
@@ -41,7 +41,7 @@ export class RequestService {
   }
   adminReject(sno: any, data: any) {
     let mesgParams = new HttpParams();
-    mesgParams = mesgParams.append('commends', data);
+    mesgParams = mesgParams.append('comments', data);
     return this.http.post(environment.adminRejected + sno, data, {
       params: mesgParams,
     });
@@ -109,5 +109,25 @@ export class RequestService {
     console.log("Sending request for OTP.");
     console.log('Get URL:', environment.confirmOtp);
     return this.http.get(environment.confirmOtp);
+  }
+
+  fetchProgramManagerRequest(id: any, data: any){
+    let mesgParams = new HttpParams();
+    mesgParams = mesgParams.append('startDate', data);
+    return this.http.get(environment.fetchProgramManagerRequest + id, {
+      params: mesgParams,
+    });
+  }
+
+  programManagerApproval(id: any){
+    return this.http.post(environment.programManagerApproval + id, '');
+  }
+
+  programManagerRejection(sno: any, data: any){
+    let mesgParams = new HttpParams();
+    mesgParams = mesgParams.append('comments', data);
+    return this.http.post(environment.programManagerRejected + sno, data, {
+      params: mesgParams,
+    });
   }
 }

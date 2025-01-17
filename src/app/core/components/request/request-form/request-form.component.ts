@@ -120,13 +120,7 @@ export class RequestFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("this.requestIndentHead.get('priorityType')?.value:", this.requestIndentHead.get('priorityType')?.value);
-
-    this.requestIndentHead.get('priorityType')?.valueChanges
-    .pipe(
-      tap(this.requestIndentHead.get('priorityType')?.value)
-    )
-
+    console.log("checking:",this.requestIndentHead.get('requestIndentHead')?.value);
     this.intervalId = setInterval(() => {
       this.date = new Date();
     }, 1000);
@@ -138,12 +132,13 @@ export class RequestFormComponent implements OnInit {
         console.log(`Product Name Changed for Index:`, searchTerm);
         if(this.isProductSelected){
           this.isProductSelected = false;
-          this.isVendorView = true;
+         // this.isVendorView = true;
           return of([]);
         }
         this.noResults = false;
         this.storeProductData = [];
         if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
+          // this.isVendorView = true;
           return of([]);
         }
         return this.productService.fetchLiveProductDetails({searchTerm}).pipe(
@@ -191,9 +186,13 @@ export class RequestFormComponent implements OnInit {
 
     console.log("this.total in ngOninit:", this.total);
 
-    if(this.productForm.get('productForm')?.value > 5000){
-      this.isVendorView = false;
-    }
+    // if(this.storeTotal){
+    //   this.isVendorView = true
+    // }
+
+    // if(this.productForm.get('productForm')?.value > 5000){
+    //   this.isVendorView = false;
+    // }
   }
 
   onChanges(): void {
@@ -218,7 +217,7 @@ export class RequestFormComponent implements OnInit {
 
     need(data: any) {
     console.log("data:", data);
-    if (data == 1) {
+    if (data == 108) {
       this.isNeed = true;
     }
   }
@@ -311,6 +310,7 @@ export class RequestFormComponent implements OnInit {
   }
 
   onSubmitHeader(data: any) {
+    console.log("header data:", data);
     this.isEditHeader = true;
     Object.keys(this.requestIndentHead.controls).forEach((f) => {
       this.requestIndentHead.get(f)?.disable();
@@ -350,8 +350,11 @@ export class RequestFormComponent implements OnInit {
   }
 
   addProductToList(product: any) {
+    /*  */
+    // this.productForm.reset();
+    /*  */
     console.log("product:", product);
-    this.isVendorView = false;
+    //this.isVendorView = false;
   
     this.deleteToastMsg = 'Item Added';
     this.isTost = true;
@@ -389,26 +392,29 @@ export class RequestFormComponent implements OnInit {
 
     console.log("this.storeTotal:", this.storeTotal);
 
-    if(this.storeTotal > 5000){
+    var finalAmt = product.unitPrice
+
+    if(finalAmt > 5000){
       this.isVendorView = false;
     }
 
-    this.isVendorView = this.checkVendorView();
-    console.log("Updated isVendorView:", this.isVendorView);
+    // this.isVendorView = this.checkVendorView();
+    // console.log("Updated isVendorView:", this.isVendorView);
 
     this.productData = '';
     this.calculateSums();
+    // this.productForm.reset();
     // this.productReset();
   }
 
-    checkVendorView(): boolean {
-    // Calculate total from the product list
-      const total = this.productList.reduce((acc, product) => acc + product.total, 0);
-      console.log("Calculated total in checkVendorView:", total);
+    // checkVendorView(): boolean {
+    // // Calculate total from the product list
+    //   const total = this.productList.reduce((acc, product) => acc + product.total, 0);
+    //   console.log("Calculated total in checkVendorView:", total);
     
-      // Return true if total <= 5000 (show vendor view), false otherwise
-      return total <= 5000;
-    }
+    //   // Return true if total <= 5000 (show vendor view), false otherwise
+    //   return total <= 5000;
+    // }
   
 
   calculateSums() {
@@ -517,13 +523,13 @@ export class RequestFormComponent implements OnInit {
       assgndVendors: this.vendorList,
       assignedDonors: this.funderList,
     };
-    console.log(indent);
+    console.log("indent data:", indent);
     this.requestService.postIndent(indent).subscribe(
       (res) => {
-        console.log(res);
+        console.log("successfully created indent request:", res);
       },
       (error) => {
-        console.log(error);
+        console.log("error while creating indent request:",error);
 
         if (error.status == 200) {
           this.productForm.reset();
@@ -534,6 +540,10 @@ export class RequestFormComponent implements OnInit {
           console.log(error.error.text);
 
           this.successData = { show: 3, text: `${error.error.text}` };
+        } else if(error.status === 406){
+          console.log("error because product total is less than 500:", error);
+          console.log("error because product total is less than 500 checking:", error.error);
+          alert(error.error);
         }
       },
     );

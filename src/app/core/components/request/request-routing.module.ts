@@ -6,6 +6,7 @@ import { AdminApprovelComponent } from './admin-approvel/admin-approvel.componen
 import { YourRequestComponent } from './your-request/your-request.component';
 import { ViewRequestComponent } from './view-request/view-request.component';
 import { OtherProductComponent } from './other-product/other-product.component';
+import { ProgramManagerApprovalComponent } from './program-manager-approval/program-manager-approval.component';
 
 const routes: Routes = [
   { component: RequestFormComponent, path: 'request' },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { component: YourRequestComponent, path: 'yourRequest' },
   { component: ViewRequestComponent, path: 'viewRequest' },
   { component: OtherProductComponent, path: 'others' },
+  { component: ProgramManagerApprovalComponent, path: 'managerApproval'},
 ];
 
 @NgModule({

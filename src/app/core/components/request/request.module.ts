@@ -11,6 +11,7 @@ import { YourRequestComponent } from './your-request/your-request.component';
 import { ViewRequestComponent } from './view-request/view-request.component';
 import { OtherProductComponent } from './other-product/other-product.component';
 import { VerificationComponent } from './verification/verification.component';
+import { ProgramManagerApprovalComponent } from './program-manager-approval/program-manager-approval.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { VerificationComponent } from './verification/verification.component';
     ViewRequestComponent,
     OtherProductComponent,
     VerificationComponent,
+    ProgramManagerApprovalComponent,
   ],
   imports: [
     CommonModule,
