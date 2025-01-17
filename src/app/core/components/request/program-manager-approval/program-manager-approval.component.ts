@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 
 @Component({
-  selector: 'app-branch-approvel',
-  templateUrl: './branch-approvel.component.html',
-  styleUrl: './branch-approvel.component.css',
+  selector: 'app-program-manager-approval',
+  templateUrl: './program-manager-approval.component.html',
+  styleUrl: './program-manager-approval.component.css'
 })
-export class BranchApprovelComponent implements OnInit {
+export class ProgramManagerApprovalComponent {
   isProcess = true;
   isCompleted = false;
   isRejected = false;
@@ -14,13 +14,14 @@ export class BranchApprovelComponent implements OnInit {
   branch = sessionStorage.getItem('branchId');
 
   reqId: any;
-  showBranch: number = 0;
+  showManager: number = 0;
   _yourReq: any;
-  currentDate: string | undefined;
+
+  selectedDate: string | undefined;
   
   constructor(private rService: RequestService) {
     const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
+    this.selectedDate = today.toISOString().split('T')[0];
   }
   ngOnInit() {
     this.fetchRequestList();
@@ -32,16 +33,18 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.fetchProgramManagerRequest(102, this.selectedDate).subscribe(
         (res: any) => {
-          console.log('jagan', res);
+          console.log('fetching processing request:', res);
           let list: any[] = res;
+          console.log("list:", list);
           list = list.filter((l) => l.requestStatus == 201);
-          console.log(list);
+          console.log("filtering processing request:",list);
 
           this._yourReq = list;
         },
         (error) => {
+          console.log("error while fetching processing request:", error);
           if (error.status == 204) {
             this._yourReq = undefined;
           }
@@ -53,14 +56,17 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.fetchProgramManagerRequest(202, this.selectedDate).subscribe(
         (res: any) => {
+          console.log("fetching completed request:", res);
           let list: any[] = res;
+          console.log("listing completed:", list);
           list = list.filter((l) => l.requestStatus == 102);
-          console.log(list);
+          console.log("filtering completed request:",list);
           this._yourReq = list;
         },
         (error) => {
+          console.log("error while fetching completed request:", error);
           if (error.status == 204) {
             this._yourReq = undefined;
           }
@@ -72,14 +78,16 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.fetchProgramManagerRequest(406, this.selectedDate).subscribe(
         (res: any) => {
+          console.log("fetching rejected request:", res);
           let list: any[] = res;
           list = list.filter((l) => l.requestStatus == 406);
-          console.log(list);
+          console.log("filtering rejected request:", list);
           this._yourReq = list;
         },
         (error) => {
+          console.log("error while fetching rejected request:", error);
           if (error.status == 204) {
             this._yourReq = undefined;
           }
@@ -90,9 +98,9 @@ export class BranchApprovelComponent implements OnInit {
 
   viewRequest(data: any) {
     this.isViewReq = true;
-    console.log(data);
+    console.log("viewing the request data:", data);
     this.reqId = data;
-    this.showBranch = 2;
+    this.showManager = 1;
   }
   closeView(data: boolean) {
     this.isViewReq = data;

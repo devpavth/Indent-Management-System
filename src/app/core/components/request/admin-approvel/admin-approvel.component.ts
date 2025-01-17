@@ -16,10 +16,15 @@ export class AdminApprovelComponent implements OnInit {
   _yourReq: any;
   branch = sessionStorage.getItem('branchId');
 
+  currentDate: string | undefined;
+
   ngOnInit() {
     this.fetchRequestList();
   }
-  constructor(private ReqService: RequestService) {}
+  constructor(private ReqService: RequestService) {
+    const today = new Date();
+    this.currentDate = today.toISOString().split('T')[0];
+  }
   fetchRequestList() {
     if (
       this.isProcess == true &&

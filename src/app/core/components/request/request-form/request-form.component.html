@@ -81,8 +81,8 @@
                     type="radio"
                     id="hosting-small"
                     formControlName="priorityType"
-                    value="0"
-                    (change)="need(this.requestIndentHead.get('need')?.value)"
+                    value="109"
+                    (change)="need(this.requestIndentHead.get('priorityType')?.value)"
                     class="peer hidden"
                     required
                   />
@@ -100,9 +100,9 @@
                     type="radio"
                     id="hosting-big"
                     formControlName="priorityType"
-                    value="1"
+                    value="108"
                     class="peer hidden"
-                    (change)="need(this.requestIndentHead.get('need')?.value)"
+                    (change)="need(this.requestIndentHead.get('priorityType')?.value)"
                   />
                   <label
                     for="hosting-big"
@@ -684,10 +684,10 @@
         </div>
       </form>
       <section *ngIf="productList.length > 0">
-        <div class="overflow-x-auto border-t border-rose-300 bg-rose-50 p-4">
+        <div class="overflow-x-auto border-t border-violet-300 bg-violet-50 p-4">
           <div class="flex gap-2">
             <svg
-              class="h-6 w-6 text-rose-600"
+              class="h-6 w-6 text-violet-600"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -704,15 +704,15 @@
               />
             </svg>
 
-            <h5 class="mb-4 text-xl font-bold text-rose-600">Product List</h5>
+            <h5 class="mb-4 text-xl font-bold text-violet-600">Product List</h5>
           </div>
 
           <table class="w-full rounded-lg text-left text-sm text-gray-500">
-            <thead class="bg-rose-600 text-xs uppercase text-gray-50">
+            <thead class="bg-violet-600 text-xs uppercase text-gray-50">
               <tr>
                 <th
                   scope="col"
-                  class="rounded-tl-lg border-purple-500 px-4 py-3"
+                  class="rounded-tl-lg border-violet-500 px-4 py-3"
                 >
                   S.no
                 </th>
@@ -732,7 +732,7 @@
             </thead>
             <tbody>
               <tr
-                class="border-x border-b border-rose-300"
+                class="border-x border-b border-violet-300"
                 *ngFor="let prd of productList; let i = index"
               >
                 <td class="px-4 py-3 text-xl font-semibold">{{ i + 1 }}</td>
@@ -783,7 +783,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="space-y-6 rounded-b-lg border border-rose-300 p-4">
+          <div class="space-y-6 rounded-b-lg border border-violet-300 p-4">
             <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
               Order summary
             </h4>

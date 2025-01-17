@@ -7,4 +7,18 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class SuccessPopComponent {
   @Output() close = new EventEmitter<boolean>();
+
+  ngOnInit(){
+
+  }
+
+  onClose() {
+    // Perform any necessary cleanup or reset logic
+    this.refreshComponentState();
+    window.location.reload();
+  }
+  
+  refreshComponentState() {
+    
+  }
 }

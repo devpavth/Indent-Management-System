@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.8:9010/';
+let Url = 'http://192.168.1.2:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -78,6 +78,7 @@ export const environment = {
   branchApprovelList: Url + baseRequestApi + '/branchrequest',
   adminAprovalList: Url + baseRequestApi + '/requestsforadmin',
   getYourReq: Url + baseRequestApi + '/yourRequest',
+  fetchProgramManagerRequest: Url + baseRequestApi + '/prgmanagerRequst/',
   //old request api
 
   postRequestIndent: Url + baseRequestApi + '/newrequest',
@@ -85,13 +86,16 @@ export const environment = {
   viewYourReq: Url + baseRequestApi + '/getrequestbyid/',
   reqProduct: Url + baseRequestApi + '/getproductdata/',
 
+  programManagerApproval: Url + baseRequestApi + '/acceptprgmanager/',
+  programManagerRejected: Url + baseRequestApi + '/rejectedbyprgmanager/',
+
   branchApprovel: Url + baseRequestApi + '/acceptBauthorize/',
   branchRejected: Url + baseRequestApi + '/rejectBauthorize/',
 
   adminAprovel: Url + baseRequestApi + '/acceptAauthorize/',
   adminRejected: Url + baseRequestApi + '/rejectAauthorize/',
 
-  commend: Url + baseRequestApi + '/getactivecommends',
+  commend: Url + baseRequestApi + '/getactivecomments',
 
   finRequestList: Url + baseRequestApi + '/requestforfinance',
   updateRequestList: Url + baseRequestApi + '/updaterequest/',

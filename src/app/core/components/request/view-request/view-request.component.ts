@@ -13,7 +13,7 @@ export class ViewRequestComponent implements OnInit {
   isRejected: boolean = false;
   isApproved: boolean = false;
   isRejectPop: boolean = false;
-  commend: any;
+  commendArray: { key: string; value: string }[] = [];
 
   date: any = new Date();
   _requestDetails: any;
@@ -28,19 +28,38 @@ export class ViewRequestComponent implements OnInit {
   }
   fetchDetails(data: any) {
     this.requstService.viewReq(data).subscribe((res) => {
-      console.log(res);
+      console.log("fetching details:", res);
       this._requestDetails = res;
 
       console.log(this._requestDetails.branchAuthorize);
     });
   }
   approvel() {
+    if(this.showID === 1){
+      this.requstService
+        .programManagerApproval(this._requestDetails.indentHeaders.sno)
+        .subscribe(
+          (res) => {
+            console.log('program manager Approval success', res);
+            this.isApproved = true;
+          },
+          (error) => {
+            if(error.status === 202){
+              this.isApproved = true;
+            }
+            if(error.status === 208){
+              console.error('Approve error: Action already made');
+            }
+          }
+        )
+        
+    }
     if (this.showID === 2) {
       this.requstService
         .branchApprovel(this._requestDetails.indentHeaders.sno)
         .subscribe(
           (res) => {
-            console.log('branch Approvel succes', res);
+            console.log('branch Approvel success', res);
           },
           (error) => {
             if (error.status === 202) {
@@ -73,7 +92,28 @@ export class ViewRequestComponent implements OnInit {
     }
   }
   rejected(sno: any, data: any) {
-    console.log(sno, data);
+    console.log("rejecting the requset:", sno, data);
+
+    if(this.showID === 1){
+      this.requstService.programManagerRejection(sno, data).subscribe(
+        (res) => {
+          console.log("program manager rejection response:", res);
+          this.isRejected = false;
+          this.isRejectPop = true;
+          // this._requestDetails = '';
+        },
+        (error) => {
+          console.log("error while rejecting the request:", error);
+          if (error.status === 202) {
+            this.isRejected = false;
+            this.isRejectPop = true;
+          }
+          if (error.status === 208) {
+            console.error('Rejected error: Action already made');
+          }
+        }
+      )
+    }
 
     if (this.showID === 2) {
       this.requstService.branchReject(sno, data).subscribe(
@@ -116,7 +156,13 @@ export class ViewRequestComponent implements OnInit {
   }
   fetchReason() {
     this.requstService.commands().subscribe((res) => {
-      this.commend = res;
+      console.log("fetching comments:", res);
+      this.commendArray = Object.entries(res).map(([key, value]) =>({
+        key,
+        value,
+      }))
+      .filter((item) => item.key !== '0');
+      console.log("this.commend:", this.commendArray);
     });
   }
 }

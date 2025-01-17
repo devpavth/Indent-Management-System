@@ -305,10 +305,10 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   updateEmployeeDetails(data: any) {
-    console.log(data);
+    console.log("successfully updating the employee data:", data);
 
     this.EmployeeService.updateEmployeeDetails(data).subscribe((res) => {
-      console.log(res);
+      console.log("successfully updated the employee details:",res);
     });
     this.showSuccess.emit(true);
   }

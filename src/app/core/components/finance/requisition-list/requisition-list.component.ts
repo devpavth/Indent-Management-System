@@ -8,10 +8,16 @@ import { SharedServiceService } from '../../service/shared-service/shared-servic
   styleUrl: './requisition-list.component.css',
 })
 export class RequisitionListComponent implements OnInit {
+  currentDate: string | undefined;
+
   ngOnInit() {
     this.fetchRequestList();
   }
-  constructor(private req: RequestService) {}
+
+  constructor(private req: RequestService) {
+    const today = new Date();
+    this.currentDate = today.toISOString().split('T')[0];
+  }
   isProcess = true;
   isCompleted = false;
   isRejected = false;
