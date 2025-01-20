@@ -17,6 +17,8 @@ export class AdminApprovelComponent implements OnInit {
   branch = sessionStorage.getItem('branchId');
 
   currentDate: string | undefined;
+  maxDate: string | undefined;
+  isViewSelectedDate: boolean = true;
 
   ngOnInit() {
     this.fetchRequestList();
@@ -24,6 +26,7 @@ export class AdminApprovelComponent implements OnInit {
   constructor(private ReqService: RequestService) {
     const today = new Date();
     this.currentDate = today.toISOString().split('T')[0];
+    this.maxDate = today.toISOString().split('T')[0];
   }
   fetchRequestList() {
     if (
@@ -32,13 +35,17 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == false
     ) {
       let status = 102;
-      this.ReqService.adminRequestList(status, this.branch).subscribe(
+      this.isViewSelectedDate = false;
+      this.ReqService.adminRequestList(status).subscribe(
         (res) => {
           this._yourReq = res;
-          console.log(res);
+          console.log("fetching admin request processing list:", res);
         },
         (error) => {
+          console.log("error while fetching admin request processing list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },
@@ -50,12 +57,17 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == false
     ) {
       let status = 202;
-      this.ReqService.adminRequestList(status, this.branch).subscribe(
+      this.isViewSelectedDate = true;
+      this.ReqService.adminRequestList(status, this.currentDate).subscribe(
         (res) => {
           this._yourReq = res;
+          console.log("fetching admin request accepted list:", res);
         },
         (error) => {
+          console.log("error while fetching admin request accepted list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },
@@ -67,12 +79,17 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == true
     ) {
       let status = 406;
-      this.ReqService.adminRequestList(status, this.branch).subscribe(
+      this.isViewSelectedDate = true;
+      this.ReqService.adminRequestList(status, this.currentDate).subscribe(
         (res) => {
           this._yourReq = res;
+          console.log("fetching admin request rejected list:", res);
         },
         (error) => {
+          console.log("error while fetching admin request rejected list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },

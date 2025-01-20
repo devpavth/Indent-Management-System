@@ -80,7 +80,7 @@
                   }"
                   required
                 >
-                  <option value="">Chose Funder</option>
+                  <option value="">Choose Funder</option>
                   <option value="125">Local</option>
                   <option value="126">Donor</option>
                   <option value="127">FCRA</option>
@@ -310,7 +310,14 @@
             </div>
             <div class="flex items-center justify-end">
               <button
+                [disabled]="funderForm.invalid"
                 type="submit"
+                [ngClass]="{
+                  'bg-gray-400':
+                    funderForm.invalid,
+                  'hover:bg-gray-400':
+                    funderForm.invalid
+                }"
                 class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
               >
                 Submit
@@ -321,4 +328,10 @@
       </div>
     </div>
   </div>
+</section>
+<section *ngIf="isSuccess">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="closeSuccess($event)"
+  ></app-success>
 </section>

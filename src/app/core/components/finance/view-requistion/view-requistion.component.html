@@ -173,7 +173,7 @@
                               class="bg-purple-500 text-xs uppercase text-gray-50 dark:bg-gray-700 dark:text-gray-400"
                             >
                               <tr>
-                                <th scope="col" class="px-6 py-3">product?</th>
+                                <th scope="col" class="px-6 py-3">product</th>
                                 <th scope="col" class="px-6 py-3">
                                   Unit Price
                                 </th>
@@ -195,7 +195,7 @@
                               <tr
                                 *ngFor="
                                   let product of _requestDetails()
-                                    .productDetails
+                                    ?.productDetails
                                 "
                                 class="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                               >
@@ -275,7 +275,7 @@
                         </dt>
                         <dd class="col-span-2 text-gray-500">
                           {{
-                            this._requestDetails().indentHeaders.totalPrice
+                            this._requestDetails()?.indentHeaders.totalPrice
                               | currency: "INR"
                           }}
                         </dd>
@@ -747,7 +747,7 @@
                           [ngClass]="{
                             'text-green-500':
                               this.approvelAmt ==
-                              this._requestDetails().indentHeaders.totalPrice
+                              this._requestDetails()?.indentHeaders.totalPrice
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -766,7 +766,7 @@
                           [ngClass]="{
                             'text-green-500':
                               approvelAmt ==
-                                this._requestDetails().indentHeaders
+                                this._requestDetails()?.indentHeaders
                                   .totalPrice && approvelAmt == donorTotal
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
@@ -789,7 +789,7 @@
                         (click)="submiteDonorList()"
                         [disabled]="
                           approvelAmt !=
-                            this._requestDetails().indentHeaders.totalPrice ||
+                            this._requestDetails()?.indentHeaders.totalPrice ||
                           approvelAmt != donorTotal
                         "
                         [ngClass]="{
@@ -864,10 +864,10 @@
                                 placeholder="Enter your email"
                               >
                                 <option
-                                  *ngFor="let commend of commend"
-                                  value=" {{ commend.commendId }}"
+                                  *ngFor="let commend of commendArray"
+                                  value="{{ commend.key }}"
                                 >
-                                  {{ commend.commends }}
+                                  {{ commend.value }}
                                 </option>
                               </select>
                             </div>

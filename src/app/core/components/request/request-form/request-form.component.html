@@ -673,9 +673,16 @@
             </div>
             <div class="mt-5 space-y-3">
               <button
+                [disabled]="productForm.invalid"
                 (click)="addProductToList(productForm.value)"
                 type="submit"
-                class="btn-rose w-full rounded-lg"
+                [ngClass]="{
+                  'bg-gray-400':
+                    productForm.invalid,
+                  'hover:bg-gray-400':
+                    productForm.invalid
+                }"
+                class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
               >
                 Add Product
               </button>

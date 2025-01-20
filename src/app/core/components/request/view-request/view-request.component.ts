@@ -17,6 +17,9 @@ export class ViewRequestComponent implements OnInit {
 
   date: any = new Date();
   _requestDetails: any;
+  isViewProgramManagerApproval: boolean = false;
+  isViewBranchApproval: boolean = false;
+
   constructor(private readonly requstService: RequestService) {}
   ngOnInit(): void {
     this.fetchReason();
@@ -30,6 +33,13 @@ export class ViewRequestComponent implements OnInit {
     this.requstService.viewReq(data).subscribe((res) => {
       console.log("fetching details:", res);
       this._requestDetails = res;
+
+      if(this._requestDetails.progarmMgrAuthData.authStatusCode === 202){
+        this.isViewProgramManagerApproval = true;
+      }
+      if(this._requestDetails.branchAuthData.authStatusCode === 202){
+        this.isViewBranchApproval = true;
+      }
 
       console.log(this._requestDetails.branchAuthorize);
     });
@@ -60,6 +70,7 @@ export class ViewRequestComponent implements OnInit {
         .subscribe(
           (res) => {
             console.log('branch Approvel success', res);
+            this.isApproved = true;
           },
           (error) => {
             if (error.status === 202) {
@@ -78,7 +89,8 @@ export class ViewRequestComponent implements OnInit {
         .adminApprovel(this._requestDetails.indentHeaders.sno)
         .subscribe(
           (res) => {
-            console.log('branch Approvel succes', res);
+            console.log('admin Approval succes', res);
+            this.isApproved = true;
           },
           (error) => {
             if (error.status === 202) {
@@ -118,7 +130,9 @@ export class ViewRequestComponent implements OnInit {
     if (this.showID === 2) {
       this.requstService.branchReject(sno, data).subscribe(
         (res) => {
-          console.log(res);
+          console.log("branch manager rejected the indent request:", res);
+          this.isRejected = false;
+          this.isRejectPop = true;
         },
         (error) => {
           if (error.status === 202) {
@@ -135,7 +149,9 @@ export class ViewRequestComponent implements OnInit {
       console.log(sno, data);
       this.requstService.adminReject(sno, data).subscribe(
         (res) => {
-          console.log(res);
+          console.log("admin rejected the indent request:", res);
+          this.isRejected = false;
+          this.isRejectPop = true;
         },
         (error) => {
           if (error.status === 202) {

@@ -20,9 +20,31 @@ export class RequestService {
   reqProduct(data: any) {
     return this.http.get(environment.reqProduct + data);
   }
-  branchRequestList() {
-    return this.http.get(environment.branchApprovelList);
+
+  branchRequestList(id: any, data?: string) {
+    let params = new HttpParams();
+
+    if(data){
+      params = params.append('startDate', data);
+    }
+
+    return this.http.get(environment.branchApprovelList + id, {
+      params: params,
+    });
   }
+
+  // fetchProgramManagerRequest(id: any, data?: string){
+  //   let mesgParams = new HttpParams();
+
+  //   if(data){
+  //     mesgParams = mesgParams.append('startDate', data);
+  //   }
+
+  //   return this.http.get(environment.fetchProgramManagerRequest + id, {
+  //     params: mesgParams,
+  //   });
+  // }
+
   branchApprovel(data: any) {
     return this.http.post(environment.branchApprovel + data, data);
   }
@@ -33,8 +55,16 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  adminRequestList(status: any, branchId: any) {
-    return this.http.get(environment.adminAprovalList);
+  adminRequestList(status: any, data?: string) {
+    let params = new HttpParams();
+
+    if(data){
+      params = params.append('startDate', data);
+    }
+
+    return this.http.get(environment.adminAprovalList + status, {
+      params: params,
+    });
   }
   adminApprovel(data: any) {
     return this.http.post(environment.adminAprovel + data, data);
@@ -46,8 +76,16 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  finRequestList(data: any): Observable<any> {
-    return this.http.get(environment.finRequestList);
+  finRequestList(status: any, data?: string): Observable<any> {
+    let params = new HttpParams();
+
+    if(data){
+      params = params.append('startDate', data);
+    }
+
+    return this.http.get(environment.finRequestList + status, {
+      params: params
+    });
   }
   commands() {
     return this.http.get(environment.commend);
@@ -60,11 +98,10 @@ export class RequestService {
   }
   commend(id: any, data: any, check: number) {
     let commendParams = new HttpParams();
-    commendParams = commendParams.append('commends', data);
-    commendParams = commendParams.append(
-      'notes',
-      'ethula Onnu Illa kizha pottudu',
-    );
+    commendParams = commendParams.append('comments', data.toString());
+    console.log("typeof data:", typeof data);
+    console.log("commendParams:", commendParams);
+  
     if (check === 1) {
       return this.http.post(
         environment.finHolding + id,
@@ -111,9 +148,13 @@ export class RequestService {
     return this.http.get(environment.confirmOtp);
   }
 
-  fetchProgramManagerRequest(id: any, data: any){
+  fetchProgramManagerRequest(id: any, data?: string){
     let mesgParams = new HttpParams();
-    mesgParams = mesgParams.append('startDate', data);
+
+    if(data){
+      mesgParams = mesgParams.append('startDate', data);
+    }
+
     return this.http.get(environment.fetchProgramManagerRequest + id, {
       params: mesgParams,
     });
