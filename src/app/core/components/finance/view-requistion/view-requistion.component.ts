@@ -53,6 +53,7 @@ export class ViewRequistionComponent implements OnInit {
   selectedDonorName = '';
 
   approvelAmt: number | undefined;
+  commendArray: { key: string; value: string }[] = [];
 
   constructor(
     private requestService: RequestService,
@@ -75,6 +76,7 @@ export class ViewRequistionComponent implements OnInit {
 
   fetchDetails(data: any) {
     this.requestService.viewReq(data).subscribe((res) => {
+      console.log("fetching data:", res);
       this._requestDetails.set(res);
       this.calculateDate();
     });
@@ -263,16 +265,31 @@ export class ViewRequistionComponent implements OnInit {
   }
   fetchReason() {
     this.requestService.commands().subscribe((res) => {
-      this.commend = res;
+      // this.commend = res;
+      // console.log("this.commend:", this.commend);
+      this.commendArray = Object.entries(res).map(([key, value]) =>({
+        key,
+        value,
+      }))
+      .filter((item) => item.key !== '0');
+      console.log("this.commend:", this.commendArray);
     });
   }
   postReason(data: any) {
+    console.log("reason for holding or rejection:", data);
+    console.log("typeof reason for holding or rejection:", typeof data);
+
+    const numericData = Number(data);
+    console.log("Converted numeric data:", numericData);
+    console.log("typeof Converted numeric data:", typeof numericData);
+
     if (this.isHolding == true && this.isReject == false) {
-      this.requestService.commend(this.reqId, data, 1)?.subscribe(
+      this.requestService.commend(this.reqId, numericData, 1)?.subscribe(
         (res) => {
-          console.log(res);
+          console.log("successfully hold the request:", res);
         },
         (error) => {
+          console.log("error while holding the request:", error);
           if (error.status == 200) {
             alert('This Request is on Hold');
             this.closeView.emit(false);
@@ -281,11 +298,12 @@ export class ViewRequistionComponent implements OnInit {
       );
     }
     if (this.isHolding == false && this.isReject == true) {
-      this.requestService.commend(this.reqId, data, 2)?.subscribe(
+      this.requestService.commend(this.reqId, numericData, 2)?.subscribe(
         (res) => {
-          console.log(res);
+          console.log("successfully rejected the request:", res);
         },
         (error) => {
+          console.log("error while rejecting the request:", error);
           if (error.status == 200) {
             alert('This Request is Rejected');
             this.closeView.emit(false);

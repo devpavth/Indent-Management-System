@@ -17,10 +17,13 @@ export class BranchApprovelComponent implements OnInit {
   showBranch: number = 0;
   _yourReq: any;
   currentDate: string | undefined;
+  maxDate: string | undefined;
+  isViewSelectedDate: boolean = true;
   
   constructor(private rService: RequestService) {
     const today = new Date();
     this.currentDate = today.toISOString().split('T')[0];
+    this.maxDate = today.toISOString().split('T')[0];
   }
   ngOnInit() {
     this.fetchRequestList();
@@ -32,17 +35,21 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.isViewSelectedDate = false;
+      this.rService.branchRequestList(102).subscribe(
         (res: any) => {
-          console.log('jagan', res);
+          console.log('fetching branch request processing list:', res);
           let list: any[] = res;
-          list = list.filter((l) => l.requestStatus == 201);
-          console.log(list);
+          list = list.filter((l) => l.requestStatus == 102);
+          console.log('fetching branch request processing list:', list);
 
           this._yourReq = list;
         },
         (error) => {
+          console.log("error while fetching branch request processing list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },
@@ -53,15 +60,20 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.isViewSelectedDate = true;
+      this.rService.branchRequestList(202, this.currentDate).subscribe(
         (res: any) => {
-          let list: any[] = res;
-          list = list.filter((l) => l.requestStatus == 102);
-          console.log(list);
-          this._yourReq = list;
+          console.log('fetching branch request accepted list:', res);
+          // let list: any[] = res;
+          // list = list.filter((l) => l.requestStatus == 102);
+          // console.log('fetching branch request accepted list:', list);
+          this._yourReq = res;
         },
         (error) => {
+          console.log("error while fetching branch request accepted list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },
@@ -72,15 +84,20 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.isViewSelectedDate = true;
+      this.rService.branchRequestList(406, this.currentDate).subscribe(
         (res: any) => {
+          console.log('fetching branch request rejected list:', res);
           let list: any[] = res;
           list = list.filter((l) => l.requestStatus == 406);
-          console.log(list);
+          console.log('fetching branch request rejected list:', list);
           this._yourReq = list;
         },
         (error) => {
+          console.log("error while fetching branch request rejected list:", error);
           if (error.status == 204) {
+            this._yourReq = undefined;
+          }else if(error.status === 404){
             this._yourReq = undefined;
           }
         },

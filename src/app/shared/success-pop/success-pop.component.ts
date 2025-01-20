@@ -19,6 +19,8 @@ export class SuccessPopComponent {
   }
   
   refreshComponentState() {
-    
+    // Add logic to reset the component
+    // For example:
+    this.ngOnInit(); // Call ngOnInit again to reinitialize the component
   }
 }

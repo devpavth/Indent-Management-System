@@ -525,8 +525,15 @@ export class RequestFormComponent implements OnInit {
     };
     console.log("indent data:", indent);
     this.requestService.postIndent(indent).subscribe(
-      (res) => {
+      (res: any) => {
         console.log("successfully created indent request:", res);
+        console.log("successfully created indent request:", res.errorMessege);
+        this.productForm.reset();
+        this.requestIndentHead.reset();
+        this.productList = [];
+        this.vendorList = [];
+        this.togglePop(true);
+        this.successData = { show: 3, text: res.errorMessege };
       },
       (error) => {
         console.log("error while creating indent request:",error);

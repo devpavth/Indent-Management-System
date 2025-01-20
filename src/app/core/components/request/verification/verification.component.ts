@@ -27,7 +27,7 @@ export class VerificationComponent {
       this.isCompleted == false &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.branchRequestList(102).subscribe(
         (res: any) => {
           console.log('verification', res);
           let list: any[] = res;
@@ -48,7 +48,7 @@ export class VerificationComponent {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.branchRequestList(202).subscribe(
         (res: any) => {
           let list: any[] = res;
           list = list.filter((l) => l.requestStatus == 102);
@@ -67,7 +67,7 @@ export class VerificationComponent {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      this.rService.branchRequestList().subscribe(
+      this.rService.branchRequestList(406).subscribe(
         (res: any) => {
           let list: any[] = res;
           list = list.filter((l) => l.requestStatus == 406);

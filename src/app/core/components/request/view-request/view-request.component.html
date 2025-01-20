@@ -375,40 +375,43 @@
                       <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
                         {{ _requestDetails?.progarmMgrAuthData.authStatusStr }}
                       </p>
-                      <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
-                        Approved By
-                        <span class="font-medium text-black"
-                          >{{ _requestDetails?.progarmMgrAuthData.empFirstName }}
-                          {{ _requestDetails?.progarmMgrAuthData.empLastName }}
-                        </span>
-                        from
-                        <span class="font-medium text-black">
-                          {{ _requestDetails?.indentBranch.branchName }}
-                        </span>
-                      </p>
-                      <span
-                        class="mt-1 block text-sm font-semibold text-gray-500"
-                        >{{
-                          _requestDetails?.progarmMgrAuthData.authStatusTime
-                            | date: "medium"
-                        }}</span
-                      >
+                      <div *ngIf="isViewProgramManagerApproval">
+                        <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
+                          Approved By
+                          <span class="font-medium text-black"
+                            >{{ _requestDetails?.progarmMgrAuthData.empFirstName }}
+                            {{ _requestDetails?.progarmMgrAuthData.empLastName }}
+                          </span>
+                          from
+                          <span class="font-medium text-black">
+                            {{ _requestDetails?.indentBranch.branchName }}
+                          </span>
+                        </p>
+                        <span
+                          class="mt-1 block text-sm font-semibold text-gray-500"
+                          >{{
+                            _requestDetails?.progarmMgrAuthData.authStatusTime
+                              | date: "medium"
+                          }}</span
+                        >
+                      </div>
+                      
                       <p
                         *ngIf="
-                          _requestDetails?.commends &&
+                          _requestDetails?.indentHeaders.comments &&
                           _requestDetails?.progarmMgrAuthData.authStatusCode == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
-                        <span class="">Rejected reason :</span
-                        >{{ _requestDetails?.commendDetail }}
+                        <span class="">Rejected reason: </span
+                        >{{ _requestDetails?.indentHeaders.commentsStr }}
+                        <span
+                          class="mt-1 block text-sm font-semibold text-gray-500"
+                          >{{
+                            _requestDetails?.progarmMgrAuthData.authStatusTime | date: "medium"
+                          }}</span
+                        >
                       </p>
-                      <span
-                        class="mt-1 block text-sm font-semibold text-gray-500"
-                        >{{
-                          _requestDetails?.branchAuthStatusTime | date: "medium"
-                        }}</span
-                      >
                     </div>
                   </div>
 
@@ -486,40 +489,43 @@
                       <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
                         {{ _requestDetails?.branchAuthData.authStatusStr }}
                       </p>
-                      <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
-                        Approved By
-                        <span class="font-medium text-black"
-                          >{{ _requestDetails?.branchAuthData.empFirstName }}
-                          {{ _requestDetails?.branchAuthData.empLastName }}
-                        </span>
-                        from
-                        <span class="font-medium text-black">
-                          {{ _requestDetails?.indentBranch.branchName }}
-                        </span>
-                      </p>
-                      <span
-                        class="mt-1 block text-sm font-semibold text-gray-500"
-                        >{{
-                          _requestDetails?.branchAuthData.authStatusTime
-                            | date: "medium"
-                        }}</span
-                      >
+                      <div *ngIf="isViewBranchApproval">
+                        <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
+                          Approved By
+                          <span class="font-medium text-black"
+                            >{{ _requestDetails?.branchAuthData.empFirstName }}
+                            {{ _requestDetails?.branchAuthData.empLastName }}
+                          </span>
+                          from
+                          <span class="font-medium text-black">
+                            {{ _requestDetails?.indentBranch.branchName }}
+                          </span>
+                        </p>
+                        <span
+                          class="mt-1 block text-sm font-semibold text-gray-500"
+                          >{{
+                            _requestDetails?.branchAuthData.authStatusTime
+                              | date: "medium"
+                          }}</span
+                        >
+                      </div>
+                      
                       <p
                         *ngIf="
-                          _requestDetails?.commends &&
+                          _requestDetails?.indentHeaders.comments &&
                           _requestDetails?.branchAuthData.authStatusCode == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
-                        <span class="">Rejected reason :</span
-                        >{{ _requestDetails?.commendDetail }}
+                        <span class="">Rejected reason: </span
+                        >{{ _requestDetails?.indentHeaders.commentsStr }}
+                        <span
+                          class="mt-1 block text-sm font-semibold text-gray-500"
+                          >{{
+                            _requestDetails?.branchAuthData.authStatusTime | date: "medium"
+                          }}</span
+                        >
                       </p>
-                      <span
-                        class="mt-1 block text-sm font-semibold text-gray-500"
-                        >{{
-                          _requestDetails?.branchAuthStatusTime | date: "medium"
-                        }}</span
-                      >
                     </div>
                   </div>
                   <div class="relative w-full">
@@ -626,13 +632,13 @@
                       </p>
                       <p
                         *ngIf="
-                          _requestDetails?.commends &&
-                          _requestDetails?.adminAuthorize == 406
+                          _requestDetails?.indentHeaders.comments &&
+                          _requestDetails?.adminAuthData.authStatusCode == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
-                        <span class="">Rejected reason :</span
-                        >{{ _requestDetails?.commendDetail }}
+                        <span class="">Rejected reason: </span
+                        >{{ _requestDetails?.indentHeaders.commentsStr }}
                       </p>
                       <p
                         *ngIf="
