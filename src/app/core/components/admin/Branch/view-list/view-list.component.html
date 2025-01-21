@@ -1,5 +1,7 @@
 <div *ngIf="isUpdate" class="fixed left-0 right-0 top-0 z-40">
-  <app-edit-list [Id]="updateId"></app-edit-list>
+  <app-edit-list [Id]="updateId"
+  (closeUpdate)="update('', $event)"
+  ></app-edit-list>
 </div>
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">

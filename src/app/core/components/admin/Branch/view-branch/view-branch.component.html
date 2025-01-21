@@ -293,7 +293,7 @@
               </button>
             </div>
           </div>
-          <div>
+          <div *ngIf="_department.length > 0">
             <h1 class="mb-4 text-sm font-medium text-gray-500">
               Department List Added
             </h1>
@@ -390,4 +390,10 @@
       </form>
     </div>
   </div>
+</section>
+<section
+  *ngIf="isToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
 </section>

@@ -165,5 +165,30 @@ export class ViewProductComponent implements OnInit {
   }
   onUpdateProduct(data: any) {
     console.log("successfully updated product data:", data);
+
+    if(this.productData.prdStatus === 200){
+      this.productService.updateProductDetails(this.productData.productId, data).subscribe(
+        (res) => {
+          console.log("successfully updated the active product:", res);
+          this.closeProduct.emit(false);
+        },
+        (error) => {
+          console.log("error while updating the active product data:", error);
+        }
+      )
+    }
+    if(this.productData.prdStatus === 303){
+      this.productService.updateOtherProductDetails(this.productData.productId, data).subscribe(
+        (res) => {
+          console.log("successfully updated the other product data:", res);
+          this.closeProduct.emit(false);
+        },
+        (error) => {
+          console.log("error while updating the other product data:", error);
+        }
+      )
+    }
+
+    
   }
 }

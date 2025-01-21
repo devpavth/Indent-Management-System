@@ -28,6 +28,8 @@ export class ViewBranchComponent implements OnInit {
   noPincode: boolean = false;
   pincodeList: any[] = [];
   cityDropDownOptions: any;
+  isToast: boolean = false;
+  deleteToastMsg: any;
 
   constructor(
     private fb: FormBuilder,
@@ -136,10 +138,10 @@ export class ViewBranchComponent implements OnInit {
   fetchBranchDetails() {
     console.log(this.getBranchCode);
     this.branchService.getBranchDetails(this.getBranchCode).subscribe((res) => {
-      console.log(res);
+      console.log("fetching branch details:", res);
       this._branch = res;
       this._department = this._branch.departments;
-      console.log(this._department);
+      console.log("fetching department:", this._department);
 
       this.viewBranchForm.patchValue({
         branchId: this._branch.branchId,
@@ -182,8 +184,8 @@ export class ViewBranchComponent implements OnInit {
   fetchDeptList() {
     this.branchService.getAllDepartments().subscribe((res: any) => {
       this.departmentProvidedList = res;
-      console.log(res);
-      console.log(this.departmentProvidedList);
+      console.log("fetching all departments:", res);
+      console.log("fetching all departments this.departmentProvidedList:", this.departmentProvidedList);
     });
   }
   addDepartList(data: string) {
@@ -209,10 +211,11 @@ export class ViewBranchComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            console.log(res);
+            console.log("successfully added the department:", res);
+            this.fetchBranchDetails();
           },
           (error) => {
-            console.log(error);
+            console.log("error while adding the department:", error);
 
             if (error.status == 200) {
               this.selectedDepartments = [];
@@ -232,12 +235,19 @@ export class ViewBranchComponent implements OnInit {
   //   console.log(list);
   // }
   deleteDept(dept: any) {
-    console.log(dept);
-    this.branchService.deleteDepart(dept).subscribe(
-      (res) => {
-        console.log('delete Department');
+    console.log("passing department id:", dept);
+    this.branchService.deleteDepart(this._branch.branchId, dept).subscribe(
+      (res: any) => {
+        console.log('delete Department', res);
+        this.isToast = true;
+        this.deleteToastMsg = res.error;
+        setTimeout(()=>{
+          this.isToast = false;
+        }, 3000);
+        this.fetchBranchDetails();
       },
       (error) => {
+        console.log("error while deleting the dept:", error);
         if (error.status == 200) {
           this.ngOnInit();
         }

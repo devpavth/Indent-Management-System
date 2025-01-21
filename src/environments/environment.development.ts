@@ -40,6 +40,8 @@ export const environment = {
   modelList: Url + baseProductApi + '/getmodelname/',
   desList: Url + baseProductApi + '/getprddetails/',
   addHeadOfAcc: Url + baseProductApi + '/addheadofaccount',
+  updateProductDetails: Url + baseProductApi + '/updateprd/',
+  updateOtherProductDetails: Url + baseProductApi + '/updateotherprd/',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdinward',
@@ -54,12 +56,13 @@ export const environment = {
   addNewBranch: Url + baseBranchApi + '/addnewbranch',
   addBranchDepartment: Url + baseBranchApi + '/adddepart/',
   getBranchDetails: Url + baseBranchApi + '/getbranchbyid',
-  deleteDept: Url + baseBranchApi + '/deletedept',
+  deleteDept: Url + baseBranchApi + '/removeDepartFromBranch/',
   updateBranch: Url + baseBranchApi + '/updatebranch',
   getAlldepartment: Url + baseBranchApi + '/getalldepartment',
   getHsnCode: Url + baseRequestApi + '/hsncode/',
   getProjOrProg: Url + baseBranchApi + '/getallprg',
   getActiveProg: Url + baseBranchApi + '/getactiveprg/',
+  deleteDepartmentProgram: Url + baseBranchApi + '/deleteprg/',
 
   //departmentd
   addNewDepartment: Url + baseBranchApi + '/adddepartment',

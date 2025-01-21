@@ -119,4 +119,12 @@ export class ProductService {
   confirmInward(code: any){
     return this.productHttp.post(environment.confirmInward + code, '');
   }
+
+  updateProductDetails(productId: any, data: any){
+    return this.productHttp.put(environment.updateProductDetails + productId, data);
+  }
+
+  updateOtherProductDetails(productId: any, data: any){
+    return this.productHttp.put(environment.updateOtherProductDetails + productId, data);
+  }
 }

@@ -32,10 +32,10 @@ export class BranchService {
   getBranchDetails(data: any) {
     return this.http.get(environment.getBranchDetails + `/${data}`);
   }
-  deleteDepart(dept: any) {
-    let deptParams = new HttpParams();
-    deptParams = deptParams.append('deptId', dept);
-    return this.http.post(environment.deleteDept, '', { params: deptParams });
+  deleteDepart(branchId: any, deptId: any) {
+    // let deptParams = new HttpParams();
+    // deptParams = deptParams.append('deptId', dept);
+    return this.http.delete(`${environment.deleteDept}${branchId}/${deptId}`);
   }
   updateBranch(data: any) {
     return this.http.post(environment.updateBranch, data);
@@ -75,5 +75,9 @@ export class BranchService {
   }
   updateAssignProj(id: any, data: any) {
     return this.http.post(environment.updateDepart + id, data);
+  }
+
+  deleteDepartmentProgram(departId: any, programId: any){
+    return this.http.post(`${environment.deleteDepartmentProgram}${departId}/${programId}`, '');
   }
 }
