@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-delete-toast',
   templateUrl: './delete-toast.component.html',
   styleUrl: './delete-toast.component.css',
 })
-export class DeleteToastComponent {}
+export class DeleteToastComponent {
+  @Input() message: string | undefined;
+}

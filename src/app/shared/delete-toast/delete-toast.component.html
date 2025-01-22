@@ -1,10 +1,10 @@
 <div
   id="toast-success"
-  class="animate-topDown flex w-full max-w-xs items-center rounded-lg bg-white p-2 text-gray-500 shadow dark:bg-gray-800 dark:text-gray-400"
+  class="animate-topDown flex w-full max-w-sm items-center rounded-lg bg-red-50 p-4 text-red-700 shadow-lg ring-1 ring-red-400/50 dark:bg-gray-800 dark:text-gray-400"
   role="alert"
 >
-  <svg
-    class="h-5 w-5 text-green-500"
+  <!-- <svg
+    class="h-5 w-5 text-red-500"
     aria-hidden="true"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
@@ -13,8 +13,22 @@
     <path
       d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
     />
+  </svg> -->
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    stroke-width="1.5" 
+    stroke="currentColor" 
+    class="h-5 w-5 text-red-500"
+    >
+      <path 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
   </svg>
+  
   <span class="sr-only">Check icon</span>
 
-  <div class="ms-3 text-sm font-normal">hh</div>
+  <div class="ms-3 text-sm font-semibold text-gray-800">{{message}}</div>
 </div>

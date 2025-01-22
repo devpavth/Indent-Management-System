@@ -15,6 +15,7 @@ import { AdminProductServiceService } from '../../admin-services/admin-product-s
 export class ViewProductComponent implements OnInit {
   @Output() closeProduct = new EventEmitter<boolean>();
   @Output() productDeleted = new EventEmitter<number>();
+  @Output() productUpdated = new EventEmitter<any>();
   @Input() productData: any;
 
   productId: string = '';
@@ -27,6 +28,12 @@ export class ViewProductComponent implements OnInit {
 
   isStockView: boolean = false;
   deleteProduct: any;
+
+  isToast: boolean = false;
+  deleteToastMsg: any;
+
+  isDeleteToast: boolean = false;
+  errorToastMsg: any;
 
   groupList: any;
   catList: any;
@@ -168,9 +175,15 @@ export class ViewProductComponent implements OnInit {
 
     if(this.productData.prdStatus === 200){
       this.productService.updateProductDetails(this.productData.productId, data).subscribe(
-        (res) => {
+        (res: any) => {
           console.log("successfully updated the active product:", res);
-          this.closeProduct.emit(false);
+          
+          this.isToast = true;
+          this.deleteToastMsg = res.error;
+          setTimeout(() => {
+            this.isToast = false;
+            this.closeProduct.emit(false);
+          }, 3000)
         },
         (error) => {
           console.log("error while updating the active product data:", error);
@@ -179,12 +192,28 @@ export class ViewProductComponent implements OnInit {
     }
     if(this.productData.prdStatus === 303){
       this.productService.updateOtherProductDetails(this.productData.productId, data).subscribe(
-        (res) => {
+        (res: any) => {
           console.log("successfully updated the other product data:", res);
-          this.closeProduct.emit(false);
+          this.productUpdated.emit(this.productData.productId);
+          this.isToast = true;
+          this.deleteToastMsg = res.error;
+
+          setTimeout(() => {
+            this.isToast = false;
+            this.closeProduct.emit(false);
+          }, 3000);
         },
         (error) => {
           console.log("error while updating the other product data:", error);
+          if(error.status === 500){
+            this.isDeleteToast = true;
+            this.errorToastMsg = 'This product might be already updated';
+
+            setTimeout(() => {
+              this.isDeleteToast = false;
+              this.closeProduct.emit(false);
+            }, 3000);
+          }
         }
       )
     }

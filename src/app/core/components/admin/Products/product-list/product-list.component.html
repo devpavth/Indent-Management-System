@@ -101,7 +101,14 @@
         </div>
         <div class="flex">
           <button (click)="fetchProductList(1, 'active')" class="mx-4 mb-4 flex gap-2">
-            <h1 class="text-sm font-semibold">Active Product</h1>
+            <h1 class="text-sm font-semibold"
+              [ngClass]="{
+                'text-purple-700 !font-bold': activeProduct === 'active',
+                'text-gray-700': activeProduct !== 'active'
+              }"
+              >
+              Active Product
+            </h1>
             <!-- <span
               class="me-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-sm text-sm font-semibold text-gray-50"
             >
@@ -109,7 +116,15 @@
             </span> -->
           </button>
           <button (click)="fetchProductList(2, 'other')" class="mx-4 mb-4 flex gap-2">
-            <h1 class="text-sm font-semibold">Other Product</h1>
+            <h1 
+              class="text-sm font-semibold"
+              [ngClass]="{
+                'text-purple-700 !font-bold': activeProduct === 'other',
+                'text-gray-700': activeProduct !== 'other'
+              }"
+              >
+              Other Product
+            </h1>
             <span
               class="me-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-sm font-semibold text-gray-50"
               *ngIf="isOtherProductView || isActiveProductView"
@@ -297,6 +312,7 @@
   <app-view-product
     (closeProduct)="toggleView($event, 0, '')"
     (productDeleted)="onProductDeleted($event)"
+    (productUpdated)="onProductUpdated($event)"
     [productData]="productData"
   ></app-view-product>
 </section>

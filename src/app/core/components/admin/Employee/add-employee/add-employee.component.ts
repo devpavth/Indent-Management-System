@@ -13,6 +13,7 @@ import { environment } from '../../../../../../environments/environment.developm
 import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
+import { Router } from '@angular/router';
 
 // If all conditions met, return no error
 
@@ -29,6 +30,10 @@ export class AddEmployeeComponent implements OnInit {
   pincodeList: any[] = [];
 
   cityDropDownOptions: any;
+
+  Spinner: boolean = false;
+
+  route = inject(Router);
 
   private sharedService = inject(SharedServiceService);
   constructor(
@@ -236,8 +241,13 @@ export class AddEmployeeComponent implements OnInit {
     this.empService.addEmployee(employeeData).subscribe(
       (res) => {
         console.log('server res', res);
-        this.empPopUpMsg= "Employee added Successfully.";
-        this.isSuccess = true;
+        this.Spinner = true;
+
+        if(this.empPopUpMsg){
+          this.Spinner = false;
+          this.empPopUpMsg= "Employee added Successfully.";
+          this.isSuccess = true;
+        }
 
         // this.addEmployeeForm.reset();
       },
@@ -246,8 +256,12 @@ export class AddEmployeeComponent implements OnInit {
 
         if (error.status == 200) {
           console.log("200 status for creating employee:", error);
-        } else {
-          // alert(error.error);
+        } if(error.status === 400) {
+          this.isToast = true;
+          this.warningToastMsg = error.error.errorMessege;
+          setTimeout(() => {
+            this.isToast = false;
+          }, 3000);
         }
         if (error.status == 500) {
           // this.addEmployeeForm.reset();
@@ -255,6 +269,7 @@ export class AddEmployeeComponent implements OnInit {
           this.isToast = true;
           setTimeout(() => {
             this.isToast = false;
+            this.route.navigate(['home/employeeList']);
           }, 3000);
         }
       },

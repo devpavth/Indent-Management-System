@@ -33,9 +33,15 @@ export class ProductService {
       data,
     );
   }
-  getAllProduct() {
-    return this.productHttp.get(environment.getAllProduct);
+
+  getAllProduct(offSet: number, pageSize: number) {
+    let params = new HttpParams()
+    .set('offSet', offSet.toString())
+    .set('pageSize', pageSize.toString())
+
+    return this.productHttp.get(environment.getAllProduct, {params});
   }
+
   deleteProduct(id: any) {
     console.log("environment.deleteProduct + id:", environment.deleteProduct + id);
     return this.productHttp.delete(environment.deleteProduct + id);

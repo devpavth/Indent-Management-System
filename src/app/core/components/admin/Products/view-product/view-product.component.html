@@ -56,7 +56,7 @@
               >
               <div class="mb-2 flex cursor-pointer items-center gap-1">
                 <svg
-                  class="h-3 w-3 text-gray-400 dark:text-white"
+                  class="h-3 w-3 text-purple-700 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -73,7 +73,7 @@
 
                 <a
                   (click)="addingAction(1)"
-                  class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                  class="text-sm text-purple-400 hover:underline dark:text-blue-500"
                   >Add Group
                 </a>
               </div>
@@ -83,8 +83,10 @@
               #catid
               (change)="fetchCatList(catid.value)"
               formControlName="prdGrpId"
-              class="focus:ring-primary-500 pointer-events-none focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [disabled]="productData.prdStatus === 200"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdGrpId')?.invalid &&
                   UpdateProductForm.get('prdGrpId')?.touched
@@ -114,7 +116,7 @@
               >
               <div class="mb-2 flex cursor-pointer items-center gap-1">
                 <svg
-                  class="h-3 w-3 text-gray-400 dark:text-white"
+                  class="h-3 w-3 text-purple-700 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -131,7 +133,7 @@
 
                 <a
                   (click)="addingAction(2)"
-                  class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                  class="text-sm text-purple-400 hover:underline dark:text-blue-500"
                   >Add Catagories</a
                 >
               </div>
@@ -140,8 +142,10 @@
               #Id
               (change)="fetchBrandList(Id.value)"
               formControlName="prdCatgId"
-              class="focus:ring-primary-500 pointer-events-none focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [disabled]="productData.prdStatus === 200"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdCatgId')?.invalid &&
                   UpdateProductForm.get('prdCatgId')?.touched
@@ -172,7 +176,7 @@
               >
               <div class="mb-2 flex cursor-pointer items-center gap-1">
                 <svg
-                  class="h-3 w-3 text-gray-400 dark:text-white"
+                  class="h-3 w-3 text-purple-700 dark:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -189,15 +193,17 @@
 
                 <a
                   (click)="addingAction(3)"
-                  class="text-sm text-gray-400 hover:underline dark:text-blue-500"
+                  class="text-sm text-purple-400 hover:underline dark:text-blue-500"
                   >Add Brand</a
                 >
               </div>
             </div>
             <select
               formControlName="prdBrndId"
-              class="focus:ring-primary-500 pointer-events-none focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [disabled]="productData.prdStatus === 200"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdBrndId')?.invalid &&
                   UpdateProductForm.get('prdBrndId')?.touched
@@ -228,15 +234,17 @@
             <input
               type="text"
               formControlName="prdmdlName"
+              [disabled]="productData.prdStatus === 200"
               class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-              placeholder="eg:456789"
+              placeholder=""
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdmdlName')?.invalid &&
                   UpdateProductForm.get('prdmdlName')?.touched
               }"
               required
-              readonly
+              
             />
             <small
               *ngIf="
@@ -256,8 +264,10 @@
             >
             <select
               formControlName="prdUnit"
-              class="focus:ring-primary-500 pointer-events-none focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [disabled]="productData.prdStatus === 200"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdUnit')?.invalid &&
                   UpdateProductForm.get('prdUnit')?.touched
@@ -288,16 +298,17 @@
             <input
               type="number"
               formControlName="prdHsnCode"
+              [disabled]="productData.prdStatus === 200"
               class="focus:ring-primary-600 focus:border-primary-600 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-              placeholder="$2999"
+              placeholder=""
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdHsnCode')?.invalid &&
                   UpdateProductForm.get('prdHsnCode')?.touched
               }"
               required
-              readonly
-              readonly
+              
             />
             <small
               *ngIf="
@@ -345,8 +356,10 @@
             >
             <select
               formControlName="prdGstPct"
-              class="focus:ring-primary-500 pointer-events-none focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+              [disabled]="productData.prdStatus === 200"
+              class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdGstPct')?.invalid &&
                   UpdateProductForm.get('prdGstPct')?.touched
@@ -376,16 +389,18 @@
             <textarea
               formControlName="prdDescription"
               rows="4"
+              [disabled]="productData.prdStatus === 200"
               class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               placeholder="Write product description here"
               appFirstCapLetter
               [ngClass]="{
+                'pointer-events-none': productData.prdStatus === 200,
                 error:
                   UpdateProductForm.get('prdDescription')?.invalid &&
                   UpdateProductForm.get('prdDescription')?.touched
               }"
               required
-              readonly
+              
             ></textarea>
             <small
               *ngIf="
@@ -543,4 +558,16 @@
     [deleteData]="deleteProduct"
     (close)="toggledelete(0, $event)"
   ></app-delete>
+</section>
+<section
+  *ngIf="isToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+</section>
+<section
+  *ngIf="isDeleteToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>

@@ -13,6 +13,9 @@ export class ProductListComponent implements OnInit {
   productData: any;
   Spinner: boolean = true;
 
+  offSet: number = 0;
+  pageSize: number = 10;
+
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalpage: number = 0;
@@ -23,6 +26,8 @@ export class ProductListComponent implements OnInit {
   isActiveProductView: boolean = false;
   activeProductList: any[] = [];
   otherProductList: any[] = [];
+
+  activeProduct: string = 'active';
 
   ngOnInit() {
     this.fetchProductList(1, 'active');
@@ -35,7 +40,7 @@ export class ProductListComponent implements OnInit {
 
     const productServiceCall = 
       productType === 'active' 
-        ? this.productService.getAllProduct()
+        ? this.productService.getAllProduct(this.offSet, this.pageSize)
         : this.productService.fetchOtherProductDetails();
 
     productServiceCall.subscribe((res: any) => {
@@ -50,6 +55,8 @@ export class ProductListComponent implements OnInit {
         this.isOtherProductView = true;
         this.isActiveProductView = false;
       }
+
+      this.activeProduct = productType;
 
       // this.list = res;
       const currentList = productType === 'active' ? this.activeProductList : this.otherProductList;
@@ -92,6 +99,16 @@ export class ProductListComponent implements OnInit {
 
     this.otherProductList = this.otherProductList.filter(
       product => product.productId !== productId
+    )
+
+    this.otherPrdLen = this.otherProductList.filter(
+      m => m.prdStatus === 303
+    ).length;
+  }
+
+  onProductUpdated(UpdatedProductId: any){
+    this.otherProductList = this.otherProductList.filter(
+      product => product.productId !== UpdatedProductId
     )
 
     this.otherPrdLen = this.otherProductList.filter(

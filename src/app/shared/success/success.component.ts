@@ -24,6 +24,9 @@ export class SuccessComponent implements OnInit {
     } else if (this.successData.show == 5) {
       this.show = 5;
       this.message = this.successData.text;
+    } else if (this.successData.show == 6) {
+      this.show = 6;
+      this.message = this.successData.text;
     }
   }
 }
