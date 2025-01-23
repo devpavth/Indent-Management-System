@@ -103,6 +103,10 @@ export class RequestFormComponent implements OnInit {
       expenditureId: [],
       requisitioner: [],
       notes: [],
+      assgndVendors: this.fb.group({
+        vendorId: [],
+        vdrAccId: []
+      })
     });
     this.productForm = this.fb.group({
       headOfAccId: [''],
@@ -159,6 +163,8 @@ export class RequestFormComponent implements OnInit {
         this.isProductSelected = false;
       }
     )
+
+    this.requestIndentHead.get('assgndVendors.vendorId')?.valueChanges
 
     this.user = sessionStorage.getItem('userId');
     if (this.user) {
@@ -502,6 +508,8 @@ export class RequestFormComponent implements OnInit {
       vdrContactPersonPhone,
       vendorAcccountDetails,
     } = this.seletedVendor;
+
+    console.log("this.seletedVendor:", this.seletedVendor);
     const vd: any[] = vendorAcccountDetails;
 
     const vendor = {
@@ -512,7 +520,7 @@ export class RequestFormComponent implements OnInit {
       vdrContactPersonPhone,
       ...vendorAcccountDetails[0],
     };
-    console.log(vendor);
+    console.log("in add vendor:", vendor);
     this.vendorList.push(vendor);
   }
   onSubmitIndent() {

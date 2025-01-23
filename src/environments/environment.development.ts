@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.2:9010/';
+let Url = 'http://192.168.1.7:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';

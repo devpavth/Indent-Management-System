@@ -28,19 +28,23 @@ export class ProductListComponent implements OnInit {
   otherProductList: any[] = [];
 
   activeProduct: string = 'active';
+  isShowPagination: boolean = true;
 
   ngOnInit() {
-    this.fetchProductList(1, 'active');
-    this.fetchProductList(2, 'other');
+    this.fetchProductList(this.offSet, this.pageSize, 'active');
+    this.fetchProductList(this.offSet, this.pageSize, 'other');
   }
   constructor(private productService: ProductService) {}
-  fetchProductList(data: number, productType: 'active' | 'other') {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+  
+  fetchProductList(offSet: number, pageSize: number, productType: 'active' | 'other') {
+    const startIndex = offSet * pageSize;
+    const endIndex = (startIndex + pageSize);
+
+    console.log('initail startIndex:', startIndex, 'initail endIndex:', endIndex);
 
     const productServiceCall = 
       productType === 'active' 
-        ? this.productService.getAllProduct(this.offSet, this.pageSize)
+        ? this.productService.getAllProduct(offSet, pageSize)
         : this.productService.fetchOtherProductDetails();
 
     productServiceCall.subscribe((res: any) => {
@@ -48,12 +52,18 @@ export class ProductListComponent implements OnInit {
 
       if(productType === 'active'){
         this.activeProductList = res;
+        // this.productList = this.activeProductList;
         this.isActiveProductView = true;
         this.isOtherProductView = false;
+
+        this.isShowPagination = true;
       }else{
         this.otherProductList = res;
+        // this.productList = this.otherProductList;
         this.isOtherProductView = true;
         this.isActiveProductView = false;
+
+        this.isShowPagination = false;
       }
 
       this.activeProduct = productType;
@@ -68,25 +78,42 @@ export class ProductListComponent implements OnInit {
       // this.isOtherProductView = productType === 'other';
 
       let list: any[] = res;
+      console.log("list:", list);
       this.otherPrdLen = this.otherProductList.filter((m) => m.prdStatus == 303).length || 0;
       console.log("this.otherPrdLen:", this.otherPrdLen);
 
       this.Spinner = false;
-      switch (data) {
-        case 1: {
+      const totalItems = list.length;
+
+      console.log('Active product:', this.activeProduct);
+      // const startIndex = offSet * pageSize;
+      // const endIndex = Math.min(startIndex + pageSize, totalItems);
+      console.log('startIndex:', startIndex, 'endIndex:', endIndex);
+
+      const filteredList = list.filter((m) => m.prdStatus === 200);
+      console.log('Filtered active products:', filteredList);
+
+      console.log("totalItems:", totalItems);
+
+      switch (this.activeProduct) {
+        case 'active': {
+          console.log("this.activeProduct inside switch:", this.activeProduct);
           this.productList = list
-            .filter((m) => m.prdStatus == 200)
-            .slice(startIndex, endIndex);
+            
+            console.log("list indise switch:", list);
+            console.log("product list:", this.productList);
           break;
         }
-        case 2: {
+        case 'other': {
           this.productList = list
-            .filter((m) => m.prdStatus == 303)
-            .slice(startIndex, endIndex);
+            
           console.log('Hello');
           break;
         }
       }
+
+      console.log('Current product list:', this.productList);
+      console.log('listLength:', this.listLength, 'offSet:', this.offSet, 'pageSize:', this.pageSize);
     });
   }
 
@@ -116,49 +143,34 @@ export class ProductListComponent implements OnInit {
     ).length;
   }
 
-  // fetchOtherProductList(data: number){
-  //   const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-  //   const endIndex = startIndex + this.itemsPerPage;
-  //   this.productService.fetchOtherProductDetails().subscribe(
-  //     (res: any) => {
-  //       console.log("fetching other product details:", res);
-  //       this.isOtherProductView = true; 
-  //       this.list = res;
-  //       this.listLength = this.list.length;
-  //       let list: any[] = res;
-  //       this.otherPrdLen = list.filter((m) => m.prdStatus == 303).length;
-  //       this.Spinner = false;
-  //       switch (data) {
-  //         case 1: {
-  //           this.productList = list
-  //             .filter((m) => m.prdStatus == 200)
-  //             .slice(startIndex, endIndex);
-  //           break;
-  //         }
-  //         case 2: {
-  //           this.productList = list
-  //             .filter((m) => m.prdStatus == 303)
-  //             .slice(startIndex, endIndex);
-  //           console.log('Hello');
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   )
-  // }
+  
 
   onPageChange(pageNumber: number): void {
-    this.currentPage = pageNumber;
-    this.fetchProductList(1, 'active');
+    console.log('Current Offset:', this.offSet, 'New Offset:', pageNumber);
+    // if (pageNumber >= 0 || pageNumber * this.pageSize < this.listLength) {
+    //   return; 
+    // }
+
+    this.offSet = pageNumber;
+    this.fetchProductList(this.offSet, this.pageSize, 'active');
+
+    if(this.activeProduct==='other'){
+      this.offSet = 0;
+    }
   }
   getSerialNumber(index: number): number {
-    return (this.currentPage - 1) * this.itemsPerPage + index + 1;
+    if(this.activeProduct==='other'){
+      return index + 1;
+    }else{
+      return (this.offSet) * this.pageSize + index + 1;
+    }
   }
   get startPage(): number {
-    return (this.currentPage - 1) * this.itemsPerPage + 1;
+    return (this.pageSize) * this.offSet + 1;
   }
   get endPage(): number {
-    return Math.min(this.currentPage * this.itemsPerPage, this.listLength);
+    const calculatedEnd = (this.offSet + 1) * this.pageSize;
+    return Math.max(calculatedEnd, this.listLength);
   }
   toggleView(action: Boolean, check: number, productData: any) {
     if (check == 1) {
@@ -167,7 +179,7 @@ export class ProductListComponent implements OnInit {
     }
     if (check == 0) {
       this.isProductList = action;
-      this.fetchProductList(1, 'active');
+      this.fetchProductList(this.offSet, this.pageSize,'active');
     }
   }
 }

@@ -13,8 +13,13 @@ export class AutoCompleteComponent<T> {
   filteredSuggestions: T[] = [];
   show: boolean = false;
 
+  ngOnInit(){
+    console.log("this.query:", this.query);
+  }
+
   onInput() {
     const queryLower = this.query.toLowerCase();
+    console.log("queryLower:", queryLower);
     if (queryLower) {
       this.filteredSuggestions = this.suggestions?.filter((suggestion) =>
         this.displayFields.some((field) => {

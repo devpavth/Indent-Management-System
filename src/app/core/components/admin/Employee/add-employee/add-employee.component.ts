@@ -238,16 +238,15 @@ export class AddEmployeeComponent implements OnInit {
     console.table(employeeData);
     console.log("employee created successfully:", employeeData);
 
+    this.Spinner = true;
+
     this.empService.addEmployee(employeeData).subscribe(
       (res) => {
-        console.log('server res', res);
-        this.Spinner = true;
+        console.log('server res:', res);
 
-        if(this.empPopUpMsg){
-          this.Spinner = false;
-          this.empPopUpMsg= "Employee added Successfully.";
-          this.isSuccess = true;
-        }
+        this.Spinner = false;
+        this.empPopUpMsg= "Employee added Successfully.";
+        this.isSuccess = true;
 
         // this.addEmployeeForm.reset();
       },
