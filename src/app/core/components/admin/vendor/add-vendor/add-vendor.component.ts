@@ -29,14 +29,14 @@ export class AddVendorComponent implements OnInit {
     private route: Router,
   ) {
     this.addVendorForm = this.fb.group({
-      branchId: [],
+      branchId: ['', Validators.required],
       vendorName: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
-      vdrAdd1: ['', Validators.required, 
+      vdrAdd1: ['', [Validators.required, 
         Validators.minLength(20),
-        Validators.maxLength(150)],
-      vdrAdd2: ['', Validators.required, 
+        Validators.maxLength(150)]],
+      vdrAdd2: ['', [Validators.required, 
         Validators.minLength(20), 
-        Validators.maxLength(100)],
+        Validators.maxLength(100)]],
       vdrCity: ['', Validators.required],
       vdrState: ['', Validators.required],
       vdrCountry: ['', Validators.required],
@@ -46,31 +46,25 @@ export class AddVendorComponent implements OnInit {
       ],
       vdrContactPersonName: [
         '',
-        [Validators.required, Validators.pattern('[A-Za-z ]+')],
+        [Validators.pattern('[A-Za-z ]+')],
       ],
       vdrContactPersonPhone: [
         '',
-        [Validators.required, Validators.pattern(/^[1-9][0-9]{9}$/)],
+        [Validators.pattern(/^[1-9][0-9]{9}$/)],
       ],
       vdrEmail: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(
+          [Validators.pattern(
             /^[a-zA-Z0-9._%+-]+@[a-z]+.([a-z]{2})+(?:\.(com|in|edu|net)){1}$/,
-          ),
-        ],
+          )],
       ],
       vdrGstNo: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/),
-        ],
+          [Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/)],
       ],
       vdrPanNo: [
         '',
-        [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
+        [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
       ],
       vdrTanNo: [
         '',
@@ -79,10 +73,10 @@ export class AddVendorComponent implements OnInit {
       vdrMsmeNo: [],
       estDate: [''],
       serviceLocation: ['', Validators.required],
-      bizType: [''],
+      bizType: ['', Validators.required],
       bizDetailName: [
         '',
-        [Validators.required, Validators.pattern('[A-Za-z ]+')],
+        // [Validators.required, Validators.pattern('[A-Za-z ]+')],
       ],
       bizDetails: ['', Validators.required],
       vendorAcccountDetails: this.fb.array([this.showBankData()]),
@@ -170,8 +164,8 @@ export class AddVendorComponent implements OnInit {
 
   showBankData() {
     return this.fb.group({
-      ifsCode: ['', Validators.required],
-      bankAccNo: ['', Validators.required],
+      ifsCode: [''],
+      bankAccNo: [''],
     });
   }
 
@@ -183,15 +177,17 @@ export class AddVendorComponent implements OnInit {
     this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
+      this._BranchName.unshift({branchId: 0, branchName: 'Mutiple Branch'});
       console.log(this._BranchName);
     });
   }
 
   submitVendorDetails(data: any) {
-    console.log(data);
+    console.log("sending new vendor data:", data);
     this.vendorService.addVendor(data).subscribe(
       (res) => {
-        console.log(res);
+        console.log("new vendor added successfully:", res);
+        this.route.navigate(['/home/vendorList']);
       },
       (error) => {
         console.log(error);

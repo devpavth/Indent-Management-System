@@ -26,6 +26,9 @@ export class ViewVendorComponent {
   pincodeList: any[] = [];
   cityDropDownOptions: any;
 
+  isToast: boolean = false;
+  deleteToastMsg: any;
+
   private sharedService = inject(SharedServiceService);
 
   UpdateVendorForm: FormGroup;
@@ -38,7 +41,7 @@ export class ViewVendorComponent {
     this.UpdateVendorForm = this.fb.group({
       branchId: [],
       vendorId: [],
-      vendorName: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
+      vendorName: ['', Validators.required],
       vdrAdd1: ['', Validators.required],
       vdrAdd2: ['', Validators.required],
       vdrCity: ['', Validators.required],
@@ -50,16 +53,15 @@ export class ViewVendorComponent {
       ],
       vdrContactPersonName: [
         '',
-        [Validators.required, Validators.pattern('[A-Za-z ]+')],
+        [Validators.pattern('[A-Za-z ]+')],
       ],
       vdrContactPersonPhone: [
         '',
-        [Validators.required, Validators.pattern(/^[1-9][0-9]{9}$/)],
+        [Validators.pattern(/^[1-9][0-9]{9}$/)],
       ],
       vdrEmail: [
         '',
         [
-          Validators.required,
           Validators.pattern(
             /^[a-zA-Z0-9._%+-]+@[a-z]+.([a-z]{2})+(?:\.(com|in|edu|net)){1}$/,
           ),
@@ -68,20 +70,19 @@ export class ViewVendorComponent {
       vdrGstNo: [
         '',
         [
-          Validators.required,
           Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/),
         ],
       ],
       vdrPanNo: [
         '',
-        [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
+        [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
       ],
       vdrTanNo: [
         '',
-        [Validators.required, Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
+        // [Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
       ],
       vdrMsmeNo: [],
-      estDate: ['', Validators.required],
+      estDate: [''],
       serviceLocation: ['', Validators.required],
       bizType: ['', Validators.required],
       bizDetailName: [
@@ -185,8 +186,9 @@ export class ViewVendorComponent {
 
   showBankData() {
     return this.fb.group({
-      ifsCode: ['', Validators.required],
-      bankAccNo: ['', Validators.required],
+      ifsCode: [''],
+      bankAccNo: [''],
+      vdrAccId: [this.vendorData?.vendorAcccountDetails[0]?.vdrAccId]
     });
   }
 
@@ -201,13 +203,20 @@ export class ViewVendorComponent {
     this.isEdit = false;
   }
   updateVendorDetails(data: any) {
-    console.log(data);
+    console.log("sending updated vendor data:", data);
     let id = this.UpdateVendorForm.get('vendorId')?.value;
-    console.log(id);
+    console.log("vendorId:", id);
+    console.log("typeof vendorId:", typeof id);
 
     this.vendorService.updateVendor(id, data).subscribe(
-      (res) => {
-        console.log(res);
+      (res: any) => {
+        console.log("vendor is successfully updated:", res);
+        this.isToast = true;
+        this.deleteToastMsg = res.errorMessege;
+        setTimeout(() =>{
+          this.isToast = false;
+          this.closeVendor.emit(false);
+        }, 3000)
       },
       (error) => {
         console.log(error);
@@ -221,7 +230,8 @@ export class ViewVendorComponent {
     this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
-      console.log(this._BranchName);
+      this._BranchName.unshift({branchId: 0, branchName: 'Multiple Branch'});
+      console.log("this._BranchName:", this._BranchName);
     });
   }
 

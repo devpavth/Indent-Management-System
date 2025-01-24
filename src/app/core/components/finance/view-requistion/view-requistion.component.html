@@ -900,3 +900,6 @@
     (close)="closeEdite($event)"
   ></app-edit-product>
 </section>
+<section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-success-pop (close)="closepop($event)"></app-success-pop>
+</section>

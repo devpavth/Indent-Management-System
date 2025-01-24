@@ -6,6 +6,7 @@ import { RequisitionListComponent } from './requisition-list/requisition-list.co
 import { ViewRequistionComponent } from './view-requistion/view-requistion.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditProductComponent } from './edit-product/edit-product.component';
+import { SharedModule } from "../../../shared/shared.module";
 
 @NgModule({
   declarations: [RequisitionListComponent, ViewRequistionComponent, EditProductComponent],
@@ -14,6 +15,7 @@ import { EditProductComponent } from './edit-product/edit-product.component';
     FinanceRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
+    SharedModule
+],
 })
 export class FinanceModule {}

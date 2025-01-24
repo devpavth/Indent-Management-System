@@ -92,7 +92,7 @@
                   placeholder="name@company.com"
                   [ngClass]="{
                     error:
-                      addVendorForm.get('vdrEmail')?.invalid &&
+                      addVendorForm.get('vdrEmail')?.hasError('pattern') &&
                       addVendorForm.get('vdrEmail')?.touched
                   }"
                   required
@@ -100,12 +100,12 @@
               </div>
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrEmail')?.invalid &&
+                  addVendorForm?.get('vdrEmail')?.hasError('pattern') &&
                   addVendorForm?.get('vdrEmail')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Invalid Email!
+                Please enter a valid email address!
               </small>
             </div>
             <div class="col-span-3">
@@ -122,19 +122,19 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrContactPersonName')?.invalid &&
+                    addVendorForm.get('vdrContactPersonName')?.hasError('pattern') &&
                     addVendorForm.get('vdrContactPersonName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrContactPersonName')?.invalid &&
+                  addVendorForm?.get('vdrContactPersonName')?.hasError('pattern') &&
                   addVendorForm?.get('vdrContactPersonName')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Contact Person Name Should not be Empty!
+                Please enter a valid name!
               </small>
             </div>
 
@@ -146,7 +146,7 @@
               <div class="relative">
                 <div
                   class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                >
+                  >
                   <svg
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
                     aria-hidden="true"
@@ -170,14 +170,14 @@
                   placeholder="123-456-970"
                   [ngClass]="{
                     error:
-                      addVendorForm.get('vdrContactPersonPhone')?.invalid &&
+                      addVendorForm.get('vdrContactPersonPhone')?.hasError('pattern') &&
                       addVendorForm.get('vdrContactPersonPhone')?.touched
                   }"
                   required
                 />
-                </div>
+              </div>
                 <small *ngIf="
-                  addVendorForm.get('vdrContactPersonPhone')?.invalid &&
+                  addVendorForm.get('vdrContactPersonPhone')?.hasError('pattern') &&
                   addVendorForm.get('vdrContactPersonPhone')?.touched
                 "
                 class="text-danger text-red-600">
@@ -194,6 +194,12 @@
                   #branchId
                   formControlName="branchId"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  [ngClass]="{
+                    error:
+                      addVendorForm.get('branchId')?.invalid &&
+                      addVendorForm.get('branchId')?.touched
+                  }"
+                  required
                 >
                   <option
                     *ngFor="let branch of _BranchName"
@@ -202,6 +208,15 @@
                     {{ branch.branchName }}
                   </option>
                 </select>
+                <small
+                  *ngIf="
+                    addVendorForm?.get('branchId')?.invalid &&
+                    addVendorForm?.get('branchId')?.touched
+                  "
+                  class="text-danger text-red-600"
+                >
+                  Branch Name is required!
+                </small>
               </div>
             </div>
           </div>
@@ -442,7 +457,7 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrGstNo')?.invalid &&
+                    addVendorForm.get('vdrGstNo')?.hasError('pattern') &&
                     addVendorForm.get('vdrGstNo')?.touched
                 }"
                 required
@@ -450,12 +465,12 @@
 
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrGstNo')?.invalid &&
+                  addVendorForm?.get('vdrGstNo')?.hasError('pattern') &&
                   addVendorForm?.get('vdrGstNo')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                GST Number should not be empty!
+                Please enter a valid GST Number!
               </small>
             </div>
             <div>
@@ -472,7 +487,7 @@
                 placeholder="ABCTY1234D"
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrPanNo')?.invalid &&
+                    addVendorForm.get('vdrPanNo')?.hasError('pattern') &&
                     addVendorForm.get('vdrPanNo')?.touched
                 }"
                 required
@@ -480,12 +495,12 @@
 
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrPanNo')?.invalid &&
+                  addVendorForm?.get('vdrPanNo')?.hasError('pattern') &&
                   addVendorForm?.get('vdrPanNo')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Invalid PAN Number!
+                Please enter a valid PAN Number!
               </small>
             </div>
             <div>
@@ -637,17 +652,22 @@
                 class="input-form"
                 autocomplete="postal-code"
                 placeholder=""
+                [ngClass]="{
+                  error:
+                    addVendorForm.get('bizType')?.invalid &&
+                    addVendorForm.get('bizType')?.touched
+                }"
               />
 
-              <!-- <small
+              <small
                 *ngIf="
                   addVendorForm?.get('bizType')?.invalid &&
                   addVendorForm?.get('bizType')?.touched
                 "
                 class="text-danger text-red-600"
               >
-                Invalid Business details Name!
-              </small> -->
+                Business Type required!
+              </small>
             </div>
 
             <div class="col-span-full mb-2">
@@ -835,8 +855,8 @@
 
             <button
               type="button"
-              (click)="submitVendorDetails(addVendorForm.value)"
               [disabled]="addVendorForm.invalid"
+              (click)="submitVendorDetails(addVendorForm.value)"
               [ngClass]="{
                 'bg-gray-400':
                   addVendorForm.invalid,

@@ -11,10 +11,43 @@ export class OnlyNumberDirective {
 
   @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent): void {
     const charCode = event.which ? event.which : event.keyCode;
-    if (charCode < 48 || charCode > 57) {
+    if ((charCode < 48 || charCode > 57) && charCode !== 46) {
       event.preventDefault();
+    }else{
+      const inputElement = this.el.nativeElement as HTMLInputElement;
+
+      // Prevent multiple dots in the input
+      if (charCode === 46 && inputElement.value.includes('.')) {
+        event.preventDefault();
+      }
     }
   }
+
+
+  // @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent): void {
+  //   const charCode = event.which ? event.which : event.keyCode;
+  //   const inputElement = this.el.nativeElement as HTMLInputElement;
+  //   const currentValue = inputElement.value;
+  //   const cursorPosition = inputElement.selectionStart;
+  
+  //   // Allow numeric values (0-9) and the dot (.)
+  //   if ((charCode < 48 || charCode > 57) && charCode !== 46) {
+  //     event.preventDefault();
+  //   } else {
+  //     // Prevent multiple dots in the input
+  //     if (charCode === 46) {
+  //       if (currentValue.includes('.')) {
+  //         event.preventDefault();
+  //       } else {
+  //         // Ensure the dot is added at the end of the number
+  //         if (cursorPosition !== currentValue.length) {
+  //           event.preventDefault();
+  //           inputElement.value = currentValue + '.';
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   @HostListener('input', ['$event']) onInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -27,7 +60,7 @@ export class OnlyNumberDirective {
   @HostListener('paste', ['$event']) onPaste(event: ClipboardEvent): void {
     const clipboardData = event.clipboardData;
     const pastedText = clipboardData?.getData('text') || '';
-    if (!/^\d+$/.test(pastedText)) {
+    if (!/^\d*\.?\d*$/.test(pastedText)) {
       event.preventDefault();
     } else {
       setTimeout(() => {

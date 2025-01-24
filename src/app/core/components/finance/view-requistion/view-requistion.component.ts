@@ -52,6 +52,9 @@ export class ViewRequistionComponent implements OnInit {
   form: FormGroup;
   selectedDonorName = '';
 
+  isApproved: boolean = false;
+  isRejectPop: boolean = false;
+
   approvelAmt: number | undefined;
   commendArray: { key: string; value: string }[] = [];
 
@@ -251,8 +254,9 @@ export class ViewRequistionComponent implements OnInit {
       })),
     };
     this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
-      (res) => {
-        console.log(res);
+      (res: any) => {
+        console.log("successfully indent request accept by finance:", res);
+        this.isApproved = true;
       },
       (error) => {
         console.error(error);
@@ -263,6 +267,13 @@ export class ViewRequistionComponent implements OnInit {
       },
     );
   }
+
+  closepop(data: boolean) {
+    this.isApproved = data;
+    this.isRejectPop = data;
+    this.closeView.emit(false);
+  }
+
   fetchReason() {
     this.requestService.commands().subscribe((res) => {
       // this.commend = res;

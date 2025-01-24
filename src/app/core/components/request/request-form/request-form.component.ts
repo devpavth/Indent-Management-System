@@ -31,6 +31,7 @@ export class RequestFormComponent implements OnInit {
 
   requestIndentHead: FormGroup;
   productForm: FormGroup;
+  assignedVendor: FormGroup;
   programList: any;
   headofacc: any;
   date: Date = new Date();
@@ -76,6 +77,10 @@ export class RequestFormComponent implements OnInit {
   user: any;
   userData: any;
 
+  isVendorSelected: boolean = false;
+  noVendor: boolean = false;
+  storeVendorList: any[] = [];
+
   @ViewChild('catid', { static: false }) catid: ElementRef<any> | undefined;
   @ViewChild('id', { static: false }) id: ElementRef<any> | undefined;
   @ViewChild('brdId', { static: false }) brdId: ElementRef<any> | undefined;
@@ -103,11 +108,14 @@ export class RequestFormComponent implements OnInit {
       expenditureId: [],
       requisitioner: [],
       notes: [],
-      assgndVendors: this.fb.group({
-        vendorId: [],
-        vdrAccId: []
-      })
+      
     });
+
+    this.assignedVendor = this.fb.group({
+      vendorId: [],
+      vdrAccId: []
+    })
+
     this.productForm = this.fb.group({
       headOfAccId: [''],
       headOfAccName: [''],
@@ -164,7 +172,42 @@ export class RequestFormComponent implements OnInit {
       }
     )
 
-    this.requestIndentHead.get('assgndVendors.vendorId')?.valueChanges
+    this.assignedVendor.get('vendorId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((searchTerm) => {
+        console.log(`vendor Name Changed for Index:`, searchTerm);
+        if(this.isVendorSelected){
+          this.isVendorSelected = false;
+          return of([]);
+        }
+        this.noVendor = false;
+        this.storeVendorList = [];
+        if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
+          return of([]);
+        }
+        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("error while fetching vendor data:", error);
+              this.noVendor = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    ).subscribe(
+      (response: any) => {
+        this.storeVendorList = response;
+        console.log("fetching vendor data from backend:", response);
+
+        this.storeVendorList = this.storeVendorList.filter(
+          (f) => f.branchId == this.employeeData?.branchId,
+        );
+
+        this.isVendorSelected = false;
+      }
+    )
 
     this.user = sessionStorage.getItem('userId');
     if (this.user) {
@@ -319,7 +362,14 @@ export class RequestFormComponent implements OnInit {
     console.log("header data:", data);
     this.isEditHeader = true;
     Object.keys(this.requestIndentHead.controls).forEach((f) => {
-      this.requestIndentHead.get(f)?.disable();
+      if(f !== 'assgndVendors'){
+        this.requestIndentHead.get(f)?.disable();
+      }else{
+        const assgndVendorsGroup = this.requestIndentHead.get('assgndVendors') as FormGroup;
+        Object.keys(assgndVendorsGroup.controls).forEach((nestedKey)=>{
+          assgndVendorsGroup.get(nestedKey)?.enable();
+        })
+      }
     });
     this.deleteToastMsg = 'Header Added Successfully';
     this.isTost = true;
@@ -523,13 +573,44 @@ export class RequestFormComponent implements OnInit {
     console.log("in add vendor:", vendor);
     this.vendorList.push(vendor);
   }
+
+  onSelectedVendor(vendor: any){
+    console.log("after selecting the vendor:", vendor);
+
+    this.isVendorSelected = true;
+
+    // this.vendorList = [vendor];
+    this.vendorList.push({
+      vendorId: vendor.vendorId,
+      vdrAccId: vendor.vendorAcccountDetails[0]?.vdrAccId,
+      vendorName: vendor.vendorName,
+      vdrContactPersonName: vendor.vdrContactPersonName,
+      vdrContactPersonPhone: vendor.vdrContactPersonPhone,
+      vdrCountry: vendor.vdrCountry
+    });
+
+    console.log("selected vendor list:", this.vendorList);
+
+    this.assignedVendor.patchValue({
+      // vendorId: vendor.vendorId,
+      vdrAccId: vendor.vendorAcccountDetails[0]?.vdrAccId     
+    })
+
+    // this.vendorList = this.assignedVendor?.value;
+    console.log("selected vendor list after assignedVendor:", this.vendorList);
+
+    console.log("this.vendor:", this.vendor);
+
+    this.storeVendorList = [];
+  }
+
   onSubmitIndent() {
     let indent = {
       ...this.headerData,
       totalPrice: this.totalSum,
       productDetails: this.productList,
       assgndVendors: this.vendorList,
-      assignedDonors: this.funderList,
+      // assignedDonors: this.funderList,
     };
     console.log("indent data:", indent);
     this.requestService.postIndent(indent).subscribe(
@@ -538,6 +619,7 @@ export class RequestFormComponent implements OnInit {
         console.log("successfully created indent request:", res.errorMessege);
         this.productForm.reset();
         this.requestIndentHead.reset();
+        this.assignedVendor.reset();
         this.productList = [];
         this.vendorList = [];
         this.togglePop(true);
@@ -586,6 +668,8 @@ export class RequestFormComponent implements OnInit {
 
     this.storeProductData = [];
   }
+
+  
 
   serchByCode(code: string) {
     console.log(code);
