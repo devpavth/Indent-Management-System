@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.3:9010/';
+let Url = 'http://192.168.1.5:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -105,6 +105,7 @@ export const environment = {
   finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
   finHolding: Url + baseRequestApi + '/holdrequest/',
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
+  saveFundAmt: Url + baseRequestApi + '/acceptFauthorize/',
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
 
@@ -132,6 +133,7 @@ export const environment = {
   AssignedBranch: Url + baseFunderApi + '/getinhandfund/',
   addFund: Url + baseFunderApi + '/addfund/',
   branchFunder: Url + baseFunderApi + '/branchfunder/',
+  fetchFunderDetails: Url + baseFunderApi + '/getinhandfund/',
 
   //transaction  api
   // fetchTransactionInfo: Url + baseProductApi + '/gettransbycode/',

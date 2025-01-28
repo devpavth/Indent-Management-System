@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { FunderService } from '../../service/Funder/funder.service';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-view-requistion',
@@ -52,6 +53,13 @@ export class ViewRequistionComponent implements OnInit {
   form: FormGroup;
   selectedDonorName = '';
 
+  isFunderSelected: boolean = false;
+  noFunder: boolean = false;
+  funderSearchList: any[] = [];
+  selectedFunderId: any;
+  isViewFundDetails: boolean= false;
+  funderDetails: any[] = [];
+
   isApproved: boolean = false;
   isRejectPop: boolean = false;
 
@@ -72,8 +80,40 @@ export class ViewRequistionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.form.get('donorId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((searchTerm) => {
+        if(this.isFunderSelected){
+          return of([]);
+        }
+        this.noFunder = false;
+        if(!searchTerm || searchTerm.length < 3){
+          this.funderSearchList = [];
+          return of([]);
+        }
+        return this.donorService.funderList({searchTerm}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("Funder API Error:", error);
+              this.noFunder = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    )
+    .subscribe(
+      (response: any) => {
+        console.log("fetching funder data from backend:", response);
+
+        this.funderSearchList = response;
+        this.isFunderSelected = false;
+
+      }
+    )
+
     this.fetchDetails(this.reqId);
-    this.fetchDonorList(1);
     this.fetchReason();
   }
 
@@ -85,52 +125,72 @@ export class ViewRequistionComponent implements OnInit {
     });
   }
   openInNewTab() {
-    const url = this.loc.prepareExternalUrl('/home/addDonar');
+    const url = this.loc.prepareExternalUrl('/home/addFunder');
     window.open(url, '_blank');
   }
-  fetchDonorList(data: any) {
-    this.donorService.funderList().subscribe((res) => {
-      this.dList = res;
-      this.cList = this.dList;
-      // this.donorList = res;
-      console.log(res);
-    });
-    if (data == 1) {
-      this.donorList = this.cList;
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 2) {
-      this.donorList = this.cList.filter(
-        (fin) => fin.funderCatgName == 'Local',
-      );
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 3) {
-      this.donorList = this.cList.filter((fin) => fin.funderCatgName == 'FCRA');
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    } else if (data == 4) {
-      this.donorList = this.cList.filter(
-        (fin) => fin.funderCatgName == 'Donor',
-      );
-      this.filteredDonors = this.donorList;
-      console.log(this.donorList);
-    }
-  }
+  // fetchDonorList(data: any) {
+  //   console.log("donar data:", data);
+  //   this.donorService.funderList().subscribe((res) => {
+  //     this.dList = res;
+  //     this.cList = this.dList;
+  //     // this.donorList = res;
+  //     console.log("Funder List:", res);
+  //   });
+  //   if (data == 1) {
+  //     this.donorList = this.cList;
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 2) {
+  //     this.donorList = this.cList.filter(
+  //       (fin) => fin.funderCatgName == 'Local',
+  //     );
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 3) {
+  //     this.donorList = this.cList.filter((fin) => fin.funderCatgName == 'FCRA');
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   } else if (data == 4) {
+  //     this.donorList = this.cList.filter(
+  //       (fin) => fin.funderCatgName == 'Donor',
+  //     );
+  //     this.filteredDonors = this.donorList;
+  //     console.log(this.donorList);
+  //   }
+  // }
 
   onInput(event: Event): void {
     const input = (event.target as HTMLInputElement).value.toLowerCase();
-    this.filteredDonors = this.donorList.filter((donor: any) =>
+    this.filteredDonors = this.donorList?.filter((donor: any) =>
       `${donor.funderName}`.toLowerCase().includes(input),
     );
     this.showDropdown = true;
   }
 
   selectDonor(donor: any): void {
+    console.log("after selecting donor from list", donor);
+    this.isFunderSelected = true;
     this.selectedDonorName = `${donor.funderName} `;
     this.form.controls['donorId'].setValue(this.selectedDonorName); // Update this line to set the name
-    this.invalidDonor = false;
-    this.showDropdown = false;
+    this.selectedFunderId = donor.funderId;
+    this.isViewFundDetails = true;
+
+    this.fetchFunderDetails();
+    this.funderSearchList = [];
+    // this.invalidDonor = false;
+    // this.showDropdown = false;
+  }
+
+  fetchFunderDetails(){
+    this.requestService.fetchFunderDetails(this.selectedFunderId).subscribe(
+      (res: any) => {
+        console.log("fetching funder details:", res);
+        this.funderDetails =  res;
+        console.log("this.funderDetails:", this.funderDetails);
+      },(error) => {
+        console.log("error while fetching funder details:", error);
+      }
+    )
   }
 
   hideDropdown(): void {
@@ -183,6 +243,12 @@ export class ViewRequistionComponent implements OnInit {
   //     this.selectedDonorName = '';
   //   }
   // }
+
+  onSelectedFunder(funderData: any){
+    console.log("funderData:", funderData);
+    this.assignedDonors = funderData;
+  }
+
   calculateDonorTotal(donors: any[]): number {
     return donors.reduce((total, donor) => total + donor.donotedAmt, 0);
   }
@@ -272,6 +338,11 @@ export class ViewRequistionComponent implements OnInit {
     this.isApproved = data;
     this.isRejectPop = data;
     this.closeView.emit(false);
+  }
+
+  close(data: boolean){
+    console.log('Close event received:', data); 
+    this.isViewFundDetails = !data;
   }
 
   fetchReason() {

@@ -464,7 +464,7 @@
                   <div
                     class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
                   >
-                    <div class="mb-6 flex">
+                    <!-- <div class="mb-6 flex">
                       <div class="me-4 flex items-center">
                         <input
                           id="inline-radio"
@@ -526,10 +526,10 @@
                         <label
                           for="inline-checked-radio"
                           class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >Exciting</label
+                          >Existing</label
                         >
                       </div>
-                    </div>
+                    </div> -->
 
                     <form
                       class="flex gap-5"
@@ -542,7 +542,7 @@
                             class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                             for="donor_input"
                           >
-                            Select Donor
+                            Select Funder
                           </label>
                           <button
                             (click)="openInNewTab()"
@@ -567,7 +567,7 @@
                               target="_blank" -->
                             <a
                               class="text-sm text-gray-400 hover:underline dark:text-blue-500"
-                              >Add Donor</a
+                              >Add Funder</a
                             >
                           </button>
                         </div>
@@ -576,7 +576,7 @@
                             type="text"
                             id="donor_input"
                             class="input-text1 w-full"
-                            placeholder="Choose Donor"
+                            placeholder="Choose Funder"
                             formControlName="donorId"
                             autocomplete="off"
                             [value]="selectedDonorName"
@@ -585,11 +585,11 @@
                             (blur)="hideDropdown()"
                           />
                           <ul
-                            *ngIf="showDropdown && filteredDonors.length > 0"
+                            *ngIf="funderSearchList && funderSearchList.length > 0"
                             class="scroll absolute z-10 mt-1 max-h-32 w-full overflow-y-scroll rounded-lg border border-gray-300 bg-white shadow-lg"
                           >
                             <li
-                              *ngFor="let donor of filteredDonors"
+                              *ngFor="let donor of funderSearchList"
                               (mousedown)="selectDonor(donor)"
                               class="an cursor-pointer p-2 text-sm hover:bg-purple-700 hover:text-white"
                             >
@@ -597,10 +597,10 @@
                             </li>
                           </ul>
                           <div
-                            *ngIf="showDropdown && filteredDonors.length === 0"
+                            *ngIf="noFunder"
                             class="absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white p-2 text-gray-500 shadow-lg"
                           >
-                            No results found
+                            No results found.
                           </div>
                         </div>
                       </div>
@@ -902,4 +902,11 @@
 </section>
 <section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
   <app-success-pop (close)="closepop($event)"></app-success-pop>
+</section>
+<section *ngIf="isViewFundDetails" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-view-fund-details
+      [funder]="funderDetails"
+      [donarName]="selectedDonorName"
+      (selectedFunderList)="onSelectedFunder($event)"
+     (close)="close($event)"></app-view-fund-details>
 </section>

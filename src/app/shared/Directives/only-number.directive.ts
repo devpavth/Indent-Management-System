@@ -10,6 +10,7 @@ export class OnlyNumberDirective {
   constructor(private el: ElementRef) {}
 
   @HostListener('keypress', ['$event']) onKeyPress(event: KeyboardEvent): void {
+    console.log("event:", event);
     const charCode = event.which ? event.which : event.keyCode;
     if ((charCode < 48 || charCode > 57) && charCode !== 46) {
       event.preventDefault();
@@ -50,6 +51,7 @@ export class OnlyNumberDirective {
   // }
 
   @HostListener('input', ['$event']) onInput(event: Event): void {
+    console.log("input event:", event);
     const inputElement = event.target as HTMLInputElement;
     if (inputElement.value.includes('-')) {
       inputElement.value = inputElement.value.replace('-', '');

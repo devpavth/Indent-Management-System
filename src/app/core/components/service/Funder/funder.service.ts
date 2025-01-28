@@ -11,8 +11,18 @@ export class FunderService {
   registerFunder(data: object) {
     return this.http.post(environment.addFunder, data);
   }
-  funderList() {
-    return this.http.get(environment.getAllFunderList);
+  funderList(params: {[key: string]: string} = {}) {
+    let httpParams = new HttpParams();
+
+    if(params && Object.keys(params).length > 0){
+      Object.keys(params).forEach((key) => {
+        httpParams = httpParams.append(key, params[key]);
+      });
+    }
+
+    console.log("httpParams:", httpParams.toString());
+
+    return this.http.get(environment.getAllFunderList, {params: httpParams});
   }
 
   deleteFunder(id: any) {

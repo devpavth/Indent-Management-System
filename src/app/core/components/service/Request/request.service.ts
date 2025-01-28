@@ -33,17 +33,6 @@ export class RequestService {
     });
   }
 
-  // fetchProgramManagerRequest(id: any, data?: string){
-  //   let mesgParams = new HttpParams();
-
-  //   if(data){
-  //     mesgParams = mesgParams.append('startDate', data);
-  //   }
-
-  //   return this.http.get(environment.fetchProgramManagerRequest + id, {
-  //     params: mesgParams,
-  //   });
-  // }
 
   branchApprovel(data: any) {
     return this.http.post(environment.branchApprovel + data, data);
@@ -170,5 +159,13 @@ export class RequestService {
     return this.http.post(environment.programManagerRejected + sno, data, {
       params: mesgParams,
     });
+  }
+
+  fetchFunderDetails(funderId: any){
+    return this.http.get(environment.fetchFunderDetails + funderId);
+  }
+
+  saveFundAmt(){
+    return this.http.post(environment.saveFundAmt, '');
   }
 }
