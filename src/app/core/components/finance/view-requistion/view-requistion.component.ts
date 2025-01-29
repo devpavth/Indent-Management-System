@@ -49,6 +49,10 @@ export class ViewRequistionComponent implements OnInit {
   cList: any[] = [];
   filteredDonors: any[] = [];
   assignedDonors: any[] = [];
+  assignedFunder: any[] = [];
+  assignnewFunder: any[] = [];
+  isToast: boolean = false;
+  warningToastMsg: any;
 
   form: FormGroup;
   selectedDonorName = '';
@@ -56,6 +60,7 @@ export class ViewRequistionComponent implements OnInit {
   isFunderSelected: boolean = false;
   noFunder: boolean = false;
   funderSearchList: any[] = [];
+  private originalFunderSearchList: any[] = []; 
   selectedFunderId: any;
   isViewFundDetails: boolean= false;
   funderDetails: any[] = [];
@@ -65,6 +70,7 @@ export class ViewRequistionComponent implements OnInit {
 
   approvelAmt: number | undefined;
   commendArray: { key: string; value: string }[] = [];
+  funderId!: number;
 
   constructor(
     private requestService: RequestService,
@@ -74,13 +80,13 @@ export class ViewRequistionComponent implements OnInit {
     private loc: Location,
   ) {
     this.form = this.fb.group({
-      donotedAmt: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
-      donorId: ['', Validators.required],
+      // donotedAmt: [0, [Validators.required, Validators.pattern('^[0-9]*$')]],
+      funderId: ['', Validators.required],
     });
   }
 
   ngOnInit() {
-    this.form.get('donorId')?.valueChanges
+    this.form.get('funderId')?.valueChanges
     .pipe(
       debounceTime(300),
       switchMap((searchTerm) => {
@@ -171,11 +177,34 @@ export class ViewRequistionComponent implements OnInit {
     console.log("after selecting donor from list", donor);
     this.isFunderSelected = true;
     this.selectedDonorName = `${donor.funderName} `;
-    this.form.controls['donorId'].setValue(this.selectedDonorName); // Update this line to set the name
+    this.form.controls['funderId'].setValue(this.selectedDonorName); // Update this line to set the name
     this.selectedFunderId = donor.funderId;
+    console.log("this.selectedFunderId:", this.selectedFunderId);
     this.isViewFundDetails = true;
 
+    const funderExists = this.assignedFunder.some(
+      (funder: any) => funder.funderId === donor.funderId
+    );
+
+    if (funderExists) {
+      console.log("Funder already exists in assignedFunder, blocking search.");
+      this.isViewFundDetails = false;
+      this.isToast = true;
+      this.warningToastMsg = `${donor.funderName} already exists in Funder cart.`;
+      setTimeout(() => {
+        this.isToast = false;
+      }, 3000)
+      return;
+    }
+
     this.fetchFunderDetails();
+    // this.onSelectedFunder(funderData);
+    if (!this.originalFunderSearchList || this.originalFunderSearchList.length === 0) {
+      this.originalFunderSearchList = [donor];  // Assign array with donor object
+    } else {
+      this.originalFunderSearchList.push(donor); // Add donor object to existing array
+    }
+
     this.funderSearchList = [];
     // this.invalidDonor = false;
     // this.showDropdown = false;
@@ -244,55 +273,137 @@ export class ViewRequistionComponent implements OnInit {
   //   }
   // }
 
-  onSelectedFunder(funderData: any){
-    console.log("funderData:", funderData);
-    this.assignedDonors = funderData;
-  }
+  // onSelectedFunder(funderData: any){
+  //   console.log("funderData received in onSelectedFunder:", funderData);
+  //   // console.log("funderId:", funderId);
 
-  calculateDonorTotal(donors: any[]): number {
-    return donors.reduce((total, donor) => total + donor.donotedAmt, 0);
-  }
-  onSubmit(): void {
-    const donorName = this.selectedDonorName; // Use selectedDonorName
-    const selectedDonor = this.donorList.find(
-      (donor: any) => `${donor.funderName} ` === donorName,
+
+  //   this.assignedFunder = Array.of(funderData[0]);
+
+  //   console.log("this.assignedFunder after assignment:", this.assignedFunder);
+
+  //   this.onSubmit(funderData[0]);
+
+  //   this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
+
+  //   console.log("this.donorTotal:", this.donorTotal);
+  // }
+
+  // calculateDonorTotal(donors: any[]): number {
+  //   console.log("donors:", donors);
+  //   return donors.reduce((total, donor) => total + donor.fundAmt, 0);
+  // }
+  // onSubmit(funderData: any): void {
+  //   const donorName = this.selectedDonorName; // Use selectedDonorName
+  //   console.log("donorName:", donorName);
+  //   console.log("donorName:", typeof donorName);
+
+  //   console.log("this.originalFunderSearchList:", this.originalFunderSearchList);
+  //   // console.log("selectedDonor:", selectedDonor);
+  //   const selectedDonor = this.originalFunderSearchList.find(
+  //     (donor: any) => {
+  //       console.log("donor in selectedDonor:", donor)
+  //       console.log("donor in selectedDonor:", donor.funderName)
+  //       console.log("donor in selectedDonor:", typeof donor.funderName)
+  //       console.log("condition checking:", donor.funderName === donorName.trim());
+  //       return donor.funderName === donorName.trim();
+  //     }
+  //   );
+
+  //   console.log("selectedDonor:", selectedDonor);
+
+  //   if (!selectedDonor) {
+  //     console.log("selectedDonor in if condition:", selectedDonor);
+  //     return;
+  //   } else {
+  //     this.invalidDonor = false;
+
+  //     const existingDonorIndex = this.assignedFunder.findIndex(
+  //       (donor: any) => donor.funderId === selectedDonor.funderId,
+  //     );
+
+  //     console.log("existingDonorIndex:", existingDonorIndex);
+
+  //     const fundAmt = funderData.fundAmt;
+  //     console.log("fundAmt:", fundAmt);
+  //     console.log("this.assignedFunder in fundAmounts:", this.assignedFunder);
+
+  //     if (existingDonorIndex !== -1) {
+  //       console.log("this.assignedFunder[existingDonorIndex]:", this.assignedFunder[existingDonorIndex]);
+  //       this.assignedDonors[existingDonorIndex] = funderData;
+  //       console.log("this.assignedFunder in existingDonorIndex:", this.assignedFunder);
+  //     } else {
+        
+  //       console.log("Before pushing:", this.assignedFunder);
+  //       this.assignedDonors.push(funderData);
+  //     }
+
+  //     // this.donorTotal = this.calculateDonorTotal(this.assignedDonors);
+
+  //     // console.log("this.donorTotal:", this.donorTotal);
+  //     console.log('Form submitted', this.assignedFunder);
+  //     this.form.reset();
+  //     // this.selectedDonorName = '';
+  //   }
+  // }
+
+  onSelectedFunder(funderData: any) {
+    console.log("funderData received in onSelectedFunder:", funderData);
+
+    if (!this.assignedFunder) {
+        this.assignedFunder = []; 
+    }
+
+    const newFunder = { ...funderData[0] }; 
+
+    const funderExists = this.assignedFunder.some((donor: any) => donor.funderId === newFunder.funderId);
+
+    if (funderExists) {
+        console.log("Funder already exists in assignedFunder. Cannot add again.");
+        return; 
+    }
+
+    console.log("Before adding new funder, assignedFunder:", this.assignedFunder);
+
+    // Check if funder already exists
+    const existingDonorIndex = this.assignedFunder.findIndex(
+        (donor: any) => donor.funderId === newFunder.funderId
     );
 
-    if (!selectedDonor) {
-      this.invalidDonor = true;
+    console.log("existingDonorIndex:", existingDonorIndex);
+
+    if (existingDonorIndex !== -1) {
+        console.log("Funder already exists, updating fundAmt...");
+        this.assignedFunder[existingDonorIndex].fundAmt += newFunder.fundAmt;
     } else {
-      this.invalidDonor = false;
-
-      const existingDonorIndex = this.assignedDonors.findIndex(
-        (donor: any) => donor.funderId === selectedDonor.funderId,
-      );
-
-      const donotedAmt = Number(this.form.value.donotedAmt); // Ensure donotedAmt is a number
-
-      if (existingDonorIndex !== -1) {
-        this.assignedDonors[existingDonorIndex].donotedAmt += donotedAmt;
-      } else {
-        let list = {
-          ...this.form.value,
-          donotedAmt: donotedAmt, // Ensure donotedAmt is a number
-          funderId: selectedDonor.funderId,
-          funderName: selectedDonor.funderName,
-        };
-        this.assignedDonors.push(list);
-      }
-
-      this.donorTotal = this.calculateDonorTotal(this.assignedDonors);
-
-      console.log(this.donorTotal);
-      console.log('Form submitted', this.assignedDonors);
-      this.form.reset();
-      this.selectedDonorName = '';
+        console.log("Adding new funder...");
+        this.assignedFunder.push(newFunder);
     }
-  }
+
+    console.log("this.assignedFunder after assignment:", this.assignedFunder);
+
+    this.onSubmit(newFunder);
+
+    this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
+    console.log("this.donorTotal:", this.donorTotal);
+}
+
+calculateDonorTotal(donors: any[]): number {
+    console.log("donors:", donors);
+    return donors.reduce((total, donor) => total + donor.fundAmt, 0);
+}
+
+onSubmit(funderData: any): void {
+    console.log("Submitting:", funderData);
+    console.log("this.assignedFunder in onSubmit:", this.assignedFunder);
+
+    this.form.reset(); // Reset form if needed
+}
+
 
   deleteDonor(data: any) {
-    this.assignedDonors.splice(0, 1);
-    this.donorTotal = this.calculateDonorTotal(this.assignedDonors);
+    this.assignedFunder.splice(0, 1);
+    this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
   }
 
   closeEdite(data: boolean) {
@@ -314,10 +425,10 @@ export class ViewRequistionComponent implements OnInit {
   submiteDonorList() {
     let finalList = {
       finApprAmount: this.approvelAmt,
-      assignedDonors: this.assignedDonors.map((fin) => ({
-        funderId: fin.funderId,
-        contribAmt: fin.donotedAmt,
-      })),
+      // assignedDonors: this.assignedDonors.map((fin) => ({
+      //   funderId: fin.funderId,
+      //   contribAmt: fin.donotedAmt,
+      // })),
     };
     this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
       (res: any) => {

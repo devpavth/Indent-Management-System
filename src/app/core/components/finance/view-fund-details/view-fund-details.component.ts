@@ -10,6 +10,7 @@ export class ViewFundDetailsComponent {
   @Input() donarName: any;
   @Output() close = new EventEmitter<boolean>();
   @Output() selectedFunderList = new EventEmitter<any>();
+  @Output() funderId = new EventEmitter<any>();
 
   isToast: boolean = false;
   warningToastMsg: any;
@@ -18,6 +19,8 @@ export class ViewFundDetailsComponent {
   selectedBranchName: string = '';
   selectedBranchId: number | null = null;
   selectedFundAmt: number | null = null;
+  // funderId: number | null = null;
+  passFunder: any[] = [];
 
   ngOnInit(){
     console.log("this.funder:", this.funder);
@@ -35,10 +38,11 @@ export class ViewFundDetailsComponent {
       console.log('Selected Funder:', selectedFunder); 
       if(selectedFunder){
         console.log("Entered Amount:", selectedFunder.enteredAmount); 
-        const { enteredAmount, branchId, branchName } = selectedFunder;
+        const { enteredAmount, branchId, branchName} = selectedFunder;
         this.selectedBranchId = branchId;
         this.selectedBranchName = branchName;
-        this.selectedFundAmt = enteredAmount;
+        this.selectedFundAmt = Number(enteredAmount);
+        
         console.log("this.selectedFundAmt:", this.selectedFundAmt);
       }
     }
@@ -51,7 +55,8 @@ export class ViewFundDetailsComponent {
       this.warningToastMsg = "Cannot Enter an Amount because Fund in Hand is 0.";
       setTimeout(()=>{
         this.isToast = false;
-      }, 3000)
+      }, 3000);
+      return;
     }
   }
 
@@ -74,24 +79,49 @@ export class ViewFundDetailsComponent {
     return isValid;
   }
 
+  isCheckBoxSelected(): boolean{
+    return !!this.selectedFunderId;
+  }
+
   submit(fundId: any){
     const selectedFunder = this.funder.find((f: any) => f.fundId === fundId);
     console.log("selectedFunder", selectedFunder);
     console.log("selectedFunder enteredAmount:", selectedFunder.enteredAmount);
-    this.selectedFundAmt = selectedFunder.enteredAmount;
+
+    console.log("Type of selectedFunder.enteredAmount before conversion:", typeof selectedFunder.enteredAmount);
+    console.log("Type of this.selectedFundAmt after conversion:", typeof this.selectedFundAmt);
+
+    this.selectedFundAmt = selectedFunder?.enteredAmount ? Number(selectedFunder.enteredAmount) : 0;
+
     console.log("this.selectedBranchId in save:", this.selectedBranchId);
     console.log("this.selectedBranchName in save:", this.selectedBranchName);
     console.log("this.selectedFundAmt in save:", this.selectedFundAmt);
 
-    this.selectedFunderList.emit([
-      {
-        branchId: this.selectedBranchId,
-        branchName: this.selectedBranchName,
-        fundAmt: this.selectedFundAmt
-      }
-    ])
+    console.log("Type of selectedFunder.enteredAmount before conversion:", typeof selectedFunder.enteredAmount);
+    console.log("Type of this.selectedFundAmt after conversion:", typeof this.selectedFundAmt);
+    console.log("selectedFunder.funderId:", selectedFunder.funderId);
+
+
+    // this.funderId = selectedFunder.funderId
+
+    const funderPayload = 
+    { 
+      funderName: selectedFunder.funderName,
+      funderId: selectedFunder.funderId,
+      branchId: this.selectedBranchId,
+      branchName: this.selectedBranchName,
+      fundAmt: Number(this.selectedFundAmt),
+      fundId: this.selectedFunderId,
+    }
+
+      console.log("Emitting funder data:", funderPayload);
+      console.log("Emitting completed");
+      this.passFunder = [funderPayload];
+
+    this.selectedFunderList.emit(this.passFunder);
 
     console.log("this.selectedFunderList:", this.selectedFunderList);
+    this.close.emit(true);
   }
 
   closePopUp(){
