@@ -155,6 +155,8 @@
                           {{ caldate }}
                         </dd>
                       </dl>
+                      <!-- <p>isViewFunderTable: {{ isViewFunderTable }}</p>
+                      <p>assignedFunder Length: {{ assignedFunder.length }}</p> -->
                     </div>
                     <!-- End Grid -->
                   </div>
@@ -283,8 +285,8 @@
                     </div>
                   </div>
                 </div>
-                <div *ngIf="isAction" class="mt-8 flex justify-end gap-3">
-                  <div>
+                <div *ngIf="isAction && isViewAction" class="mt-8 flex justify-end gap-3">
+                  <!-- <div> -->
                     <button
                       (click)="
                         isAccept = true;
@@ -293,10 +295,10 @@
                         isReject = false
                       "
                       type="submit"
-                      class=""
-                    >
+                      class="flex items-center gap-1 px-4 border rounded-full bg-green-500 text-white"
+                      >
                       <svg
-                        class="h-10 w-10 text-green-500 dark:text-white"
+                        class="h-6 w-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -310,9 +312,10 @@
                           clip-rule="evenodd"
                         />
                       </svg>
+                      Accept
                     </button>
-                  </div>
-                  <div class="">
+                  <!-- </div> -->
+                  <!-- <div class=""> -->
                     <button
                       type="submit"
                       (click)="
@@ -320,9 +323,10 @@
                         isAccept = false;
                         reasonHead = 'Holding'
                       "
+                      class="flex items-center gap-1 px-4 border rounded-full bg-amber-500 text-white"
                     >
                       <svg
-                        class="h-10 w-10 text-amber-500 dark:text-white"
+                        class="h-6 w-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -336,15 +340,17 @@
                           clip-rule="evenodd"
                         />
                       </svg>
+                      Hold
                     </button>
-                  </div>
-                  <div class="">
+                  <!-- </div> -->
+                  <!-- <div class=""> -->
                     <button
                       type="submit"
                       (click)="isReject = true; reasonHead = 'Rejection'"
+                      class="flex items-center gap-1 px-4 py-1 border rounded-full bg-red-500 text-white"
                     >
                       <svg
-                        class="h-10 w-10 text-red-600 dark:text-white"
+                        class="h-6 w-6"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -358,14 +364,16 @@
                           clip-rule="evenodd"
                         />
                       </svg>
+                      Reject
                     </button>
-                  </div>
+                  <!-- </div> -->
                 </div>
                 <section *ngIf="isAccept">
                   <div
                     class="my-4 flex rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
                     role="alert"
-                  >
+                    *ngIf="!isViewFunderTable && !isViewFinRejIndent"
+                    >
                     <svg
                       class="me-3 mt-[2px] inline h-4 w-4 flex-shrink-0"
                       aria-hidden="true"
@@ -397,8 +405,9 @@
                   </div>
                   
                   <div
+                    *ngIf="!isViewFunderTable && !isViewFinRejIndent"
                     class="rounded-lg border border-purple-500/10 bg-purple-400/10 p-4 backdrop-blur-lg"
-                  >
+                    >
                     <!-- <div class="mb-6 flex">
                       <div class="me-4 flex items-center">
                         <input
@@ -510,7 +519,7 @@
                           <input
                             type="text"
                             id="donor_input"
-                            class="input-text1 w-full"
+                            class="input-text1 w-[700px]"
                             placeholder="Choose Funder"
                             formControlName="funderId"
                             autocomplete="off"
@@ -597,9 +606,76 @@
                       Please select a valid donor !
                     </small>
                   </div>
+                  
+                  <div *ngIf="isViewFunderTable || !isViewFinRejIndent"
+                    class="flex mt-4 text-green-500 font-bold"
+                    >
+                    <div class="space-y-6">
+                      <div class="relative w-full">
+                        <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 rounded-full text-green-500"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <div class="ml-4">
+                          <h1>Indent Accepted by 
+                            <span class="text-green-500 font-bold">
+                              {{_requestDetails()?.financeAuthData?.empFirstName}} {{_requestDetails()?.financeAuthData?.empLastName}}
+                            </span>
+                          </h1>
+                        </div>
+                      </div>
+                    </div>       
+                  </div>
+
+                  <div *ngIf="isViewFinRejIndent"
+                    class="flex mt-4 text-red-500 font-bold"
+                    >
+                    <div class="space-y-6">
+                      <div class="relative w-full">
+                        <svg
+                          class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <div class="ml-4">
+                          <h1>Indent Rejected by 
+                            <span class="text-red-500 font-bold">
+                              {{_requestDetails()?.financeAuthData?.empFirstName}} {{_requestDetails()?.financeAuthData?.empLastName}}
+                            </span> on {{_requestDetails()?.financeAuthData?.authStatusTime | date: 'medium'
+                            }}
+                          </h1>
+                          <h3 class="text-gray-800 font-semibold">
+                            Reason: <span class="text-gray-500 font-bold">
+                              {{_requestDetails()?.indentHeaders?.commentsStr}}
+                            </span>
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
+                  </div>
 
                   <div
-                    *ngIf="assignedFunder.length > 0"
+                    *ngIf="assignedFunder && assignedFunder.length > 0 || isViewFunderTable || !isViewFinRejIndent"
                     class="mt-4 overflow-x-auto shadow-md sm:rounded-lg"
                     >
                     <table
@@ -613,7 +689,7 @@
                           <th scope="col" class="px-6 py-3">Funder Name</th>
                           <th scope="col" class="px-6 py-3">Branch Name</th>
                           <th scope="col" class="px-6 py-3">Amount</th>
-                          <th scope="col" class="px-6 py-3"></th>
+                          <th scope="col" class="px-6 py-3" *ngIf="!isViewFunderTable"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -638,10 +714,12 @@
                             {{ donor.branchName }}
                           </td>
                           <td class="px-6 py-4">
-                            {{ donor.fundAmt | currency: "INR" }}
+                            {{ donor.contribAmt | currency: "INR" }}
                           </td>
-                          <td class="px-6 py-4">
-                            <a (click)="deleteDonor(donor.fundAmt)"
+                          <td class="px-6 py-4"
+                            *ngIf="!isViewFunderTable"
+                            >
+                            <a (click)="deleteDonor(donor.contribAmt)"
                               ><svg
                                 class="h-6 w-6 cursor-pointer text-red-600"
                                 aria-hidden="true"
@@ -666,16 +744,16 @@
                     </table>
                   </div>
                   <h1
-                    *ngIf="assignedFunder.length > 0"
+                    *ngIf="assignedFunder.length > 0 || isViewFunderTable"
                     class="py-4 text-end font-semibold"
-                  >
+                    >
                     Total Donated Amount :
                     <span class="text-green-600">{{
                       donorTotal | currency: "INR"
                     }}</span>
                   </h1>
                   <!-- sddsiusdiieeiei -->
-                  <div class="mb-4 py-4">
+                  <div class="mb-4 py-4" *ngIf="!isViewFunderTable && !isViewFinRejIndent">
                     <div>
                       <label
                         class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -709,9 +787,10 @@
                         <input
                           placeholder="₹"
                           #appAmt
-                          class="block w-80 truncate rounded-l-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                          class="block w-80 truncate rounded-lg border border-purple-300 bg-purple-50 p-2.5 text-sm text-gray-900 hover:border-purple-600 hover:bg-gray-100 hover:ring-2 hover:ring-purple-200 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
                           type="number"
                           [value]="donorTotal"
+                          readonly
                         />
                         <!-- <div class="">
                           <button
@@ -741,7 +820,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="mt-6">
+                  <div class="mt-6" *ngIf="!isViewFunderTable && !isViewFinRejIndent">
                     <h2
                       class="mb-2 text-lg font-semibold text-gray-900 dark:text-white"
                     >
@@ -750,7 +829,7 @@
                     <ul
                       class="list-inside space-y-1 text-gray-500 dark:text-gray-400"
                     >
-                      <li class="flex items-center">
+                      <!-- <li class="flex items-center">
                         <svg
                           [ngClass]="{
                             'text-green-500':
@@ -768,14 +847,14 @@
                           />
                         </svg>
                         Requested Total & Approval Amount should be Match.
-                      </li>
+                      </li> -->
                       <li class="flex items-center">
                         <svg
                           [ngClass]="{
                             'text-green-500':
-                              approvelAmt ==
+                              donorTotal ==
                                 this._requestDetails()?.indentHeaders
-                                  .totalPrice && approvelAmt == donorTotal
+                                  .totalPrice && donorTotal == donorTotal
                           }"
                           class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                           aria-hidden="true"
@@ -791,20 +870,20 @@
                       </li>
                     </ul>
                   </div>
-                  <div class="mt-8 flex justify-end gap-3">
+                  <div class="mt-8 flex justify-end gap-3" *ngIf="!isViewFunderTable && !isViewFinRejIndent">
                     <div>
                       <button
                         (click)="submiteDonorList()"
                         [disabled]="
-                          approvelAmt !=
+                          donorTotal !=
                             this._requestDetails()?.indentHeaders.totalPrice ||
-                          approvelAmt != donorTotal
+                          donorTotal != donorTotal
                         "
                         [ngClass]="{
                           'bg-gray-500 hover:bg-gray-500':
-                            approvelAmt !=
+                            donorTotal !=
                               this._requestDetails().indentHeaders.totalPrice ||
-                            approvelAmt != donorTotal
+                            donorTotal != donorTotal
                         }"
                         type="submit"
                         class="me-2 rounded-lg bg-purple-500 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-600 dark:focus:ring-purple-800"

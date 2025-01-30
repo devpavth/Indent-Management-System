@@ -82,9 +82,11 @@ export class RequestService {
   updateRequest(id: any, data: any) {
     return this.http.post(environment.updateRequestList + id, data);
   }
-  finDonorAssign(Id: string, data: any) {
+  
+  finDonorAssign(Id: any, data: any) {
     return this.http.post(environment.finSubmite + Id, data);
   }
+
   commend(id: any, data: any, check: number) {
     let commendParams = new HttpParams();
     commendParams = commendParams.append('comments', data.toString());
@@ -165,7 +167,5 @@ export class RequestService {
     return this.http.get(environment.fetchFunderDetails + funderId);
   }
 
-  saveFundAmt(){
-    return this.http.post(environment.saveFundAmt, '');
-  }
+
 }

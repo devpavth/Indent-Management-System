@@ -110,7 +110,7 @@ export class ViewFundDetailsComponent {
       funderId: selectedFunder.funderId,
       branchId: this.selectedBranchId,
       branchName: this.selectedBranchName,
-      fundAmt: Number(this.selectedFundAmt),
+      contribAmt: Number(this.selectedFundAmt),
       fundId: this.selectedFunderId,
     }
 

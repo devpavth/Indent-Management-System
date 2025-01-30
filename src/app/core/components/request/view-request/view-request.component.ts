@@ -19,6 +19,7 @@ export class ViewRequestComponent implements OnInit {
   _requestDetails: any;
   isViewProgramManagerApproval: boolean = false;
   isViewBranchApproval: boolean = false;
+  isViewFinanceApproval: boolean = false;
 
   constructor(private readonly requstService: RequestService) {}
   ngOnInit(): void {
@@ -39,6 +40,9 @@ export class ViewRequestComponent implements OnInit {
       }
       if(this._requestDetails.branchAuthData.authStatusCode === 202){
         this.isViewBranchApproval = true;
+      }
+      if(this._requestDetails.financeAuthData.authStatusCode === 202){
+        this.isViewFinanceApproval = true;
       }
 
       console.log(this._requestDetails.branchAuthorize);

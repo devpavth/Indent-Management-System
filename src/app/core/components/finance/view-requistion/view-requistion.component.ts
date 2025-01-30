@@ -54,6 +54,10 @@ export class ViewRequistionComponent implements OnInit {
   isToast: boolean = false;
   warningToastMsg: any;
 
+  isViewAction: boolean = true;
+  isViewFunderTable: boolean = false;
+  isViewFinRejIndent: boolean = false;
+
   form: FormGroup;
   selectedDonorName = '';
 
@@ -64,6 +68,7 @@ export class ViewRequistionComponent implements OnInit {
   selectedFunderId: any;
   isViewFundDetails: boolean= false;
   funderDetails: any[] = [];
+  assignedFundId: any[] = [];
 
   isApproved: boolean = false;
   isRejectPop: boolean = false;
@@ -119,6 +124,8 @@ export class ViewRequistionComponent implements OnInit {
       }
     )
 
+    console.log("this.reqId:", this.reqId);
+
     this.fetchDetails(this.reqId);
     this.fetchReason();
   }
@@ -127,6 +134,35 @@ export class ViewRequistionComponent implements OnInit {
     this.requestService.viewReq(data).subscribe((res) => {
       console.log("fetching data:", res);
       this._requestDetails.set(res);
+
+      const authStatusCode = this._requestDetails()?.financeAuthData?.authStatusCode;
+      console.log("Finance Auth Status:", authStatusCode);
+      console.log("Finance Auth Status:", typeof authStatusCode);
+
+      if(authStatusCode === 202){
+        this.isViewAction = false;
+        this.assignedFunder = this._requestDetails()?.assignedDonors;
+        console.log("this.assignedFunder:", this.assignedFunder);
+
+        if(this.assignedFunder.length > 0){
+          console.log("this.assignedFunder:", this.assignedFunder);
+          console.log("Rendering Funder Table...");
+          this.isAccept = true;
+          this.isViewFunderTable = true;
+          this.isViewFinRejIndent = false;
+          this.donorTotal = this.assignedFunder.reduce((total, donor) => total + donor.contribAmt, 0);
+        }
+      }
+
+      if(authStatusCode === 406){
+        this.isViewAction = false;
+        this.isAccept = true;
+        this.isViewFinRejIndent = true;
+      }
+
+      
+
+      // this._requestDetails.find((req))
       this.calculateDate();
     });
   }
@@ -356,6 +392,8 @@ export class ViewRequistionComponent implements OnInit {
 
     const newFunder = { ...funderData[0] }; 
 
+    console.log("newFunder:", newFunder);
+
     const funderExists = this.assignedFunder.some((donor: any) => donor.funderId === newFunder.funderId);
 
     if (funderExists) {
@@ -373,8 +411,8 @@ export class ViewRequistionComponent implements OnInit {
     console.log("existingDonorIndex:", existingDonorIndex);
 
     if (existingDonorIndex !== -1) {
-        console.log("Funder already exists, updating fundAmt...");
-        this.assignedFunder[existingDonorIndex].fundAmt += newFunder.fundAmt;
+        console.log("Funder already exists, updating contribAmt...");
+        this.assignedFunder[existingDonorIndex].contribAmt += newFunder.contribAmt;
     } else {
         console.log("Adding new funder...");
         this.assignedFunder.push(newFunder);
@@ -390,14 +428,20 @@ export class ViewRequistionComponent implements OnInit {
 
 calculateDonorTotal(donors: any[]): number {
     console.log("donors:", donors);
-    return donors.reduce((total, donor) => total + donor.fundAmt, 0);
+    return donors.reduce((total, donor) => total + donor.contribAmt, 0);
 }
 
 onSubmit(funderData: any): void {
     console.log("Submitting:", funderData);
     console.log("this.assignedFunder in onSubmit:", this.assignedFunder);
 
-    this.form.reset(); // Reset form if needed
+    this.assignedFundId = this.assignedFunder.map((item) => ({
+      fundId: item.fundId,
+      contribAmt: item.contribAmt
+    })); 
+    console.log("this.assignedFundId:", this.assignedFundId);
+
+    this.form.reset();
 }
 
 
@@ -424,22 +468,25 @@ onSubmit(funderData: any): void {
 
   submiteDonorList() {
     let finalList = {
-      finApprAmount: this.approvelAmt,
+      // finApprAmount: this.donorTotal,
+      assignedDonors: this.assignedFunder
       // assignedDonors: this.assignedDonors.map((fin) => ({
       //   funderId: fin.funderId,
       //   contribAmt: fin.donotedAmt,
       // })),
     };
+
+    console.log("finalList:", finalList);
     this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
       (res: any) => {
         console.log("successfully indent request accept by finance:", res);
         this.isApproved = true;
       },
       (error) => {
-        console.error(error);
+        console.error("error while approving the financial:", error);
 
         if (error.status) {
-          alert('Successfully Registered');
+          alert('Successfully Failed!');
         }
       },
     );
