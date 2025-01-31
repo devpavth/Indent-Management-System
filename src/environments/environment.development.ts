@@ -1,4 +1,4 @@
-let Url = 'http://192.168.1.7:9010/';
+let Url = 'http://192.168.1.4:9010/';
 
 let location = 'https://www.universal-tutorial.com/api/';
 let bassEmployeeApi = 'employee';
@@ -105,6 +105,10 @@ export const environment = {
   finSubmite: Url + baseRequestApi + '/acceptFauthorize/',
   finHolding: Url + baseRequestApi + '/holdrequest/',
   finReject: Url + baseRequestApi + '/rejectFauthorize/',
+
+  fetchProcurementList: Url + baseRequestApi + '/requestforprct/',
+  prctHolding: Url + baseRequestApi + '/holdrequestbyprct/',
+  prcReject: Url + baseRequestApi + '/rejectprctauth/',
 
   comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
 

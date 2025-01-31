@@ -128,7 +128,7 @@
                           }}
                         </dd>
                       </dl>
-                      <dl class="grid gap-x-3 sm:grid-cols-5">
+                      <!-- <dl class="grid gap-x-3 sm:grid-cols-5">
                         <dt
                           class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
                         >
@@ -142,7 +142,7 @@
                               | date: "shortTime"
                           }}
                         </dd>
-                      </dl>
+                      </dl> -->
                       <dl class="grid gap-x-3 sm:grid-cols-5">
                         <dt
                           class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
@@ -285,6 +285,46 @@
                     </div>
                   </div>
                 </div>
+
+                <div *ngIf="isViewFinHoldIndent"
+                    class="flex mt-4 text-amber-500 font-bold"
+                    >
+                    <div class="space-y-6">
+                      <div class="relative w-full">
+                        <svg
+                          class="-top-0.1 absolute z-10 -ml-3 h-6 w-6 bg-white text-amber-500"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                          >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Zm-1 7a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        <div class="ml-4">
+                          <h1>Indent On Hold by 
+                            <span class="text-amber-500 font-bold">
+                              {{_requestDetails()?.financeAuthData?.empFirstName}} {{_requestDetails()?.financeAuthData?.empLastName}}
+                            </span> on {{_requestDetails()?.financeAuthData?.authStatusTime | date: 'MMM d, y, h:mm a'
+                            }}
+                          </h1>
+                          <h3 class="text-gray-800 font-semibold">
+                            Reason: <span class="text-gray-500 font-bold">
+                              {{_requestDetails()?.indentHeaders?.commentsStr}}
+                            </span>
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
+                  </div>
+
                 <div *ngIf="isAction && isViewAction" class="mt-8 flex justify-end gap-3">
                   <!-- <div> -->
                     <button
@@ -318,6 +358,7 @@
                   <!-- <div class=""> -->
                     <button
                       type="submit"
+                      *ngIf="!isViewAcceptRejectAction"
                       (click)="
                         this.isHolding = true;
                         isAccept = false;
@@ -519,7 +560,7 @@
                           <input
                             type="text"
                             id="donor_input"
-                            class="input-text1 w-[700px]"
+                            class="input-text1 w-[550px]"
                             placeholder="Choose Funder"
                             formControlName="funderId"
                             autocomplete="off"
@@ -607,7 +648,7 @@
                     </small>
                   </div>
                   
-                  <div *ngIf="isViewFunderTable || !isViewFinRejIndent"
+                  <div *ngIf="isViewFunderTable && !isViewFinHoldIndent && !isViewFinRejIndent"
                     class="flex mt-4 text-green-500 font-bold"
                     >
                     <div class="space-y-6">
@@ -628,7 +669,7 @@
                           <h1>Indent Accepted by 
                             <span class="text-green-500 font-bold">
                               {{_requestDetails()?.financeAuthData?.empFirstName}} {{_requestDetails()?.financeAuthData?.empLastName}}
-                            </span>
+                            </span> on {{_requestDetails().financeAuthData?.authStatusTime | date: 'MMM d, y, h:mm a'}}
                           </h1>
                         </div>
                       </div>
@@ -659,7 +700,7 @@
                           <h1>Indent Rejected by 
                             <span class="text-red-500 font-bold">
                               {{_requestDetails()?.financeAuthData?.empFirstName}} {{_requestDetails()?.financeAuthData?.empLastName}}
-                            </span> on {{_requestDetails()?.financeAuthData?.authStatusTime | date: 'medium'
+                            </span> on {{_requestDetails()?.financeAuthData?.authStatusTime | date: 'MMM d, y, h:mm a'
                             }}
                           </h1>
                           <h3 class="text-gray-800 font-semibold">
@@ -673,9 +714,10 @@
                     
                     
                   </div>
-
+                  
+                  
                   <div
-                    *ngIf="assignedFunder && assignedFunder.length > 0 || isViewFunderTable || !isViewFinRejIndent"
+                    *ngIf="assignedFunder && assignedFunder.length > 0 || isViewFunderTable && !isViewFinRejIndent"
                     class="mt-4 overflow-x-auto shadow-md sm:rounded-lg"
                     >
                     <table
@@ -687,7 +729,7 @@
                         <tr>
                           <th scope="col" class="px-6 py-3">S.No</th>
                           <th scope="col" class="px-6 py-3">Funder Name</th>
-                          <th scope="col" class="px-6 py-3">Branch Name</th>
+                          <th scope="col" class="px-6 py-3">Fund Utilized From</th>
                           <th scope="col" class="px-6 py-3">Amount</th>
                           <th scope="col" class="px-6 py-3" *ngIf="!isViewFunderTable"></th>
                         </tr>
@@ -1002,4 +1044,10 @@
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
   <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+</section>
+<section *ngIf="isRejectPop">
+  <app-cdelete-pop (close)="closepop($event)"></app-cdelete-pop>
+</section>
+<section *ngIf="isWarningPopup">
+  <app-warning-popup (close)="closepop($event)"></app-warning-popup>
 </section>

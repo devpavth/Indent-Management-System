@@ -1,26 +1,17 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
-
-import { Location } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  inject,
-  signal,
-} from '@angular/core';
-import { SharedServiceService } from '../../service/shared-service/shared-service.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FunderService } from '../../service/Funder/funder.service';
+import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-view-requistion',
-  templateUrl: './view-requistion.component.html',
-  styleUrls: ['./view-requistion.component.css'],
+  selector: 'app-view-procurementreq',
+  templateUrl: './view-procurementreq.component.html',
+  styleUrl: './view-procurementreq.component.css'
 })
-export class ViewRequistionComponent implements OnInit {
+export class ViewProcurementreqComponent {
   @Input() reqId: any;
   @Output() closeView = new EventEmitter<boolean>();
   dataService = inject(RequestService);
@@ -143,7 +134,7 @@ export class ViewRequistionComponent implements OnInit {
       console.log("Finance Auth Status:", typeof authStatusCode);
 
       if(authStatusCode === 202){
-        this.isViewAction = false;
+        this.isViewAction = true;
         this.assignedFunder = this._requestDetails()?.assignedDonors;
         console.log("this.assignedFunder:", this.assignedFunder);
 
@@ -505,7 +496,7 @@ onSubmit(funderData: any): void {
   closepop(data: boolean) {
     this.isApproved = data;
     this.isRejectPop = data;
-    this.isWarningPopup = data
+    this.isWarningPopup = data;
     this.closeView.emit(false);
   }
 
@@ -535,10 +526,11 @@ onSubmit(funderData: any): void {
     console.log("typeof Converted numeric data:", typeof numericData);
 
     if (this.isHolding == true && this.isReject == false) {
-      this.requestService.commend(this.reqId, numericData, 1)?.subscribe(
+      this.requestService.holdOrRejectcomments(this.reqId, numericData, 1)?.subscribe(
         (res) => {
           console.log("successfully hold the request:", res);
           this.isWarningPopup = true;
+          
         },
         (error) => {
           console.log("error while holding the request:", error);
@@ -550,7 +542,7 @@ onSubmit(funderData: any): void {
       );
     }
     if (this.isHolding == false && this.isReject == true) {
-      this.requestService.commend(this.reqId, numericData, 2)?.subscribe(
+      this.requestService.holdOrRejectcomments(this.reqId, numericData, 2)?.subscribe(
         (res) => {
           console.log("successfully rejected the request:", res);
           this.isRejectPop = true;

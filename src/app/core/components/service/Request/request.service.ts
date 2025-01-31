@@ -167,5 +167,40 @@ export class RequestService {
     return this.http.get(environment.fetchFunderDetails + funderId);
   }
 
+  fetchPrctReqList(status: any, data?: string): Observable<any>{
+    let params =  new HttpParams();
+
+    if(data){
+      params = params.append('startDate', data);
+    }
+
+    return this.http.get(environment.fetchProcurementList + status, {
+      params: params
+    })
+  }
+
+
+  holdOrRejectcomments(id: any, data: any, check: number) {
+    let commendParams = new HttpParams();
+    commendParams = commendParams.append('comments', data.toString());
+    console.log("typeof data:", typeof data);
+    console.log("commendParams:", commendParams);
+  
+    if (check === 1) {
+      return this.http.post(
+        environment.prctHolding + id,
+        {},
+        { params: commendParams },
+      );
+    }
+    if (check === 2) {
+      return this.http.post(
+        environment.prcReject + id,
+        {},
+        { params: commendParams },
+      );
+    }
+    return null;
+  }
 
 }

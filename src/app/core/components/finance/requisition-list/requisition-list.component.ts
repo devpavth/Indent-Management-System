@@ -85,8 +85,8 @@ export class RequisitionListComponent implements OnInit {
       this.isHold == true &&
       this.isRejected == false
     ){
-      this.isViewSelectedDate = true;
-      this.req.finRequestList(418, this.currentDate).subscribe(
+      this.isViewSelectedDate = false;
+      this.req.finRequestList(418).subscribe(
         (res: any) => {
           console.log("fetching finance request on hold list:", res);
           this.userRequest = res;

@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
         this.userData = res;
         // console.log(res);
 
-        if ((res = !null)) {
+        if ((res != null)) {
           this.userid = this.userData?.employeeId;
 
           sessionStorage.setItem('userId', this.userid);
