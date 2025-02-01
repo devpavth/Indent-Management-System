@@ -76,11 +76,11 @@
                         Request#
                       </h2>
                       <span class="mt-1 block text-gray-500">{{
-                        _requestDetails()?.indentHeaders.requestNo
+                        _requestDetails()?.indentHeaders?.requestNo
                       }}</span>
   
                       <address class="mt-2 font-medium not-italic text-gray-800">
-                        {{ _requestDetails()?.indentHeaders.requisitioner }}<br />
+                        {{ _requestDetails()?.indentHeaders?.requisitioner }}<br />
                         <!-- {{_requestDetails.empDept }}<br> -->
                       </address>
                     </div>
@@ -96,16 +96,16 @@
                       <h3
                         class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
                       >
-                        {{ _requestDetails()?.createdEmpData.empFirstName }}
-                        {{ _requestDetails()?.createdEmpData.empLastName }}
+                        {{ _requestDetails()?.createdEmpData?.empFirstName }}
+                        {{ _requestDetails()?.createdEmpData?.empLastName }}
                       </h3>
   
                       <address
                         class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
                       >
                         <!-- {{ _requestDetails()?.createdEmpData.empRole }}<br /> -->
-                        {{ _requestDetails()?.indentBranch.branchName }}<br />
-                        {{ _requestDetails()?.indentBranch.deptName }}<br />
+                        {{ _requestDetails()?.indentBranch?.branchName }}<br />
+                        {{ _requestDetails()?.indentBranch?.deptName }}<br />
                       </address>
                     </div>
                     <!-- Col -->
@@ -432,18 +432,14 @@
                         donorTotal | currency: "INR"
                       }}</span>
                     </h1>
+                    
   
                   <div *ngIf="isAction && isViewAction" class="mt-8 flex justify-end gap-3">
                     <!-- <div> -->
                       <button
-                        (click)="
-                          isAccept = true;
-                          isAction = false;
-                          isHolding = false;
-                          isReject = false
-                        "
+                        (click)="onAccept()"
                         type="submit"
-                        class="flex items-center gap-1 px-4 border rounded-full bg-green-500 text-white"
+                        class="flex items-center gap-1 px-4 py-2 border rounded-full bg-green-500 text-white"
                         >
                         <svg
                           class="h-6 w-6"
@@ -464,7 +460,7 @@
                       </button>
                     <!-- </div> -->
                     <!-- <div class=""> -->
-                      <button
+                      <!-- <button
                         type="submit"
                         *ngIf="!isViewAcceptRejectAction"
                         (click)="
@@ -490,10 +486,10 @@
                           />
                         </svg>
                         Hold
-                      </button>
+                      </button> -->
                     <!-- </div> -->
                     <!-- <div class=""> -->
-                      <button
+                      <!-- <button
                         type="submit"
                         (click)="isReject = true; reasonHead = 'Rejection'"
                         class="flex items-center gap-1 px-4 py-1 border rounded-full bg-red-500 text-white"
@@ -514,10 +510,16 @@
                           />
                         </svg>
                         Reject
-                      </button>
+                      </button> -->
                     <!-- </div> -->
                   </div>
-                  <section *ngIf="isAccept">
+
+
+                  <!-- <section *ngIf="isAccept">
+                    <app-pdf-upload></app-pdf-upload>
+                  </section> -->
+                  
+                  <section>
                     <div
                       class="my-4 flex rounded-lg bg-blue-50 p-4 text-sm text-blue-800 dark:bg-gray-800 dark:text-blue-400"
                       role="alert"
@@ -923,13 +925,13 @@
                           (click)="submiteDonorList()"
                           [disabled]="
                             donorTotal !=
-                              this._requestDetails()?.indentHeaders.totalPrice ||
+                              this._requestDetails()?.indentHeaders?.totalPrice ||
                             donorTotal != donorTotal
                           "
                           [ngClass]="{
                             'bg-gray-500 hover:bg-gray-500':
                               donorTotal !=
-                                this._requestDetails().indentHeaders.totalPrice ||
+                                this._requestDetails().indentHeaders?.totalPrice ||
                               donorTotal != donorTotal
                           }"
                           type="submit"
@@ -1051,6 +1053,8 @@
     <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
   </section>
    -->
+
+
 
 
 <section *ngIf="isRejectPop">

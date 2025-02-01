@@ -123,7 +123,6 @@ export class ViewRequistionComponent implements OnInit {
 
         this.funderSearchList = response;
         this.isFunderSelected = false;
-
       }
     )
 
@@ -456,7 +455,17 @@ onSubmit(funderData: any): void {
 
 
   deleteDonor(data: any) {
-    this.assignedFunder.splice(0, 1);
+    console.log("Before deletion:", this.assignedFunder);
+
+    this.assignedFunder = this.assignedFunder.filter(
+      (item: any) => item.fundId !== data.fundId
+    )
+
+    console.log("After deletion:", this.assignedFunder);
+
+    console.log("data:", data);
+    
+    // this.assignedFunder.splice(0, 1);
     this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
   }
 

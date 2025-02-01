@@ -21,6 +21,8 @@ export class LeftMenuComponent {
   user: any;
   userData: any;
   isLevelView: boolean = true;
+  isBlockRequest: boolean = false;
+  isBlockUser: boolean = false;
 
   ngOnInit(){
     this.user = sessionStorage.getItem('userId');
@@ -35,6 +37,12 @@ export class LeftMenuComponent {
         if(this.userData.empDesig !== 15){
           console.log("logging");
           this.isLevelView = false;
+        }else{
+          this.isBlockRequest = true;
+        }
+
+        if(this.userData.empDesig === 10){
+          this.isBlockUser = true;
         }
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);

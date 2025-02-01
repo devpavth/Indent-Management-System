@@ -202,7 +202,7 @@ export class RequestFormComponent implements OnInit {
         console.log("fetching vendor data from backend:", response);
 
         this.storeVendorList = this.storeVendorList.filter(
-          (f) => f.branchId == this.employeeData?.branchId,
+          (f) => f.branchId == this.employeeData?.branchId || f.branchId == 0,
         );
 
         this.isVendorSelected = false;

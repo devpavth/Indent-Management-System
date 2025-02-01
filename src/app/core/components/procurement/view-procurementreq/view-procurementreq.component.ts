@@ -5,6 +5,7 @@ import { FunderService } from '../../service/Funder/funder.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-procurementreq',
@@ -15,6 +16,7 @@ export class ViewProcurementreqComponent {
   @Input() reqId: any;
   @Output() closeView = new EventEmitter<boolean>();
   dataService = inject(RequestService);
+  route = inject(Router);
 
   // _requestDetails: any = {};
   _requestDetails = signal<any>(null);
@@ -124,6 +126,14 @@ export class ViewProcurementreqComponent {
     this.fetchReason();
   }
 
+  onAccept(){
+    this.isAccept = true;
+    this.isAction = false;
+    this.isHolding = false;
+    this.isReject = false
+    this.route.navigate(['home/qComparison']);
+  }
+
   fetchDetails(data: any) {
     this.requestService.viewReq(data).subscribe((res) => {
       console.log("fetching data:", res);
@@ -141,7 +151,7 @@ export class ViewProcurementreqComponent {
         if(this.assignedFunder.length > 0){
           console.log("this.assignedFunder:", this.assignedFunder);
           console.log("Rendering Funder Table...");
-          this.isAccept = true;
+          // this.isAccept = true;
           this.isViewFunderTable = true;
           this.isViewFinRejIndent = false;
           this.donorTotal = this.assignedFunder.reduce((total, donor) => total + donor.contribAmt, 0);
@@ -150,7 +160,7 @@ export class ViewProcurementreqComponent {
 
       if(authStatusCode === 406){
         this.isViewAction = false;
-        this.isAccept = true;
+        // this.isAccept = true;
         this.isViewFinRejIndent = true;
       }
 
