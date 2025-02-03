@@ -176,3 +176,9 @@
 >
   <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
 </section>
+
+<section *ngIf="isViewReasonBranch" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-view-fundbranchreason
+      [checkedFund]="checkedFunder"
+     (close)="closeReason($event)"></app-view-fundbranchreason>
+</section>

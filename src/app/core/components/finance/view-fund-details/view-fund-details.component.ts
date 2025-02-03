@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Signal } from '@angular/core';
+import { Funder } from '../../../models/funder.type';
 
 @Component({
   selector: 'app-view-fund-details',
@@ -7,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ViewFundDetailsComponent {
   @Input() funder: any;
+  @Input() reqDetails!: Signal<any>;
   @Input() donarName: any;
   @Output() close = new EventEmitter<boolean>();
   @Output() selectedFunderList = new EventEmitter<any>();
@@ -21,6 +23,9 @@ export class ViewFundDetailsComponent {
   selectedFundAmt: number | null = null;
   // funderId: number | null = null;
   passFunder: any[] = [];
+  checkedFunder: Funder | undefined;
+
+  isViewReasonBranch: boolean = false;
 
   ngOnInit(){
     console.log("this.funder:", this.funder);
@@ -36,7 +41,20 @@ export class ViewFundDetailsComponent {
       this.selectedFunderId = fundId;
       const selectedFunder = this.funder.find((f: any) => f.fundId === fundId);
       console.log('Selected Funder:', selectedFunder); 
+      this.checkedFunder = selectedFunder;
+      console.log("this.checkedFunder:", this.checkedFunder);
+      console.log("this.reqDetails:", this.reqDetails());
       if(selectedFunder){
+        if(selectedFunder?.branchId !== this.reqDetails()?.indentBranch?.branchId){
+          this.isViewReasonBranch = true;
+          console.log("mismatch branch..");       
+        } 
+        if(selectedFunder?.branchId === 0){
+          this.isViewReasonBranch = false;
+        }
+        else{
+          console.log("matching branch..");
+        }
         console.log("Entered Amount:", selectedFunder.enteredAmount); 
         const { enteredAmount, branchId, branchName} = selectedFunder;
         this.selectedBranchId = branchId;
@@ -126,5 +144,9 @@ export class ViewFundDetailsComponent {
 
   closePopUp(){
     this.close.emit(true);
+  }
+
+  closeReason(data: boolean){
+    this.isViewReasonBranch = !data;
   }
 }

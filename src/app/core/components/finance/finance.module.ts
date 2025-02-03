@@ -8,9 +8,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { SharedModule } from "../../../shared/shared.module";
 import { ViewFundDetailsComponent } from './view-fund-details/view-fund-details.component';
+import { ViewFundbranchreasonComponent } from './view-fundbranchreason/view-fundbranchreason.component';
 
 @NgModule({
-  declarations: [RequisitionListComponent, ViewRequistionComponent, EditProductComponent, ViewFundDetailsComponent],
+  declarations: [RequisitionListComponent, ViewRequistionComponent, EditProductComponent, ViewFundDetailsComponent, ViewFundbranchreasonComponent],
   imports: [
     CommonModule,
     FinanceRoutingModule,

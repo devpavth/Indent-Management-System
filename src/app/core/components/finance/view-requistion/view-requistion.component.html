@@ -1035,6 +1035,7 @@
 <section *ngIf="isViewFundDetails" class="absolute left-0 right-0 top-0 z-50 h-screen">
   <app-view-fund-details
       [funder]="funderDetails"
+      [reqDetails]="_requestDetails"
       [donarName]="selectedDonorName"
       (selectedFunderList)="onSelectedFunder($event)"
      (close)="close($event)"></app-view-fund-details>

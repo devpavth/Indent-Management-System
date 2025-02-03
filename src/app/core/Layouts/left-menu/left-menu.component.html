@@ -110,7 +110,6 @@
         >
           <li>
             <a
-              *ngIf="isBlockUser"
               routerLinkActive="side-menu-active"
               routerLink="/home/request"
               class="left-submenu group"
@@ -125,14 +124,15 @@
               >User Request List</a
             >
           </li>
-          <li *ngIf="true"> 
+          <li> 
             <a
               routerLinkActive="side-menu-active"
               [routerLink]="isBlockUser ? null : '/home/managerApproval'"
               class="left-submenu group"
               [ngClass]="{
-                'cursor-not-allowed text-gray-400': isBlockUser
-              }"
+                'cursor-not-allowed': isBlockUser,
+                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
+              }"              
               >
               Program Manager Approval
             </a>
@@ -140,16 +140,24 @@
           <li>
             <a
               routerLinkActive="side-menu-active"
-              routerLink="/home/branchApprovel"
+              [routerLink]="isBlockUser ? null : '/home/branchApprovel'"
               class="left-submenu group"
+              [ngClass]="{
+                'cursor-not-allowed': isBlockUser,
+                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
+              }" 
               >Branch Approval</a
             >
           </li>
           <li>
             <a
               routerLinkActive="side-menu-active"
-              routerLink="/home/adminApprovel"
+              [routerLink]="isBlockUser ? null : '/home/adminApprovel'"
               class="left-submenu group"
+              [ngClass]="{
+                'cursor-not-allowed': isBlockUser,
+                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
+              }"
               >Admin Approval</a
             >
           </li>
