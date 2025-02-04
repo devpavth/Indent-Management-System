@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { ProductService } from '../../core/components/service/Product/product.service';
+import { Vendor } from '../../core/models/vendor/vendor.type';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -16,10 +20,73 @@ export class PdfUploadComponent {
   leastPrice: number = 0;
   selectedQuote: number | null = null; // Variable for the selected quote index
 
+  assignedVendor: FormGroup;
+
+  noVendor: boolean = false;
+  isVendorSelected: boolean = false;
+  storeVendorList: Vendor[] = [];
+
+  selectedVendorName: string[] = [];
+
+  productService = inject(ProductService)
+
   constructor(
     private sanitizer: DomSanitizer,
     private request: RequestService,
-  ) {}
+    private fb: FormBuilder
+  ) {
+    this.assignedVendor = this.fb.group({
+      vendorId: [],
+    })
+  }
+
+  ngOnInit(){
+    this.assignedVendor.get('vendorId')?.valueChanges
+    .pipe(
+      debounceTime(300),
+      switchMap((searchTerm) => {
+        console.log(`vendor Name Changed for Index:`, searchTerm);
+        if(this.isVendorSelected){
+          this.isVendorSelected = false;
+          return of([]);
+        }
+        this.noVendor = false;
+        this.storeVendorList = [];
+        if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
+          return of([]);
+        }
+        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
+          catchError((error) => {
+            if(error.status === 404){
+              console.log("error while fetching vendor data:", error);
+              this.noVendor = true;
+            }
+            return of([]);
+          })
+        )
+      })
+    ).subscribe(
+      (response: Vendor[]) => {
+        this.storeVendorList = response;
+        console.log("fetching vendor data from backend:", response);
+
+        this.isVendorSelected = false;
+      }
+    )
+  }
+
+  onSelectedVendor(vendor: Vendor){
+    console.log("onSelectedVendor:", vendor);
+
+    this.isVendorSelected = true;
+
+    if(this.selectedVendorName.length< 3 && !this.selectedVendorName.includes(vendor.vendorName)){
+      this.selectedVendorName.push(vendor.vendorName);
+    }
+
+    this.storeVendorList = [];
+  }
+  
 
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
@@ -49,8 +116,13 @@ export class PdfUploadComponent {
   }
 
   deleteSlide(index: number): void {
+    console.log("index:", index);
     this.pdfSrc.splice(index, 1);
     this.pdfFiles.splice(index, 1);
+
+    if(this.selectedVendorName && this.selectedVendorName.length > index){
+      this.selectedVendorName.splice(index, 1);
+    }
     if (this.currentSlideIndex >= this.pdfSrc.length) {
       this.currentSlideIndex = this.pdfSrc.length - 1;
     }

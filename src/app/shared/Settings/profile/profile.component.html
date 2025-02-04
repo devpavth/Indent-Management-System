@@ -11,7 +11,7 @@
           >
             <dt class="font-medium text-gray-900">Name</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empFirstName }} {{ userDetail.empLastName }}
+              {{ userDetail?.empFirstName }} {{ userDetail?.empLastName }}
             </dd>
           </div>
 
@@ -20,7 +20,7 @@
           >
             <dt class="font-medium text-gray-900">Email</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empEmail }}
+              {{ userDetail?.empEmail }}
             </dd>
           </div>
 
@@ -29,7 +29,7 @@
           >
             <dt class="font-medium text-gray-900">Phone</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empPhone }}
+              {{ userDetail?.empPhone }}
             </dd>
           </div>
 
@@ -38,7 +38,7 @@
           >
             <dt class="font-medium text-gray-900">Gender</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empGender }}
+              {{ userDetail?.empGender }}
             </dd>
           </div>
           <div
@@ -46,7 +46,7 @@
           >
             <dt class="font-medium text-gray-900">Date of Birth</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empDateofBirth | date: "dd-MM-yyyy" }}
+              {{ userDetail?.empDateofBirth | date: "dd-MM-yyyy" }}
             </dd>
           </div>
           <div
@@ -54,7 +54,7 @@
           >
             <dt class="font-medium text-gray-900">Country</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.country }}
+              {{ userDetail?.country }}
             </dd>
           </div>
           <div
@@ -62,9 +62,9 @@
           >
             <dt class="font-medium text-gray-900">Address</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.addressLine1 }} {{ userDetail.addressLine2 }}
-              {{ userDetail.state }}, {{ userDetail.city }} -
-              {{ userDetail.pin }}.
+              {{ userDetail?.addressLine1 }} {{ userDetail?.addressLine2 }}
+              {{ userDetail?.state }}, {{ userDetail?.city }} -
+              {{ userDetail?.pin }}.
             </dd>
           </div>
         </dl>
@@ -81,7 +81,7 @@
           >
             <dt class="font-medium text-gray-900">User ID</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.employeeId }}
+              {{ userDetail?.employeeId }}
             </dd>
           </div>
 
@@ -90,7 +90,7 @@
           >
             <dt class="font-medium text-gray-900">Join Date</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empJoiningDate | date: "dd-MM-yyyy" }}
+              {{ userDetail?.empJoiningDate | date: "dd-MM-yyyy" }}
             </dd>
           </div>
 
@@ -99,24 +99,24 @@
           >
             <dt class="font-medium text-gray-900">Role</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empRole }}
+              {{ userDetail?.empRole }}
             </dd>
           </div>
 
-          <div
+          <!-- <div
             class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
           >
             <dt class="font-medium text-gray-900">Department</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ userDetail.empDepartment }}
             </dd>
-          </div>
+          </div> -->
           <div
             class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
           >
             <dt class="font-medium text-gray-900">Designation</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.empDesignation }}
+              {{ userDetail?.empDesignation }}
             </dd>
           </div>
           <div
@@ -124,17 +124,17 @@
           >
             <dt class="font-medium text-gray-900">Branch</dt>
             <dd class="text-gray-700 sm:col-span-2">
-              {{ userDetail.branchName }}
+              {{ userDetail?.branchName }}
             </dd>
           </div>
-          <div
+          <!-- <div
             class="grid grid-cols-1 gap-1 p-3 even:bg-purple-50 sm:grid-cols-3 sm:gap-4"
           >
             <dt class="font-medium text-gray-900">Flage</dt>
             <dd class="text-gray-700 sm:col-span-2">
               {{ userDetail.empFlag }}
             </dd>
-          </div>
+          </div> -->
         </dl>
       </div>
     </div>

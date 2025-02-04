@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Subject, tap } from 'rxjs';
+import { Observable, Subject, tap } from 'rxjs';
+import { Vendor } from '../../../models/vendor/vendor.type';
 
 @Injectable({
   providedIn: 'root',
@@ -101,7 +102,7 @@ export class ProductService {
     return this.productHttp.get(environment.fetchLiveProductDetails, {params: httpParams});
   }
 
-  fetchLiveVendorDetails(params: {[key: string]: string}){
+  fetchLiveVendorDetails(params: {[key: string]: string}): Observable<Vendor[]>{
     let httpParams = new HttpParams();
 
     Object.keys(params).forEach((key) => {
@@ -110,7 +111,7 @@ export class ProductService {
 
     console.log("httpParams:", httpParams.toString());
 
-    return this.productHttp.get(environment.fetchLiveVendorDetails, {params: httpParams});
+    return this.productHttp.get<Vendor[]>(environment.fetchLiveVendorDetails, {params: httpParams});
   }
 
   fetchOtherProductDetails(){

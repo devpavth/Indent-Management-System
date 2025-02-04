@@ -123,7 +123,7 @@
                             class="col-span-2 text-gray-500 dark:text-neutral-500"
                           >
                             {{
-                              _requestDetails()?.indentHeaders.requiredDate
+                              _requestDetails()?.indentHeaders?.requiredDate
                                 | date: "dd-MMMM-yyyy"
                             }}
                           </dd>
@@ -277,7 +277,7 @@
                           </dt>
                           <dd class="col-span-2 text-gray-500">
                             {{
-                              this._requestDetails()?.indentHeaders.totalPrice
+                              this._requestDetails()?.indentHeaders?.totalPrice
                                 | currency: "INR"
                             }}
                           </dd>
@@ -903,7 +903,7 @@
                               'text-green-500':
                                 donorTotal ==
                                   this._requestDetails()?.indentHeaders
-                                    .totalPrice && donorTotal == donorTotal
+                                    ?.totalPrice && donorTotal == donorTotal
                             }"
                             class="me-2 h-3.5 w-3.5 flex-shrink-0 text-gray-500"
                             aria-hidden="true"

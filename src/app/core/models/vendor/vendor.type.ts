@@ -1,0 +1,141 @@
+export type VendorAccount = {
+    bankAccNo: string;
+    ifsCode: string;
+    vdrAccId: number;
+    vdrAccStatus: number
+}
+
+export type Vendor = {
+    bizDetailName: string;
+    bizDetails: number;
+    bizType: string;
+    branchId: number;
+    createdBy: string;
+    createdOn: string;
+    estDate: string;
+    modifiedBy: string;
+    modifiedOn: string;
+    serviceLocation: number;
+    vdrAdd1: string;
+    vdrAdd2: string;
+    vdrCity: string;
+    vdrContactPersonName: number;
+    vdrCountry: string;
+    vdrEmail: string;
+    vdrGstNo: string;
+    vdrMsmeNo: string;
+    vdrPanNo: string;
+    vdrPincode: number;
+    vdrState: string;
+    vdrStatus: number;
+    vdrTanNo: string;
+    vendorId: number;
+    vendorName: string;
+    vendorAcccountDetails: VendorAccount[];
+}
+
+
+// bizDetailName
+// : 
+// null
+// bizDetails
+// : 
+// 256
+// bizType
+// : 
+// "Service"
+// branchId
+// : 
+// 0
+// createdBy
+// : 
+// "SEN001"
+// createdOn
+// : 
+// "2025-01-02T07:41:31.874+00:00"
+// estDate
+// : 
+// "2012-05-20"
+// modifiedBy
+// : 
+// "SEN001"
+// modifiedOn
+// : 
+// "2025-01-24T13:51:34.918+00:00"
+// serviceLocation
+// : 
+// 498
+// vdrAdd1
+// : 
+// "123, Silicon Valley Road"
+// vdrAdd2
+// : 
+// "Near Innovation Center"
+// vdrCity
+// : 
+// "Cyberabad, Shaikpet"
+// vdrContactPersonName
+// : 
+// "Suresh Kumar"
+// vdrContactPersonPhone
+// : 
+// 9012345678
+// vdrCountry
+// : 
+// "India"
+// vdrEmail
+// : 
+// "support@technovasolutions.com"
+// vdrGstNo
+// : 
+// "36ABCDEF1234G1Z"
+// vdrMsmeNo
+// : 
+// "MSME234567890"
+// vdrPanNo
+// : 
+// "ABCDEF1234"
+// vdrPincode
+// : 
+// 500081
+// vdrState
+// : 
+// "Telangana"
+// vdrStatus
+// : 
+// 200
+// vdrTanNo
+// : 
+// "HYDT67890T"
+// vendorAcccountDetails
+// : 
+// Array(1)
+// 0
+// : 
+// bankAccNo
+// : 
+// "123456789019"
+// ifsCode
+// : 
+// "SBIN0000125"
+// vdrAccId
+// : 
+// 32
+// vdrAccStatus
+// : 
+// 200
+// [[Prototype]]
+// : 
+// Object
+// length
+// : 
+// 1
+// [[Prototype]]
+// : 
+// Array(0)
+// vendorId
+// : 
+// 10
+// vendorName
+// : 
+// "Tech Nova Solutions Pvt Ltd
