@@ -5,6 +5,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { Vendor } from '../../core/models/vendor/vendor.type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
+import { ProRequestdata } from '../../core/models/proRequestData/pro-requestdata.model';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -26,101 +29,198 @@ export class PdfUploadComponent {
   isVendorSelected: boolean = false;
   storeVendorList: Vendor[] = [];
 
-  selectedVendorName: string[] = [];
+  selectedVendorName: { name: string; isViewCloseIcon: boolean }[] = [];
+  isEnableUploadBtn: boolean = false;
+  isEnableSearch: boolean = true;
+  isToast: boolean = false;
+  warningToastMsg: string = '';
+  // isViewCloseIcon: boolean = false;
+  requestData: ProRequestdata | null = null;
+  productHeadData: (string | number)[] = [];
 
-  productService = inject(ProductService)
+  productService = inject(ProductService);
+  route = inject(ActivatedRoute);
+  proQuoteService = inject(ProcurementQuotedataService);
+
+  reqId: number = 0;
 
   constructor(
     private sanitizer: DomSanitizer,
     private request: RequestService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.assignedVendor = this.fb.group({
       vendorId: [],
-    })
+    });
   }
 
-  ngOnInit(){
-    this.assignedVendor.get('vendorId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        console.log(`vendor Name Changed for Index:`, searchTerm);
-        if(this.isVendorSelected){
-          this.isVendorSelected = false;
-          return of([]);
-        }
-        this.noVendor = false;
-        this.storeVendorList = [];
-        if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
-          return of([]);
-        }
-        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("error while fetching vendor data:", error);
-              this.noVendor = true;
-            }
+  ngOnInit() {
+    this.assignedVendor
+      .get('vendorId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          console.log(`vendor Name Changed for Index:`, searchTerm);
+          if (this.isVendorSelected) {
+            this.isVendorSelected = false;
             return of([]);
-          })
-        )
-      })
-    ).subscribe(
-      (response: Vendor[]) => {
+          }
+          this.noVendor = false;
+          this.storeVendorList = [];
+          if (
+            !searchTerm?.trim() ||
+            !isNaN(searchTerm) ||
+            searchTerm.length < 3
+          ) {
+            return of([]);
+          }
+          return this.productService
+            .fetchLiveVendorDetails({ searchTerm })
+            .pipe(
+              catchError((error) => {
+                if (error.status === 404) {
+                  console.log('error while fetching vendor data:', error);
+                  this.noVendor = true;
+                }
+                return of([]);
+              }),
+            );
+        }),
+      )
+      .subscribe((response: Vendor[]) => {
         this.storeVendorList = response;
-        console.log("fetching vendor data from backend:", response);
+        console.log('fetching vendor data from backend:', response);
 
         this.isVendorSelected = false;
-      }
-    )
+      });
+
+    this.requestData = this.proQuoteService.getData();
+    if (this.requestData) {
+      console.log('Received reqId:', this.requestData.reqId);
+      console.log('Received Request No:', this.requestData.requestNo);
+      console.log('Received productDetails:', this.requestData.productDetails);
+      this.requestData.productDetails.map((p) => {       
+        headOfAccName: p.headOfAccName
+        headOfAccId: p.headOfAccId
+      })
+      // console.log(headOfAccName);
+    } else {
+      console.log('No data found. Handle accordingly.');
+    }
+    console.log('this.requestData:', this.requestData);
   }
 
-  onSelectedVendor(vendor: Vendor){
-    console.log("onSelectedVendor:", vendor);
+  onSelectedVendor(vendor: Vendor) {
+    console.log('onSelectedVendor:', vendor);
 
     this.isVendorSelected = true;
 
-    if(this.selectedVendorName.length< 3 && !this.selectedVendorName.includes(vendor.vendorName)){
-      this.selectedVendorName.push(vendor.vendorName);
+    const vendorExists = this.selectedVendorName.some(
+      (v) => v.name === vendor.vendorName,
+    );
+    if (vendorExists) {
+      this.isToast = true;
+      this.warningToastMsg = 'Selected Vendor already exists';
+      this.storeVendorList = [];
+      setTimeout(() => {
+        this.isToast = false;
+      }, 3000);
+
+      return;
+    }
+
+    if (this.selectedVendorName.length < 3) {
+      this.selectedVendorName.push({
+        name: vendor.vendorName,
+        isViewCloseIcon: true,
+      });
+      this.isEnableUploadBtn = true;
+      this.isEnableSearch = false;
     }
 
     this.storeVendorList = [];
   }
-  
 
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
+    console.log('Selected Files:', files);
+    console.log('Current pdfFiles:', this.pdfFiles);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      console.log(file);
+      console.log('Processing File:', file);
+
+      console.log(
+        'this.pdfFiles.some(f => f.name === file.name)',
+        this.pdfFiles.some(
+          (f) => f.name.trim().toLowerCase() === file.name.trim().toLowerCase(),
+        ),
+      );
+
+      const isFileAlreadyUploaded = this.pdfFiles.some(
+        (f) => f.name === file.name,
+      );
+      console.log('Is file already uploaded:', isFileAlreadyUploaded);
+
+      if (this.pdfFiles.some((f) => f.name === file.name)) {
+        console.log(
+          'this.pdfFiles.some(f => f.name === file.name)',
+          this.pdfFiles.some((f) => f.name === file.name),
+        );
+        this.isToast = true;
+        this.warningToastMsg =
+          'System Detected the Selected PDF is already Uploaded';
+        setTimeout(() => {
+          this.isToast = false;
+        }, 3000);
+        return;
+      }
 
       if (file) {
         const url = URL.createObjectURL(file);
         this.pdfSrc.push(this.sanitizer.bypassSecurityTrustResourceUrl(url));
         this.pdfFiles.push(file); // Store the File object
+
+        console.log('Updated pdfFiles:', this.pdfFiles);
+
+        this.isEnableUploadBtn = false;
+        this.isEnableSearch = true;
+
+        const vendorToDisableCloseIcon = this.selectedVendorName.find(
+          (v) => v.isViewCloseIcon,
+        );
+        console.log('vendorToDisableCloseIcon:', vendorToDisableCloseIcon);
+        if (vendorToDisableCloseIcon) {
+          vendorToDisableCloseIcon.isViewCloseIcon = false;
+        }
       }
     }
   }
 
-  showPreviousSlide(): void {
-    if (this.currentSlideIndex > 0) {
-      this.currentSlideIndex--;
-    }
-    console.log(this.pdfSrc);
-  }
+  // showPreviousSlide(): void {
+  //   if (this.currentSlideIndex > 0) {
+  //     this.currentSlideIndex--;
+  //   }
+  //   console.log(this.pdfSrc);
+  // }
 
-  showNextSlide(): void {
-    if (this.currentSlideIndex < this.pdfSrc.length - 1) {
-      this.currentSlideIndex++;
-    }
+  // showNextSlide(): void {
+  //   if (this.currentSlideIndex < this.pdfSrc.length - 1) {
+  //     this.currentSlideIndex++;
+  //   }
+  // }
+
+  removeVendor(vendorIndex: number) {
+    this.selectedVendorName.splice(vendorIndex, 1);
+    this.isEnableSearch = true;
+    this.isEnableUploadBtn = false;
   }
 
   deleteSlide(index: number): void {
-    console.log("index:", index);
+    console.log('index:', index);
     this.pdfSrc.splice(index, 1);
     this.pdfFiles.splice(index, 1);
 
-    if(this.selectedVendorName && this.selectedVendorName.length > index){
+    if (this.selectedVendorName && this.selectedVendorName.length > index) {
       this.selectedVendorName.splice(index, 1);
     }
     if (this.currentSlideIndex >= this.pdfSrc.length) {
@@ -152,6 +252,10 @@ export class PdfUploadComponent {
 
     // Append the least priced file name separately
     formData.append('leastPricedFileName', leastPricedFileName);
+
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
 
     this.request.uploadPdf(formData, leastPricedFileName).subscribe(
       (response) => {

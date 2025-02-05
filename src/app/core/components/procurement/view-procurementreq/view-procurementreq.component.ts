@@ -6,6 +6,8 @@ import { SharedServiceService } from '../../service/shared-service/shared-servic
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { ProRequestdata } from '../../../models/proRequestData/pro-requestdata.model';
+import { ProcurementQuotedataService } from '../../service/procurementQuotedata/procurement-quotedata.service';
 
 @Component({
   selector: 'app-view-procurementreq',
@@ -17,6 +19,7 @@ export class ViewProcurementreqComponent {
   @Output() closeView = new EventEmitter<boolean>();
   dataService = inject(RequestService);
   route = inject(Router);
+  procurementDataService = inject(ProcurementQuotedataService);
 
   // _requestDetails: any = {};
   _requestDetails = signal<any>(null);
@@ -131,7 +134,15 @@ export class ViewProcurementreqComponent {
     this.isAction = false;
     this.isHolding = false;
     this.isReject = false
-    this.route.navigate(['home/qComparison']);
+    const requestData: ProRequestdata = {
+      reqId: this.reqId,
+      requestNo: this._requestDetails()?.indentHeaders?.requestNo,
+      productDetails: this._requestDetails()?.productDetails
+    }
+    console.log('requestData:', requestData);
+    this.procurementDataService.setData(requestData);
+    this.route.navigate(['home/qComparison']
+    );
   }
 
   fetchDetails(data: any) {

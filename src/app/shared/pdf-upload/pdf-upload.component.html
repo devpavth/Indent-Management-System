@@ -1,14 +1,35 @@
 <div class="bg-white shadow-md">
+  <label for=""
+    class="ml-4 font-bold text-purple-600 text-lg"
+    >INDENT ID:</label>
+  <input 
+
+    type="text" 
+    class="rounded-lg font-semibold m-4 text-center text-lg"
+    [value]="requestData?.requestNo"
+    readonly
+  />
+  <div>
+    <select>
+      <option [value]="requestData?.productDetails">
+        
+      </option>
+    </select>
+  </div>
+
+
   <div
     class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+    *ngIf="pdfSrc.length !== 3"
     >
-    <div class="w-full md:w-1/2" *ngIf="pdfSrc.length !== 3">
+    <div class="w-full md:w-1/2">
+      <h3 class="font-semibold text-purple-600 text-lg mb-4">Search Vendor to Upload the Quote</h3>
       <form class="flex items-center" [formGroup]="assignedVendor">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
           <div
             class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-          >
+            >
             <svg
               aria-hidden="true"
               class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -28,8 +49,11 @@
             class="w-full rounded border px-4 py-2"
             id="simple-search"
             class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            placeholder="Search"
+            placeholder="Search Vendor..."
             formControlName="vendorId"
+            [ngClass]="{
+              'pointer-events-none': !isEnableSearch
+            }"
             required=""
           />
         </div>
@@ -55,6 +79,7 @@
         </ul>
       </form>
     </div>
+    
     <input
     #fileInput
     type="file"
@@ -69,8 +94,13 @@
     *ngIf="pdfSrc.length !== 3"
     type="button"
     (click)="fileInput.click()"
-    class="mt-4 -mb-2 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
-  >
+    [disabled]="!isEnableUploadBtn"
+    [ngClass]="{
+      'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
+      'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
+    }"
+    class="rounded-full !mt-8 bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
+    >
     <svg
       class="h-5 w-5 text-white"
       aria-hidden="true"
@@ -149,22 +179,50 @@
     <div>
       <section class="bg-white" *ngIf="selectedVendorName.length > 0">
         <div class="px-4 py-8">
-          <h3>Vendor Quote Assessment</h3>
-          <form action="#" class="grid grid-cols-3">
+          <h3 class="font-semibold text-lg text-purple-700 mb-4">Vendor Quote Assessment</h3>
+          <form action="#" class="grid grid-cols-3 gap-4">
             <ng-container *ngFor="let ven of selectedVendorName; let i = index">
-              <div class="col-span-1">
+              <div class="col-span-1 border rounded-lg p-2 shadow-md">
+                <div class="flex justify-between items-center mb-2">
+                  <input 
+                  type="text"
+                  class="rounded-lg font-medium w-full px-2 py-2 border border-gray-300"
+                  [value]="ven.name || ''"
+                  readonly
+                  />
+                  <button
+                    *ngIf="selectedVendorName[i].isViewCloseIcon"
+                    type="submit"
+                    (click)="removeVendor(i)"
+                    class="p-2 w-10 h-10 ml-2 rounded-full bg-red-500 text-white flex items-center justify-center"
+                    >
+                    <svg
+                      class="h-6 w-6"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    
+                  </button>
+                </div>
                 <!-- <label
                   for="quote{{ i }}"
                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ file.name }}</label
                 > -->
-                <input 
-                  type="text"
-                  class="rounded-lg gap-4 font-medium"
-                  [value]="selectedVendorName[i] || ''"
-                  readonly
-                />
+               
               </div>
+              
+              
             </ng-container>
           </form>
         </div>
@@ -188,7 +246,7 @@
           
           <!-- PDF Details -->
           <div class="p-4 bg-white text-black">
-            <p class="font-bold m-0">{{selectedVendorName[i]}}</p>
+            <p class="font-bold m-0">{{selectedVendorName[i].name}}</p>
             <div class="flex items-center gap-1 mt-1">
               <img src="../../../assets/Img/pdf-icon.png" alt="PDF Icon" class="w-[32px] h-[30px]" />
               <span>{{ pdfFiles[i].name }}</span>
@@ -302,3 +360,9 @@
     </div>
   </section>
 </div>
+<section
+  *ngIf="isToast"
+  class="fixed top-10 right-2 left-6 z-50 flex w-full items-center justify-center"
+>
+  <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+</section>
