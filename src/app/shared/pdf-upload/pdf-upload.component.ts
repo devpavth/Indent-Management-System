@@ -7,7 +7,7 @@ import { ProductService } from '../../core/components/service/Product/product.se
 import { Vendor } from '../../core/models/vendor/vendor.type';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
-import { ProRequestdata } from '../../core/models/proRequestData/pro-requestdata.model';
+import { indentProductList, ProRequestdata } from '../../core/models/proRequestData/pro-requestdata.model';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -20,6 +20,9 @@ export class PdfUploadComponent {
   currentSlideIndex: number = 0;
 
   quotes: number[] = [0, 0, 0]; // Array for the quotes
+  ven1Price: number[] = [];
+  ven2Price: number[] = [];
+  ven3Price: number[] = [];
   leastPrice: number = 0;
   selectedQuote: number | null = null; // Variable for the selected quote index
 
@@ -31,12 +34,15 @@ export class PdfUploadComponent {
 
   selectedVendorName: { name: string; isViewCloseIcon: boolean }[] = [];
   isEnableUploadBtn: boolean = false;
-  isEnableSearch: boolean = true;
+  isEnableSearch: boolean = false;
   isToast: boolean = false;
   warningToastMsg: string = '';
   // isViewCloseIcon: boolean = false;
   requestData: ProRequestdata | null = null;
-  productHeadData: (string | number)[] = [];
+  productHeadData: indentProductList[] = [];
+  uniqueProductHeadData: indentProductList[] = [];
+  filterProductHeadData: indentProductList[] = [];
+  // productHeadData: { headOfAccName: string; headOfAccId: number }[] = [];
 
   productService = inject(ProductService);
   route = inject(ActivatedRoute);
@@ -99,15 +105,39 @@ export class PdfUploadComponent {
       console.log('Received reqId:', this.requestData.reqId);
       console.log('Received Request No:', this.requestData.requestNo);
       console.log('Received productDetails:', this.requestData.productDetails);
-      this.requestData.productDetails.map((p) => {       
-        headOfAccName: p.headOfAccName
-        headOfAccId: p.headOfAccId
-      })
+      this.productHeadData = this.requestData.productDetails.map((p) => ({
+        headOfAccName: p.headOfAccName,
+        headOfAccId: p.headOfAccId,
+        id: p.id,
+        itemTotalPrice: p.itemTotalPrice,
+        prdCode: p.prdCode,
+        prdDescription: p.prdDescription,
+        prdGstPct: p.prdGstPct,
+        prdHsnCode: p.prdHsnCode,
+        prdStatus: p.prdStatus,
+        prdUnit: p.prdUnit,
+        prdbrndName: p.prdbrndName,
+        prdcatgName: p.prdcatgName,
+        prdgrpName: p.prdgrpName,
+        prdmdlName: p.prdmdlName,
+        productId: p.productId,
+        qty: p.qty,
+        unitPrice: p.unitPrice,
+      }));
       // console.log(headOfAccName);
     } else {
       console.log('No data found. Handle accordingly.');
     }
     console.log('this.requestData:', this.requestData);
+    console.log('this.productHeadData:', this.productHeadData);
+
+    this.uniqueProductHeadData = [
+      ...new Map(
+        this.productHeadData.map((item) => [item.headOfAccName, item]),
+      ).values(),
+    ];
+
+    console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
   }
 
   onSelectedVendor(vendor: Vendor) {
@@ -139,6 +169,18 @@ export class PdfUploadComponent {
     }
 
     this.storeVendorList = [];
+  }
+
+  selectedHeadOfAcc(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const headOfAccId = Number(selectElement.value);
+    console.log('headOfAccId:', headOfAccId);
+    this.filterProductHeadData = this.productHeadData.filter(
+      (pro: indentProductList) => {
+        return pro.headOfAccId === headOfAccId;
+      },
+    );
+    this.isEnableSearch = true;
   }
 
   onFileSelected(event: any): void {
@@ -264,6 +306,29 @@ export class PdfUploadComponent {
       (error) => {
         console.error('Upload failed', error);
       },
+    );
+  }
+
+  calculateVen1Price(index: number) {
+    // this.ven1Price = this.ven1Price[index];
+    console.log('ven 1 index:', index);
+    this.quotes[index] = this.ven1Price[index] || 0;
+
+    this.quotes[index] = this.ven1Price.reduce((sum, value) => sum + (value || 0), 0);
+  }
+
+  calculateVen2Price(index: number) {
+    console.log('ven 2 index:', index);
+    this.quotes[index] = this.ven2Price[index] || 0;
+    this.quotes[index] = this.ven2Price.reduce((sum, value) =>sum + (value || 0), 0);
+  }
+
+  calculateVen3Price(index: number){
+    console.log('ven 3 index:', index);
+    this.quotes[index] = this.ven3Price[index] || 0;
+    this.quotes[index] = this.ven3Price.reduce(
+      (sum, value) => sum + (value || 0),
+      0,
     );
   }
 

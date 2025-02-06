@@ -32,16 +32,16 @@ export class ViewRequestComponent implements OnInit {
   }
   fetchDetails(data: any) {
     this.requstService.viewReq(data).subscribe((res) => {
-      console.log("fetching details:", res);
+      console.log('fetching details:', res);
       this._requestDetails = res;
 
-      if(this._requestDetails.progarmMgrAuthData.authStatusCode === 202){
+      if (this._requestDetails.progarmMgrAuthData.authStatusCode === 202) {
         this.isViewProgramManagerApproval = true;
       }
-      if(this._requestDetails.branchAuthData.authStatusCode === 202){
+      if (this._requestDetails.branchAuthData.authStatusCode === 202) {
         this.isViewBranchApproval = true;
       }
-      if(this._requestDetails.financeAuthData.authStatusCode === 202){
+      if (this._requestDetails.financeAuthData.authStatusCode === 202) {
         this.isViewFinanceApproval = true;
       }
 
@@ -49,7 +49,7 @@ export class ViewRequestComponent implements OnInit {
     });
   }
   approvel() {
-    if(this.showID === 1){
+    if (this.showID === 1) {
       this.requstService
         .programManagerApproval(this._requestDetails.indentHeaders.sno)
         .subscribe(
@@ -58,15 +58,14 @@ export class ViewRequestComponent implements OnInit {
             this.isApproved = true;
           },
           (error) => {
-            if(error.status === 202){
+            if (error.status === 202) {
               this.isApproved = true;
             }
-            if(error.status === 208){
+            if (error.status === 208) {
               console.error('Approve error: Action already made');
             }
-          }
-        )
-        
+          },
+        );
     }
     if (this.showID === 2) {
       this.requstService
@@ -108,18 +107,18 @@ export class ViewRequestComponent implements OnInit {
     }
   }
   rejected(sno: any, data: any) {
-    console.log("rejecting the requset:", sno, data);
+    console.log('rejecting the requset:', sno, data);
 
-    if(this.showID === 1){
+    if (this.showID === 1) {
       this.requstService.programManagerRejection(sno, data).subscribe(
         (res) => {
-          console.log("program manager rejection response:", res);
+          console.log('program manager rejection response:', res);
           this.isRejected = false;
           this.isRejectPop = true;
           // this._requestDetails = '';
         },
         (error) => {
-          console.log("error while rejecting the request:", error);
+          console.log('error while rejecting the request:', error);
           if (error.status === 202) {
             this.isRejected = false;
             this.isRejectPop = true;
@@ -127,14 +126,14 @@ export class ViewRequestComponent implements OnInit {
           if (error.status === 208) {
             console.error('Rejected error: Action already made');
           }
-        }
-      )
+        },
+      );
     }
 
     if (this.showID === 2) {
       this.requstService.branchReject(sno, data).subscribe(
         (res) => {
-          console.log("branch manager rejected the indent request:", res);
+          console.log('branch manager rejected the indent request:', res);
           this.isRejected = false;
           this.isRejectPop = true;
         },
@@ -153,7 +152,7 @@ export class ViewRequestComponent implements OnInit {
       console.log(sno, data);
       this.requstService.adminReject(sno, data).subscribe(
         (res) => {
-          console.log("admin rejected the indent request:", res);
+          console.log('admin rejected the indent request:', res);
           this.isRejected = false;
           this.isRejectPop = true;
         },
@@ -176,13 +175,14 @@ export class ViewRequestComponent implements OnInit {
   }
   fetchReason() {
     this.requstService.commands().subscribe((res) => {
-      console.log("fetching comments:", res);
-      this.commendArray = Object.entries(res).map(([key, value]) =>({
-        key,
-        value,
-      }))
-      .filter((item) => item.key !== '0');
-      console.log("this.commend:", this.commendArray);
+      console.log('fetching comments:', res);
+      this.commendArray = Object.entries(res)
+        .map(([key, value]) => ({
+          key,
+          value,
+        }))
+        .filter((item) => item.key !== '0');
+      console.log('this.commend:', this.commendArray);
     });
   }
 }

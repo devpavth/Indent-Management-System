@@ -300,11 +300,12 @@
                       >
                     </div>
                   </div>
-                  
+
                   <div class="relative w-full">
                     <svg
                       *ngIf="
-                        _requestDetails?.progarmMgrAuthData.authStatusCode == 202
+                        _requestDetails?.progarmMgrAuthData.authStatusCode ==
+                        202
                       "
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -319,7 +320,8 @@
                     </svg>
                     <svg
                       *ngIf="
-                        _requestDetails?.progarmMgrAuthData.authStatusCode == 102
+                        _requestDetails?.progarmMgrAuthData.authStatusCode ==
+                        102
                       "
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
@@ -338,7 +340,8 @@
                     </svg>
                     <svg
                       *ngIf="
-                        _requestDetails?.progarmMgrAuthData.authStatusCode == 406
+                        _requestDetails?.progarmMgrAuthData.authStatusCode ==
+                        406
                       "
                       class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
                       aria-hidden="true"
@@ -359,14 +362,14 @@
                       <h4
                         [ngClass]="{
                           psts:
-                            _requestDetails?.progarmMgrAuthData.authStatusCode ==
-                            102,
+                            _requestDetails?.progarmMgrAuthData
+                              .authStatusCode == 102,
                           ssts:
-                            _requestDetails?.progarmMgrAuthData.authStatusCode ==
-                            202,
+                            _requestDetails?.progarmMgrAuthData
+                              .authStatusCode == 202,
                           rsts:
-                            _requestDetails?.progarmMgrAuthData.authStatusCode ==
-                            406
+                            _requestDetails?.progarmMgrAuthData
+                              .authStatusCode == 406
                         }"
                         class="font-bold text-gray-500"
                       >
@@ -379,8 +382,12 @@
                         <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
                           Approved By
                           <span class="font-medium text-black"
-                            >{{ _requestDetails?.progarmMgrAuthData.empFirstName }}
-                            {{ _requestDetails?.progarmMgrAuthData.empLastName }}
+                            >{{
+                              _requestDetails?.progarmMgrAuthData.empFirstName
+                            }}
+                            {{
+                              _requestDetails?.progarmMgrAuthData.empLastName
+                            }}
                           </span>
                           from
                           <span class="font-medium text-black">
@@ -395,11 +402,12 @@
                           }}</span
                         >
                       </div>
-                      
+
                       <p
                         *ngIf="
                           _requestDetails?.indentHeaders.comments &&
-                          _requestDetails?.progarmMgrAuthData.authStatusCode == 406
+                          _requestDetails?.progarmMgrAuthData.authStatusCode ==
+                            406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
@@ -408,7 +416,8 @@
                         <span
                           class="mt-1 block text-sm font-semibold text-gray-500"
                           >{{
-                            _requestDetails?.progarmMgrAuthData.authStatusTime | date: "medium"
+                            _requestDetails?.progarmMgrAuthData.authStatusTime
+                              | date: "medium"
                           }}</span
                         >
                       </p>
@@ -509,7 +518,7 @@
                           }}</span
                         >
                       </div>
-                      
+
                       <p
                         *ngIf="
                           _requestDetails?.indentHeaders.comments &&
@@ -522,7 +531,8 @@
                         <span
                           class="mt-1 block text-sm font-semibold text-gray-500"
                           >{{
-                            _requestDetails?.branchAuthData.authStatusTime | date: "medium"
+                            _requestDetails?.branchAuthData.authStatusTime
+                              | date: "medium"
                           }}</span
                         >
                       </p>
@@ -540,7 +550,7 @@
                       height="24"
                       fill="currentColor"
                       viewBox="0 0 24 24"
-                      >
+                    >
                       <path
                         fill-rule="evenodd"
                         d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Zm-1 7a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
@@ -668,8 +678,7 @@
                   <div class="relative w-full">
                     <svg
                       *ngIf="
-                        _requestDetails?.financeAuthData
-                        .authStatusCode == 202
+                        _requestDetails?.financeAuthData.authStatusCode == 202
                       "
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -684,15 +693,14 @@
                     </svg>
                     <svg
                       *ngIf="
-                        _requestDetails?.financeAuthData
-                        .authStatusCode == 102
+                        _requestDetails?.financeAuthData.authStatusCode == 102
                       "
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      >
+                    >
                       <path
                         d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                         fill="currentColor"
@@ -704,8 +712,7 @@
                     </svg>
                     <svg
                       *ngIf="
-                        _requestDetails?.financeAuthData
-                        .authStatusCode == 406
+                        _requestDetails?.financeAuthData.authStatusCode == 406
                       "
                       class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
                       aria-hidden="true"
@@ -726,16 +733,13 @@
                       <h4
                         [ngClass]="{
                           psts:
-                            _requestDetails?.financeAuthData
-                            .authStatusCode ==
+                            _requestDetails?.financeAuthData.authStatusCode ==
                             102,
                           ssts:
-                            _requestDetails?.financeAuthData
-                            .authStatusCode ==
+                            _requestDetails?.financeAuthData.authStatusCode ==
                             202,
                           rsts:
-                            _requestDetails?.financeAuthData
-                            .authStatusCode ==
+                            _requestDetails?.financeAuthData.authStatusCode ==
                             406
                         }"
                         class="font-bold text-gray-500"
@@ -765,7 +769,7 @@
                           }}</span
                         >
                       </div>
-                      
+
                       <p
                         *ngIf="
                           _requestDetails?.indentHeaders.comments &&
@@ -778,7 +782,8 @@
                         <span
                           class="mt-1 block text-sm font-semibold text-gray-500"
                           >{{
-                            _requestDetails?.financeAuthData.authStatusTime | date: "medium"
+                            _requestDetails?.financeAuthData.authStatusTime
+                              | date: "medium"
                           }}</span
                         >
                       </p>
@@ -792,8 +797,7 @@
                   (showID &&
                     this._requestDetails?.progarmMgrAuthData.authStatusCode ===
                       102) ||
-                      this._requestDetails?.branchAuthData.authStatusCode ===
-                      102 ||
+                  this._requestDetails?.branchAuthData.authStatusCode === 102 ||
                   this._requestDetails?.adminAuthData.authStatusCode === 102
                 "
                 class="mt-8 flex gap-3"

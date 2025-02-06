@@ -34,16 +34,20 @@ export class LeftMenuComponent {
         console.log("this.userData:", this.userData);
         console.log("this.userData with empRole:", typeof this.userData.empRole);
 
-        if(this.userData.empDesig !== 15){
-          console.log("logging");
-          this.isLevelView = false;
-        }else{
-          this.isBlockRequest = true;
-        }
+        // if(this.userData.empDesig !== 15){
+        //   console.log("logging");
+        //   this.isLevelView = false;
+        // }else{
+        //   this.isBlockRequest = true;
+        // }
 
-        if(this.userData.empDesig !== 10){
-          this.isBlockUser = false;
-        }
+        // if(this.userData.empDesig !== 10){
+        //   this.isBlockUser = false;
+        // }
+
+        const role = sessionStorage.getItem('role');
+        console.log('role:', role);
+        console.log('role:', typeof role);
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });

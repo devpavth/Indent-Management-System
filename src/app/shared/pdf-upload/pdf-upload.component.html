@@ -1,35 +1,45 @@
 <div class="bg-white shadow-md">
-  <label for=""
-    class="ml-4 font-bold text-purple-600 text-lg"
-    >INDENT ID:</label>
-  <input 
-
-    type="text" 
-    class="rounded-lg font-semibold m-4 text-center text-lg"
+  <label for="" class="ml-4 text-lg font-bold text-purple-600"
+    >INDENT ID:</label
+  >
+  <input
+    type="text"
+    class="m-4 rounded-lg text-center text-lg font-semibold"
     [value]="requestData?.requestNo"
     readonly
   />
   <div>
-    <select>
-      <option [value]="requestData?.productDetails">
-        
+    <label for="" class="m-4 text-lg font-semibold text-purple-600"
+      >Head of Account:</label
+    >
+    <select      
+      class="m-4 w-64 rounded-lg border border-gray-500"
+      (change)="selectedHeadOfAcc($event)"
+      >
+      <option value="">Choose Head of Account</option>
+      <option 
+        *ngFor="let head of uniqueProductHeadData"
+        [value]="head.headOfAccId"
+        >
+        {{ head.headOfAccName }}
       </option>
     </select>
   </div>
 
-
   <div
     class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
     *ngIf="pdfSrc.length !== 3"
-    >
+  >
     <div class="w-full md:w-1/2">
-      <h3 class="font-semibold text-purple-600 text-lg mb-4">Search Vendor to Upload the Quote</h3>
+      <h3 class="mb-4 text-lg font-semibold text-purple-600">
+        Search Vendor to Upload the Quote
+      </h3>
       <form class="flex items-center" [formGroup]="assignedVendor">
         <label for="simple-search" class="sr-only">Search</label>
         <div class="relative w-full">
           <div
             class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-            >
+          >
             <svg
               aria-hidden="true"
               class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -61,65 +71,66 @@
           <small>No vendor found.</small>
         </div>
         <ul
-          *ngIf="storeVendorList &&
-          storeVendorList.length > 0"
-          class="absolute border-none z-10 w-2/5 mt-24 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
+          *ngIf="storeVendorList && storeVendorList.length > 0"
+          class="absolute z-10 mt-24 w-2/5 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+        >
+          <li
+            *ngFor="let ven of storeVendorList"
+            (click)="onSelectedVendor(ven)"
+            class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
           >
-            
-            <li
-              *ngFor="let ven of storeVendorList"
-              (click)="onSelectedVendor(ven)"
-              class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-              >
-              {{ven.vendorName}}
-            </li>
-            <li *ngIf="noVendor || storeVendorList.length === 0" class="px-4 py-2 text-sm text-red-500 cursor-pointer">
-              No data
-            </li>
+            {{ ven.vendorName }}
+          </li>
+          <li
+            *ngIf="noVendor || storeVendorList.length === 0"
+            class="cursor-pointer px-4 py-2 text-sm text-red-500"
+          >
+            No data
+          </li>
         </ul>
       </form>
     </div>
-    
-    <input
-    #fileInput
-    type="file"
-    (change)="onFileSelected($event)"
-    accept="application/pdf"
-    multiple
-    class="hidden"
-  />
 
-  <!-- Save Button Triggers File Input Click -->
-  <button
-    *ngIf="pdfSrc.length !== 3"
-    type="button"
-    (click)="fileInput.click()"
-    [disabled]="!isEnableUploadBtn"
-    [ngClass]="{
-      'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
-      'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
-    }"
-    class="rounded-full !mt-8 bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
+    <input
+      #fileInput
+      type="file"
+      (change)="onFileSelected($event)"
+      accept="application/pdf"
+      multiple
+      class="hidden"
+    />
+
+    <!-- Save Button Triggers File Input Click -->
+    <button
+      *ngIf="pdfSrc.length !== 3"
+      type="button"
+      (click)="fileInput.click()"
+      [disabled]="!isEnableUploadBtn"
+      [ngClass]="{
+        'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
+        'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
+      }"
+      class="!mt-8 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
     >
-    <svg
-      class="h-5 w-5 text-white"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
-      />
-      <path
-        d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
-      />
-    </svg>
-  </button>
+      <svg
+        class="h-5 w-5 text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
+        />
+        <path
+          d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
+        />
+      </svg>
+    </button>
   </div>
-  
+
   <!-- Upload Section -->
   <!-- <div
     *ngIf="pdfSrc.length !== 3"
@@ -179,23 +190,25 @@
     <div>
       <section class="bg-white" *ngIf="selectedVendorName.length > 0">
         <div class="px-4 py-8">
-          <h3 class="font-semibold text-lg text-purple-700 mb-4">Vendor Quote Assessment</h3>
+          <h3 class="mb-4 text-lg font-semibold text-purple-700">
+            Vendor Quote Assessment
+          </h3>
           <form action="#" class="grid grid-cols-3 gap-4">
             <ng-container *ngFor="let ven of selectedVendorName; let i = index">
-              <div class="col-span-1 border rounded-lg p-2 shadow-md">
-                <div class="flex justify-between items-center mb-2">
-                  <input 
-                  type="text"
-                  class="rounded-lg font-medium w-full px-2 py-2 border border-gray-300"
-                  [value]="ven.name || ''"
-                  readonly
+              <div class="col-span-1 rounded-lg border p-2 shadow-md">
+                <div class="mb-2 flex items-center justify-between">
+                  <input
+                    type="text"
+                    class="w-full rounded-lg border border-gray-300 px-2 py-2 font-medium"
+                    [value]="ven.name || ''"
+                    readonly
                   />
                   <button
                     *ngIf="selectedVendorName[i].isViewCloseIcon"
                     type="submit"
                     (click)="removeVendor(i)"
-                    class="p-2 w-10 h-10 ml-2 rounded-full bg-red-500 text-white flex items-center justify-center"
-                    >
+                    class="ml-2 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 p-2 text-white"
+                  >
                     <svg
                       class="h-6 w-6"
                       aria-hidden="true"
@@ -211,7 +224,6 @@
                         clip-rule="evenodd"
                       />
                     </svg>
-                    
                   </button>
                 </div>
                 <!-- <label
@@ -219,36 +231,53 @@
                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
                   >{{ file.name }}</label
                 > -->
-               
               </div>
-              
-              
             </ng-container>
           </form>
         </div>
       </section>
-      
-      <div class="grid grid-cols-3 gap-4 p-4 max-w-full mx-auto">
-        
-        <div class="relative w-full rounded-lg border border-gray-300 overflow-hidden bg-gray-100 shadow-md group" 
-          *ngFor="let pdf of pdfSrc; let i = index">
+
+      <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
+        <div
+          class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
+          *ngFor="let pdf of pdfSrc; let i = index"
+        >
           <!-- PDF Preview -->
-          <button 
+          <button
             (click)="deleteSlide(i)"
-            class="absolute top-2 right-6 hidden group-hover:flex items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700"
+            class="absolute right-6 top-2 hidden items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 group-hover:flex"
+          >
+            <svg
+              class="h-5 w-5 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
             >
-            <svg class="h-5 w-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-              <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd"/>
+              <path
+                fill-rule="evenodd"
+                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                clip-rule="evenodd"
+              />
             </svg>
           </button>
-    
-          <iframe class="w-full h-[150px] border-b border-gray-300" [src]="pdf"></iframe>
-          
+
+          <iframe
+            class="h-[150px] w-full border-b border-gray-300"
+            [src]="pdf"
+          ></iframe>
+
           <!-- PDF Details -->
-          <div class="p-4 bg-white text-black">
-            <p class="font-bold m-0">{{selectedVendorName[i].name}}</p>
-            <div class="flex items-center gap-1 mt-1">
-              <img src="../../../assets/Img/pdf-icon.png" alt="PDF Icon" class="w-[32px] h-[30px]" />
+          <div class="bg-white p-4 text-black">
+            <p class="m-0 font-bold">{{ selectedVendorName[i].name }}</p>
+            <div class="mt-1 flex items-center gap-1">
+              <img
+                src="../../../assets/Img/pdf-icon.png"
+                alt="PDF Icon"
+                class="h-[30px] w-[32px]"
+              />
               <span>{{ pdfFiles[i].name }}</span>
             </div>
           </div>
@@ -307,6 +336,145 @@
     </button> -->
   </div>
 
+  <div class="mt-6 flex flex-row items-center space-x-4" *ngIf="filterProductHeadData.length > 0">
+    <div class="-m-1.5">
+      <div class="inline-block min-w-full p-1.5 align-middle">
+        <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
+        <div class="overflow-hidden rounded-lg border m-4">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-purple-500 text-sm uppercase text-white dark:bg-white-700 dark:text-white-400">
+              <tr>
+                <th
+                  scope="col"
+                  class="px-5 py-4 text-start text-sm font-medium uppercase"
+                >
+                  Product
+                </th>
+                
+                <th
+                  scope="col"
+                  class="px-5 py-4 text-start text-sm font-medium uppercase"
+                >
+                  Quantity
+                </th>
+
+                <th
+                  scope="col"
+                  class="px-5 py-4 text-start text-sm font-medium uppercase"
+                >
+                  Unit Price
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let product of filterProductHeadData">
+                <td
+                  class="px-5 py-4 text-start text-sm font-medium text-gray-800"
+                >
+                  <p class="font-bold text-black">
+                    {{ product.prdmdlName }}
+                  </p>
+                  <p class="text-gray-800">
+                    {{ product.prdbrndName }} | HoA -
+                    {{ product.headOfAccName }}
+                  </p>
+                  <p class="w-48 text-xs text-gray-400">
+                    {{ product.prdDescription }}
+                  </p>
+                </td>
+                
+                <td class="px-5 py-4 text-center text-sm text-gray-800">
+                  {{ product.qty }}
+                </td>
+
+                <td class="px-5 py-4 text-center text-sm text-gray-800">
+                  {{ product.unitPrice | currency: "INR" }}
+                  <p class="text-gray-800">
+                    ({{ product.prdGstPct }}%)
+                  </p>
+                </td>
+                
+              </tr>
+            </tbody>
+            
+          </table>
+          
+
+
+        </div>
+        
+      </div>
+    </div>
+    <div
+      class="flex items-center justify-center"
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-600 mx-8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+        </svg>
+    </div>
+    <div class="-m-1.5" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2">
+      <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden rounded-lg border">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-purple-500 text-sm uppercase text-white dark:bg-white-700 dark:text-white-400">
+              <tr>
+                <th
+                  scope="col"
+                  *ngFor="let ven of selectedVendorName"
+                  class="px-3 py-3 w-32 text-start text-sm font-medium uppercase"
+                  >
+                  {{ven.name}}
+                </th>
+                <!-- <th
+                  scope="col"
+                  class="px-6 py-3 text-start text-xs font-medium uppercase"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-start text-xs font-medium uppercase"
+                >
+                  Total Price
+                </th> -->
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let product of filterProductHeadData; let i = index">
+                <td class="px-3 py-3 text-start text-sm text-gray-800">
+                  <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven1Price[i]"
+                    (input)="calculateVen1Price(i)"
+                  />
+                  
+                </td>
+                <td class="px-3 py-3 text-center text-sm text-gray-800">
+                  <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven2Price[i]"
+                    (input)="calculateVen2Price(i)"
+                  />
+                </td>
+                <td class="px-3 py-3 text-center text-sm text-gray-800">
+                  <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven3Price[i]"
+                    (input)="calculateVen3Price(i)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
   <!-- Quote Section -->
   <section class="bg-white" *ngIf="pdfSrc.length > 0">
     <div class="mx-auto px-4 py-8 lg:py-16">
@@ -323,7 +491,9 @@
               class="input-text1 w-full"
               [(ngModel)]="quotes[i]"
               name="quote{{ i }}"
+              [value]="quotes[i]"
               required
+              readonly
               (input)="updateLeastPrice()"
             />
           </div>
@@ -336,8 +506,8 @@
         <button
           *ngIf="pdfSrc.length == 3"
           (click)="uploadPdf()"
-          class="an mt-4 -mb-2 rounded-lg bg-purple-700 p-2 px-4 font-semibold text-white hover:bg-purple-900"
-          >
+          class="an -mb-2 mt-4 rounded-lg bg-purple-700 p-2 px-4 font-semibold text-white hover:bg-purple-900"
+        >
           <!-- <svg
             class="h-5 w-5 text-white"
             aria-hidden="true"
@@ -362,7 +532,7 @@
 </div>
 <section
   *ngIf="isToast"
-  class="fixed top-10 right-2 left-6 z-50 flex w-full items-center justify-center"
+  class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
   <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
 </section>

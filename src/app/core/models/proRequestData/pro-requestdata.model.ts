@@ -18,7 +18,6 @@ export interface indentProductList {
   unitPrice: number;
 }
 
-
 export interface ProRequestdata {
   reqId: number;
   requestNo: string;

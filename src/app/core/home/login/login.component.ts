@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
   userData: any;
   userid: any;
   branchid: any;
+  userRole: string = "";
 
   isPasswordHidden = true; //password visiable
   passwordEnabled: boolean = false; //password enable
@@ -76,9 +77,14 @@ export class LoginComponent implements OnInit {
 
         if ((res != null)) {
           this.userid = this.userData?.employeeId;
+          this.userRole = this.userData?.roles;
+          console.log('this.userRole:', this.userRole);
+          console.log('this.userRole:', typeof this.userRole);
+
 
           sessionStorage.setItem('userId', this.userid);
           sessionStorage.setItem('token', this.userData.token);
+          sessionStorage.setItem('role', this.userRole);
           this.Router.navigate(['home/dashboard']);
 
           console.log(this.userData);
