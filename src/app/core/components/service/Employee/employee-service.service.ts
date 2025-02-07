@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
+import { DesignationRoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
 
 @Injectable({
   providedIn: 'root',
@@ -49,8 +50,8 @@ export class EmployeeServiceService {
   //   );
   // }
 
-  deleteEmployee(employeeId: string){
-    console.log("Sending delete request for employee ID:", employeeId);
+  deleteEmployee(employeeId: string) {
+    console.log('Sending delete request for employee ID:', employeeId);
     console.log('Delete URL:', environment.deleteEmployee + employeeId);
     return this.http.post(environment.deleteEmployee + employeeId, '');
   }
@@ -69,5 +70,9 @@ export class EmployeeServiceService {
 
   getDesignation() {
     return this.http.get(environment.getDesignation);
+  }
+
+  getDesignationRoleMapping(): Observable<DesignationRoleMapping[]>{
+    return this.http.get<DesignationRoleMapping[]>(environment.getDesignationRoleMapping);
   }
 }

@@ -1,9 +1,9 @@
-<div *ngIf="isUpdate" class="fixed left-0 right-0 top-0 z-40">
+<!-- <div *ngIf="isUpdate" class="fixed left-0 right-0 top-0 z-40">
   <app-edit-list
     [Id]="updateId"
     (closeUpdate)="update('', $event)"
   ></app-edit-list>
-</div>
+</div> -->
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
     <div class="mx-auto">
@@ -16,10 +16,10 @@
           <div class="w-full">
             <div class="flex items-center justify-between">
               <h1 class="font-semibold text-purple-800">
-                <span *ngIf="activeId == 1"> Department List </span>
-                <span *ngIf="activeId == 2"> Project/Program List </span>
+                <span> Designation List </span>
+                <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
               </h1>
-              <button
+              <!-- <button
                 type="button"
                 routerLink="/home/addList/{{ activeId }}"
                 class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
@@ -43,9 +43,9 @@
                   />
                 </svg>
 
-                <span *ngIf="activeId == 1"> Department </span>
+                <span *ngIf="activeId == 1"> Desgination </span>
                 <span *ngIf="activeId == 2"> Project/Program </span>
-              </button>
+              </button> -->
               <!-- <form [formGroup]="headOfAccForm">
                 <div>
                   <label
@@ -134,8 +134,8 @@
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
-                    <span *ngIf="activeId == 1"> Department List </span>
-                    <span *ngIf="activeId == 2"> Project/Program List </span>
+                    <span> Designation List </span>
+                    <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
                     <button
                       class="an rounded-full hover:bg-gray-600 hover:text-white"
                     >
@@ -170,7 +170,7 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let p of headOfAccList; let i = index"
+                *ngFor="let p of designationRoleList; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
@@ -178,7 +178,7 @@
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
-                  {{ p.deptName ?? p.proName }}
+                  {{ p.empDesignation }}
                 </th>
 
                 <!-- <td class="px-4 py-3"></td>
@@ -186,7 +186,7 @@
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
-                    (click)="update(p.departId ?? p.programId, true)"
+                    (click)="update(p.empDesig, true)"
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -211,7 +211,7 @@
                       />
                     </svg>
                   </button>
-                  <button
+                  <!-- <button
                     (click)="
                       toggledelete(activeId, true, p.programId ?? p.departId)
                     "
@@ -233,7 +233,7 @@
                         clip-rule="evenodd"
                       />
                     </svg>
-                  </button>
+                  </button> -->
                 </td>
               </tr>
             </tbody>
@@ -324,8 +324,8 @@
   </section>
 </div>
 
-<app-delete
+<!-- <app-delete
   *ngIf="isDelete"
   [deleteData]="deleteItem"
   (close)="toggledelete(0, false, '')"
-></app-delete>
+></app-delete> -->

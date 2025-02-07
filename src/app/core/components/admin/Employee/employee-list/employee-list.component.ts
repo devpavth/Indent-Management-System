@@ -84,7 +84,7 @@ export class EmployeeListComponent implements OnInit {
 
         this.totalpage += this.employeeList.length;
 
-        console.log("fetching employee list:",res);
+        console.log('fetching employee list:', res);
       },
       (error) => {
         if (error.status == 403) {
@@ -533,22 +533,22 @@ export class EmployeeListComponent implements OnInit {
     this.isDelete = !this.isDelete;
     if (data == 1) {
       let empId = this.Admin.employeeCode.employeeId;
-      console.log("Employee ID to delete:", empId);
+      console.log('Employee ID to delete:', empId);
 
       this.employeeService.deleteEmployee(empId).subscribe(
         (res) => {
-          if(res !== null){
-            console.log("deleting employee:",res);
-          }else{
-            console.log("Employee deleted successfully, no response data.");
+          if (res !== null) {
+            console.log('deleting employee:', res);
+          } else {
+            console.log('Employee deleted successfully, no response data.');
           }
         },
         (error) => {
           if (error.status == 200) {
             this.fetchEmployeeList(this.userid);
-            console.log("userid:",this.userid);
+            console.log('userid:', this.userid);
             console.log('Delete Success');
-          }else{
+          } else {
             console.error('Delete failed:', error);
           }
         },

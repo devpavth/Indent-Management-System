@@ -1,4 +1,5 @@
 <div class="bg-white shadow-md">
+  <h1 class="text-center text-xl mb-4 pt-5 text-purple-600 font-bold">Quote Comparison Stage</h1>
   <label for="" class="ml-4 text-lg font-bold text-purple-600"
     >INDENT ID:</label
   >
@@ -15,6 +16,7 @@
     <select      
       class="m-4 w-64 rounded-lg border border-gray-500"
       (change)="selectedHeadOfAcc($event)"
+      [value]="currentHeadOfAccId"
       >
       <option value="">Choose Head of Account</option>
       <option 
@@ -336,7 +338,7 @@
     </button> -->
   </div>
 
-  <div class="mt-6 flex flex-row items-center space-x-4" *ngIf="filterProductHeadData.length > 0">
+  <div class="mt-6 flex flex-row items-center justify-center space-x-4" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2 && pdfSrc.length > 2">
     <div class="-m-1.5">
       <div class="inline-block min-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
@@ -353,22 +355,23 @@
                 
                 <th
                   scope="col"
+                  *ngFor="let ven of selectedVendorName"
                   class="px-5 py-4 text-start text-sm font-medium uppercase"
                 >
-                  Quantity
+                  {{ven.name}}
                 </th>
 
-                <th
+                <!-- <th
                   scope="col"
                   class="px-5 py-4 text-start text-sm font-medium uppercase"
                 >
                   Unit Price
-                </th>
+                </th> -->
                 
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr *ngFor="let product of filterProductHeadData">
+              <tr *ngFor="let product of filterProductHeadData; let i = index">
                 <td
                   class="px-5 py-4 text-start text-sm font-medium text-gray-800"
                 >
@@ -385,14 +388,33 @@
                 </td>
                 
                 <td class="px-5 py-4 text-center text-sm text-gray-800">
-                  {{ product.qty }}
+                   <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven1Price[i]"
+                    (input)="calculateVen1Price(i)"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (paste)="preventPaste($event)"
+                  />
                 </td>
 
                 <td class="px-5 py-4 text-center text-sm text-gray-800">
-                  {{ product.unitPrice | currency: "INR" }}
-                  <p class="text-gray-800">
-                    ({{ product.prdGstPct }}%)
-                  </p>
+                  <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven2Price[i]"
+                    (input)="calculateVen2Price(i)"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (paste)="preventPaste($event)"
+                  />
+                </td>
+
+                <td class="px-5 py-4 text-center text-sm text-gray-800">
+                  <input type="number"
+                    class="rounded-lg w-32"
+                    [(ngModel)]="ven3Price[i]"
+                    (input)="calculateVen3Price(i)"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (paste)="preventPaste($event)"
+                  />
                 </td>
                 
               </tr>
@@ -406,14 +428,14 @@
         
       </div>
     </div>
-    <div
+    <!-- <div
       class="flex items-center justify-center"
         >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-600 mx-8">
           <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
         </svg>
-    </div>
-    <div class="-m-1.5" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2">
+    </div> -->
+    <!-- <div class="-m-1.5" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2">
       <div class="inline-block min-w-full align-middle">
         <div class="overflow-hidden rounded-lg border">
           <table class="min-w-full divide-y divide-gray-200">
@@ -426,18 +448,7 @@
                   >
                   {{ven.name}}
                 </th>
-                <!-- <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium uppercase"
-                >
-                  Status
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium uppercase"
-                >
-                  Total Price
-                </th> -->
+                
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -470,7 +481,7 @@
           </table>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
 
@@ -494,15 +505,30 @@
               [value]="quotes[i]"
               required
               readonly
-              (input)="updateLeastPrice()"
             />
           </div>
         </ng-container>
       </form>
-      <div class="flex flex-col items-end justify-end">
-        <p class="mt-4 font-semibold text-purple-700">
-          Least Price: <span>{{ leastPrice }}</span>
-        </p>
+      <div class="flex flex-col items-start justify-start mt-4" *ngIf="pdfSrc.length == 3">
+        <div class="border border-gray-300 p-4 rounded-lg">
+          <h3
+            class="mt-4 font-semibold text-purple-600"
+            >Least Vendor Name: 
+            <span
+              class="text-gray-700 font-semibold"
+              >{{leastPricedVendorName}}</span>
+          </h3>
+          <p class="mt-4 font-semibold text-purple-700">
+            Least Price: 
+            <span 
+              class="text-gray-700 font-semibold"
+              >{{ leastPrice }}</span>
+          </p>
+          
+        </div>
+        
+      </div>
+      <div class="flex flex-col items-end justify-start">
         <button
           *ngIf="pdfSrc.length == 3"
           (click)="uploadPdf()"
@@ -535,4 +561,16 @@
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
   <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+</section>
+<section
+  *ngIf="isSuccessToast"
+  class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+</section>
+<section *ngIf="isWarningPopup">
+    <app-warning-popup 
+      (close)="closepop($event)"
+      (clearQuotation)="clearPreviousQuotation()"
+      ></app-warning-popup>
 </section>

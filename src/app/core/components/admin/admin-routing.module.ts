@@ -24,6 +24,7 @@ import { ViewListComponent } from './Branch/view-list/view-list.component';
 import { AddListComponent } from './Branch/add-list/add-list.component';
 import { EditListComponent } from './Branch/edit-list/edit-list.component';
 import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.component';
+import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
 
 const routes: Routes = [
   { component: AddEmployeeComponent, path: 'addEmployee' },
@@ -47,7 +48,8 @@ const routes: Routes = [
   { component: ViewListComponent, path: 'viewList/:id' },
   { component: AddListComponent, path: 'addList/:id' },
   { component: EditListComponent, path: 'editList/:id' },
-  {component: InwardAlertComponent, path: 'inwardAlert'}
+  {component: InwardAlertComponent, path: 'inwardAlert'},
+  { component: RoleMappingComponent, path: 'designationRoleMapping'}
 ];
 
 @NgModule({

@@ -24,6 +24,7 @@ export const environment = {
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
+  getDesignationRoleMapping: Url + bassEmployeeApi + '/desig/getactive',
   searchPincode: Url + 'api/searchPincode/',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',

@@ -24,6 +24,10 @@ export class PdfUploadComponent {
   ven2Price: number[] = [];
   ven3Price: number[] = [];
   leastPrice: number = 0;
+  leastPricedVendorName: string = '';
+  isWarningPopup: boolean = false;
+  previousHeadofAccId: number | null = null;
+  currentHeadOfAccId: number | null = null;
   selectedQuote: number | null = null; // Variable for the selected quote index
 
   assignedVendor: FormGroup;
@@ -36,7 +40,9 @@ export class PdfUploadComponent {
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
   isToast: boolean = false;
+  isSuccessToast: boolean = false;
   warningToastMsg: string = '';
+  deleteToastMsg: string = '';
   // isViewCloseIcon: boolean = false;
   requestData: ProRequestdata | null = null;
   productHeadData: indentProductList[] = [];
@@ -138,6 +144,12 @@ export class PdfUploadComponent {
     ];
 
     console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
+
+    this.isSuccessToast = true;
+    this.deleteToastMsg = 'Step 1: Select Head of Account';
+    setTimeout(() => {
+      this.isSuccessToast = false;
+    }, 3000);
   }
 
   onSelectedVendor(vendor: Vendor) {
@@ -166,21 +178,103 @@ export class PdfUploadComponent {
       });
       this.isEnableUploadBtn = true;
       this.isEnableSearch = false;
+      this.isSuccessToast = true;
+      this.deleteToastMsg = `Upload ${vendor.vendorName} Quotation`;
+      setTimeout(() => {
+        this.isSuccessToast = false;
+      }, 3000);
     }
 
     this.storeVendorList = [];
   }
 
+  // selectedHeadOfAcc(event: Event) {
+  //   const selectElement = event.target as HTMLSelectElement;
+  //   const headOfAccId = Number(selectElement.value);
+  //   console.log('headOfAccId:', headOfAccId);
+
+  //   if (
+  //     this.previousHeadofAccId !== null &&
+  //     this.previousHeadofAccId !== headOfAccId
+  //   ) {
+  //     this.isSuccessToast = false;
+  //     this.isWarningPopup = true;
+  //     this.currentHeadOfAccId = headOfAccId;
+  //   } else {
+  //     this.isSuccessToast = true;
+  //     this.deleteToastMsg = 'Step 2: Search Vendor Name';
+  //     setTimeout(() => {
+  //       this.isSuccessToast = false;
+  //     }, 3000);
+  //   }
+
+  //   this.filterProductHeadData = this.productHeadData.filter(
+  //     (pro: indentProductList) => {
+  //       return pro.headOfAccId === headOfAccId;
+  //     },
+  //   );
+
+  //   this.isEnableSearch = true;
+
+  //   if (!headOfAccId) {
+  //     this.isSuccessToast = false;
+  //     this.isWarningPopup = true;
+  //   }
+
+  //   this.previousHeadofAccId = headOfAccId;
+
+  //   // this.filterProductHeadData.length = 0;
+  // }
+
   selectedHeadOfAcc(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const headOfAccId = Number(selectElement.value);
-    console.log('headOfAccId:', headOfAccId);
+
+    console.log('Selected headOfAccId:', headOfAccId);
+
+    // If the selected headOfAccId is different from the previous one, show the popup
+    if (
+      this.previousHeadofAccId !== null &&
+      this.previousHeadofAccId !== headOfAccId
+    ) {
+      this.isWarningPopup = true;
+      this.currentHeadOfAccId = headOfAccId; // Store the new selection temporarily
+    } else {
+      this.applyHeadOfAccId(headOfAccId);
+    }
+  }
+
+  // Function to apply the selected Head of Account
+  applyHeadOfAccId(headOfAccId: number) {
+    this.previousHeadofAccId = headOfAccId; // Update previous selection
+    this.isWarningPopup = false; // Hide the popup
+
+    // Apply the filtered product head data
     this.filterProductHeadData = this.productHeadData.filter(
-      (pro: indentProductList) => {
-        return pro.headOfAccId === headOfAccId;
-      },
+      (pro: indentProductList) => pro.headOfAccId === headOfAccId,
     );
+
+    // Reset other data
+    this.isSuccessToast = true;
+    this.deleteToastMsg = 'Step 2: Search Vendor Name';
+    setTimeout(() => {
+      this.isSuccessToast = false;
+    }, 3000);
     this.isEnableSearch = true;
+    this.pdfSrc = [];
+    this.selectedVendorName = [];
+    this.pdfFiles = [];
+  }
+
+  clearPreviousQuotation() {
+    this.pdfSrc = [];
+    this.selectedVendorName = [];
+    this.pdfFiles = [];
+    this.currentHeadOfAccId = null;
+    this.previousHeadofAccId = null;
+    this.assignedVendor.reset();
+    this.isEnableSearch = false;
+    console.log('Previous quotation cleared!');
   }
 
   onFileSelected(event: any): void {
@@ -234,6 +328,23 @@ export class PdfUploadComponent {
         if (vendorToDisableCloseIcon) {
           vendorToDisableCloseIcon.isViewCloseIcon = false;
         }
+
+        if (this.selectedVendorName.length < 3) {
+          this.isSuccessToast = true;
+          this.deleteToastMsg = 'Search Next Vendor Name';
+          setTimeout(() => {
+            this.isSuccessToast = false;
+          }, 3000);
+        }
+
+
+        if (this.selectedVendorName.length === 3) {
+          this.isSuccessToast = true;
+          this.deleteToastMsg = 'Scroll Down to Comparison Table';
+          setTimeout(() => {
+            this.isSuccessToast = false;
+          }, 3000);
+        }
       }
     }
   }
@@ -250,6 +361,11 @@ export class PdfUploadComponent {
   //     this.currentSlideIndex++;
   //   }
   // }
+
+  closepop(data: boolean) {
+    this.currentHeadOfAccId = this.previousHeadofAccId;
+    this.isWarningPopup = data;
+  }
 
   removeVendor(vendorIndex: number) {
     this.selectedVendorName.splice(vendorIndex, 1);
@@ -312,29 +428,58 @@ export class PdfUploadComponent {
   calculateVen1Price(index: number) {
     // this.ven1Price = this.ven1Price[index];
     console.log('ven 1 index:', index);
-    this.quotes[index] = this.ven1Price[index] || 0;
+    this.ven1Price[index] = this.ven1Price[index] || 0;
 
-    this.quotes[index] = this.ven1Price.reduce((sum, value) => sum + (value || 0), 0);
+    this.quotes[0] = this.ven1Price.reduce(
+      (sum, value) => sum + (value || 0),
+      0,
+    );
+    this.updateLeastPrice();
   }
 
   calculateVen2Price(index: number) {
     console.log('ven 2 index:', index);
-    this.quotes[index] = this.ven2Price[index] || 0;
-    this.quotes[index] = this.ven2Price.reduce((sum, value) =>sum + (value || 0), 0);
-  }
-
-  calculateVen3Price(index: number){
-    console.log('ven 3 index:', index);
-    this.quotes[index] = this.ven3Price[index] || 0;
-    this.quotes[index] = this.ven3Price.reduce(
+    this.ven2Price[index] = this.ven2Price[index] || 0;
+    this.quotes[1] = this.ven2Price.reduce(
       (sum, value) => sum + (value || 0),
       0,
     );
+    this.updateLeastPrice();
+  }
+
+  calculateVen3Price(index: number) {
+    console.log('ven 3 index:', index);
+    this.ven3Price[index] = this.ven3Price[index] || 0;
+    this.quotes[2] = this.ven3Price.reduce(
+      (sum, value) => sum + (value || 0),
+      0,
+    );
+    this.updateLeastPrice();
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  preventPaste(event: ClipboardEvent) {
+    event.preventDefault();
   }
 
   updateLeastPrice(): void {
     this.leastPrice = Math.min(
       ...this.quotes.filter((q) => q !== null && q !== undefined),
     );
+
+    const leastPriceIndex = this.quotes.indexOf(this.leastPrice);
+    if (leastPriceIndex === -1) {
+      console.error('No valid least price found');
+      return;
+    }
+
+    this.leastPricedVendorName = this.selectedVendorName[leastPriceIndex].name;
+    console.log('leastPricedVendorName:', this.leastPricedVendorName);
   }
 }
