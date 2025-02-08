@@ -1,5 +1,5 @@
 <div class="bg-white shadow-md">
-  <h1 class="text-center text-xl mb-4 pt-5 text-purple-600 font-bold">Quote Comparison Stage</h1>
+  <h1 class="text-center text-xl mb-4 pt-5 text-purple-600 font-bold">Quote Comparison Sheet</h1>
   <label for="" class="ml-4 text-lg font-bold text-purple-600"
     >INDENT ID:</label
   >
@@ -338,7 +338,7 @@
     </button> -->
   </div>
 
-  <div class="mt-6 flex flex-row items-center justify-center space-x-4" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2 && pdfSrc.length > 2">
+  <div class="mt-6 flex flex-row items-center space-x-4" *ngIf="filterProductHeadData.length > 0 && selectedVendorName.length > 2 && pdfSrc.length > 2">
     <div class="-m-1.5">
       <div class="inline-block min-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
@@ -389,7 +389,7 @@
                 
                 <td class="px-5 py-4 text-center text-sm text-gray-800">
                    <input type="number"
-                    class="rounded-lg w-32"
+                    class="rounded-lg w-32 no-spinner appearance-none"
                     [(ngModel)]="ven1Price[i]"
                     (input)="calculateVen1Price(i)"
                     (keypress)="allowOnlyNumbers($event)"

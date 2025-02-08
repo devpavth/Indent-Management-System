@@ -27,6 +27,7 @@ import { WarningComponent } from './warning/warning.component';
 import { ConfirmBranchDetailsComponent } from './confirm-branch-details/confirm-branch-details.component';
 import { ConfirmOtpComponent } from './confirm-otp/confirm-otp.component';
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
+import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popup/warning-roleassigning-popup.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { WarningPopupComponent } from './warning-popup/warning-popup.component';
     ConfirmBranchDetailsComponent,
     ConfirmOtpComponent,
     WarningPopupComponent,
+    WarningRoleassigningPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -82,7 +84,8 @@ import { WarningPopupComponent } from './warning-popup/warning-popup.component';
     AutoCompleteComponent,
     OnlyNumberDirective,
     OtpComponent,
-    WarningPopupComponent
+    WarningPopupComponent,
+    WarningRoleassigningPopupComponent
   ],
 })
 export class SharedModule {}

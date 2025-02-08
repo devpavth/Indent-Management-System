@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
-import { DesignationRoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
+import { DesignationRoleMapping, RoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +72,32 @@ export class EmployeeServiceService {
     return this.http.get(environment.getDesignation);
   }
 
-  getDesignationRoleMapping(): Observable<DesignationRoleMapping[]>{
-    return this.http.get<DesignationRoleMapping[]>(environment.getDesignationRoleMapping);
+  getDesignationRoleMapping(): Observable<DesignationRoleMapping[]> {
+    return this.http.get<DesignationRoleMapping[]>(
+      environment.getDesignationRoleMapping,
+    );
+  }
+
+  getDesignationRole(): Observable<RoleMapping[]> {
+    return this.http.get<RoleMapping[]>(environment.getDesignationRole);
+  }
+
+  fetchDesignationAssignedRole(
+    designId: number | undefined,
+  ): Observable<DesignationRoleMapping> {
+    return this.http.get<DesignationRoleMapping>(
+      environment.fetchDesignationAssignedRole + designId,
+    );
+  }
+
+  assigningRoleToDesignation(designationId: number | undefined, roleId: number){
+    let params = new HttpParams();
+
+    if(designationId !== undefined){
+      params = params.append('empDesig', designationId.toString());
+    }
+    params = params.append('roleId', roleId.toString());
+
+    return this.http.post(environment.assigningRoleToDesignation, {}, {params})
   }
 }

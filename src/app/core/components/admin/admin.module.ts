@@ -40,6 +40,7 @@ import { EditListComponent } from './Branch/edit-list/edit-list.component';
 import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.component';
 import { ViewTransactionComponent } from './Transaction/view-transaction/view-transaction.component';
 import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
+import { ViewDesignationRoleComponent } from './Employee/view-designation-role/view-designation-role.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -79,6 +80,7 @@ import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.compo
     InwardAlertComponent,
     ViewTransactionComponent,
     RoleMappingComponent,
+    ViewDesignationRoleComponent,
   ],
   imports: [
     CommonModule,

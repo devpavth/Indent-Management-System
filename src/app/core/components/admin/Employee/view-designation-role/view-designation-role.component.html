@@ -1,4 +1,4 @@
-<section *ngIf="activeLink == 1" class="bg-black bg-opacity-50">
+<section class="bg-black bg-opacity-50">
   <div class="flex">
     <div class="w-1/2"></div>
     <div class="animate-slide-in-right h-lvh w-2/4 border bg-white shadow-xl">
@@ -26,7 +26,9 @@
           </button>
         </div>
         <div class="mr-4">
-          <h1 class="text-xl font-semibold text-purple-800">View Department</h1>
+          <h1 class="text-xl font-semibold text-purple-800">
+            View Designation
+          </h1>
         </div>
       </div>
       <div>
@@ -36,13 +38,13 @@
               <label
                 for="first_name"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Department Name</label
+                >Designation Name</label
               >
               <input
                 type="text"
-                [(ngModel)]="department"
+                [(ngModel)]="designation"
                 class="input-form"
-                placeholder="Department Name"
+                placeholder="Desgination Name"
                 required
                 readonly
               />
@@ -59,7 +61,7 @@
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
-                    Project
+                    Role
                     <button
                       class="an rounded-full hover:bg-gray-600 hover:text-white"
                     >
@@ -88,7 +90,7 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let item of projectList; let i = index"
+                *ngFor="let role of designationRole; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <td class="px-4 py-3">{{ i + 1 }}</td>
@@ -96,18 +98,18 @@
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
-                  {{ item.proName }}
+                  {{ role.roleName }}
                 </th>
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
-                    *ngIf="!check(item.programId)"
-                    (click)="assignProjtoDept(item)"
-                    class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    *ngIf="!check(role.roleName)"
+                    (click)="assignRoletoDesign(role)"
+                    class="group inline-flex items-center justify-center rounded-full bg-blue-500 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-200 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
                     <svg
-                      class="h-5 w-5 text-blue-600 group-hover:text-blue-50 dark:text-white"
+                      class="h-5 w-5 text-blue-50 group-hover:text-blue-600 dark:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -125,13 +127,13 @@
                     </svg>
                   </button>
                   <button
-                    *ngIf="check(item.programId)"
-                    (click)="deleteDeptProgram(item)"
-                    class="group inline-flex items-center justify-center rounded-full bg-red-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    *ngIf="check(role.roleName)"
+                    (click)="deleteDeptProgram(role)"
+                    class="group inline-flex items-center pointer-events-none justify-center rounded-full bg-red-500 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-200 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
                     <svg
-                      class="h-5 w-5 text-red-600 group-hover:text-red-50 dark:text-white"
+                      class="h-5 w-5 text-red-50 group-hover:text-red-600 dark:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -284,4 +286,12 @@
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
   <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+</section>
+<section *ngIf="isWarningPopup">
+    <app-warning-roleassigning-popup
+      [selectedRoleName]="selectedRoleName"
+      [designation]="designation"
+      (close)="closepop($event)"
+      (assigningRole)="assignRoletoDesignation(selectedRole)"
+      ></app-warning-roleassigning-popup>
 </section>

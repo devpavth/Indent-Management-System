@@ -30,7 +30,7 @@ export class RoleMappingComponent {
     deleteId: undefined,
   };
 
-  updateId: any;
+  updateId: number = 0;
   constructor(
     private productService: ProductService,
     private fb: FormBuilder,
