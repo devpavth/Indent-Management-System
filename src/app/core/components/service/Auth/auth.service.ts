@@ -26,4 +26,10 @@ export class AuthService {
   isLoggedIn() {
     return this.getToken() !== null;
   }
+
+  getUserRoles(): string[]{
+    const storedRoles = sessionStorage.getItem('roles');
+    console.log('storedRoles:', storedRoles);
+    return storedRoles ? JSON.parse(storedRoles) : [];
+  }
 }

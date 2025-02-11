@@ -11,7 +11,7 @@ export class RequisitionListComponent implements OnInit {
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
-  
+
   ngOnInit() {
     this.fetchRequestList();
   }
@@ -39,19 +39,23 @@ export class RequisitionListComponent implements OnInit {
     ) {
       let status = 102;
       this.isViewSelectedDate = false;
-      this.req.finRequestList(status).subscribe((res) => {
-        this.userRequest = res;
-        console.log("fetching finance request processing list:", res);
-      },
-      (error) => {
-        console.log("error while fetching processing finance request:", error);
-        if (error.status == 204) {
-          this.userRequest = undefined;
-        }else if(error.status === 404){
-          this.userRequest = undefined;
-        }
-      },
-    );
+      this.req.finRequestList(status).subscribe(
+        (res) => {
+          this.userRequest = res;
+          console.log('fetching finance request processing list:', res);
+        },
+        (error) => {
+          console.log(
+            'error while fetching processing finance request:',
+            error,
+          );
+          if (error.status == 204) {
+            this.userRequest = undefined;
+          } else if (error.status === 404) {
+            this.userRequest = undefined;
+          }
+        },
+      );
     }
     if (
       this.isProcess == false &&
@@ -62,7 +66,7 @@ export class RequisitionListComponent implements OnInit {
       this.isViewSelectedDate = true;
       this.req.finRequestList(202, this.currentDate).subscribe(
         (res: any) => {
-          console.log("fetching completed finance request:", res);
+          console.log('fetching completed finance request:', res);
           // let list: any[] = res;
           // console.log("listing completed:", list);
           // list = list.filter((l) => l.requestStatus == 102);
@@ -70,58 +74,58 @@ export class RequisitionListComponent implements OnInit {
           this.userRequest = res;
         },
         (error) => {
-          console.log("error while fetching completed finance request:", error);
+          console.log('error while fetching completed finance request:', error);
           if (error.status == 204) {
             this.userRequest = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this.userRequest = undefined;
           }
         },
       );
     }
-    if(
+    if (
       this.isProcess == false &&
       this.isCompleted == false &&
       this.isHold == true &&
       this.isRejected == false
-    ){
+    ) {
       this.isViewSelectedDate = false;
       this.req.finRequestList(418).subscribe(
         (res: any) => {
-          console.log("fetching finance request on hold list:", res);
+          console.log('fetching finance request on hold list:', res);
           this.userRequest = res;
         },
         (error) => {
-          console.log("error while fetching on hold finance request:", error);
+          console.log('error while fetching on hold finance request:', error);
           if (error.status == 204) {
             this.userRequest = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this.userRequest = undefined;
           }
-        }
-      )
+        },
+      );
     }
-    if(
+    if (
       this.isProcess == false &&
       this.isCompleted == false &&
       this.isHold == false &&
       this.isRejected == true
-    ){
+    ) {
       this.isViewSelectedDate = true;
       this.req.finRequestList(406, this.currentDate).subscribe(
         (res: any) => {
-          console.log("fetching finance request rejected list:", res);
+          console.log('fetching finance request rejected list:', res);
           this.userRequest = res;
         },
         (error) => {
-          console.log("error while fetching rejected finance request:", error);
+          console.log('error while fetching rejected finance request:', error);
           if (error.status == 204) {
             this.userRequest = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this.userRequest = undefined;
           }
-        }
-      )
+        },
+      );
     }
   }
   viewRequest(data: any) {

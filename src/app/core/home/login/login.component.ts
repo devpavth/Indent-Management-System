@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
 
           sessionStorage.setItem('userId', this.userid);
           sessionStorage.setItem('token', this.userData.token);
-          sessionStorage.setItem('role', this.userRole);
+          sessionStorage.setItem('roles', JSON.stringify(this.userRole));
           this.Router.navigate(['home/dashboard']);
 
           console.log(this.userData);

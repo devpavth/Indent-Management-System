@@ -24,6 +24,7 @@ export class LeftMenuComponent {
   isLevelView: boolean = true;
   isBlockRequest: boolean = false;
   isBlockUser: boolean = true;
+  isAccessUserFinance: boolean = false;
 
   ngOnInit() {
     this.user = sessionStorage.getItem('userId');
@@ -49,13 +50,21 @@ export class LeftMenuComponent {
         //   this.isBlockUser = false;
         // }
 
-        const role = sessionStorage.getItem('role');
-        console.log('role:', role);
-        console.log('role:', typeof role);
-
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
     }
+
+    // const roleString = sessionStorage.getItem('roles');
+    // const roles: string[] = roleString ? JSON.parse(roleString) : [];
+    // console.log('role:', roles);
+    // console.log('role:', typeof roles);
+
+    // if (roles.includes('ROLE_USER')) {
+    //   console.log('checking user role.');
+    //   this.isAccessUserFinance = true;
+    // }
+
+    
   }
 
   toggleRequest() {
@@ -64,7 +73,7 @@ export class LeftMenuComponent {
   toggleAdmin() {
     this.tAdmin = !this.tAdmin;
   }
-  
+
   toggleEmployee(){
     this.employee = !this.employee;
   } 

@@ -9,7 +9,17 @@ import { ProcurementRequestlistComponent } from './procurement-requestlist/procu
 import { ViewProcurementreqComponent } from './view-procurementreq/view-procurementreq.component';
 
 @NgModule({
-  declarations: [ComparisonComponent, ProcurementRequestlistComponent, ViewProcurementreqComponent],
-  imports: [CommonModule, ProcurementRoutingModule, SharedModule, FormsModule, ReactiveFormsModule],
+  declarations: [
+    ComparisonComponent,
+    ProcurementRequestlistComponent,
+    ViewProcurementreqComponent,
+  ],
+  imports: [
+    CommonModule,
+    ProcurementRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+  ],
 })
 export class ProcurementModule {}

@@ -55,7 +55,8 @@
           type="button"
           [ngClass]="{
             'left-menu': !isBlockRequest,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': isBlockRequest
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              isBlockRequest
           }"
           class="left-menu group"
           aria-controls="dropdown-example"
@@ -124,40 +125,28 @@
               >User Request List</a
             >
           </li>
-          <li> 
+          <li>
             <a
               routerLinkActive="side-menu-active"
-              [routerLink]="isBlockUser ? null : '/home/managerApproval'"
+              routerLink="/home/managerApproval"
               class="left-submenu group"
-              [ngClass]="{
-                'cursor-not-allowed': isBlockUser,
-                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
-              }"              
-              >
+            >
               Program Manager Approval
             </a>
           </li>
           <li>
             <a
               routerLinkActive="side-menu-active"
-              [routerLink]="isBlockUser ? null : '/home/branchApprovel'"
+              routerLink="/home/branchApprovel"
               class="left-submenu group"
-              [ngClass]="{
-                'cursor-not-allowed': isBlockUser,
-                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
-              }" 
               >Branch Approval</a
             >
           </li>
           <li>
             <a
               routerLinkActive="side-menu-active"
-              [routerLink]="isBlockUser ? null : '/home/adminApprovel'"
+              routerLink="/home/adminApprovel"
               class="left-submenu group"
-              [ngClass]="{
-                'cursor-not-allowed': isBlockUser,
-                'hover:bg-none hover:text-inherit hover:border-transparent': isBlockUser
-              }"
               >Admin Approval</a
             >
           </li>
@@ -169,7 +158,8 @@
           class="left-menu group"
           [ngClass]="{
             'left-menu': !isBlockRequest,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': isBlockRequest
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              isBlockRequest
           }"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
@@ -254,7 +244,8 @@
           class="left-menu group"
           [ngClass]="{
             'left-menu': !isBlockRequest,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': isBlockRequest
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              isBlockRequest
           }"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
@@ -305,7 +296,7 @@
           *ngIf="procurement && !isBlockRequest"
           id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
-        > 
+        >
           <li>
             <a
               routerLinkActive="side-menu-active"
@@ -365,7 +356,8 @@
           (click)="poapproval = !poapproval"
           [ngClass]="{
             'left-menu': !isBlockRequest,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': isBlockRequest
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              isBlockRequest
           }"
         >
           <svg
@@ -435,12 +427,16 @@
       </li>
 
       <li>
-        <button type="button" class="left-menu group"
+        <button
+          type="button"
+          class="left-menu group"
           [ngClass]="{
             'left-menu': isLevelView,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': !isLevelView
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              !isLevelView
           }"
-         (click)="toggleAdmin()">
+          (click)="toggleAdmin()"
+        >
           <svg
             class="left-menusvg h-6 w-6"
             [ngClass]="{
@@ -493,7 +489,7 @@
               type="button"
               class="left-menu group"
               (click)="toggleEmployee()"
-              >
+            >
               <span
                 class="ml-9 flex-1 whitespace-nowrap text-left rtl:text-right"
                 >Employee</span
@@ -541,7 +537,7 @@
               type="button"
               class="left-menu group"
               (click)="toggleProduct()"
-              >
+            >
               <span
                 class="ml-9 flex-1 whitespace-nowrap text-left rtl:text-right"
                 >Product</span
@@ -645,7 +641,8 @@
           class="left-menu group"
           [ngClass]="{
             'left-menu': !isBlockRequest,
-            'flex w-full items-center p-2 cursor-not-allowed text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700': isBlockRequest
+            'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
+              isBlockRequest
           }"
           (click)="toggleTransaction()"
         >

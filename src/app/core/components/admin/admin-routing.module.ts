@@ -27,6 +27,7 @@ import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.co
 import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
 
 const routes: Routes = [
+  // { path: '', redirectTo: 'employeeList', pathMatch: 'full' },
   { component: AddEmployeeComponent, path: 'addEmployee' },
   { component: EmployeeListComponent, path: 'employeeList' },
   { component: ProductListComponent, path: 'productList' },
@@ -48,8 +49,8 @@ const routes: Routes = [
   { component: ViewListComponent, path: 'viewList/:id' },
   { component: AddListComponent, path: 'addList/:id' },
   { component: EditListComponent, path: 'editList/:id' },
-  {component: InwardAlertComponent, path: 'inwardAlert'},
-  { component: RoleMappingComponent, path: 'designationRoleMapping'}
+  { component: InwardAlertComponent, path: 'inwardAlert' },
+  { component: RoleMappingComponent, path: 'designationRoleMapping' },
 ];
 
 @NgModule({
