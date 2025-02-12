@@ -31,12 +31,22 @@ export class AddVendorComponent implements OnInit {
     this.addVendorForm = this.fb.group({
       branchId: ['', Validators.required],
       vendorName: ['', [Validators.required, Validators.pattern('[A-Za-z ]+')]],
-      vdrAdd1: ['', [Validators.required, 
-        Validators.minLength(20),
-        Validators.maxLength(150)]],
-      vdrAdd2: ['', [Validators.required, 
-        Validators.minLength(20), 
-        Validators.maxLength(100)]],
+      vdrAdd1: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(20),
+          Validators.maxLength(150),
+        ],
+      ],
+      vdrAdd2: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(20),
+          Validators.maxLength(100),
+        ],
+      ],
       vdrCity: ['', Validators.required],
       vdrState: ['', Validators.required],
       vdrCountry: ['', Validators.required],
@@ -44,28 +54,21 @@ export class AddVendorComponent implements OnInit {
         '',
         [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)],
       ],
-      vdrContactPersonName: [
-        '',
-        [Validators.pattern('[A-Za-z ]+')],
-      ],
-      vdrContactPersonPhone: [
-        '',
-        [Validators.pattern(/^[1-9][0-9]{9}$/)],
-      ],
+      vdrContactPersonName: ['', [Validators.pattern('[A-Za-z ]+')]],
+      vdrContactPersonPhone: ['', [Validators.pattern(/^[1-9][0-9]{9}$/)]],
       vdrEmail: [
         '',
-          [Validators.pattern(
+        [
+          Validators.pattern(
             /^[a-zA-Z0-9._%+-]+@[a-z]+.([a-z]{2})+(?:\.(com|in|edu|net)){1}$/,
-          )],
+          ),
+        ],
       ],
       vdrGstNo: [
         '',
-          [Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/)],
+        [Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/)],
       ],
-      vdrPanNo: [
-        '',
-        [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
-      ],
+      vdrPanNo: ['', [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
       vdrTanNo: [
         '',
         // [Validators.required, Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
@@ -83,77 +86,77 @@ export class AddVendorComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-
-    this.addVendorForm.get('vdrPincode')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((pincode) => {
-        if(this.isPincodeSelected){
-          return of([]);
-        }
-        this.noPincode = false;
-        if(!pincode || pincode.toString().length !== 6){
-          this.pincodeList = [];
-          return of([]);
-        }
-        return this.sharedService.fetchPincode(pincode).pipe(
-          catchError((error) => {
-            if(error[0].status === "Error"){
-              console.log("Pincode API Error:", error);
-              this.noPincode = true;
-            }
+    this.addVendorForm
+      .get('vdrPincode')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((pincode) => {
+          if (this.isPincodeSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
+          }
+          this.noPincode = false;
+          if (!pincode || pincode.toString().length !== 6) {
+            this.pincodeList = [];
+            return of([]);
+          }
+          return this.sharedService.fetchPincode(pincode).pipe(
+            catchError((error) => {
+              if (error[0].status === 'Error') {
+                console.log('Pincode API Error:', error);
+                this.noPincode = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
         const postOfficeArray = response?.[0]?.postOffice ?? [];
-        console.log("postOfficeArray:", postOfficeArray);
+        console.log('postOfficeArray:', postOfficeArray);
 
         this.pincodeList = postOfficeArray;
-        console.log("reponse from pincode:", response);
-        console.log("typeof Pincode API Error:", typeof response?.[0]?.status);
+        console.log('reponse from pincode:', response);
+        console.log('typeof Pincode API Error:', typeof response?.[0]?.status);
 
-        if(response?.[0]?.status === "Error" 
-            && this.pincodeList.length === 0){
-          console.log("Pincode API Error:", response?.[0]?.status);
+        if (
+          response?.[0]?.status === 'Error' &&
+          this.pincodeList.length === 0
+        ) {
+          console.log('Pincode API Error:', response?.[0]?.status);
           this.noPincode = true;
-          
-          this.addVendorForm.patchValue({
-            vdrCity: '',
-            vdrState: '',
-            vdrCountry: ''
-          },
-          {emitEvent: false}
-        )
+
+          this.addVendorForm.patchValue(
+            {
+              vdrCity: '',
+              vdrState: '',
+              vdrCountry: '',
+            },
+            { emitEvent: false },
+          );
         }
-        console.log("fetching pincode with live search:", this.pincodeList);
+        console.log('fetching pincode with live search:', this.pincodeList);
 
-        if(this.pincodeList.length > 0){
-          const cityDropDownOptions = this.pincodeList.map(
-            (address) => ({
-              label: `${address.name}, ${address.city}`,
-              value: `${address.name}, ${address.city}`
-            })
-          )
+        if (this.pincodeList.length > 0) {
+          const cityDropDownOptions = this.pincodeList.map((address) => ({
+            label: `${address.name}, ${address.city}`,
+            value: `${address.name}, ${address.city}`,
+          }));
 
-          console.log("cityDropDownOptions:", cityDropDownOptions);
+          console.log('cityDropDownOptions:', cityDropDownOptions);
 
-          this.addVendorForm.patchValue({
-            vdrCity: cityDropDownOptions[0].value,
-            vdrState: this.pincodeList[0].state,
-            vdrCountry: this.pincodeList[0].country
-          },
-          {emitEvent: false}
-        )
+          this.addVendorForm.patchValue(
+            {
+              vdrCity: cityDropDownOptions[0].value,
+              vdrState: this.pincodeList[0].state,
+              vdrCountry: this.pincodeList[0].country,
+            },
+            { emitEvent: false },
+          );
 
-        this.cityDropDownOptions = cityDropDownOptions;
+          this.cityDropDownOptions = cityDropDownOptions;
         }
         this.isPincodeSelected = false;
-      }
-    )
+      });
 
     this.getBranchName();
   }
@@ -177,16 +180,16 @@ export class AddVendorComponent implements OnInit {
     this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
-      this._BranchName.unshift({branchId: 0, branchName: 'Mutiple Branch'});
+      this._BranchName.unshift({ branchId: 0, branchName: 'Mutiple Branch' });
       console.log(this._BranchName);
     });
   }
 
   submitVendorDetails(data: any) {
-    console.log("sending new vendor data:", data);
+    console.log('sending new vendor data:', data);
     this.vendorService.addVendor(data).subscribe(
       (res) => {
-        console.log("new vendor added successfully:", res);
+        console.log('new vendor added successfully:', res);
         this.route.navigate(['/home/vendorList']);
       },
       (error) => {

@@ -10,7 +10,7 @@ import { ProductService } from '../../../service/Product/product.service';
 @Component({
   selector: 'app-view-transaction',
   templateUrl: './view-transaction.component.html',
-  styleUrl: './view-transaction.component.css'
+  styleUrl: './view-transaction.component.css',
 })
 export class ViewTransactionComponent {
   isChecked: boolean = false;
@@ -49,7 +49,7 @@ export class ViewTransactionComponent {
       totalPrice: [],
       tranUpdBy: [],
       tranUpdOn: [],
-      
+
       // branchDto: this.fb.group({
       //   branchName: [],
       //   add1: [],
@@ -101,24 +101,25 @@ export class ViewTransactionComponent {
 
   ngOnInit(): void {
     // this.getBranchName();
-    this.TransactionForm.patchValue(this.transactionData);  
-    console.log("this.transactionData:", this.transactionData);
+    this.TransactionForm.patchValue(this.transactionData);
+    console.log('this.transactionData:', this.transactionData);
     Object.keys(this.TransactionForm.controls).forEach((form) => {
       this.TransactionForm.get(form)?.disable();
     });
 
-    this.productService.productTransaction(this.transactionData.prdtrnsCode).subscribe(
-      (res) =>{
-        console.log("fetching transaction details:", res);
-        this.transactionList = res;
+    this.productService
+      .productTransaction(this.transactionData.prdtrnsCode)
+      .subscribe(
+        (res) => {
+          console.log('fetching transaction details:', res);
+          this.transactionList = res;
 
-        this.inwardPrdDetails = this.transactionList.transPrdDetails;
-      },
-      (error) => {
-        console.log("error while fetching transaction details:", error);
-      }
-    )
-
+          this.inwardPrdDetails = this.transactionList.transPrdDetails;
+        },
+        (error) => {
+          console.log('error while fetching transaction details:', error);
+        },
+      );
   }
 
   get transactionDetails() {
@@ -133,16 +134,16 @@ export class ViewTransactionComponent {
     // this.isEdit = false;
   }
 
-  acceptTransactionDetails(code: any){
+  acceptTransactionDetails(code: any) {
     this.productService.confirmInward(code).subscribe(
       (res) => {
-        console.log("accepting inward alert transaction:", res);
+        console.log('accepting inward alert transaction:', res);
         this.closeVendor.emit(false);
       },
       (error) => {
-        console.log("error while accepting inward alert transaction:", error);
-      }
-    )
+        console.log('error while accepting inward alert transaction:', error);
+      },
+    );
   }
 
   // getBranchName() {
@@ -152,6 +153,4 @@ export class ViewTransactionComponent {
   //     console.log(this._BranchName);
   //   });
   // }
-
-
 }

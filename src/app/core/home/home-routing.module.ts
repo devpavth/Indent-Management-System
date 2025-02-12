@@ -30,17 +30,17 @@ const routes: Routes = [
         },
       },
       {
-        path: 'requests',
+        path: '',
 
         loadChildren: () =>
           import('../components/request/request.module').then(
             (m) => m.RequestModule,
           ),
-        canActivate: [authGuard], // ✅ Protect the route
+        canActivate: [authGuard],
         data: { roles: ['ROLE_USER'] },
       },
       {
-        path: 'admin',
+        path: '',
 
         loadChildren: () =>
           import('../components/admin/admin.module').then((m) => m.AdminModule),
@@ -49,7 +49,7 @@ const routes: Routes = [
       },
 
       {
-        path: 'finance',
+        path: '',
         loadChildren: () =>
           import('../components/finance/finance.module').then(
             (m) => m.FinanceModule,
@@ -58,7 +58,7 @@ const routes: Routes = [
         data: { roles: ['ROLE_FINANCE_AUTH'] },
       },
       {
-        path: 'procurement',
+        path: '',
         loadChildren: () =>
           import('../components/procurement/procurement.module').then(
             (m) => m.ProcurementModule,
@@ -68,6 +68,10 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: '**',
+    component: LoginComponent
+  }
 ];
 
 @NgModule({

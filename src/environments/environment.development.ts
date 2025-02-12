@@ -27,8 +27,7 @@ export const environment = {
   getDesignationRoleMapping: Url + bassEmployeeApi + '/desig/getactive',
   getDesignationRole: Url + bassEmployeeApi + '/role/getactive',
   fetchDesignationAssignedRole: Url + bassEmployeeApi + '/desig/get/',
-  assigningRoleToDesignation:
-    Url + bassEmployeeApi + '/desig/role/addnew',
+  assigningRoleToDesignation: Url + bassEmployeeApi + '/desig/role/addnew',
   searchPincode: Url + 'api/searchPincode/',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
@@ -115,7 +114,7 @@ export const environment = {
   prctHolding: Url + baseRequestApi + '/holdrequestbyprct/',
   prcReject: Url + baseRequestApi + '/rejectprctauth/',
 
-  comparisonPdf: Url + baseRequestApi + '/quote/upload/3',
+  comparisonPdf: Url + baseRequestApi + '/addquotecomparison',
 
   confirmBranchDetails: Url + baseRequestApi + '/urgent/getbranch',
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',

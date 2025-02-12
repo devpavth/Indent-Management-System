@@ -110,10 +110,16 @@ export class RequestService {
     return null;
   }
 
-  uploadPdf(data: any, fileName: any) {
-    let name = new HttpParams();
-    name = name.append('selectedQuote', fileName);
-    return this.http.post(environment.comparisonPdf, data, { params: name });
+  uploadPdf(data: any, files: any) {
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(data));
+
+    files.forEach((file: string | Blob, index: any) => {
+      formData.append('files', file);
+    })
+
+    return this.http.post(environment.comparisonPdf, formData);
   }
   //new request indent api function
   getProgramList() {

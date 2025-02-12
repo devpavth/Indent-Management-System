@@ -51,14 +51,8 @@ export class ViewVendorComponent {
         '',
         [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)],
       ],
-      vdrContactPersonName: [
-        '',
-        [Validators.pattern('[A-Za-z ]+')],
-      ],
-      vdrContactPersonPhone: [
-        '',
-        [Validators.pattern(/^[1-9][0-9]{9}$/)],
-      ],
+      vdrContactPersonName: ['', [Validators.pattern('[A-Za-z ]+')]],
+      vdrContactPersonPhone: ['', [Validators.pattern(/^[1-9][0-9]{9}$/)]],
       vdrEmail: [
         '',
         [
@@ -69,14 +63,9 @@ export class ViewVendorComponent {
       ],
       vdrGstNo: [
         '',
-        [
-          Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/),
-        ],
+        [Validators.pattern(/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z\d]{2}$/)],
       ],
-      vdrPanNo: [
-        '',
-        [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)],
-      ],
+      vdrPanNo: ['', [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
       vdrTanNo: [
         '',
         // [Validators.pattern(/^[A-Z]{4}[0-9]{5}[A-Z]$/)],
@@ -97,87 +86,86 @@ export class ViewVendorComponent {
   ngOnInit(): void {
     this.getBranchName();
     this.UpdateVendorForm.patchValue(this.vendorData);
-    console.log("this.vendorData:", this.vendorData);
-    console.log("this.vendorData:", this.vendorData.vdrCity);
+    console.log('this.vendorData:', this.vendorData);
+    console.log('this.vendorData:', this.vendorData.vdrCity);
     Object.keys(this.UpdateVendorForm.controls).forEach((form) => {
       this.UpdateVendorForm.get(form)?.disable();
     });
-
 
     // this.UpdateVendorForm.patchValue({
     //   vdrCity: this.vendorData.vdrCity
     // })
 
-    this.UpdateVendorForm.get('vdrPincode')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((pincode) => {
-        if(this.isPincodeSelected){
-          return of([]);
-        }
-        this.noPincode = false;
-        if(!pincode || pincode.toString().length !==6){
-          this.pincodeList = [];
-          return of([]);
-        }
-        return this.sharedService.fetchPincode(pincode).pipe(
-          catchError((error)=>{
-            if(error.status === "Error"){
-              console.log("Pincode API Error:", error);
-              this.noPincode = true;
-            }
+    this.UpdateVendorForm.get('vdrPincode')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((pincode) => {
+          if (this.isPincodeSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
+          }
+          this.noPincode = false;
+          if (!pincode || pincode.toString().length !== 6) {
+            this.pincodeList = [];
+            return of([]);
+          }
+          return this.sharedService.fetchPincode(pincode).pipe(
+            catchError((error) => {
+              if (error.status === 'Error') {
+                console.log('Pincode API Error:', error);
+                this.noPincode = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
         const postOfficeArray = response?.[0]?.postOffice ?? [];
-        console.log("postOfficeArray:", postOfficeArray);
+        console.log('postOfficeArray:', postOfficeArray);
 
         this.pincodeList = postOfficeArray;
-        console.log("reponse from pincode:", response);
-        console.log("typeof Pincode API Error:", typeof response?.[0]?.status);
+        console.log('reponse from pincode:', response);
+        console.log('typeof Pincode API Error:', typeof response?.[0]?.status);
 
-        if(response?.[0]?.status === "Error"
-          && this.pincodeList.length === 0
-        ){
-          console.log("Pincode API Error:", response?.[0]?.status);
+        if (
+          response?.[0]?.status === 'Error' &&
+          this.pincodeList.length === 0
+        ) {
+          console.log('Pincode API Error:', response?.[0]?.status);
           this.noPincode = true;
 
-          this.UpdateVendorForm.patchValue({
-            vdrCity: '',
-            vdrState: '',
-            vdrCountry: ''
-          },{emitEvent: false})
+          this.UpdateVendorForm.patchValue(
+            {
+              vdrCity: '',
+              vdrState: '',
+              vdrCountry: '',
+            },
+            { emitEvent: false },
+          );
         }
-        console.log("fetching pincode with live search:", this.pincodeList);
+        console.log('fetching pincode with live search:', this.pincodeList);
 
-        if(this.pincodeList.length > 0){
-          const cityDropDownOptions = this.pincodeList.map(
-            (address) => ({
-              label: `${address.name}, ${address.city}`,
-              value: `${address.name}, ${address.city}`
-            })
-          )
+        if (this.pincodeList.length > 0) {
+          const cityDropDownOptions = this.pincodeList.map((address) => ({
+            label: `${address.name}, ${address.city}`,
+            value: `${address.name}, ${address.city}`,
+          }));
 
-          console.log("cityDropDownOptions:", cityDropDownOptions);
+          console.log('cityDropDownOptions:', cityDropDownOptions);
 
           this.cityDropDownOptions = cityDropDownOptions;
 
-          this.UpdateVendorForm.patchValue({
-            vdrCity: cityDropDownOptions[0].value,
-            vdrState: this.pincodeList[0].state,
-            vdrCountry: this.pincodeList[0].country
-          },
-        {emitEvent: false}
-      )
-        
+          this.UpdateVendorForm.patchValue(
+            {
+              vdrCity: cityDropDownOptions[0].value,
+              vdrState: this.pincodeList[0].state,
+              vdrCountry: this.pincodeList[0].country,
+            },
+            { emitEvent: false },
+          );
         }
         this.isPincodeSelected = false;
-      }
-    )
+      });
   }
 
   get vendorAcccountDetails() {
@@ -188,7 +176,7 @@ export class ViewVendorComponent {
     return this.fb.group({
       ifsCode: [''],
       bankAccNo: [''],
-      vdrAccId: [this.vendorData?.vendorAcccountDetails[0]?.vdrAccId]
+      vdrAccId: [this.vendorData?.vendorAcccountDetails[0]?.vdrAccId],
     });
   }
 
@@ -203,20 +191,20 @@ export class ViewVendorComponent {
     this.isEdit = false;
   }
   updateVendorDetails(data: any) {
-    console.log("sending updated vendor data:", data);
+    console.log('sending updated vendor data:', data);
     let id = this.UpdateVendorForm.get('vendorId')?.value;
-    console.log("vendorId:", id);
-    console.log("typeof vendorId:", typeof id);
+    console.log('vendorId:', id);
+    console.log('typeof vendorId:', typeof id);
 
     this.vendorService.updateVendor(id, data).subscribe(
       (res: any) => {
-        console.log("vendor is successfully updated:", res);
+        console.log('vendor is successfully updated:', res);
         this.isToast = true;
         this.deleteToastMsg = res.errorMessege;
-        setTimeout(() =>{
+        setTimeout(() => {
           this.isToast = false;
           this.closeVendor.emit(false);
-        }, 3000)
+        }, 3000);
       },
       (error) => {
         console.log(error);
@@ -230,8 +218,8 @@ export class ViewVendorComponent {
     this.branchService.getBranch().subscribe((res) => {
       console.log(res);
       this._BranchName = res;
-      this._BranchName.unshift({branchId: 0, branchName: 'Multiple Branch'});
-      console.log("this._BranchName:", this._BranchName);
+      this._BranchName.unshift({ branchId: 0, branchName: 'Multiple Branch' });
+      console.log('this._BranchName:', this._BranchName);
     });
   }
 
