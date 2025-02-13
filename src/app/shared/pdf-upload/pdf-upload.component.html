@@ -14,7 +14,7 @@
 
   <div
     class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
-    *ngIf="pdfSrc.length !== 3"
+    
   >
     <div class="w-full md:w-1/2">
       <form class="flex items-center" [formGroup]="comparisonQuoteForm">
@@ -26,7 +26,7 @@
               let headIndex = index
             "
             [formGroupName]="headIndex"
-          >
+            >
             <div>
               <label for="" class="text-lg font-semibold text-purple-600"
                 >Head of Account:</label
@@ -37,7 +37,7 @@
                 formControlName="headOfAccId"
                 [value]="currentHeadOfAccId"
               >
-                <option value="">Choose Head of Account</option>
+                <option value="" disabled>Choose Head of Account</option>
                 <option
                   *ngFor="let head of uniqueProductHeadData"
                   [value]="head.headOfAccId"
@@ -46,20 +46,21 @@
                 </option>
               </select>
             </div>
-            <h3 class="mb-4 mt-2 text-lg font-semibold text-purple-600">
+            <h3 class="mb-4 mt-2 text-lg font-semibold text-purple-600" *ngIf="pdfSrc.length !== 3">
               Search Vendor to Upload the Quote
             </h3>
-            <div formArrayName="qcVendors">
+            <div formArrayName="qcVendors" *ngIf="pdfSrc.length !== 3">
               <div
                 *ngFor="
                   let ven of getQcVendorsArray(headIndex).controls;
                   let i = index
                 "
                 [formGroupName]="i"
-              >
+                class="flex flex-row gap-4"
+                >
                 <div
                   class="pointer-events-none absolute mt-32 inset-y-0 left-0 flex items-center pl-3"
-                >
+                  >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -74,9 +75,12 @@
                     />
                   </svg>
                 </div>
+                <!-- <div>
+                  
+                </div> -->
                 <input
                   type="text"
-                  class="w-full rounded border px-4 py-2"
+                  class="w-full rounded border p-0"
                   id="simple-search"
                   class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder="Search Vendor..."
@@ -87,72 +91,76 @@
                   }"
                   required=""
                 />
+
+                <div *ngIf="noVendor" class="absolute mt-2 text-sm text-red-600">
+                  <small>No vendor found.</small>
+                </div>
+                <ul
+                  *ngIf="storeVendorList && storeVendorList.length > 0"
+                  class="absolute z-10 mt-12 w-5/6 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                >
+                  <li
+                    *ngFor="let ven of storeVendorList"
+                    (click)="onSelectedVendor(ven, currentHeadIndex ?? 0)"
+                    class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                  >
+                    {{ ven.vendorName }}
+                  </li>
+                  <li
+                    *ngIf="noVendor || storeVendorList.length === 0"
+                    class="cursor-pointer px-4 py-2 text-sm text-red-500"
+                  >
+                    No data
+                  </li>
+                </ul>
+
+                <input
+                  #fileInput
+                  type="file"
+                  (change)="onFileSelected($event, headIndex, i)"
+                  accept="application/pdf"
+                  multiple
+                  class="hidden"
+                />
+
+                <!-- Save Button Triggers File Input Click -->
+                <button
+                  *ngIf="pdfSrc.length !== 3"
+                  type="button"
+                  (click)="fileInput.click()"
+                  [disabled]="!isEnableUploadBtn"
+                  [ngClass]="{
+                    'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
+                    'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
+                  }"
+                  class="!mt-2 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
+                >
+                  <svg
+                    class="h-5 w-5 text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
+                    />
+                    <path
+                      d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="noVendor" class="absolute mt-48 text-sm text-red-600">
-          <small>No vendor found.</small>
-        </div>
-        <ul
-          *ngIf="storeVendorList && storeVendorList.length > 0"
-          class="absolute z-10 mt-56 w-2/5 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
-        >
-          <li
-            *ngFor="let ven of storeVendorList"
-            (click)="onSelectedVendor(ven, currentHeadIndex ?? 0)"
-            class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-          >
-            {{ ven.vendorName }}
-          </li>
-          <li
-            *ngIf="noVendor || storeVendorList.length === 0"
-            class="cursor-pointer px-4 py-2 text-sm text-red-500"
-          >
-            No data
-          </li>
-        </ul>
+        
       </form>
     </div>
 
-    <input
-      #fileInput
-      type="file"
-      (change)="onFileSelected($event)"
-      accept="application/pdf"
-      multiple
-      class="hidden"
-    />
-
-    <!-- Save Button Triggers File Input Click -->
-    <button
-      *ngIf="pdfSrc.length !== 3"
-      type="button"
-      (click)="fileInput.click()"
-      [disabled]="!isEnableUploadBtn"
-      [ngClass]="{
-        'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
-        'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
-      }"
-      class="!mt-28 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
-    >
-      <svg
-        class="h-5 w-5 text-white"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
-        />
-        <path
-          d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
-        />
-      </svg>
-    </button>
+    
   </div>
 
   <!-- Upload Section -->
@@ -182,7 +190,6 @@
 
   <!-- PDF Display Section -->
   <div *ngIf="selectedVendorName.length > 0" class="flex">
-
     <div>
       <section class="bg-white" *ngIf="selectedVendorName.length > 0">
         <div class="px-4 py-8">
@@ -229,52 +236,76 @@
         </div>
       </section>
 
-      <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
-        <div
-          class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
-          *ngFor="let pdf of pdfSrc; let i = index"
-        >
-          <!-- PDF Preview -->
-          <button
-            (click)="deleteSlide(i)"
-            class="absolute right-6 top-2 hidden items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 group-hover:flex"
-          >
-            <svg
-              class="h-5 w-5 text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
+      <form [formGroup]="comparisonQuoteForm">
+        <div formArrayName="qcHeadOfAcc">
+          <div
+            *ngFor="
+              let head of getQcHeadOfAccArray().controls;
+              let headIndex = index
+            "
+            [formGroupName]="headIndex"
             >
-              <path
-                fill-rule="evenodd"
-                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
+            <div formArrayName="qcVendors">
+              <div 
+                *ngFor="
+                  let ven of getQcVendorsArray(headIndex).controls;
+                  let i = index
+                "
+                [formGroupName]="i"
+                >
+                  <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
+                    <div
+                      class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
+                      *ngFor="let pdf of pdfSrc; let i = index"
+                      >
+                      <!-- PDF Preview -->
+                      <button
+                        (click)="deleteSlide(i)"
+                        class="absolute right-6 top-2 hidden items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 group-hover:flex"
+                      >
+                        <svg
+                          class="h-5 w-5 text-white"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
 
-          <iframe
-            class="h-[150px] w-full border-b border-gray-300"
-            [src]="pdf"
-          ></iframe>
+                      <iframe
+                        class="h-[150px] w-full border-b border-gray-300"
+                        [src]="pdf"
+                      ></iframe>
 
-          <!-- PDF Details -->
-          <div class="bg-white p-4 text-black">
-            <p class="m-0 font-bold">{{ selectedVendorName[i].name }}</p>
-            <div class="mt-1 flex items-center gap-1">
-              <img
-                src="../../../assets/Img/pdf-icon.png"
-                alt="PDF Icon"
-                class="h-[30px] w-[32px]"
-              />
-              <span>{{ pdfFiles[i].name }}</span>
+                      <!-- PDF Details -->
+                      <div class="bg-white p-4 text-black">
+                        <p class="m-0 font-bold">{{ selectedVendorName[i].name }}</p>
+                        <div class="mt-1 flex items-center gap-1">
+                          <img
+                            src="../../../assets/Img/pdf-icon.png"
+                            alt="PDF Icon"
+                            class="h-[30px] w-[32px]"
+                          />
+                          <input formControlName="quotePath" [value]="pdfFiles[i].name" readonly />
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </form>
+      
       
     </div>
     
@@ -287,7 +318,7 @@
       selectedVendorName.length > 2 &&
       pdfSrc.length > 2
     "
-  >
+    >
     <div class="-m-1.5">
       <div class="inline-block min-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->

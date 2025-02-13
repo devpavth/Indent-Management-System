@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { Vendor } from '../../core/models/vendor/vendor.type';
@@ -74,9 +74,6 @@ export class PdfUploadComponent {
       indentId: null,
       qcHeadOfAcc: this.fb.array([this.headOfAccDetailsArr()]),
     });
-    // this.assignedVendor = this.fb.group({
-    //   vendorId: [],
-    // });
   }
 
   headOfAccDetailsArr() {
@@ -90,7 +87,7 @@ export class PdfUploadComponent {
   comparisonVendors() {
     return this.fb.group({
       vendorId: null,
-      quotePath: [],
+      quotePath: [''],
       qcProducts: this.fb.array([this.quotationProductArr()]),
     });
   }
@@ -351,18 +348,64 @@ export class PdfUploadComponent {
 
     const productIds = this.filterProductHeadData.map((item) => ({
       productId: item.productId,
+      quotedPrice: 0,
     }));
-    console.log("productIds:", productIds);
-    this.qcHeadOfAcc.forEach((head) => {
-      head.qcVendors.forEach((vendor: { qcProducts: { productId: number; quotedPrice: number; }[]; }) => {
-        vendor.qcProducts = productIds.map((id) => ({
-          productId: id.productId,
-          quotedPrice: 0,
-        }));
-      });
+    console.log('productIds:', productIds);
+
+
+    const headIndex = this.comparisonQuoteForm.value.qcHeadOfAcc.findIndex(
+      (head: { headOfAccId: number }) => head.headOfAccId === headOfAccId,
+    );
+
+    if (headIndex === -1) {
+      console.error('headIndex not found for headOfAccId:', headOfAccId);
+      return;
+    }
+
+    const qcVendorsArray = this.getQcVendorsArray(headIndex);
+    if (!qcVendorsArray || !qcVendorsArray.controls) {
+      console.error(
+        'qcVendorsArray is undefined or empty for headIndex:',
+        headIndex,
+      );
+      return;
+    }
+
+    qcVendorsArray.controls.forEach((vendorControl, vendorIndex) => {
+      let qcProductsArray = vendorControl.get('qcProducts') as FormArray;
+
+      if (!(qcProductsArray instanceof FormArray)) {
+        console.warn(
+          `Initializing qcProducts FormArray for vendor at index ${vendorIndex}`,
+        );
+
+        qcProductsArray = new FormArray<FormGroup>([]); 
+
+        (vendorControl as FormGroup).setControl(
+          'qcProducts',
+          qcProductsArray,
+        );
+      }
+
+      while (qcProductsArray.length < productIds.length) {
+        qcProductsArray.push(
+          new FormGroup({
+            productId: new FormControl(null),
+            quotedPrice: new FormControl(null),
+          }),
+        );
+      }
+
+      const updatedQcProducts = productIds.map((product) => ({
+        productId: product.productId,
+        quotedPrice: 0,
+      }));
+
+      qcProductsArray.setValue(updatedQcProducts);
     });
 
-    console.log('this.qcHeadOfAcc.:', this.qcHeadOfAcc);
+    console.log('Final Updated qcVendorsArray:', qcVendorsArray.value);
+
 
     // Reset other data
     this.isSuccessToast = true;
@@ -387,7 +430,7 @@ export class PdfUploadComponent {
     console.log('Previous quotation cleared!');
   }
 
-  onFileSelected(event: any): void {
+  onFileSelected(event: any, headIndex: number, vendorIndex: number): void {
     const files: FileList = event.target.files;
     console.log('Selected Files:', files);
     console.log('Current pdfFiles:', this.pdfFiles);
@@ -427,6 +470,22 @@ export class PdfUploadComponent {
         this.pdfFiles.push(file); // Store the File object
 
         console.log('Updated pdfFiles:', this.pdfFiles);
+
+       const qcVendorsArray = this.getQcVendorsArray(headIndex);
+
+       if (qcVendorsArray) {
+         qcVendorsArray.controls.forEach((vendorControl, index) => {
+           // Assign each vendor a file from pdfFiles array (ensure index is within bounds)
+           const fileName = this.pdfFiles[index]?.name || '';
+
+           vendorControl.get('quotePath')?.setValue(fileName);
+         });
+       }
+
+       console.log('Updated qcVendorsArray:', qcVendorsArray.value);
+
+
+
 
         this.isEnableUploadBtn = false;
         this.isEnableSearch = true;
@@ -506,7 +565,6 @@ export class PdfUploadComponent {
         {
           leastQuotedVendor: this.leastPricedVendorId,
         },
-        
       ],
     });
     console.log('getting comparisonQuoteForm:', this.comparisonQuoteForm.value);

@@ -107,59 +107,57 @@ export class StockComponent implements OnInit {
     this.inwardForm.get('prdUnit')?.disable();
   }
   ngOnInit() {
-    this.inwardForm.get('productId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        console.log(`Product Name Changed for Index:`, searchTerm);
-        if(this.isProductSelected){
-          this.isProductSelected = false;
-          return of([]);
-        }
-        this.noResults = false;
-        this.storeProductData = [];
-        if(!searchTerm?.trim() || !isNaN(searchTerm)){
-          return of([]);
-        }
-        return this.productService.fetchLiveProductDetails({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("error while fetching product data:", error);
-              this.noResults = true;
-            }
+    this.inwardForm
+      .get('productId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          console.log(`Product Name Changed for Index:`, searchTerm);
+          if (this.isProductSelected) {
+            this.isProductSelected = false;
             return of([]);
-          })
-        )
-      })
-    ).subscribe(
-      (response: any) => {
+          }
+          this.noResults = false;
+          this.storeProductData = [];
+          if (!searchTerm?.trim() || !isNaN(searchTerm)) {
+            return of([]);
+          }
+          return this.productService
+            .fetchLiveProductDetails({ searchTerm })
+            .pipe(
+              catchError((error) => {
+                if (error.status === 404) {
+                  console.log('error while fetching product data:', error);
+                  this.noResults = true;
+                }
+                return of([]);
+              }),
+            );
+        }),
+      )
+      .subscribe((response: any) => {
         this.storeProductData = response;
-        console.log("fetching product data from backend:", response);
+        console.log('fetching product data from backend:', response);
 
-        
         // if (this.inwardForm.get('prdUnit')?.value == 200) {
         //   this.isBox = true;
         //   this.updateForm();
         // }
 
         this.isProductSelected = false;
+      });
 
-      }
-    )
-
-    this.inwardFormHeader.get('inwardFromCode')?.valueChanges.subscribe(
-      (optionValue) => {
+    this.inwardFormHeader
+      .get('inwardFromCode')
+      ?.valueChanges.subscribe((optionValue) => {
         this.inwardFormHeader.get('vendorId')?.setValue(null);
-        if(optionValue === '269'){
+        if (optionValue === '269') {
           this.setupVendorSearch();
-        }
-        else if(optionValue === '268'){
+        } else if (optionValue === '268') {
           // this.inwardFormHeader.get('vendorId')?.setValue(null);
           this.fetchAllBranch();
         }
-      }
-    )
-
+      });
 
     this.user = sessionStorage.getItem('userId');
     if (this.user) {
@@ -167,11 +165,14 @@ export class StockComponent implements OnInit {
         console.table(res);
         this.userData = res;
 
-        console.log("this.userData:", this.userData);
-        console.log("this.userData with empRole:", typeof this.userData.empRole);
+        console.log('this.userData:', this.userData);
+        console.log(
+          'this.userData with empRole:',
+          typeof this.userData.empRole,
+        );
 
-        if(this.userData.empRole !== "Level 4"){
-          console.log("logging");
+        if (this.userData.empRole !== 'Level 4') {
+          console.log('logging');
           this.isLevelView = false;
         }
 
@@ -179,59 +180,65 @@ export class StockComponent implements OnInit {
       });
     }
 
-    
-
     this.fetchAllBranch();
     // this.fetchVendorList();
   }
 
-  setupVendorSearch(){
-    this.inwardFormHeader.get('vendorId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) =>{
-        if(this.isVendorSelected){
-          return of([]);
-        }
-        this.noVendor = false;
-        if(!searchTerm || searchTerm.length < 3){
-          this.vendorSearchList = [];
-          return of([]);
-        }
-        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("Vendor API Error:", error);
-              this.noVendor = true;
-            }
+  setupVendorSearch() {
+    this.inwardFormHeader
+      .get('vendorId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          if (this.isVendorSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
-        console.log("fetching vendor data from backend:", response);
+          }
+          this.noVendor = false;
+          if (!searchTerm || searchTerm.length < 3) {
+            this.vendorSearchList = [];
+            return of([]);
+          }
+          return this.productService
+            .fetchLiveVendorDetails({ searchTerm })
+            .pipe(
+              catchError((error) => {
+                if (error.status === 404) {
+                  console.log('Vendor API Error:', error);
+                  this.noVendor = true;
+                }
+                return of([]);
+              }),
+            );
+        }),
+      )
+      .subscribe((response: any) => {
+        console.log('fetching vendor data from backend:', response);
 
         this.vendorSearchList = response;
         this.isVendorSelected = false;
-      }
-    )
+      });
   }
 
   fetchAllBranch() {
     this.branchService.getBranch().subscribe((res) => {
-      console.log("fetching branch details:", res);
+      console.log('fetching branch details:', res);
 
       this._branch = res;
 
       this.filteredBranch = this._branch.slice(0, 1);
 
-      if(this._branch && Array.isArray(this._branch) && this.userData?.empDesig === 15){
+      if (
+        this._branch &&
+        Array.isArray(this._branch) &&
+        this.userData?.empDesig === 15
+      ) {
         this._branch = this._branch.filter(
-          branch => branch.branchName !== this.filteredBranch[0].branchName
-        )
-        console.log("Filtered Branches (excluding 'Head Office'):", this.filteredToBranch);
+          (branch) => branch.branchName !== this.filteredBranch[0].branchName,
+        );
+        console.log(
+          "Filtered Branches (excluding 'Head Office'):",
+          this.filteredToBranch,
+        );
       }
 
       // if(this._branch[0]?.branchName === "Head Office"){
@@ -241,38 +248,38 @@ export class StockComponent implements OnInit {
   }
 
   // onFromBranchChange(selectedBranchId: any){
-  //   console.log("selectedBranchId before conversion:", selectedBranchId); 
+  //   console.log("selectedBranchId before conversion:", selectedBranchId);
 
   //   if (typeof selectedBranchId === 'string') {
-  //     selectedBranchId = selectedBranchId.split(':')[1]; 
+  //     selectedBranchId = selectedBranchId.split(':')[1];
   //   }
-  
+
   //   selectedBranchId = +selectedBranchId;
 
   //   console.log("Converted selectedBranchId to number:", selectedBranchId);
 
   //   if (isNaN(selectedBranchId)) {
   //     console.log("Error: Invalid selectedBranchId:", selectedBranchId);
-  //     return; 
+  //     return;
   //   }
 
   //   this.filteredToBranch = this._branch.filter(
-  //     (branch: any) => { 
+  //     (branch: any) => {
   //       console.log("Comparing with branchId:", branch.branchId);
   //       return branch.branchId !== selectedBranchId;
   //     }
   //   )
   // }
 
-  onSelectProduct(product: any){
-    console.log("after selecting the product from the list", product);
+  onSelectProduct(product: any) {
+    console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
-    
-    this.productData = [product];
-    console.log("productData:", this.productData);
-    console.log("product data prdQty:", this.productData[0].prdMinQty);
 
-    // 
+    this.productData = [product];
+    console.log('productData:', this.productData);
+    console.log('product data prdQty:', this.productData[0].prdMinQty);
+
+    //
 
     this.inwardForm.patchValue({
       // productId: product.productId,
@@ -285,28 +292,29 @@ export class StockComponent implements OnInit {
 
     // this.inwardForm.
 
-      if (this.inwardForm.get('prdUnit')?.value == 200) {
-        this.isBox = true;
-        this.updateForm();
-      }
+    if (this.inwardForm.get('prdUnit')?.value == 200) {
+      this.isBox = true;
+      this.updateForm();
+    }
 
-    console.log("Form values updated with selected product data:", this.inwardForm.value);
-
+    console.log(
+      'Form values updated with selected product data:',
+      this.inwardForm.value,
+    );
 
     this.storeProductData = [];
   }
 
-  onSelectVendor(vendor: any){
-    console.log("after selecting the product from the list", vendor);
+  onSelectVendor(vendor: any) {
+    console.log('after selecting the product from the list', vendor);
     this.isVendorSelected = true;
     this.inwardFormHeader.get('vendorId')?.setValue(vendor.vendorName);
 
-    console.log("logging vendorId");
+    console.log('logging vendorId');
     this.selectedVendorId = vendor.vendorId;
     this.vendorData = [vendor];
-  
-    
-    console.log("vendorData:", this.vendorData);
+
+    console.log('vendorData:', this.vendorData);
     this.vendorSearchList = [];
   }
 
@@ -322,8 +330,7 @@ export class StockComponent implements OnInit {
   //       purchasedPrice: this.productData.prdPurchasedPrice,
   //       gstPercentage: this.productData.prdGstPct,
   //     });
-      
-      
+
   //   });
   // }
   // fetchVendorList() {
@@ -339,7 +346,7 @@ export class StockComponent implements OnInit {
 
     this.updateForm();
   }
-  
+
   updateForm() {
     if (this.isBox && !this.inwardForm.contains('totalPieces')) {
       console.log("Adding 'totalPieces' control to the form");
@@ -389,14 +396,14 @@ export class StockComponent implements OnInit {
         prdUnit: this.productData[0].prdUnit,
         total,
         productCode: this.productData[0].prdCode,
-        productId: this.productData[0].productId
+        productId: this.productData[0].productId,
       });
       console.log(total);
     }
 
-    console.log("this.productList:",this.productList);
+    console.log('this.productList:', this.productList);
 
-    this.inwardForm.reset(); 
+    this.inwardForm.reset();
     this.productData = '';
     this.isBox = false;
   }
@@ -422,18 +429,18 @@ export class StockComponent implements OnInit {
   //   console.log(this.header);
   // }
   inwardHeader(data: any) {
-    console.log("inwardHeader add header btn:",data);
+    console.log('inwardHeader add header btn:', data);
 
     this.header = data;
 
-    if(this.inwardFormHeader.get('inwardFromCode')?.value === '269'){
+    if (this.inwardFormHeader.get('inwardFromCode')?.value === '269') {
       this.header.vendorId = this.selectedVendorId;
     }
-    
+
     let branch: any[] = this._branch;
     let vendor: any[] = this.vendorData;
 
-    console.log("vendor:", vendor);
+    console.log('vendor:', vendor);
 
     let branchDetails = branch.find((f) => f.branchId == data.vendorId);
     let vendorDetails = vendor?.find((v) => v.vendorId == data.vendorId);
@@ -451,12 +458,12 @@ export class StockComponent implements OnInit {
       }
     }
 
-    console.log("this.header:", this.header);
+    console.log('this.header:', this.header);
   }
 
   deleteHeader() {
     this.header = '';
-    console.log("while deleting the header:", this.header);
+    console.log('while deleting the header:', this.header);
     // this.inwardFormHeader.get('vendorId')?.setValue(null);
     this.inwardFormHeader.reset();
   }
@@ -467,33 +474,32 @@ export class StockComponent implements OnInit {
     this.route.navigate(['/home/pTransaction']);
   }
 
-  deleteItem(product: any){
+  deleteItem(product: any) {
     this.productList = this.productList.filter(
-      p => p.productId !== product.productId
-    )
+      (p) => p.productId !== product.productId,
+    );
   }
 
   onSubmit() {
     const inwardFromCode = this.inwardFormHeader.get('inwardFromCode')?.value;
 
     let finalList = { ...this.header, transPrdDetails: this.productList };
-    console.log("finalList:", finalList);
+    console.log('finalList:', finalList);
 
-    if(inwardFromCode === '269'){
-      console.log("checking inward transaction");
+    if (inwardFromCode === '269') {
+      console.log('checking inward transaction');
       this.productService.addInward(finalList).subscribe(
         (res: any) => {
-          console.log("successfully submitting inward data:",res);
-          
+          console.log('successfully submitting inward data:', res);
+
           this.isSuccess = true;
           let successData = { show: 2, text: res.error };
           this.transactionID = successData;
-          
         },
         (error) => {
-          console.log("error while saving inward data:",error);
+          console.log('error while saving inward data:', error);
           // if (error.status == 200) {
-  
+
           //   this.isSuccess = true;
           //   let successData = { show: 2, text: error.error.text };
           //   this.transactionID = successData;
@@ -501,20 +507,20 @@ export class StockComponent implements OnInit {
           // console.log(error.error.text);
         },
       );
-    }else if(inwardFromCode === '268'){
-      console.log("checking outward transaction");
+    } else if (inwardFromCode === '268') {
+      console.log('checking outward transaction');
       this.productService.saveOutward(finalList).subscribe(
         (res: any) => {
-          console.log("successfully submitting outward data:",res);
-          console.log("successfully submitting outward data:",res.error);
+          console.log('successfully submitting outward data:', res);
+          console.log('successfully submitting outward data:', res.error);
           this.isSuccess = true;
           let successData = { show: 2, text: res.error };
           this.transactionID = successData;
         },
         (error) => {
-          console.log("error while saving outward data:",error);
+          console.log('error while saving outward data:', error);
           // if (error.status == 200) {
-  
+
           //   this.isSuccess = true;
           //   let successData = { show: 2, text: error.error.text };
           //   this.transactionID = successData;
@@ -522,11 +528,9 @@ export class StockComponent implements OnInit {
           // console.log(error.error.text);
         },
       );
+    } else {
+      console.log('Error: Invalid inwardFromCode value');
     }
-    else{
-      console.log("Error: Invalid inwardFromCode value");
-    }
-    
   }
   resetComponent() {
     this.inwardFormHeader.reset();
