@@ -13,6 +13,8 @@ export class ViewRequestComponent implements OnInit {
   isRejected: boolean = false;
   isApproved: boolean = false;
   isRejectPop: boolean = false;
+  isToast: boolean = false;
+  warningToastMsg: string = '';
   commendArray: { key: string; value: string }[] = [];
 
   date: any = new Date();
@@ -58,6 +60,13 @@ export class ViewRequestComponent implements OnInit {
             this.isApproved = true;
           },
           (error) => {
+            console.log('error in approving program manager:', error);
+            this.isToast = true;
+            this.warningToastMsg = error.error.errorMessege;
+            setTimeout(() => {
+              this.isToast = false;
+              this.closeView.emit(false);
+            }, 3000);
             if (error.status === 202) {
               this.isApproved = true;
             }

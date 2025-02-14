@@ -71,7 +71,7 @@ export class RequestFormComponent implements OnInit {
   storeProductData: any[] = [];
   isVendorView: boolean = true;
 
-  isEnableSave: boolean = false;
+  isEnableSave: boolean = true;
   storeTotal: number = 0;
 
   user: any;
@@ -218,10 +218,10 @@ export class RequestFormComponent implements OnInit {
         console.log("this.userData:", this.userData);
         console.log("this.userData with empRole:", this.userData.empDesig);
 
-        if(this.userData.empDesig === 10){
-          console.log("checking..")
-          this.isEnableSave = true;
-        }
+        // if(this.userData.empDesig === 10){
+        //   console.log("checking..")
+        //   this.isEnableSave = true;
+        // }
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });

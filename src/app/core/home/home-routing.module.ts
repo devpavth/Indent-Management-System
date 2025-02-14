@@ -37,7 +37,14 @@ const routes: Routes = [
             (m) => m.RequestModule,
           ),
         canActivate: [authGuard],
-        data: { roles: ['ROLE_USER'] },
+        data: {
+          roles: [
+            'ROLE_USER',
+            'ROLE_PROGRAM_AUTH',
+            'ROLE_BRANCH_AUTH',
+            'ROLE_ADMIN_AUTH',
+          ],
+        },
       },
       {
         path: '',
@@ -70,8 +77,8 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: LoginComponent
-  }
+    component: LoginComponent,
+  },
 ];
 
 @NgModule({

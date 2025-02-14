@@ -36,15 +36,16 @@ export class AddingComponent implements OnInit {
     this.CatForm = this.fb.group({
       grpId: [],
       prdcatgName: ['', [Validators.required,
-        Validators.pattern('[a-zA-Z]+')]],
+        Validators.pattern('^[a-zA-Z ]+$')]],
       prdcatgStatus: [200],
     });
 
     this.BrandForm = this.fb.group({
       catId: [],
-      prdbrndName: ['', [Validators.required,
-        Validators.pattern('[a-zA-Z]+')
-      ]],
+      prdbrndName: [
+        '',
+        [Validators.required, Validators.pattern('^[a-zA-Z ]+$')],
+      ],
       prdbrndStatus: [200],
     });
   }

@@ -1,13 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, of, Subject, switchMap } from 'rxjs';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { Vendor } from '../../core/models/vendor/vendor.type';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
+// import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
 import { indentProductList, ProRequestdata } from '../../core/models/proRequestData/pro-requestdata.model';
+import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -15,6 +16,8 @@ import { indentProductList, ProRequestdata } from '../../core/models/proRequestD
   styleUrls: ['./pdf-upload.component.css'],
 })
 export class PdfUploadComponent {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  searchSubject = new Subject<string>();
   pdfSrc: SafeResourceUrl[] = [];
   pdfFiles: File[] = []; // Array to hold the File objects
   currentSlideIndex: number = 0;
@@ -46,12 +49,17 @@ export class PdfUploadComponent {
     name: string;
     isViewCloseIcon: boolean;
   }[] = [];
+  productIds: { productId: number; quotedPrice: number }[] = [];
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
   isToast: boolean = false;
   isSuccessToast: boolean = false;
   warningToastMsg: string = '';
   deleteToastMsg: string = '';
+  isQuoteUploaded: boolean = false;
+  quotedHeadOfAccName: string = '';
+  quoteMsg: string = '';
+  filterQuotedHeadOfAcc: indentProductList[]=[];
   // isViewCloseIcon: boolean = false;
   requestData: ProRequestdata | null = null;
   productHeadData: indentProductList[] = [];
@@ -100,57 +108,95 @@ export class PdfUploadComponent {
   }
 
   ngOnInit() {
-    this.comparisonQuoteForm
-      .get('qcHeadOfAcc')
-      ?.valueChanges.subscribe((qcHeadOfAccArray) => {
-        qcHeadOfAccArray.forEach((qcHeadGroup: any, headIndex: number) => {
-          const qcVendorsArray = this.getQcVendorsArray(headIndex);
-
-          qcVendorsArray.controls.forEach((vendorGroup, vendorIndex) => {
-            vendorGroup
-              .get('vendorId')
-              ?.valueChanges.pipe(
-                debounceTime(300),
-                switchMap((searchTerm) => {
-                  console.log(`vendor Name Changed for Index:`, searchTerm);
-                  if (this.isVendorSelected) {
-                    this.isVendorSelected = false;
-                    return of([]);
-                  }
-                  this.noVendor = false;
-                  this.storeVendorList = [];
-                  if (
-                    !searchTerm ||
-                    !isNaN(searchTerm) ||
-                    searchTerm.length < 3
-                  ) {
-                    return of([]);
-                  }
-                  return this.productService
-                    .fetchLiveVendorDetails({ searchTerm })
-                    .pipe(
-                      catchError((error) => {
-                        if (error.status === 404) {
-                          console.log(
-                            'error while fetching vendor data:',
-                            error,
-                          );
-                          this.noVendor = true;
-                        }
-                        return of([]);
-                      }),
-                    );
-                }),
-              )
-              .subscribe((response: Vendor[]) => {
-                this.storeVendorList = response;
-                console.log('fetching vendor data from backend:', response);
-
-                this.isVendorSelected = false;
-              });
-          });
-        });
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          if (typeof searchTerm !== 'string') {
+            console.error('Invalid search term:', searchTerm);
+            return of([]);
+          }
+          if (this.isVendorSelected) {
+            this.isVendorSelected = false;
+            return of([]);
+          }
+          this.noVendor = false;
+          this.storeVendorList = [];
+          if (
+            !searchTerm ||
+            !isNaN(Number(searchTerm)) ||
+            searchTerm.length < 3
+          ) {
+            return of([]);
+          }
+          return this.productService
+            .fetchLiveVendorDetails({ searchTerm })
+            .pipe(
+              catchError((error) => {
+                if (error.status === 404) {
+                  this.noVendor = true;
+                }
+                return of([]);
+              }),
+            );
+        }),
+      )
+      .subscribe((response: Vendor[]) => {
+        this.storeVendorList = response;
+        this.isVendorSelected = false;
       });
+
+    // this.comparisonQuoteForm
+    //   .get('qcHeadOfAcc')
+    //   ?.valueChanges.subscribe((qcHeadOfAccArray) => {
+    //     qcHeadOfAccArray.forEach((qcHeadGroup: any, headIndex: number) => {
+    //       const qcVendorsArray = this.getQcVendorsArray(headIndex);
+
+    //       qcVendorsArray.controls.forEach((vendorGroup, vendorIndex) => {
+    //         vendorGroup
+    //           .get('vendorId')
+    //           ?.valueChanges.pipe(
+    //             debounceTime(300),
+    //             switchMap((searchTerm) => {
+    //               console.log(`vendor Name Changed for Index:`, searchTerm);
+    //               if (this.isVendorSelected) {
+    //                 this.isVendorSelected = false;
+    //                 return of([]);
+    //               }
+    //               this.noVendor = false;
+    //               this.storeVendorList = [];
+    //               if (
+    //                 !searchTerm ||
+    //                 !isNaN(searchTerm) ||
+    //                 searchTerm.length < 3
+    //               ) {
+    //                 return of([]);
+    //               }
+    //               return this.productService
+    //                 .fetchLiveVendorDetails({ searchTerm })
+    //                 .pipe(
+    //                   catchError((error) => {
+    //                     if (error.status === 404) {
+    //                       console.log(
+    //                         'error while fetching vendor data:',
+    //                         error,
+    //                       );
+    //                       this.noVendor = true;
+    //                     }
+    //                     return of([]);
+    //                   }),
+    //                 );
+    //             }),
+    //           )
+    //           .subscribe((response: Vendor[]) => {
+    //             this.storeVendorList = response;
+    //             console.log('fetching vendor data from backend:', response);
+
+    //             this.isVendorSelected = false;
+    //           });
+    //       });
+    //     });
+    //   });
 
     this.requestData = this.proQuoteService.getData();
     if (this.requestData) {
@@ -196,6 +242,39 @@ export class PdfUploadComponent {
     setTimeout(() => {
       this.isSuccessToast = false;
     }, 3000);
+
+    this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
+  }
+
+  verifyQuoteComparisonHeadOfAcc(sno: number | undefined){
+    this.request.verifyQuoteComparisonHeadOfAcc(sno).subscribe(
+      (res: any) => {
+        console.log("verifying quote compare headofacc:", res);
+        this.filterQuotedHeadOfAcc = res;
+        this.uniqueProductHeadData = this.uniqueProductHeadData.filter((head) => {
+          return !this.filterQuotedHeadOfAcc.some((item) => item.headOfAccId === head.headOfAccId);
+        });
+
+        console.log(
+          'this.uniqueProductHeadData after filter:',
+          this.uniqueProductHeadData,
+        );
+
+        // if(this.uniqueProductHeadData.length === 0){
+        //   this.isQuoteUploaded = true;
+        //   this.quoteMsg =
+        //     'Quote Comparison done for all Head of Account so the Indent moved to Accepted list.';
+        // }
+      },(error)=>{
+        console.log("error while fetching verified headOfAcc:", error);
+      }
+    )
+  }
+
+  onSearchChange(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const searchTerm = inputElement.value.trim();
+    this.searchSubject.next(searchTerm);
   }
 
   getQcHeadOfAccArray(): FormArray {
@@ -241,25 +320,47 @@ export class PdfUploadComponent {
       setTimeout(() => {
         this.isSuccessToast = false;
       }, 3000);
+
+      console.log('this.selectedVendorName:', this.selectedVendorName);
+
+      console.log(
+        'this.getQcVendorsArray(headOfAccIndex)',
+        this.getQcVendorsArray(headOfAccIndex),
+      );
+
+      const qcVendorsArray = this.getQcVendorsArray(headOfAccIndex);
+
+      console.log('qcVendorsArray:', qcVendorsArray);
+
+      if (
+        qcVendorsArray.length > 0 &&
+        qcVendorsArray.at(0).value.vendorId === null
+      ) {
+        qcVendorsArray.removeAt(0);
+      }
+
+      console.log('qcVendorsArray after removal:', qcVendorsArray.value);
+
+      if (qcVendorsArray) {
+        // Ensure a new vendor object is created
+        const newVendorGroup = this.fb.group({
+          vendorId: [vendor.vendorId],
+          quotePath: [''], // Add other fields if necessary
+          qcProducts: this.fb.array([]), // Initialize an empty array if needed
+        });
+
+        // Push the new vendor into the FormArray
+        qcVendorsArray.push(newVendorGroup);
+        console.log('Updated qcVendorsArray:', qcVendorsArray.value);
+      }
     }
 
     const qcHeadOfAccArray = this.comparisonQuoteForm.get(
       'qcHeadOfAcc',
     ) as FormArray;
-    const qcVendorsArray = qcHeadOfAccArray
-      .at(headOfAccIndex)
-      .get('qcVendors') as FormArray;
-
-    // Add a new vendor if less than 3 vendors are present
-    if (qcVendorsArray.length < 3) {
-      qcVendorsArray.push(this.comparisonVendors()); // Add new vendor form
-    }
-
-    // Update the last added vendor
-    const vendorIndex = qcVendorsArray.length - 1;
-    qcVendorsArray.at(vendorIndex).patchValue({
-      vendorId: this.selectedVendorId,
-    });
+    // const qcVendorsArray = qcHeadOfAccArray
+    //   .at(headOfAccIndex)
+    //   .get('qcVendors') as FormArray;
 
     this.storeVendorList = [];
   }
@@ -308,6 +409,13 @@ export class PdfUploadComponent {
 
     console.log('Selected headOfAccId:', headOfAccId);
 
+    const selectedHead = this.uniqueProductHeadData.find(
+      (h) => h.headOfAccId === headOfAccId,
+    );
+
+    this.quotedHeadOfAccName = selectedHead ? selectedHead.headOfAccName : '';
+    console.log('this.quotedHeadOfAccName:', this.quotedHeadOfAccName);
+
     this.comparisonQuoteForm.patchValue({
       qcHeadOfAcc: [
         {
@@ -320,7 +428,7 @@ export class PdfUploadComponent {
     // If the selected headOfAccId is different from the previous one, show the popup
     if (
       this.previousHeadofAccId !== null &&
-      this.previousHeadofAccId !== headOfAccId
+      this.previousHeadofAccId !== headOfAccId && this.selectedVendorName.length !== 0
     ) {
       this.isWarningPopup = true;
       this.currentHeadOfAccId = headOfAccId; // Store the new selection temporarily
@@ -346,12 +454,11 @@ export class PdfUploadComponent {
 
     console.log('this.filterProductHeadData:', this.filterProductHeadData);
 
-    const productIds = this.filterProductHeadData.map((item) => ({
+    this.productIds = this.filterProductHeadData.map((item) => ({
       productId: item.productId,
       quotedPrice: 0,
     }));
-    console.log('productIds:', productIds);
-
+    console.log('productIds:', this.productIds);
 
     const headIndex = this.comparisonQuoteForm.value.qcHeadOfAcc.findIndex(
       (head: { headOfAccId: number }) => head.headOfAccId === headOfAccId,
@@ -361,51 +468,6 @@ export class PdfUploadComponent {
       console.error('headIndex not found for headOfAccId:', headOfAccId);
       return;
     }
-
-    const qcVendorsArray = this.getQcVendorsArray(headIndex);
-    if (!qcVendorsArray || !qcVendorsArray.controls) {
-      console.error(
-        'qcVendorsArray is undefined or empty for headIndex:',
-        headIndex,
-      );
-      return;
-    }
-
-    qcVendorsArray.controls.forEach((vendorControl, vendorIndex) => {
-      let qcProductsArray = vendorControl.get('qcProducts') as FormArray;
-
-      if (!(qcProductsArray instanceof FormArray)) {
-        console.warn(
-          `Initializing qcProducts FormArray for vendor at index ${vendorIndex}`,
-        );
-
-        qcProductsArray = new FormArray<FormGroup>([]); 
-
-        (vendorControl as FormGroup).setControl(
-          'qcProducts',
-          qcProductsArray,
-        );
-      }
-
-      while (qcProductsArray.length < productIds.length) {
-        qcProductsArray.push(
-          new FormGroup({
-            productId: new FormControl(null),
-            quotedPrice: new FormControl(null),
-          }),
-        );
-      }
-
-      const updatedQcProducts = productIds.map((product) => ({
-        productId: product.productId,
-        quotedPrice: 0,
-      }));
-
-      qcProductsArray.setValue(updatedQcProducts);
-    });
-
-    console.log('Final Updated qcVendorsArray:', qcVendorsArray.value);
-
 
     // Reset other data
     this.isSuccessToast = true;
@@ -419,15 +481,89 @@ export class PdfUploadComponent {
     this.pdfFiles = [];
   }
 
+  // Function to update `qcProducts` for each vendor
+  updateQcProductsForVendors(qcVendorsArray: FormArray) {
+    qcVendorsArray.controls.forEach((vendorControl, index) => {
+      let qcProductsArray = vendorControl.get('qcProducts') as FormArray;
+
+      if (!qcProductsArray) {
+        console.error(`qcProducts FormArray is missing at index ${index}`);
+        return;
+      }
+
+      // Clear existing products to avoid duplication
+      qcProductsArray.clear();
+
+      // Push the stored `productIds` to each vendor
+      this.productIds.forEach((product) => {
+        qcProductsArray.push(
+          new FormGroup({
+            productId: new FormControl(product.productId),
+            quotedPrice: new FormControl(product.quotedPrice),
+          }),
+        );
+      });
+
+      console.log(
+        `Updated qcProducts for vendor ${index}:`,
+        qcProductsArray.value,
+      );
+    });
+
+    console.log('Fully updated qcVendorsArray:', qcVendorsArray.value);
+  }
+
   clearPreviousQuotation() {
+    const headOfAccIndex = 0;
     this.pdfSrc = [];
     this.selectedVendorName = [];
     this.pdfFiles = [];
     this.currentHeadOfAccId = null;
     this.previousHeadofAccId = null;
+    this.ven1Price = [];
+    this.ven2Price = [];
+    this.ven3Price = [];
+    this.quotes = [];
+    console.log(
+      'this.getQcVendorsArray(headOfAccIndex) before',
+      this.getQcVendorsArray(headOfAccIndex).value,
+    );
+    const qcVendorsArray = this.getQcVendorsArray(headOfAccIndex);
+    qcVendorsArray.clear();
+    console.log(
+      'this.getQcVendorsArray(headOfAccIndex) after',
+      this.getQcVendorsArray(headOfAccIndex).value,
+    );
     this.comparisonQuoteForm.reset();
     this.isEnableSearch = false;
     console.log('Previous quotation cleared!');
+  }
+
+  clearQuotation(){
+    const headOfAccIndex = 0;
+    this.pdfSrc = [];
+    this.selectedVendorName = [];
+    this.pdfFiles = [];
+    this.currentHeadOfAccId = null;
+    this.previousHeadofAccId = null;
+    this.ven1Price = [];
+    this.ven2Price = [];
+    this.ven3Price = [];
+    this.quotes = [];
+    console.log(
+      'this.getQcVendorsArray(headOfAccIndex) before',
+      this.getQcVendorsArray(headOfAccIndex).value,
+    );
+    const qcVendorsArray = this.getQcVendorsArray(headOfAccIndex);
+    qcVendorsArray.clear();
+    console.log(
+      'this.getQcVendorsArray(headOfAccIndex) after',
+      this.getQcVendorsArray(headOfAccIndex).value,
+    );
+    this.comparisonQuoteForm.reset();
+    this.isEnableSearch = false;
+    this.isQuoteUploaded = false;
+    console.log('Quotation cleared!');
   }
 
   onFileSelected(event: any, headIndex: number, vendorIndex: number): void {
@@ -471,21 +607,19 @@ export class PdfUploadComponent {
 
         console.log('Updated pdfFiles:', this.pdfFiles);
 
-       const qcVendorsArray = this.getQcVendorsArray(headIndex);
+        const qcVendorsArray = this.getQcVendorsArray(headIndex);
 
-       if (qcVendorsArray) {
-         qcVendorsArray.controls.forEach((vendorControl, index) => {
-           // Assign each vendor a file from pdfFiles array (ensure index is within bounds)
-           const fileName = this.pdfFiles[index]?.name || '';
+        if (qcVendorsArray) {
+          qcVendorsArray.controls.forEach((vendorControl, index) => {
+            // Assign each vendor a file from pdfFiles array (ensure index is within bounds)
+            const fileName = this.pdfFiles[index]?.name || '';
 
-           vendorControl.get('quotePath')?.setValue(fileName);
-         });
-       }
+            vendorControl.get('quotePath')?.setValue(fileName);
+          });
+          console.log('Updated qcVendorsArray:', qcVendorsArray.value);
 
-       console.log('Updated qcVendorsArray:', qcVendorsArray.value);
-
-
-
+          this.updateQcProductsForVendors(qcVendorsArray);
+        }
 
         this.isEnableUploadBtn = false;
         this.isEnableSearch = true;
@@ -517,26 +651,20 @@ export class PdfUploadComponent {
     }
   }
 
-  // showPreviousSlide(): void {
-  //   if (this.currentSlideIndex > 0) {
-  //     this.currentSlideIndex--;
-  //   }
-  //   console.log(this.pdfSrc);
-  // }
-
-  // showNextSlide(): void {
-  //   if (this.currentSlideIndex < this.pdfSrc.length - 1) {
-  //     this.currentSlideIndex++;
-  //   }
-  // }
-
   closepop(data: boolean) {
     this.currentHeadOfAccId = this.previousHeadofAccId;
     this.isWarningPopup = data;
+    // this.isQuoteUploaded = data;
   }
 
   removeVendor(vendorIndex: number) {
+    console.log("vendorIndex in removeVendor:", vendorIndex);
+    console.log('this.selectedVendorName before:', this.selectedVendorName);
     this.selectedVendorName.splice(vendorIndex, 1);
+    console.log("this.selectedVendorName after:", this.selectedVendorName);
+    const qcVendorsArray = this.getQcVendorsArray(vendorIndex);
+    qcVendorsArray.clear();
+    console.log('qcVendorsArray in removing the vendor:', qcVendorsArray.value);
     this.isEnableSearch = true;
     this.isEnableUploadBtn = false;
   }
@@ -573,71 +701,115 @@ export class PdfUploadComponent {
       return;
     }
 
-    const leastPriceIndex = this.quotes.indexOf(this.leastPrice);
-    if (leastPriceIndex === -1) {
-      console.error('No valid least price found');
-      return;
-    }
+    // const leastPriceIndex = this.quotes.indexOf(this.leastPrice);
+    // if (leastPriceIndex === -1) {
+    //   console.error('No valid least price found');
+    //   return;
+    // }
 
-    const leastPricedFileName = this.pdfFiles[leastPriceIndex].name;
+    // const leastPricedFileName = this.pdfFiles[leastPriceIndex].name;
 
-    const formData = new FormData();
-    console.log(this.pdfFiles);
-    console.log(leastPricedFileName);
+    // const formData = new FormData();
+    // console.log(this.pdfFiles);
+    // console.log(leastPricedFileName);
 
-    this.pdfFiles.forEach((file) => {
-      formData.append('files', file, file.name);
-    });
+    // this.pdfFiles.forEach((file) => {
+    //   formData.append('files', file, file.name);
+    // });
 
-    // Append the least priced file name separately
-    formData.append('leastPricedFileName', leastPricedFileName);
+    // // Append the least priced file name separately
+    // formData.append('leastPricedFileName', leastPricedFileName);
 
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
+
+    const pdfFilesArray = Array.from(this.pdfFiles);
 
     this.request
-      .uploadPdf(this.comparisonQuoteForm.value, leastPricedFileName)
+      .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
       .subscribe(
         (response) => {
-          console.log('Upload successful', response);
+          console.log('Upload successful:', response);
+          this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
+          if (this.uniqueProductHeadData.length !== 0){
+            this.isQuoteUploaded = true;
+          }
         },
         (error) => {
-          console.error('Upload failed', error);
+          console.log('Upload failed:', error);
         },
       );
   }
 
-  calculateVen1Price(index: number) {
-    // this.ven1Price = this.ven1Price[index];
-    console.log('ven 1 index:', index);
-    this.ven1Price[index] = this.ven1Price[index] || 0;
+  updateVendorPrice(
+    index: number,
+    vendorIndex: number,
+    priceArray: number[],
+    quoteIndex: number,
+  ) {
+    const headOfAccIndex = 0;
+    console.log(`Vendor ${vendorIndex + 1} index:`, index);
 
-    this.quotes[0] = this.ven1Price.reduce(
+    priceArray[index] = priceArray[index] || 0;
+    console.log(`Price Array for vendor ${vendorIndex + 1}:`, priceArray);
+
+    const qcHeadOfAccArray = this.comparisonQuoteForm.get(
+      'qcHeadOfAcc',
+    ) as FormArray;
+
+    if (!qcHeadOfAccArray || !qcHeadOfAccArray.at(headOfAccIndex)) {
+      console.log('Invalid headOfAccIndex:', headOfAccIndex);
+      return;
+    }
+
+    const qcVendorsArray = qcHeadOfAccArray
+      .at(headOfAccIndex)
+      .get('qcVendors') as FormArray;
+
+    if (!qcVendorsArray) {
+      console.log('qcVendorsArray is undefined at index', headOfAccIndex);
+      return;
+    }
+
+    const vendor = qcVendorsArray.at(vendorIndex);
+
+    if (!vendor || !vendor.get('qcProducts')) {
+      console.log(`qcProducts is undefined for vendor ${vendorIndex}`);
+      return;
+    }
+
+    const qcProductsArray = vendor.get('qcProducts') as FormArray;
+
+    if (!qcProductsArray.at(index)) {
+      console.log(`qcProductsArray does not have an entry at index ${index}`);
+      return;
+    }
+
+    qcProductsArray.at(index).patchValue({ quotedPrice: priceArray[index] });
+
+    console.log(
+      `Updated qcProductsArray for Vendor ${vendorIndex + 1}:`,
+      qcProductsArray.value,
+    );
+
+    this.quotes[quoteIndex] = priceArray.reduce(
       (sum, value) => sum + (value || 0),
       0,
     );
     this.updateLeastPrice();
+  }
+
+  calculateVen1Price(index: number) {
+    this.updateVendorPrice(index, 0, this.ven1Price, 0);
   }
 
   calculateVen2Price(index: number) {
-    console.log('ven 2 index:', index);
-    this.ven2Price[index] = this.ven2Price[index] || 0;
-    this.quotes[1] = this.ven2Price.reduce(
-      (sum, value) => sum + (value || 0),
-      0,
-    );
-    this.updateLeastPrice();
+    this.updateVendorPrice(index, 1, this.ven2Price, 1);
   }
 
   calculateVen3Price(index: number) {
-    console.log('ven 3 index:', index);
-    this.ven3Price[index] = this.ven3Price[index] || 0;
-    this.quotes[2] = this.ven3Price.reduce(
-      (sum, value) => sum + (value || 0),
-      0,
-    );
-    this.updateLeastPrice();
+    this.updateVendorPrice(index, 2, this.ven3Price, 2);
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {

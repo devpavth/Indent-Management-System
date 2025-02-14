@@ -121,6 +121,11 @@ export class RequestService {
 
     return this.http.post(environment.comparisonPdf, formData);
   }
+
+  verifyQuoteComparisonHeadOfAcc(sno: number | undefined){
+    return this.http.get(environment.quoteHeadOfAccVerification + sno);
+  }
+
   //new request indent api function
   getProgramList() {
     return this.http.get(environment.programlist);

@@ -37,7 +37,8 @@
                 formControlName="headOfAccId"
                 [value]="currentHeadOfAccId"
               >
-                <option value="" disabled>Choose Head of Account</option>
+                <option 
+                  value="" disabled>Choose Head of Account</option>
                 <option
                   *ngFor="let head of uniqueProductHeadData"
                   [value]="head.headOfAccId"
@@ -51,11 +52,7 @@
             </h3>
             <div formArrayName="qcVendors" *ngIf="pdfSrc.length !== 3">
               <div
-                *ngFor="
-                  let ven of getQcVendorsArray(headIndex).controls;
-                  let i = index
-                "
-                [formGroupName]="i"
+                
                 class="flex flex-row gap-4"
                 >
                 <div
@@ -84,7 +81,8 @@
                   id="simple-search"
                   class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder="Search Vendor..."
-                  formControlName="vendorId"
+                  #searchInput
+                  (input)="onSearchChange($event)"
                   (focus)="currentHeadIndex = headIndex"
                   [ngClass]="{
                     'pointer-events-none': !isEnableSearch
@@ -117,7 +115,7 @@
                 <input
                   #fileInput
                   type="file"
-                  (change)="onFileSelected($event, headIndex, i)"
+                  (change)="onFileSelected($event, headIndex, getQcVendorsArray(headIndex).controls[0].get('vendorId')?.value)"
                   accept="application/pdf"
                   multiple
                   class="hidden"
@@ -236,7 +234,7 @@
         </div>
       </section>
 
-      <form [formGroup]="comparisonQuoteForm">
+      <!-- <form [formGroup]="comparisonQuoteForm">
         <div formArrayName="qcHeadOfAcc">
           <div
             *ngFor="
@@ -252,7 +250,7 @@
                   let i = index
                 "
                 [formGroupName]="i"
-                >
+                > -->
                   <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
                     <div
                       class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
@@ -294,17 +292,17 @@
                             alt="PDF Icon"
                             class="h-[30px] w-[32px]"
                           />
-                          <input formControlName="quotePath" [value]="pdfFiles[i].name" readonly />
+                          <input [value]="pdfFiles[i].name" readonly />
 
                         </div>
                       </div>
                     </div>
                   </div>
-              </div>
+              <!-- </div>
             </div>
           </div>
         </div>
-      </form>
+      </form> -->
       
       
     </div>
@@ -494,4 +492,11 @@
     (close)="closepop($event)"
     (clearQuotation)="clearPreviousQuotation()"
   ></app-warning-popup>
+</section>
+<section *ngIf="isQuoteUploaded" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-quote-successpopup
+    [quotedHeadOfAccName]="quotedHeadOfAccName"
+    [quoteMsg]="quoteMsg"
+   (close)="clearQuotation()"
+   ></app-quote-successpopup>
 </section>

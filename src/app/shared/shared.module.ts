@@ -28,6 +28,7 @@ import { ConfirmBranchDetailsComponent } from './confirm-branch-details/confirm-
 import { ConfirmOtpComponent } from './confirm-otp/confirm-otp.component';
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
 import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popup/warning-roleassigning-popup.component';
+import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpopup.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popu
     ConfirmOtpComponent,
     WarningPopupComponent,
     WarningRoleassigningPopupComponent,
+    QuoteSuccesspopupComponent,
   ],
   imports: [
     CommonModule,

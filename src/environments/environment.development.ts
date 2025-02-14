@@ -115,6 +115,8 @@ export const environment = {
   prcReject: Url + baseRequestApi + '/rejectprctauth/',
 
   comparisonPdf: Url + baseRequestApi + '/addquotecomparison',
+  quoteHeadOfAccVerification:
+    Url + baseRequestApi + '/quotecomparisonverification/',
 
   confirmBranchDetails: Url + baseRequestApi + '/urgent/getbranch',
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',

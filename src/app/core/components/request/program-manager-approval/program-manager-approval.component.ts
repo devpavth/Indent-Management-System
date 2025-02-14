@@ -4,7 +4,7 @@ import { RequestService } from '../../service/Request/request.service';
 @Component({
   selector: 'app-program-manager-approval',
   templateUrl: './program-manager-approval.component.html',
-  styleUrl: './program-manager-approval.component.css'
+  styleUrl: './program-manager-approval.component.css',
 })
 export class ProgramManagerApprovalComponent {
   isProcess = true;
@@ -20,7 +20,7 @@ export class ProgramManagerApprovalComponent {
   selectedDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
-  
+
   constructor(private rService: RequestService) {
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
@@ -42,17 +42,17 @@ export class ProgramManagerApprovalComponent {
         (res: any) => {
           console.log('fetching processing request:', res);
           let list: any[] = res;
-          console.log("list:", list);
+          console.log('list:', list);
           list = list.filter((l) => l.requestStatus == 201);
-          console.log("filtering processing request:",list);
+          console.log('filtering processing request:', list);
 
           this._yourReq = list;
         },
         (error) => {
-          console.log("error while fetching processing request:", error);
+          console.log('error while fetching processing request:', error);
           if (error.status == 204) {
             this._yourReq = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this._yourReq = undefined;
           }
         },
@@ -64,24 +64,26 @@ export class ProgramManagerApprovalComponent {
       this.isRejected == false
     ) {
       this.isViewSelectedDate = true;
-      this.rService.fetchProgramManagerRequest(202, this.selectedDate).subscribe(
-        (res: any) => {
-          console.log("fetching completed request:", res);
-          // let list: any[] = res;
-          // console.log("listing completed:", list);
-          // list = list.filter((l) => l.requestStatus == 102);
-          // console.log("filtering completed request:", list);
-          this._yourReq = res;
-        },
-        (error) => {
-          console.log("error while fetching completed request:", error);
-          if (error.status == 204) {
-            this._yourReq = undefined;
-          }else if(error.status === 404){
-            this._yourReq = undefined;
-          }
-        },
-      );
+      this.rService
+        .fetchProgramManagerRequest(202, this.selectedDate)
+        .subscribe(
+          (res: any) => {
+            console.log('fetching completed request:', res);
+            // let list: any[] = res;
+            // console.log("listing completed:", list);
+            // list = list.filter((l) => l.requestStatus == 102);
+            // console.log("filtering completed request:", list);
+            this._yourReq = res;
+          },
+          (error) => {
+            console.log('error while fetching completed request:', error);
+            if (error.status == 204) {
+              this._yourReq = undefined;
+            } else if (error.status === 404) {
+              this._yourReq = undefined;
+            }
+          },
+        );
     }
     if (
       this.isProcess == false &&
@@ -89,29 +91,31 @@ export class ProgramManagerApprovalComponent {
       this.isRejected == true
     ) {
       this.isViewSelectedDate = true;
-      this.rService.fetchProgramManagerRequest(406, this.selectedDate).subscribe(
-        (res: any) => {
-          console.log("fetching rejected request:", res);
-          let list: any[] = res;
-          list = list.filter((l) => l.requestStatus == 406);
-          console.log("filtering rejected request:", list);
-          this._yourReq = list;
-        },
-        (error) => {
-          console.log("error while fetching rejected request:", error);
-          if (error.status == 204) {
-            this._yourReq = undefined;
-          }else if(error.status === 404){
-            this._yourReq = undefined;
-          }
-        },
-      );
+      this.rService
+        .fetchProgramManagerRequest(406, this.selectedDate)
+        .subscribe(
+          (res: any) => {
+            console.log('fetching rejected request:', res);
+            let list: any[] = res;
+            list = list.filter((l) => l.requestStatus == 406);
+            console.log('filtering rejected request:', list);
+            this._yourReq = list;
+          },
+          (error) => {
+            console.log('error while fetching rejected request:', error);
+            if (error.status == 204) {
+              this._yourReq = undefined;
+            } else if (error.status === 404) {
+              this._yourReq = undefined;
+            }
+          },
+        );
     }
   }
 
   viewRequest(data: any) {
     this.isViewReq = true;
-    console.log("viewing the request data:", data);
+    console.log('viewing the request data:', data);
     this.reqId = data;
     this.showManager = 1;
   }
