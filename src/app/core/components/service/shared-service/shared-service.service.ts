@@ -80,8 +80,11 @@ export class SharedServiceService {
     });
   }
 
-  fetchPincode(pincode: any){
-    console.log("environment.searchPincode + pincode:", environment.searchPincode + pincode);
+  fetchPincode(pincode: any) {
+    console.log(
+      'environment.searchPincode + pincode:',
+      environment.searchPincode + pincode,
+    );
     return this.http.get(environment.searchPincode + pincode);
   }
 

@@ -1,13 +1,22 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+} from '@angular/forms';
 import { catchError, debounceTime, of, Subject, switchMap } from 'rxjs';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { Vendor } from '../../core/models/vendor/vendor.type';
 import { ActivatedRoute, Router } from '@angular/router';
 // import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
-import { indentProductList, ProRequestdata } from '../../core/models/proRequestData/pro-requestdata.model';
+import {
+  indentProductList,
+  ProRequestdata,
+} from '../../core/models/proRequestData/pro-requestdata.model';
 import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
 
 @Component({
@@ -57,9 +66,11 @@ export class PdfUploadComponent {
   warningToastMsg: string = '';
   deleteToastMsg: string = '';
   isQuoteUploaded: boolean = false;
+  isQuoteAccepted: boolean = false;
+  Spinner: boolean = false;
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
-  filterQuotedHeadOfAcc: indentProductList[]=[];
+  filterQuotedHeadOfAcc: indentProductList[] = [];
   // isViewCloseIcon: boolean = false;
   requestData: ProRequestdata | null = null;
   productHeadData: indentProductList[] = [];
@@ -246,29 +257,42 @@ export class PdfUploadComponent {
     this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
   }
 
-  verifyQuoteComparisonHeadOfAcc(sno: number | undefined){
+  verifyQuoteComparisonHeadOfAcc(sno: number | undefined) {
     this.request.verifyQuoteComparisonHeadOfAcc(sno).subscribe(
       (res: any) => {
-        console.log("verifying quote compare headofacc:", res);
+        console.log('verifying quote compare headofacc:', res);
         this.filterQuotedHeadOfAcc = res;
-        this.uniqueProductHeadData = this.uniqueProductHeadData.filter((head) => {
-          return !this.filterQuotedHeadOfAcc.some((item) => item.headOfAccId === head.headOfAccId);
-        });
+        this.uniqueProductHeadData = this.uniqueProductHeadData.filter(
+          (head) => {
+            return !this.filterQuotedHeadOfAcc.some(
+              (item) => item.headOfAccId === head.headOfAccId,
+            );
+          },
+        );
 
         console.log(
           'this.uniqueProductHeadData after filter:',
           this.uniqueProductHeadData,
         );
 
-        // if(this.uniqueProductHeadData.length === 0){
-        //   this.isQuoteUploaded = true;
-        //   this.quoteMsg =
-        //     'Quote Comparison done for all Head of Account so the Indent moved to Accepted list.';
-        // }
-      },(error)=>{
-        console.log("error while fetching verified headOfAcc:", error);
-      }
-    )
+        if (this.uniqueProductHeadData.length === 0) {
+          console.log('uniqueProductHeadData becomes empty..');
+          setTimeout(() => {
+            this.isQuoteUploaded = false;
+            this.Spinner = true;
+            setTimeout(() => {
+              this.Spinner = false;
+              this.isQuoteAccepted = true;
+            }, 2000);
+          }, 3000);
+          this.quoteMsg =
+            'Quote Comparison done for all Head of Account so the Indent moved to Accepted list.';
+        }
+      },
+      (error) => {
+        console.log('error while fetching verified headOfAcc:', error);
+      },
+    );
   }
 
   onSearchChange(event: Event) {
@@ -428,7 +452,8 @@ export class PdfUploadComponent {
     // If the selected headOfAccId is different from the previous one, show the popup
     if (
       this.previousHeadofAccId !== null &&
-      this.previousHeadofAccId !== headOfAccId && this.selectedVendorName.length !== 0
+      this.previousHeadofAccId !== headOfAccId &&
+      this.selectedVendorName.length !== 0
     ) {
       this.isWarningPopup = true;
       this.currentHeadOfAccId = headOfAccId; // Store the new selection temporarily
@@ -539,7 +564,7 @@ export class PdfUploadComponent {
     console.log('Previous quotation cleared!');
   }
 
-  clearQuotation(){
+  clearQuotation() {
     const headOfAccIndex = 0;
     this.pdfSrc = [];
     this.selectedVendorName = [];
@@ -658,10 +683,10 @@ export class PdfUploadComponent {
   }
 
   removeVendor(vendorIndex: number) {
-    console.log("vendorIndex in removeVendor:", vendorIndex);
+    console.log('vendorIndex in removeVendor:', vendorIndex);
     console.log('this.selectedVendorName before:', this.selectedVendorName);
     this.selectedVendorName.splice(vendorIndex, 1);
-    console.log("this.selectedVendorName after:", this.selectedVendorName);
+    console.log('this.selectedVendorName after:', this.selectedVendorName);
     const qcVendorsArray = this.getQcVendorsArray(vendorIndex);
     qcVendorsArray.clear();
     console.log('qcVendorsArray in removing the vendor:', qcVendorsArray.value);
@@ -732,7 +757,11 @@ export class PdfUploadComponent {
         (response) => {
           console.log('Upload successful:', response);
           this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
-          if (this.uniqueProductHeadData.length !== 0){
+          console.log(
+            'this.uniqueProductHeadData:',
+            this.uniqueProductHeadData,
+          );
+          if (this.uniqueProductHeadData.length !== 0) {
             this.isQuoteUploaded = true;
           }
         },

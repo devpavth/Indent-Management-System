@@ -29,6 +29,7 @@ import { ConfirmOtpComponent } from './confirm-otp/confirm-otp.component';
 import { WarningPopupComponent } from './warning-popup/warning-popup.component';
 import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popup/warning-roleassigning-popup.component';
 import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpopup.component';
+import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-acceptedpopup.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpo
     WarningPopupComponent,
     WarningRoleassigningPopupComponent,
     QuoteSuccesspopupComponent,
+    QuoteAcceptedpopupComponent,
   ],
   imports: [
     CommonModule,

@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 })
 export class QuoteSuccesspopupComponent {
   @Input() quotedHeadOfAccName: string = '';
-  @Input() quoteMsg: string = '';
   @Output() close = new EventEmitter<boolean>();
 
   route = inject(Router);
@@ -16,11 +15,7 @@ export class QuoteSuccesspopupComponent {
   ngOnInit() {}
 
   onClose() {
-    if (this.quotedHeadOfAccName) {
-      this.close.emit(false);
-    }else if (this.quoteMsg) {
-      this.route.navigate(['/home/proReqList']);
-    }
+    this.close.emit(false);
     // this.refreshComponentState();
     // window.location.reload();
   }

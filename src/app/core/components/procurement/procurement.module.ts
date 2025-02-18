@@ -7,12 +7,14 @@ import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProcurementRequestlistComponent } from './procurement-requestlist/procurement-requestlist.component';
 import { ViewProcurementreqComponent } from './view-procurementreq/view-procurementreq.component';
+import { ViewAcceptedprocurementreqComponent } from './view-acceptedprocurementreq/view-acceptedprocurementreq.component';
 
 @NgModule({
   declarations: [
     ComparisonComponent,
     ProcurementRequestlistComponent,
     ViewProcurementreqComponent,
+    ViewAcceptedprocurementreqComponent,
   ],
   imports: [
     CommonModule,
