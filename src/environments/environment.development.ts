@@ -120,6 +120,8 @@ export const environment = {
 
   confirmBranchDetails: Url + baseRequestApi + '/urgent/getbranch',
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',
+
+  fetchQuoteComparison: Url + baseRequestApi + '/getquotecomparison',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

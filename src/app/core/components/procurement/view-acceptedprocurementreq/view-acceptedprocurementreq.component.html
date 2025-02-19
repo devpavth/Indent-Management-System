@@ -1,4 +1,4 @@
-<div class="absolute top-12 left-4 right-0 z-50 w-4/5 bg-gradient-to-t from-gray-900 to-purple-950 p-8 sm:ml-64 print-content">
+<div class="absolute top-12 left-4 right-0 z-50 w-4/5 bg-gradient-to-t from-gray-900 to-purple-950 p-8 sm:ml-64">
   <button class="fixed ml-24" (click)="closeView.emit(false)">
     <svg
       class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
@@ -66,6 +66,7 @@
                     <select 
                         class="m-4 w-64 rounded-lg border border-gray-500"
                         (change)="selectedHeadOfAcc($event)"
+                        [value]="selectedHeadOfAccId"
                         >
                         <option 
                             value="" disabled>Choose Head of Account</option>
@@ -81,7 +82,6 @@
                 <div class="mt-6 flex flex-col">
                   <div class="-m-1.5 overflow-x-auto">
                     <div class="inline-block min-w-full p-1.5 align-middle"
-                        *ngIf="filterProductHeadData.length > 0"
                         >
                       <div class="overflow-hidden rounded-lg border">
                         <div class="overflow-x-auto shadow-md sm:rounded-lg"
@@ -94,11 +94,11 @@
                             >
                               <tr>
                                 <th scope="col" class="px-6 py-3">Product</th>
-                                <th scope="col" class="px-6 py-3">
-                                  Cloute Technologies Pvt. Ltd.
+                                <th scope="col" class="px-6 py-3" *ngFor="let ven of selectedVendorname">
+                                  {{ven}}
                                 </th>
-                                <th scope="col" class="px-6 py-3">Bright Technology</th>
-                                <th scope="col" class="px-6 py-3">NextGen</th>
+                                <!-- <th scope="col" class="px-6 py-3">Bright Technology</th>
+                                <th scope="col" class="px-6 py-3">NextGen</th> -->
                                 <!-- <th scope="col" class="px-6 py-3">
                                   Item Price(Incl GST)
                                 </th> -->
@@ -114,7 +114,7 @@
                             <tbody>
                               <tr
                                 *ngFor="
-                                  let product of filterProductHeadData
+                                  let product of getAllQuotedPrices()
                                 "
                                 class="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
                               >
@@ -132,10 +132,10 @@
                                         {{ product.prdDescription }}
                                     </p>
                                 </td>
-                                <!-- <td class="px-6 py-4 dark:text-white">
-                                  {{ product?.unitPrice | currency: "INR" }}
+                                <td class="px-6 py-4 dark:text-white" *ngFor="let price of product.quotedPrices">
+                                  {{ price | currency: "INR" }}
                                 </td>
-                                <td class="px-6 py-4 dark:text-white">
+                                <!-- <td class="px-6 py-4 dark:text-white">
                                   {{ product?.qty }}
                                 </td>
                                 <td class="px-6 py-4 dark:text-white">
@@ -188,10 +188,15 @@
 
                       <dl class="grid gap-x-0 gap-y-1 sm:grid-cols-5">
                         <dt class="col-span-2 font-semibold text-gray-800">
+                          Least Vendor Name:
+                        </dt>
+                        <dd class="col-span-3 text-gray-500">{{leastQuotedVendorData?.leastVendorName}}</dd>
+                        <dt class="col-span-2 font-semibold text-gray-800">
                           Least Vendor Total:
                         </dt>
-                        <dd class="col-span-3 text-gray-500"></dd>
-                        <dt class="col-span-2 font-semibold text-gray-800">
+                        <dd class="col-span-3 text-gray-500">{{leastQuotedVendorData?.leastPrice | currency:'INR' }}</dd>
+                        
+                        <!-- <dt class="col-span-2 font-semibold text-gray-800">
                           Indent Total:
                         </dt>
                         
@@ -200,21 +205,11 @@
                             this._requestDetails()?.indentHeaders?.totalPrice
                               | currency: "INR"
                           }}
-                        </dd>
+                        </dd> -->
                       </dl>
                     </div>
                   </div>
-                </div>
-
-                
-                <button 
-                    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 print-hidden"
-                    (click)="printPage()">
-                    Print
-                </button>
-
-                
-      
+                </div>               
               </div>
             </div>
           </div>
@@ -222,6 +217,7 @@
       </div>
     </div>
   </section>
+  
 </div>
 <!-- <section *ngIf="isEditProduct" class="fixed left-0 right-0 top-0 z-50">
     <app-edit-product
