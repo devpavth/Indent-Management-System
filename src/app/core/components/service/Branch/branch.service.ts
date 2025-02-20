@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
+import { Branch } from '../../../models/branch/branch.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +10,8 @@ import { environment } from '../../../../../environments/environment.development
 export class BranchService {
   constructor(private readonly http: HttpClient) {}
 
-  getBranch() {
-    return this.http.get(environment.getBranch);
+  getBranch(): Observable<Branch[]> {
+    return this.http.get<Branch[]>(environment.getBranch);
   }
   addBranch(branch: any) {
     return this.http.post(environment.addNewBranch, branch);

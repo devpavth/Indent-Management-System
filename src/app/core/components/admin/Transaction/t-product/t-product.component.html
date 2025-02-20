@@ -45,7 +45,7 @@
               type="button"
               routerLink="/home/inoutstock"
               class="an flex items-center justify-center rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
+            >
               <svg
                 class="mr-2 h-4 w-4"
                 fill="currentColor"
@@ -55,7 +55,7 @@
                 height="24"
                 fill="none"
                 viewBox="0 0 24 24"
-                >
+              >
                 <path
                   stroke="currentColor"
                   stroke-linecap="round"
@@ -200,7 +200,7 @@
 
     <table
       class="mb-4 w-full overflow-hidden rounded-lg border border-black bg-gray-50 shadow-md"
-      >
+    >
       <thead>
         <tr class="bg-blue-500 text-white">
           <th class="p-2 text-left">#</th>
@@ -219,20 +219,27 @@
         >
           <td class="p-2">{{ i + 1 }}</td>
           <td class="p-2">
-            {{ item.transProductData.prdmdlName }} - {{ item.transProductData.prdbrndName
-            }}<br />
-            <span class="text-sm">HSN: {{ item.transProductData.prdHsnCode }}</span
+            {{ item.transProductData.prdmdlName }} -
+            {{ item.transProductData.prdbrndName }}<br />
+            <span class="text-sm"
+              >HSN: {{ item.transProductData.prdHsnCode }}</span
             ><br />
-            <span class="text-sm">{{ item.transProductData.prdDescription }}</span
+            <span class="text-sm">{{
+              item.transProductData.prdDescription
+            }}</span
             ><br />
             <span class="text-sm"
               >Product Code : {{ item.transProductData.prdCode }}</span
             >
           </td>
-          <td class="p-2 text-right">{{ item.purchasedPrice | currency:'INR'}}</td>
+          <td class="p-2 text-right">
+            {{ item.purchasedPrice | currency: "INR" }}
+          </td>
           <td class="p-2 text-right">{{ item.prdQty }}</td>
           <td class="p-2 text-right">{{ item.gstPercentage }} %</td>
-          <td class="p-2 text-right">{{ item.itemTotalPrice | currency:'INR'}}</td>
+          <td class="p-2 text-right">
+            {{ item.itemTotalPrice | currency: "INR" }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -272,7 +279,9 @@
     <div class="w-full text-end">
       <h1 class="font-semibold">
         Total Price :
-        <span class="text-gray-700">{{ transactionData.totalPrice | currency:'INR'}}</span>
+        <span class="text-gray-700">{{
+          transactionData.totalPrice | currency: "INR"
+        }}</span>
       </h1>
     </div>
     <!-- <div class="mb-12 mt-12">

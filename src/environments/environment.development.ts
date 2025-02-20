@@ -46,6 +46,10 @@ export const environment = {
   addHeadOfAcc: Url + baseProductApi + '/addheadofaccount',
   updateProductDetails: Url + baseProductApi + '/updateprd/',
   updateOtherProductDetails: Url + baseProductApi + '/updateotherprd/',
+  fetchStockReportForBranch:
+    Url +
+    baseProductApi +
+    '/stockreportforbranch/',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdinward',
@@ -122,6 +126,7 @@ export const environment = {
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',
 
   fetchQuoteComparison: Url + baseRequestApi + '/getquotecomparison',
+  fetchNormalRequest: Url + baseRequestApi + '/getnormalrequest',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

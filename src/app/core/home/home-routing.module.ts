@@ -73,6 +73,24 @@ const routes: Routes = [
         canActivate: [authGuard],
         data: { roles: ['ROLE_PROCUREMENT_AUTH'] },
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../components/final-ceocfo/final-ceocfo.module').then(
+            (m) => m.FinalCeocfoModule,
+          ),
+        canActivate: [authGuard],
+        data: { roles: ['ROLE_PROCUREMENT_AUTH'] },
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import('../components/reports/reports.module').then(
+            (m) => m.ReportsModule,
+          ),
+        canActivate: [authGuard],
+        data: { roles: ['ROLE_IT_ADMIN'] },
+      },
     ],
   },
   {

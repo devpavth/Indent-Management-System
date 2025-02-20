@@ -12,9 +12,9 @@ export class TProductComponent implements OnInit {
   vendor: any;
   inwardPrdDetails: any;
 
-  user:any;
+  user: any;
   userData: any;
-  isAddTransactionView: boolean = false;
+  isAddTransactionView: boolean = true;
 
   private employeeService = inject(EmployeeServiceService);
 
@@ -27,13 +27,13 @@ export class TProductComponent implements OnInit {
         console.table(res);
         this.userData = res;
 
-        console.log("this.userData:", this.userData);
-        console.log("this.userData with empRole:", this.userData.empDesig);
+        console.log('this.userData:', this.userData);
+        console.log('this.userData with empRole:', this.userData.empDesig);
 
-        if(this.userData.empDesig === 15 || this.userData.empDesig === 11){
-          console.log("checking..")
-          this.isAddTransactionView = true;
-        }
+        // if (this.userData.empDesig === 15 || this.userData.empDesig === 11) {
+        //   console.log('checking..');
+        //   this.isAddTransactionView = true;
+        // }
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });

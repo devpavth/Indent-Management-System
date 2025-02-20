@@ -134,4 +134,8 @@ export class ProductService {
   updateOtherProductDetails(productId: any, data: any){
     return this.productHttp.put(environment.updateOtherProductDetails + productId, data);
   }
+
+  fetchStockReportForBranch(branchId: number, startDate: Date | undefined, endDate: Date | undefined){
+    return this.productHttp.get(environment.fetchStockReportForBranch + `${branchId}?startDate=${startDate}&endDate=${endDate}`)
+  }
 }

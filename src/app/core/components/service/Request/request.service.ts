@@ -25,7 +25,7 @@ export class RequestService {
   branchRequestList(id: any, data?: string) {
     let params = new HttpParams();
 
-    if(data){
+    if (data) {
       params = params.append('startDate', data);
     }
 
@@ -33,7 +33,6 @@ export class RequestService {
       params: params,
     });
   }
-
 
   branchApprovel(data: any) {
     return this.http.post(environment.branchApprovel + data, data);
@@ -48,7 +47,7 @@ export class RequestService {
   adminRequestList(status: any, data?: string) {
     let params = new HttpParams();
 
-    if(data){
+    if (data) {
       params = params.append('startDate', data);
     }
 
@@ -69,12 +68,12 @@ export class RequestService {
   finRequestList(status: any, data?: string): Observable<any> {
     let params = new HttpParams();
 
-    if(data){
+    if (data) {
       params = params.append('startDate', data);
     }
 
     return this.http.get(environment.finRequestList + status, {
-      params: params
+      params: params,
     });
   }
   commands() {
@@ -83,7 +82,7 @@ export class RequestService {
   updateRequest(id: any, data: any) {
     return this.http.post(environment.updateRequestList + id, data);
   }
-  
+
   finDonorAssign(Id: any, data: any) {
     return this.http.post(environment.finSubmite + Id, data);
   }
@@ -91,9 +90,9 @@ export class RequestService {
   commend(id: any, data: any, check: number) {
     let commendParams = new HttpParams();
     commendParams = commendParams.append('comments', data.toString());
-    console.log("typeof data:", typeof data);
-    console.log("commendParams:", commendParams);
-  
+    console.log('typeof data:', typeof data);
+    console.log('commendParams:', commendParams);
+
     if (check === 1) {
       return this.http.post(
         environment.finHolding + id,
@@ -114,16 +113,16 @@ export class RequestService {
   uploadPdf(data: any, files: any) {
     const formData = new FormData();
 
-    formData.append("data", JSON.stringify(data));
+    formData.append('data', JSON.stringify(data));
 
     files.forEach((file: string | Blob, index: any) => {
       formData.append('files', file);
-    })
+    });
 
     return this.http.post(environment.comparisonPdf, formData);
   }
 
-  verifyQuoteComparisonHeadOfAcc(sno: number | undefined){
+  verifyQuoteComparisonHeadOfAcc(sno: number | undefined) {
     return this.http.get(environment.quoteHeadOfAccVerification + sno);
   }
 
@@ -138,23 +137,23 @@ export class RequestService {
     return this.http.post(environment.postIndent, data);
   }
 
-  getBranchDetails(){
-    console.log("Test");
-    console.log("Sending request.");
+  getBranchDetails() {
+    console.log('Test');
+    console.log('Sending request.');
     console.log('Get URL:', environment.confirmBranchDetails);
     return this.http.get(environment.confirmBranchDetails);
   }
 
-  getConfirmOtp(){
-    console.log("Sending request for OTP.");
+  getConfirmOtp() {
+    console.log('Sending request for OTP.');
     console.log('Get URL:', environment.confirmOtp);
     return this.http.get(environment.confirmOtp);
   }
 
-  fetchProgramManagerRequest(id: any, data?: string){
+  fetchProgramManagerRequest(id: any, data?: string) {
     let mesgParams = new HttpParams();
 
-    if(data){
+    if (data) {
       mesgParams = mesgParams.append('startDate', data);
     }
 
@@ -163,11 +162,11 @@ export class RequestService {
     });
   }
 
-  programManagerApproval(id: any){
+  programManagerApproval(id: any) {
     return this.http.post(environment.programManagerApproval + id, '');
   }
 
-  programManagerRejection(sno: any, data: any){
+  programManagerRejection(sno: any, data: any) {
     let mesgParams = new HttpParams();
     mesgParams = mesgParams.append('comments', data);
     return this.http.post(environment.programManagerRejected + sno, data, {
@@ -175,29 +174,28 @@ export class RequestService {
     });
   }
 
-  fetchFunderDetails(funderId: any){
+  fetchFunderDetails(funderId: any) {
     return this.http.get(environment.fetchFunderDetails + funderId);
   }
 
-  fetchPrctReqList(status: any, data?: string): Observable<any>{
-    let params =  new HttpParams();
+  fetchPrctReqList(status: any, data?: string): Observable<any> {
+    let params = new HttpParams();
 
-    if(data){
+    if (data) {
       params = params.append('startDate', data);
     }
 
     return this.http.get(environment.fetchProcurementList + status, {
-      params: params
-    })
+      params: params,
+    });
   }
-
 
   holdOrRejectcomments(id: any, data: any, check: number) {
     let commendParams = new HttpParams();
     commendParams = commendParams.append('comments', data.toString());
-    console.log("typeof data:", typeof data);
-    console.log("commendParams:", commendParams);
-  
+    console.log('typeof data:', typeof data);
+    console.log('commendParams:', commendParams);
+
     if (check === 1) {
       return this.http.post(
         environment.prctHolding + id,
@@ -215,14 +213,17 @@ export class RequestService {
     return null;
   }
 
-  fetchQuoteComparison(sno: number, headOfAccId: number): Observable<QuoteComparison>{
-    return (
-      this.http.get<
-      QuoteComparison>(
-        environment.fetchQuoteComparison +
-          `?sno=${sno}&headOfAccId=${headOfAccId}`,
-      )
+  fetchQuoteComparison(
+    sno: number,
+    headOfAccId: number,
+  ): Observable<QuoteComparison> {
+    return this.http.get<QuoteComparison>(
+      environment.fetchQuoteComparison +
+        `?sno=${sno}&headOfAccId=${headOfAccId}`,
     );
   }
 
+  // fetchNormalRequest(startDate: Date | undefined, endDate: Date | undefined){
+  //   return this.http.get(environment.fetchNormalRequest + `?startDate=${startDate}&endDate=${endDate}`)
+  // }
 }

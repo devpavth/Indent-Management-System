@@ -1,12 +1,13 @@
 import { Component, ElementRef, HostListener } from '@angular/core';
+// import { undefined } from '../../procurement/procurement-requestlist/procurement-requestlist.component';
 import { RequestService } from '../../service/Request/request.service';
 
 @Component({
-  selector: 'app-procurement-requestlist',
-  templateUrl: './procurement-requestlist.component.html',
-  styleUrl: './procurement-requestlist.component.css',
+  selector: 'app-ceo-cfoapproval-requisitionlist',
+  templateUrl: './ceo-cfoapproval-requisitionlist.component.html',
+  styleUrl: './ceo-cfoapproval-requisitionlist.component.css',
 })
-export class ProcurementRequestlistComponent {
+export class CeoCfoapprovalRequisitionlistComponent {
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;

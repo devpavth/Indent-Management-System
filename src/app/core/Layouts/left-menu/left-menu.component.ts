@@ -14,6 +14,7 @@ export class LeftMenuComponent {
   poapproval: boolean = false;
   finance: boolean = false;
   transaction: boolean = false;
+  report: boolean = false;
   product: boolean = false;
   branch: boolean = false;
   employee: boolean = false;
