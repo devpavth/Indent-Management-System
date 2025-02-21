@@ -1,0 +1,26 @@
+<div class="absolute top-12 left-4 right-0 z-50 w-4/5 bg-gradient-to-t from-gray-900 to-purple-950 p-8 sm:ml-64">
+    <button class="fixed ml-24" (click)="closeView.emit(false)">
+        <svg
+        class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+        >
+        <path
+            class=""
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18 17.94 6M18 18 6.06 6"
+        />
+        </svg>
+    </button>
+    <div class="mt-12">
+        <iframe *ngIf="pdfUrl" [src]="pdfUrl" width="100%" height="700px"></iframe>
+    </div>
+
+</div>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { BranchService } from '../../service/Branch/branch.service';
 import { Branch } from '../../../models/branch/branch.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-stockreport-branch',
@@ -14,11 +15,14 @@ export class StockreportBranchComponent {
 
   productService = inject(ProductService);
   branchService = inject(BranchService);
+  sanitizer = inject(DomSanitizer);
   branchList: Branch[] = [];
 
   startDate: Date | undefined;
   endDate: Date | undefined;
   selectedBranchId: number = 0;
+  pdfUrl: SafeResourceUrl | null = null;
+  maxDate: string = '';
 
   constructor(private readonly fb: FormBuilder) {
     this.dateRange = this.fb.group({
@@ -35,6 +39,12 @@ export class StockreportBranchComponent {
     //   console.log(res);
     // });
     console.log('testing stock normal report');
+    const today = new Date();
+    console.log("today:", today);
+    console.log("typeof today:", typeof today);
+    this.maxDate = today.toISOString().split('T')[0];
+    console.log("maxDate:", this.maxDate);
+    // console.log("typeof maxDate:", typeof maxDate);
     this.fetchAllBranch();
   }
 
@@ -43,6 +53,7 @@ export class StockreportBranchComponent {
       (res: Branch[]) => {
         console.log("fetching branch Details:", res);
         this.branchList = res;
+        this.branchList.unshift({branchId: 0, branchName: 'All', branchCode: ''})
         console.log('this.branchList:', this.branchList);
       },
       (error) => {
@@ -62,13 +73,31 @@ export class StockreportBranchComponent {
   onSubmit(startDate: Date | undefined, endDate: Date | undefined) {
     console.log('Date choosen', startDate, endDate);
 
-    this.productService.fetchStockReportForBranch(this.selectedBranchId, startDate, endDate).subscribe(
-      (res) => {
-        console.log("fetching normal request", res);
-      },(error) =>{
-        console.log("error while fetching request:", error);
-      }
-    )
+    if(this.selectedBranchId === 0){
+      this.productService.fetchAllBranchStockReport(startDate, endDate).subscribe(
+        (res: Blob) => {
+          const blob = new Blob([res], {type: 'application/pdf'});
+          const objectUrl = window.URL.createObjectURL(blob);
+          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+          console.log('fetching all branch stock report', res);
+        },(error) =>{
+          console.log('error while fetching all branch stock report:', error);
+        }
+      )
+    }else{
+
+
+      this.productService.fetchStockReportForBranch(this.selectedBranchId, startDate, endDate).subscribe(
+        (res: Blob) => {
+          const blob = new Blob([res], {type: 'application/pdf'});
+          const objectUrl = window.URL.createObjectURL(blob);
+          this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+          console.log("fetching normal request", res);
+        },(error) =>{
+          console.log("error while fetching request:", error);
+        }
+      )
+    }
 
     // this.productService.getStockReport(data).subscribe(
     //   (res: any) => {
@@ -87,9 +116,9 @@ export class StockreportBranchComponent {
     //   },
     // );
   }
-  setBrowserUrl(): void {
-    const url =
-      'http://192.168.1.11:9004/product/stockreport?startDate=2024-07-17&endDate=2024-07-24';
-    window.open(url, '_blank');
-  }
+  // setBrowserUrl(): void {
+  //   const url =
+  //     'http://192.168.1.11:9004/product/stockreport?startDate=2024-07-17&endDate=2024-07-24';
+  //   window.open(url, '_blank');
+  // }
 }

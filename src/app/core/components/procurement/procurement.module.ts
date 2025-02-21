@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProcurementRequestlistComponent } from './procurement-requestlist/procurement-requestlist.component';
 import { ViewProcurementreqComponent } from './view-procurementreq/view-procurementreq.component';
 import { ViewAcceptedprocurementreqComponent } from './view-acceptedprocurementreq/view-acceptedprocurementreq.component';
+import { ViewConsolidatedquoteComponent } from './view-consolidatedquote/view-consolidatedquote.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ViewAcceptedprocurementreqComponent } from './view-acceptedprocurementr
     ProcurementRequestlistComponent,
     ViewProcurementreqComponent,
     ViewAcceptedprocurementreqComponent,
+    ViewConsolidatedquoteComponent,
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
@@ -223,7 +223,27 @@ export class RequestService {
     );
   }
 
+  fetchQuoteComparisonPDF(sno: number, headOfAccId: number){
+    return this.http.get(
+      environment.fetchQuoteComparisonPDF + 
+      `?sno=${sno}&headOfAccId=${headOfAccId}`, {
+        responseType: 'blob'
+      }
+    );
+  }
+
   // fetchNormalRequest(startDate: Date | undefined, endDate: Date | undefined){
   //   return this.http.get(environment.fetchNormalRequest + `?startDate=${startDate}&endDate=${endDate}`)
   // }
+
+  fetchConsolidatedQuotePDF(reqId: number){
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    })
+    return this.http.get(environment.fetchConsolidatedQuotePDF + reqId, {
+      headers,
+      responseType: 'blob'
+    });
+  }
 }

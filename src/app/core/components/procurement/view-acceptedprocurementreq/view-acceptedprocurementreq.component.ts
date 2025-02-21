@@ -2,6 +2,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, signal, Vie
 import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-acceptedprocurementreq',
@@ -14,6 +15,7 @@ export class ViewAcceptedprocurementreqComponent {
   @Output() closeView = new EventEmitter<boolean>();
   _requestDetails = signal<any>(null);
   requestService = inject(RequestService);
+  sanitizer = inject(DomSanitizer);
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
   filterProductHeadData: indentProductList[] = [];
@@ -21,11 +23,15 @@ export class ViewAcceptedprocurementreqComponent {
   selectedVendorname: string[] = [];
   vendorQuotedPrice: number[] = [];
   selectedHeadOfAccId: number | null = null;
-  leastQuotedVendorData: {
+  leastQuotedVendorData:
+    | {
         leastVendorName: string;
         leastPrice: number | string;
       }
     | undefined;
+
+  isLoading: boolean = false;
+  pdfURL: SafeResourceUrl | null = null;
 
   ngOnInit() {
     console.log('reqId:', this.reqId);
@@ -47,6 +53,31 @@ export class ViewAcceptedprocurementreqComponent {
         ];
 
         console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
+
+        this.uniqueProductHeadData.unshift({
+          headOfAccId: 0,
+          headOfAccName: 'All',
+          id: 0,
+          itemTotalPrice: 0,
+          prdCode: '',
+          prdDescription: '',
+          prdGstPct: 0,
+          prdHsnCode: 0,
+          prdStatus: 0,
+          prdUnit: 0,
+          prdbrndName: '',
+          prdcatgName: '',
+          prdgrpName: '',
+          prdmdlName: '',
+          productId: 0,
+          qty: 0,
+          unitPrice: 0,
+        });
+
+        console.log(
+          'this.uniqueProductHeadData after all:',
+          this.uniqueProductHeadData,
+        );
 
         if (this.uniqueProductHeadData.length > 0) {
           console.log('checking');
@@ -75,7 +106,7 @@ export class ViewAcceptedprocurementreqComponent {
       this.selectedHeadOfAccId = Number(selectElement.value);
     }
 
-    if (this.selectedHeadOfAccId) {
+    if (this.selectedHeadOfAccId || this.selectedHeadOfAccId === 0) {
       this.fetchQuote(this.selectedHeadOfAccId);
     }
 
@@ -83,29 +114,47 @@ export class ViewAcceptedprocurementreqComponent {
   }
 
   fetchQuote(headOfAccId: number) {
-    this.requestService.fetchQuoteComparison(this.reqId, headOfAccId).subscribe(
-      (res: QuoteComparison) => {
-        console.log('fetching quote data based on headofaccid:', res);
-        this.indentQuoteComparison = res;
-        console.log(
-          'this.indentQuoteComparison:',
-          this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
-            (vendor) => vendor.assgndVendorData.vendorName,
-          ),
-        );
-        this.selectedVendorname =
-          this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
-            (vendor) => vendor.assgndVendorData.vendorName,
-          );
+    console.log('headOfAccId in fetchQuote:', headOfAccId);
+    this.isLoading = true;
+    this.requestService
+      .fetchQuoteComparisonPDF(this.reqId, headOfAccId)
+      .subscribe(
+        (res: Blob) => {
+          const blob = new Blob([res], { type: 'application/pdf' });
+          const objectUrl = window.URL.createObjectURL(blob);
+          this.pdfURL =
+            this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+          console.log('Fetching comparison quote pdf:', res);
+          this.isLoading = false;
+        },
+        (error) => {
+          console.log('error while fetching comparison quote pdf', error);
+          this.isLoading = false;
+        },
+      );
+    // this.requestService.fetchQuoteComparison(this.reqId, headOfAccId).subscribe(
+    //   (res: QuoteComparison) => {
+    //     console.log('fetching quote data based on headofaccid:', res);
+    //     this.indentQuoteComparison = res;
+    //     console.log(
+    //       'this.indentQuoteComparison:',
+    //       this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
+    //         (vendor) => vendor.assgndVendorData.vendorName,
+    //       ),
+    //     );
+    //     this.selectedVendorname =
+    //       this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
+    //         (vendor) => vendor.assgndVendorData.vendorName,
+    //       );
 
-        this.leastQuotedVendorData = this.getLeastQuotedVendorData(headOfAccId);
+    //     this.leastQuotedVendorData = this.getLeastQuotedVendorData(headOfAccId);
 
-        console.log('leastQuotedVendorData:', this.leastQuotedVendorData);
-      },
-      (error) => {
-        console.log('error while fetching quote data:', error);
-      },
-    );
+    //     console.log('leastQuotedVendorData:', this.leastQuotedVendorData);
+    //   },
+    //   (error) => {
+    //     console.log('error while fetching quote data:', error);
+    //   },
+    // );
 
     this.filterProductHeadData = this.productHeadData.filter(
       (pro: indentProductList) => pro.headOfAccId === headOfAccId,
@@ -143,5 +192,4 @@ export class ViewAcceptedprocurementreqComponent {
         }
       : { leastVendorName: 'N/A', leastPrice: 'N/A' };
   }
-
 }

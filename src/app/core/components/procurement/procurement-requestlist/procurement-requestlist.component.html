@@ -418,7 +418,9 @@
                         </button>
                       </li>
                       <li>
-                        <button class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <button 
+                          (click)="openConsolidatedQuote(req.sno)"
+                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
                           Consolidated Quote
                         </button>
                       </li>
@@ -439,10 +441,17 @@
     (closeView)="refresh($event)"
   ></app-view-procurementreq>
 </section>
-<section *ngIf="isViewQuoteCompare" class="">
+<section *ngIf="isViewQuoteCompare">
   <app-view-acceptedprocurementreq
     [reqId]="reqId"
     [indentNumber]="indentNumber"
     (closeView)="refresh($event)"
   ></app-view-acceptedprocurementreq>
+</section>
+<section *ngIf="isViewConsolidatedQuote">
+  <app-view-consolidatedquote
+    [reqId]="reqId"
+    (closeView)="refresh($event)"
+  >
+  </app-view-consolidatedquote>
 </section>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
 import { Vendor } from '../../../models/vendor/vendor.type';
 
@@ -136,6 +136,25 @@ export class ProductService {
   }
 
   fetchStockReportForBranch(branchId: number, startDate: Date | undefined, endDate: Date | undefined){
-    return this.productHttp.get(environment.fetchStockReportForBranch + `${branchId}?startDate=${startDate}&endDate=${endDate}`)
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+    return this.productHttp.get(environment.fetchStockReportForBranch + 
+      `${branchId}?startDate=${startDate}&endDate=${endDate}`, 
+      {
+        headers,
+        responseType: 'blob'
+      }
+    )
+  }
+
+  fetchAllBranchStockReport(startDate: Date | undefined, endDate: Date | undefined){
+    return this.productHttp.get(environment.fetchAllStockReport + 
+      `?startDate=${startDate}&endDate=${endDate}`,
+      {
+        responseType: 'blob'
+      }
+    )
   }
 }

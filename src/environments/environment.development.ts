@@ -46,10 +46,7 @@ export const environment = {
   addHeadOfAcc: Url + baseProductApi + '/addheadofaccount',
   updateProductDetails: Url + baseProductApi + '/updateprd/',
   updateOtherProductDetails: Url + baseProductApi + '/updateotherprd/',
-  fetchStockReportForBranch:
-    Url +
-    baseProductApi +
-    '/stockreportforbranch/',
+  fetchStockReportForBranch: Url + baseProductApi + '/stockreportforbranch/',
   //inward
   getProductByCode: Url + baseProductApi + '/getprdbycode/',
   inward: Url + baseProductApi + '/addprdinward',
@@ -58,6 +55,7 @@ export const environment = {
   fetchOtherProductDetails: Url + baseProductApi + '/getotherprd',
   saveOutward: Url + baseProductApi + '/addprdoutward',
   fetchInwardForBranch: Url + baseProductApi + '/getinwardforbranch/',
+  fetchAllStockReport: Url + baseProductApi + '/stockreport',
   //Branch Api
   getAllBranch: Url + baseBranchApi + '/getallbranch',
   getBranch: Url + baseBranchApi + '/branchname',
@@ -126,7 +124,11 @@ export const environment = {
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',
 
   fetchQuoteComparison: Url + baseRequestApi + '/getquotecomparison',
+  fetchQuoteComparisonPDF:
+    Url + baseRequestApi + '/quote/generate-report',
   fetchNormalRequest: Url + baseRequestApi + '/getnormalrequest',
+  fetchConsolidatedQuotePDF:
+    Url + baseRequestApi + '/quote/consolidate/generate-report/',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

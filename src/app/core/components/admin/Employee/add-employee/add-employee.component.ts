@@ -14,6 +14,7 @@ import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { Router } from '@angular/router';
+import { DesignationRoleMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 
 // If all conditions met, return no error
 
@@ -102,6 +103,7 @@ export class AddEmployeeComponent implements OnInit {
     )
     this.fetchAllBranch();
     this.fetchDesignation();
+    this.fetchAllDesignation();
   }
 
   fetchAllBranch() {
@@ -169,7 +171,7 @@ export class AddEmployeeComponent implements OnInit {
     pin: new FormControl('', Validators.pattern(/^[1-9]{1}[0-9]{5}$/)),
     country: new FormControl('', [Validators.required]),
     empRole: new FormControl('', [Validators.required]),
-    empBranch: new FormControl('', [Validators.required]),
+    branchCode: new FormControl('', [Validators.required]),
 
     empDesig: new FormControl('', [Validators.required]),
     empJoiningDate: new FormControl('', [Validators.required]),
@@ -292,6 +294,16 @@ export class AddEmployeeComponent implements OnInit {
       this._city = res;
       console.log(this._city);
     });
+  }
+
+  fetchAllDesignation(){
+    this.empService.getDesignationRoleMapping().subscribe(
+      (res: DesignationRoleMapping[]) =>{
+        console.log("fetching designation role:", res);
+      },(error) =>{
+        console.log("error while fetching role:", error);
+      }
+    )
   }
 
   fetchDesignation() {

@@ -31,6 +31,7 @@ export class ProcurementRequestlistComponent {
   isView = false;
   isAcceptedView: boolean = false;
   isViewQuoteCompare: boolean = false;
+  isViewConsolidatedQuote: boolean = false;
   userRequest: any;
   selectedRequestId: number | null = null;
 
@@ -206,16 +207,25 @@ export class ProcurementRequestlistComponent {
     console.log(sno);
     this.reqId = sno;
     this.indentNumber = indentNO;
-    if(this.isCompleted === true){
+    if (this.isCompleted === true) {
       this.isViewQuoteCompare = true;
     }
   }
 
+  openConsolidatedQuote(sno: number){
+    console.log('sno in openConsolidatedQuote:', sno);
+    this.reqId = sno;
+
+    if(this.isCompleted === true){
+      this.isViewConsolidatedQuote = true;
+    }
+  }
 
   refresh(data: any) {
     this.isView = data;
     // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
+    this.isViewConsolidatedQuote = data;
     this.fetchRequestList();
   }
 }

@@ -25,11 +25,16 @@
        
         <div class="items-center justify-between">
           <div class=" ">
+            
             <div class="mx-auto">
+                
               <!-- Card -->
               <div class="flex flex-col p-4 sm:p-10">
+                <h2
+                class="text-purple-600 text-xl font-semibold text-center mb-2"
+                >Quote Comparison Sheet</h2>
                 <!-- Grid -->
-                <div class="flex justify-between">
+                <!-- <div class="flex justify-between">
                   <div>
                     <img
                       src="../../../../../assets/Img/logo_apd.png"
@@ -38,7 +43,7 @@
                     />       
                   </div>
 
-                </div>
+                </div> -->
 
                 <div class="flex flex-row items-center">               
                     <label for=""
@@ -78,8 +83,15 @@
                     </select>
                 </div>
 
+                <div class="mt-8 relative">
+                    <div *ngIf="isLoading" class="absolute mt-2 inset-0 flex items-center justify-center bg-white bg-opacity-70">
+                        <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <iframe *ngIf="!isLoading && pdfURL" [src]="pdfURL" width="100%" height="700px"></iframe>
+                </div>
+
                 <!-- Table -->
-                <div class="mt-6 flex flex-col">
+                <!-- <div class="mt-6 flex flex-col">
                   <div class="-m-1.5 overflow-x-auto">
                     <div class="inline-block min-w-full p-1.5 align-middle"
                         >
@@ -97,18 +109,8 @@
                                 <th scope="col" class="px-6 py-3" *ngFor="let ven of selectedVendorname">
                                   {{ven}}
                                 </th>
-                                <!-- <th scope="col" class="px-6 py-3">Bright Technology</th>
-                                <th scope="col" class="px-6 py-3">NextGen</th> -->
-                                <!-- <th scope="col" class="px-6 py-3">
-                                  Item Price(Incl GST)
-                                </th> -->
-                                <!-- <th
-                                  *ngIf="isAccept"
-                                  scope="col"
-                                  class="px-6 py-3"
-                                >
-                                  Action
-                                </th> -->
+                                
+                                
                               </tr>
                             </thead>
                             <tbody>
@@ -135,41 +137,8 @@
                                 <td class="px-6 py-4 dark:text-white" *ngFor="let price of product.quotedPrices">
                                   {{ price | currency: "INR" }}
                                 </td>
-                                <!-- <td class="px-6 py-4 dark:text-white">
-                                  {{ product?.qty }}
-                                </td>
-                                <td class="px-6 py-4 dark:text-white">
-                                  {{ product?.prdGstPct }}
-                                </td>
-                                <td class="px-6 py-4">
-                                  {{ product?.itemTotalPrice }}
-                                </td> -->
-                                <!-- <td *ngIf="isAccept" class="px-6 py-4">
-                                  <button
-                                    (click)="
-                                      productEdit(product);
-                                      this.isEditProduct = true
-                                    "
-                                  >
-                                    <svg
-                                      class="h-6 w-6 text-blue-600"
-                                      aria-hidden="true"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="24"
-                                      height="24"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        stroke="currentColor"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-                                      />
-                                    </svg>
-                                  </button>
-                                </td> -->
+                                
+                                
                               </tr>
                             </tbody>
                           </table>
@@ -177,13 +146,12 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <!-- End Table -->
 
                 <!-- Flex -->
-                <div class="mt-8 flex sm:justify-end" *ngIf="filterProductHeadData.length > 0">
+                <!-- <div class="mt-8 flex sm:justify-end" *ngIf="filterProductHeadData.length > 0">
                   <div class="w-full max-w-2xl space-y-2 sm:text-end">
-                    <!-- Grid -->
                     <div class="grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
 
                       <dl class="grid gap-x-0 gap-y-1 sm:grid-cols-5">
@@ -196,20 +164,11 @@
                         </dt>
                         <dd class="col-span-3 text-gray-500">{{leastQuotedVendorData?.leastPrice | currency:'INR' }}</dd>
                         
-                        <!-- <dt class="col-span-2 font-semibold text-gray-800">
-                          Indent Total:
-                        </dt>
                         
-                        <dd class="col-span-3 text-gray-500">
-                          {{
-                            this._requestDetails()?.indentHeaders?.totalPrice
-                              | currency: "INR"
-                          }}
-                        </dd> -->
                       </dl>
                     </div>
                   </div>
-                </div>               
+                </div>                -->
               </div>
             </div>
           </div>
@@ -219,33 +178,10 @@
   </section>
   
 </div>
-<!-- <section *ngIf="isEditProduct" class="fixed left-0 right-0 top-0 z-50">
-    <app-edit-product
-      [product]="productData"
-      (close)="closeEdite($event)"
-    ></app-edit-product>
-  </section>
-  <section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
-    <app-success-pop (close)="closepop($event)"></app-success-pop>
-  </section>
-  <section *ngIf="isViewFundDetails" class="absolute left-0 right-0 top-0 z-50 h-screen">
-    <app-view-fund-details
-        [funder]="funderDetails"
-        [donarName]="selectedDonorName"
-        (selectedFunderList)="onSelectedFunder($event)"
-       (close)="close($event)"></app-view-fund-details>
-  </section>
-  <section
-    *ngIf="isToast"
-    class="fixed top-10 z-50 flex w-full items-center justify-center"
-  >
-    <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
-  </section>
-   -->
 
-<!-- <section *ngIf="isRejectPop">
-  <app-cdelete-pop (close)="closepop($event)"></app-cdelete-pop>
-</section>
-<section *ngIf="isWarningPopup">
-  <app-warning-popup (close)="closepop($event)"></app-warning-popup>
-</section> -->
+<!-- <div
+  *ngIf="Spinner"
+  class="absolute bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-purple-50 p-4 sm:ml-64"
+>
+  <app-spinner></app-spinner>
+</div> -->

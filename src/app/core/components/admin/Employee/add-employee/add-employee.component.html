@@ -544,25 +544,25 @@
               <select
                 class="input-form"
                 #BranchName
-                formControlName="empBranch"
+                formControlName="branchCode"
                 [ngClass]="{
                   error:
-                    addEmployeeForm.get('empBranch')?.invalid &&
-                    addEmployeeForm.get('empBranch')?.touched
+                    addEmployeeForm.get('branchCode')?.invalid &&
+                    addEmployeeForm.get('branchCode')?.touched
                 }"
               >
                 <option null selected disabled>Choose Branch</option>
                 <option
                   *ngFor="let branch of _branch"
-                  value="{{ branch.branchId }}"
+                  value="{{ branch.branchCode }}"
                 >
                   {{ branch.branchName }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  addEmployeeForm?.get('empBranch')?.invalid &&
-                  addEmployeeForm?.get('empBranch')?.touched
+                  addEmployeeForm?.get('branchCode')?.invalid &&
+                  addEmployeeForm?.get('branchCode')?.touched
                 "
                 class="text-danger text-red-600"
               >
