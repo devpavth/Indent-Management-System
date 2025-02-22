@@ -81,8 +81,11 @@ export class ViewProductComponent implements OnInit {
   }
   ngOnInit(): void {
     this.UpdateProductForm.patchValue(this.productData);
-    console.log("getting productData:", this.productData);
-    console.log("getting productData with prdbrndName:", this.productData.prdbrndName);
+    console.log('getting productData:', this.productData);
+    console.log(
+      'getting productData with prdbrndName:',
+      this.productData.prdbrndName,
+    );
 
     Object.keys(this.UpdateProductForm.controls).forEach((form) => {
       this.UpdateProductForm.get(form)?.disable();
@@ -122,24 +125,24 @@ export class ViewProductComponent implements OnInit {
   fetchGroupList() {
     this.productService.groupList().subscribe((res) => {
       this.groupList = res;
-      console.log("fetching group details:", res);
+      console.log('fetching group details:', res);
     });
   }
   fetchCatList(Id: any) {
     this.productService.catagoriesList(Id).subscribe((res) => {
       this.catList = res;
-      console.log("fetching category list for selected product group:", res);
-      
+      console.log('fetching category list for selected product group:', res);
+
       // this.brandList = [];
       // return this.productService.brandList(this.productData.prdCatgId);
       // this.UpdateProductForm.get('prdBrndId')?.patchValue(null);
-      // this.UpdateProductForm.get('prdBrndId')?.updateValueAndValidity(); 
+      // this.UpdateProductForm.get('prdBrndId')?.updateValueAndValidity();
     });
   }
   fetchBrandList(catId: any) {
     this.productService.brandList(catId).subscribe((res) => {
       this.brandList = res;
-      console.log("fetching brand details for selected product group:", res);
+      console.log('fetching brand details for selected product group:', res);
     });
   }
 
@@ -151,10 +154,10 @@ export class ViewProductComponent implements OnInit {
         action: 2,
         deleteId: this.productData.productId,
       };
-      console.log("this.deleteProduct:",this.deleteProduct);
+      console.log('this.deleteProduct:', this.deleteProduct);
 
       this.productDeleted.emit(this.deleteProduct.deleteId);
-      console.log("this.deleteProduct.deletedId:", this.deleteProduct.deleteId);
+      console.log('this.deleteProduct.deletedId:', this.deleteProduct.deleteId);
     } else if (check == 0) {
       this.isDelete = isView;
       this.closeProduct.emit(false);
@@ -171,53 +174,55 @@ export class ViewProductComponent implements OnInit {
     }
   }
   onUpdateProduct(data: any) {
-    console.log("successfully updated product data:", data);
+    console.log('successfully updated product data:', data);
 
-    if(this.productData.prdStatus === 200){
-      this.productService.updateProductDetails(this.productData.productId, data).subscribe(
-        (res: any) => {
-          console.log("successfully updated the active product:", res);
-          
-          this.isToast = true;
-          this.deleteToastMsg = res.error;
-          setTimeout(() => {
-            this.isToast = false;
-            this.closeProduct.emit(false);
-          }, 3000)
-        },
-        (error) => {
-          console.log("error while updating the active product data:", error);
-        }
-      )
-    }
-    if(this.productData.prdStatus === 303){
-      this.productService.updateOtherProductDetails(this.productData.productId, data).subscribe(
-        (res: any) => {
-          console.log("successfully updated the other product data:", res);
-          this.productUpdated.emit(this.productData.productId);
-          this.isToast = true;
-          this.deleteToastMsg = res.error;
+    if (this.productData.prdStatus === 200) {
+      this.productService
+        .updateProductDetails(this.productData.productId, data)
+        .subscribe(
+          (res: any) => {
+            console.log('successfully updated the active product:', res);
 
-          setTimeout(() => {
-            this.isToast = false;
-            this.closeProduct.emit(false);
-          }, 3000);
-        },
-        (error) => {
-          console.log("error while updating the other product data:", error);
-          if(error.status === 500){
-            this.isDeleteToast = true;
-            this.errorToastMsg = 'This product might be already updated';
-
+            this.isToast = true;
+            this.deleteToastMsg = res.error;
             setTimeout(() => {
-              this.isDeleteToast = false;
+              this.isToast = false;
               this.closeProduct.emit(false);
             }, 3000);
-          }
-        }
-      )
+          },
+          (error) => {
+            console.log('error while updating the active product data:', error);
+          },
+        );
     }
+    if (this.productData.prdStatus === 303) {
+      this.productService
+        .updateOtherProductDetails(this.productData.productId, data)
+        .subscribe(
+          (res: any) => {
+            console.log('successfully updated the other product data:', res);
+            this.productUpdated.emit(this.productData.productId);
+            this.isToast = true;
+            this.deleteToastMsg = res.error;
 
-    
+            setTimeout(() => {
+              this.isToast = false;
+              this.closeProduct.emit(false);
+            }, 3000);
+          },
+          (error) => {
+            console.log('error while updating the other product data:', error);
+            if (error.status === 500) {
+              this.isDeleteToast = true;
+              this.errorToastMsg = 'This product might be already updated';
+
+              setTimeout(() => {
+                this.isDeleteToast = false;
+                this.closeProduct.emit(false);
+              }, 3000);
+            }
+          },
+        );
+    }
   }
 }

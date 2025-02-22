@@ -41,6 +41,8 @@ import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.co
 import { ViewTransactionComponent } from './Transaction/view-transaction/view-transaction.component';
 import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
 import { ViewDesignationRoleComponent } from './Employee/view-designation-role/view-designation-role.component';
+import { AddNewdesignationComponent } from './Employee/add-newdesignation/add-newdesignation.component';
+import { AddNewlevelComponent } from './Employee/add-newlevel/add-newlevel.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -81,6 +83,8 @@ import { ViewDesignationRoleComponent } from './Employee/view-designation-role/v
     ViewTransactionComponent,
     RoleMappingComponent,
     ViewDesignationRoleComponent,
+    AddNewdesignationComponent,
+    AddNewlevelComponent,
   ],
   imports: [
     CommonModule,

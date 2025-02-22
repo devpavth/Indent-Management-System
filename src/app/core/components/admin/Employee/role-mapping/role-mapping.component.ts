@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ProductService } from '../../../service/Product/product.service';
-import { DesignationRoleMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import { DesignationRoleMapping, LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 
 @Component({
   selector: 'app-role-mapping',
@@ -18,7 +18,11 @@ export class RoleMappingComponent {
   listLength: any;
 
   // headOfAccList: any[] = [];
+  levelDesignationList: LevelMapping[] | undefined;
   designationRoleList: DesignationRoleMapping[] | undefined;
+  isViewAddNewDesignation: boolean = false;
+  sortLevelInAscending: boolean = true;
+
   employeeService = inject(EmployeeServiceService);
 
   // activeId: any;
@@ -42,18 +46,74 @@ export class RoleMappingComponent {
     // console.log(this.activeId);
     // this.fetchDepartNProj();
     this.fetchDesignationRole();
+    // this.fetchLevelForDesignation();
   }
 
-  fetchDesignationRole(){
+  addNewDesignation() {
+    this.isViewAddNewDesignation = true;
+  }
+
+  closeNewDesignation(closeIcon: boolean) {
+    this.isViewAddNewDesignation = !closeIcon;
+  }
+
+  // fetchLevelForDesignation() {
+  //   this.employeeService.fetchLevelForDesignation().subscribe(
+  //     (res: LevelMapping[]) => {
+  //       console.log('fetching level for designation:', res);
+  //       this.levelDesignationList = res;
+  //       console.log(
+  //         'level name:',
+  //         this.levelDesignationList.map((level) => level.levelName),
+  //       );
+  //       this.designationRoleList = this.levelDesignationList.flatMap(
+  //         (desig) => desig.designationTables,
+  //       );
+  //       console.log('Processed designationRoleList:', this.designationRoleList);
+  //     },
+  //     (error) => {
+  //       console.log('error while fetching level for designation:', error);
+  //     },
+  //   );
+  // }
+
+  fetchDesignationRole() {
     this.employeeService.getDesignationRoleMapping().subscribe(
       (res: DesignationRoleMapping[]) => {
-        console.log("fetching designation details:", res);
+        console.log('fetching designation details:', res);
         this.designationRoleList = res;
       },
       (error) => {
-        console.log("error while fetching designation:", error);
-      }
-    )
+        console.log('error while fetching designation:', error);
+      },
+    );
+  }
+
+  sortByLevel() {
+    this.sortLevelInAscending = !this.sortLevelInAscending;
+
+    this.designationRoleList?.sort((a, b) => {
+      return this.sortLevelInAscending
+        ? a.levelId - b.levelId
+        : b.levelId - a.levelId;
+    });
+  }
+
+  getLevelByColor(levelId: number): string{
+    const colors = [
+      'bg-red-100 rounded-xl',
+      'bg-blue-100 rounded-xl',
+      'bg-green-100 rounded-xl',
+      'bg-yellow-100 rounded-xl',
+      'bg-purple-100 rounded-xl',
+      'bg-pink-100 rounded-xl',
+      'bg-indigo-100 rounded-xl',
+      'bg-teal-100 rounded-xl',
+      'bg-orange-100 rounded-xl',
+      'bg-gray-100 rounded-xl',
+    ];
+
+    return colors[levelId % colors.length];
   }
 
   // fetchDepartNProj() {

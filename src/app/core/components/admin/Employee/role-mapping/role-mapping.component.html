@@ -19,11 +19,11 @@
                 <span> Designation List </span>
                 <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
               </h1>
-              <!-- <button
+              <button
                 type="button"
-                routerLink="/home/addList/{{ activeId }}"
+                (click)="addNewDesignation()"
                 class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-              >
+                >
                 <svg
                   class="mr-2 h-4 w-4"
                   fill="currentColor"
@@ -43,9 +43,8 @@
                   />
                 </svg>
 
-                <span *ngIf="activeId == 1"> Desgination </span>
-                <span *ngIf="activeId == 2"> Project/Program </span>
-              </button> -->
+                Add Designation
+              </button>
               <!-- <form [formGroup]="headOfAccForm">
                 <div>
                   <label
@@ -133,12 +132,13 @@
               <tr>
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
-                  <div class="flex items-center justify-between">
-                    <span> Designation List </span>
-                    <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
+                  <div class="flex items-center justify-start gap-4">
+                    <span>Level</span>
+
                     <button
+                      (click)="sortByLevel()"
                       class="an rounded-full hover:bg-gray-600 hover:text-white"
-                    >
+                      >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -155,6 +155,31 @@
                       </svg>
                     </button>
                   </div>
+                  
+                </th>
+                <th scope="col" class="px-4 py-3">
+                  <div class="flex items-center justify-between">
+                    <span> Designation List </span>
+                    <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
+                    <!-- <button
+                      class="an rounded-full hover:bg-gray-600 hover:text-white"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-4 w-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button> -->
+                  </div>
                 </th>
 
                 <!-- <th scope="col" class="px-4 py-3">Model</th>
@@ -170,15 +195,21 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let p of designationRoleList; let i = index"
+                *ngFor="let desig of designationRoleList; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
+                <td 
+                  class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                  <span [ngClass]="getLevelByColor(desig.levelId)" class="px-2 py-1">
+                    {{ desig.levelName }}
+                  </span>
+                </td>
                 <th
                   scope="row"
                   class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
-                  {{ p.empDesignation }}
+                  {{ desig.empDesignation }}
                 </th>
 
                 <!-- <td class="px-4 py-3"></td>
@@ -186,7 +217,7 @@
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
-                    (click)="update(p.empDesig, true)"
+                    (click)="update(desig.empDesig, true)"
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -239,86 +270,7 @@
             </tbody>
           </table>
         </div>
-        <nav
-          class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
-          aria-label="Table navigation"
-        >
-          <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-            Showing
-            <span class="font-semibold text-gray-900 dark:text-white"
-              >{{ startPage }}-{{ endPage }}</span
-            >
-            of
-            <span class="font-semibold text-gray-900 dark:text-white">{{
-              listLength
-            }}</span>
-          </span>
-          <div class="flex gap-2">
-            <div class="flex items-center gap-2">
-              <p class="text-sm font-semibold">Records per Page</p>
 
-              <input
-                type="number"
-                class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-20 rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                [(ngModel)]="itemsPerPage"
-              />
-            </div>
-            <ul class="inline-flex items-center">
-              <li>
-                <button
-                  (click)="onPageChange(currentPage - 1)"
-                  [disabled]="currentPage === 1"
-                  class="ml-0 flex h-full cursor-pointer items-center justify-center rounded-l-lg bg-white px-3 py-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Previous</span>
-                  <svg
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </li>
-              <li>
-                <a
-                  class="flex items-center justify-center bg-white px-3 py-2 text-sm leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                  >{{ currentPage }}</a
-                >
-              </li>
-
-              <li>
-                <!-- [disabled]="currentPage * itemsPerPage >= productList.length" -->
-                <button
-                  (click)="onPageChange(currentPage + 1)"
-                  [disabled]="endPage == listLength"
-                  class="flex h-full cursor-pointer items-center justify-center rounded-r-lg bg-white px-3 py-1.5 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-                >
-                  <span class="sr-only">Next</span>
-                  <svg
-                    class="h-5 w-5"
-                    aria-hidden="true"
-                    fill="currentColor"
-                    viewbox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav>
       </div>
     </div>
   </section>
@@ -329,3 +281,9 @@
   [deleteData]="deleteItem"
   (close)="toggledelete(0, false, '')"
 ></app-delete> -->
+
+<section *ngIf="isViewAddNewDesignation" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-add-newdesignation
+    (close)="closeNewDesignation($event)"
+      ></app-add-newdesignation>
+</section>

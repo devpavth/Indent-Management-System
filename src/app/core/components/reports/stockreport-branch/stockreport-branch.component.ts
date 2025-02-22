@@ -23,6 +23,7 @@ export class StockreportBranchComponent {
   selectedBranchId: number = 0;
   pdfUrl: SafeResourceUrl | null = null;
   maxDate: string = '';
+  isLoading: boolean = false;
 
   constructor(private readonly fb: FormBuilder) {
     this.dateRange = this.fb.group({
@@ -46,6 +47,10 @@ export class StockreportBranchComponent {
     console.log("maxDate:", this.maxDate);
     // console.log("typeof maxDate:", typeof maxDate);
     this.fetchAllBranch();
+  }
+
+  resetEndDate(){
+    // this.endDate = '';
   }
 
   fetchAllBranch(){
@@ -74,27 +79,31 @@ export class StockreportBranchComponent {
     console.log('Date choosen', startDate, endDate);
 
     if(this.selectedBranchId === 0){
+      this.isLoading = true;
       this.productService.fetchAllBranchStockReport(startDate, endDate).subscribe(
         (res: Blob) => {
           const blob = new Blob([res], {type: 'application/pdf'});
           const objectUrl = window.URL.createObjectURL(blob);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
           console.log('fetching all branch stock report', res);
+          this.isLoading = false;
         },(error) =>{
           console.log('error while fetching all branch stock report:', error);
+          this.isLoading = false;
         }
       )
     }else{
-
-
+      this.isLoading = true;
       this.productService.fetchStockReportForBranch(this.selectedBranchId, startDate, endDate).subscribe(
         (res: Blob) => {
           const blob = new Blob([res], {type: 'application/pdf'});
           const objectUrl = window.URL.createObjectURL(blob);
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
           console.log("fetching normal request", res);
+          this.isLoading = false;
         },(error) =>{
           console.log("error while fetching request:", error);
+          this.isLoading = false;
         }
       )
     }

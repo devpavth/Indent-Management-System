@@ -17,6 +17,8 @@ export class ViewDesignationRoleComponent {
   @Input() Id: number | undefined;
   @Output() closeUpdate = new EventEmitter<boolean>();
   designation: string = '';
+  levelName: string = '';
+  levelId: number = 0;
   roleId: number = 0;
   selectedRole!: RoleMapping;
   selectedRoleName: string = '';
@@ -77,12 +79,32 @@ export class ViewDesignationRoleComponent {
         console.log('After Update:', this.activeRoleMapping);
         // this.activeRoleMapping = res.desigRoleMapping;
         this.designation = res.empDesignation;
+        this.levelName = res.levelName;
+        this.levelId = res.levelId;
       },
       (error) => {
         console.log('error while fetching Designation Assigned Role', error);
       },
     );
   }
+
+  getLevelByColor(levelId: number): string{
+    const colors = [
+      'bg-red-100 rounded-xl',
+      'bg-blue-100 rounded-xl',
+      'bg-green-100 rounded-xl',
+      'bg-yellow-100 rounded-xl',
+      'bg-purple-100 rounded-xl',
+      'bg-pink-100 rounded-xl',
+      'bg-indigo-100 rounded-xl',
+      'bg-teal-100 rounded-xl',
+      'bg-orange-100 rounded-xl',
+      'bg-gray-100 rounded-xl',
+    ];
+
+    return colors[levelId % colors.length];
+  }
+
   assignRoletoDesign(role: RoleMapping) {
     console.log('adding data:', role);
     this.selectedRole = role;

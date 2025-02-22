@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
-import { DesignationRoleMapping, RoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
+import { DesignationRoleMapping, LevelMapping, RoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
 
 @Injectable({
   providedIn: 'root',
@@ -99,5 +99,30 @@ export class EmployeeServiceService {
     params = params.append('roleId', roleId.toString());
 
     return this.http.post(environment.assigningRoleToDesignation, {}, {params})
+  }
+
+  fetchLevelForDesignation(): Observable<LevelMapping[]>{
+    return this.http.get<LevelMapping[]>(environment.fetchLevelForDesignation);
+  }
+
+  postNewDesignation(levelId: number, designName: string){
+    // console.log('tseting api:', environment.postNewDesignation + levelId, designName);
+    return this.http.post(environment.postNewDesignation + levelId, {
+      empDesignation: designName,
+    });
+  }
+
+  fetchNewLevel(){
+    return this.http.get(environment.fetchNewLevel);
+  }
+
+  confirmNewLevel(){
+    return this.http.post(environment.confirmNewLevel, '');
+  }
+
+  updateLevelForDesignation(levelId: number, designId: number){
+    return this.http.put(environment.updateLevelForDesgination + 
+      `?levelId=${levelId}&empDesig=${designId}`, ''
+    )
   }
 }

@@ -23,6 +23,12 @@ export const environment = {
   deleteEmployee: Url + bassEmployeeApi + '/deleteemployee/',
   verifyEmail: Url + bassEmployeeApi + '/emailid',
   verifyPhoneNo: Url + bassEmployeeApi + '/phonenumber',
+  fetchLevelForDesignation: Url + bassEmployeeApi + '/level/getactive',
+  postNewDesignation: Url + bassEmployeeApi + '/desig/addnew/',
+  fetchNewLevel: Url + bassEmployeeApi + '/level/getnew',
+  confirmNewLevel: Url + bassEmployeeApi + '/level/addnew',
+  updateLevelForDesgination:
+    Url + bassEmployeeApi + '/alter/level/desig',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
   getDesignationRoleMapping: Url + bassEmployeeApi + '/desig/getactive',
   getDesignationRole: Url + bassEmployeeApi + '/role/getactive',
@@ -124,8 +130,7 @@ export const environment = {
   confirmOtp: Url + baseRequestApi + '/urgent/getbranch/sendotp',
 
   fetchQuoteComparison: Url + baseRequestApi + '/getquotecomparison',
-  fetchQuoteComparisonPDF:
-    Url + baseRequestApi + '/quote/generate-report',
+  fetchQuoteComparisonPDF: Url + baseRequestApi + '/quote/generate-report',
   fetchNormalRequest: Url + baseRequestApi + '/getnormalrequest',
   fetchConsolidatedQuotePDF:
     Url + baseRequestApi + '/quote/consolidate/generate-report/',
