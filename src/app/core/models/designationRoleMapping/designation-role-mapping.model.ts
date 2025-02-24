@@ -1,6 +1,7 @@
 export interface RoleMapping {
   id: number;
   roleName: string;
+  specialRole: boolean;
   status: number;
 }
 

@@ -120,9 +120,15 @@ export class EmployeeServiceService {
     return this.http.post(environment.confirmNewLevel, '');
   }
 
-  updateLevelForDesignation(levelId: number, designId: number){
+  updateLevelForDesignation(levelId: number | undefined, designId: number | undefined){
     return this.http.put(environment.updateLevelForDesgination + 
       `?levelId=${levelId}&empDesig=${designId}`, ''
+    )
+  }
+
+  removeRoleFromDesignation(desigId: number | undefined, roleId: number){
+    return this.http.delete(environment.removeRoleFromDesignation + 
+      `?empDesig=${desigId}&roleId=${roleId}`
     )
   }
 }

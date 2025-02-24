@@ -7,7 +7,7 @@
       class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
     >
       <button
-        (click)="close.emit(false)"
+        (click)="close.emit()"
         type="button"
         class="absolute right-2.5 top-2.5 ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
         data-modal-toggle="successModal"
@@ -34,25 +34,19 @@
           class="w-24"
           src="https://lottie.host/embed/bc10536f-dc09-4cf8-8863-3be19dd382e7/WtKpJtrfHz.lottie"
         ></iframe>
-        <!-- <iframe 
-        class="w-16"
-        src="https://lottie.host/embed/a3c3f1b9-edcb-4515-befd-4cf0504eee5e/ofFwZ3BnQk.lottie"></iframe> -->
-        <!-- <iframe
-          class="w-16"
-          src="https://lottie.host/embed/8a999025-1bd1-4f59-b29c-4c4ee21d47e5/rAapk16EsR.json"
-        ></iframe> -->
+        
       </div>
       <p class="mb-4 mt-8 text-lg font-semibold text-gray-900 dark:text-white">
-        Are you sure you want to Assign {{selectedRoleName}} to {{designation}}?
+        {{message}}
       </p>
       <div class="flex flex-row justify-end items-end">
         <button type="button" class="py-3 px-4 mr-4 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900"
-          (click)="saveAssigningRole()"
+          (click)="confirm.emit()"
         >
                 OK
         </button>
         <button type="button" class="py-3 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900"
-          (click)="closePopup()"
+          (click)="close.emit()"
           >
               Cancel
         </button>

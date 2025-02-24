@@ -6,17 +6,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './warning-roleassigning-popup.component.css',
 })
 export class WarningRoleassigningPopupComponent {
-  @Input() designation: string = '';
-  @Input() selectedRoleName: string = '';
-  @Output() close = new EventEmitter<boolean>();
-  @Output() assigningRole = new EventEmitter<void>();
+  @Input() message!: string;
+  @Output() close = new EventEmitter<void>();
+  @Output() confirm = new EventEmitter<void>();
 
   saveAssigningRole() {
-    this.assigningRole.emit();
-    this.close.emit(false);
+    // this.assigningRole.emit();
+    // this.close.emit(false);
   }
 
   closePopup() {
-    this.close.emit(false);
+    // this.close.emit(false);
   }
 }

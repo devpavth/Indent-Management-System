@@ -43,6 +43,7 @@ import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.compo
 import { ViewDesignationRoleComponent } from './Employee/view-designation-role/view-designation-role.component';
 import { AddNewdesignationComponent } from './Employee/add-newdesignation/add-newdesignation.component';
 import { AddNewlevelComponent } from './Employee/add-newlevel/add-newlevel.component';
+import { UpdatelevelFordesignationComponent } from './Employee/updatelevel-fordesignation/updatelevel-fordesignation.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -85,6 +86,7 @@ import { AddNewlevelComponent } from './Employee/add-newlevel/add-newlevel.compo
     ViewDesignationRoleComponent,
     AddNewdesignationComponent,
     AddNewlevelComponent,
+    UpdatelevelFordesignationComponent,
   ],
   imports: [
     CommonModule,

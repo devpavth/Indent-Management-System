@@ -27,8 +27,9 @@ export const environment = {
   postNewDesignation: Url + bassEmployeeApi + '/desig/addnew/',
   fetchNewLevel: Url + bassEmployeeApi + '/level/getnew',
   confirmNewLevel: Url + bassEmployeeApi + '/level/addnew',
-  updateLevelForDesgination:
-    Url + bassEmployeeApi + '/alter/level/desig',
+  updateLevelForDesgination: Url + bassEmployeeApi + '/alter/level/desig',
+  removeRoleFromDesignation:
+    Url + bassEmployeeApi + '/desig/role/remove',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
   getDesignationRoleMapping: Url + bassEmployeeApi + '/desig/getactive',
   getDesignationRole: Url + bassEmployeeApi + '/role/getactive',

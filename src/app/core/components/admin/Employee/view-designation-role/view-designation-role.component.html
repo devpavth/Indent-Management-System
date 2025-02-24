@@ -1,7 +1,7 @@
 <section class="bg-black bg-opacity-50">
   <div class="flex">
     <div class="w-1/2"></div>
-    <div class="animate-slide-in-right h-lvh w-2/4 border bg-white shadow-xl">
+    <div class="animate-slide-in-right overflow-y-auto overflow-x-hidden h-lvh w-2/4 border bg-white shadow-xl">
       <div class="flex items-center justify-between border bg-purple-50">
         <div class="m-4">
           <button (click)="closeUpdate.emit(false)">
@@ -46,6 +46,12 @@
                 class="text-sm font-medium text-gray-900 dark:text-white px-2 py-1">
                 {{levelName}}
               </span>
+
+              <a
+                (click)="changeLevel()"
+                class="text-sm cursor-pointer text-purple-500 hover:underline dark:text-blue-500"
+                >Change Level
+              </a>
             </div>
             <input
                 type="text"
@@ -102,9 +108,29 @@
                 <td class="px-4 py-3">{{ i + 1 }}</td>
                 <th
                   scope="row"
-                  class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                  class="relative whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                 >
                   {{ role.roleName }}
+                  <svg 
+                    *ngIf="role.specialRole"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    fill="none" viewBox="0 0 24 24" 
+                    stroke-width="1.5" stroke="currentColor" 
+                    class="size-5 inline-block cursor-pointer text-yellow-700"
+                    (click)="toggleTooltip(i, $event)"
+                    >
+                    <path stroke-linecap="round" 
+                      stroke-linejoin="round" 
+                      d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+
+                  <div
+                    *ngIf="role.specialRole && visibleTooltipIndex === i"
+                    class="absolute left-1/2 -top-[50%] z-10 min-w-[250px] -translate-x-1/2 rounded-lg bg-black px-3 py-2 text-sm text-white shadow-md"
+                    (click)="$event.stopPropagation()"
+                  >
+                    This special role can be assigned with only one designation.
+                  </div>
                 </th>
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
@@ -134,8 +160,8 @@
                   </button>
                   <button
                     *ngIf="check(role.roleName)"
-                    (click)="deleteDeptProgram(role)"
-                    class="group inline-flex items-center pointer-events-none justify-center rounded-full bg-red-500 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-200 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    (click)="deleteRoleFromDesignation(role)"
+                    class="group inline-flex items-center justify-center rounded-full bg-red-500 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-200 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
                     <svg
@@ -295,9 +321,21 @@
 </section>
 <section *ngIf="isWarningPopup">
     <app-warning-roleassigning-popup
-      [selectedRoleName]="selectedRoleName"
-      [designation]="designation"
-      (close)="closepop($event)"
-      (assigningRole)="assignRoletoDesignation(selectedRole)"
+      [message]="popupMessage"
+      (confirm)="confirmAction()"
+      (close)="isWarningPopup = false"
       ></app-warning-roleassigning-popup>
+</section>
+<section *ngIf="isUpdateLevelView" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-updatelevel-fordesignation
+    [initialLevelId]="levelId"
+    [designationId]="designationId"
+    (close)="closeUpdateLevel($event)"
+      ></app-updatelevel-fordesignation>
+</section>
+<section
+  *ngIf="isDeleteToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>
