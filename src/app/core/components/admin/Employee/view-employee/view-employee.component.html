@@ -333,9 +333,14 @@
                 required
               />
 
-              <div *ngIf="noPincode && viewEmployeeForm.get('pin')?.value?.toString().length === 6" 
-                class="absolute mt-1 text-sm text-red-600">
-                  <small>No Pincode found.</small>
+              <div
+                *ngIf="
+                  noPincode &&
+                  viewEmployeeForm.get('pin')?.value?.toString().length === 6
+                "
+                class="absolute mt-1 text-sm text-red-600"
+              >
+                <small>No Pincode found.</small>
               </div>
 
               <small
@@ -366,7 +371,10 @@
               >
                 >
                 <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                <option
+                  *ngFor="let option of cityDropDownOptions"
+                  value="{{ option.value }}"
+                >
                   {{ option.label }}
                 </option>
               </select>
@@ -398,7 +406,7 @@
                 }"
                 readonly
               />
-                <!-- <option null selected disabled>Choose State</option>
+              <!-- <option null selected disabled>Choose State</option>
                 <option *ngFor="let state of _state" value="{{ state.sname }}">
                   {{ state.sname }}
                 </option> -->
@@ -432,7 +440,7 @@
                 }"
                 readonly
               />
-                <!-- <option disabled selected hidden>Choose Country</option>
+              <!-- <option disabled selected hidden>Choose Country</option>
                 <option value="India">India</option> -->
               <!-- </select> -->
 
@@ -446,10 +454,6 @@
                 Country Should not be Empty!
               </small>
             </div>
-            
-
-            
-            
           </div>
         </div>
         <div
@@ -477,23 +481,23 @@
               >
               <select
                 class="input-form"
-                formControlName="empRole"
+                formControlName="levelId"
                 [ngClass]="{
                   error:
-                    viewEmployeeForm.get('empRole')?.invalid &&
-                    viewEmployeeForm.get('empRole')?.touched
+                    viewEmployeeForm.get('levelId')?.invalid &&
+                    viewEmployeeForm.get('levelId')?.touched
                 }"
-                (change)="fetchDesignation()"
               >
                 <option null selected disabled>Choose Role</option>
-                <option *ngFor="let role of _role" value="{{ role }}">
-                  {{ role }}
+                <option *ngFor="let level of levelForDesignation" 
+                  [value]="level.levelId">
+                  {{ level.levelName }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  viewEmployeeForm?.get('empRole')?.invalid &&
-                  viewEmployeeForm?.get('empRole')?.touched
+                  viewEmployeeForm?.get('levelId')?.invalid &&
+                  viewEmployeeForm?.get('levelId')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -509,25 +513,25 @@
               <select
                 #branch
                 class="input-form"
-                formControlName="empBranch"
+                formControlName="branchId"
                 [ngClass]="{
                   error:
-                    viewEmployeeForm.get('empBranch')?.invalid &&
-                    viewEmployeeForm.get('empBranch')?.touched
+                    viewEmployeeForm.get('branchId')?.invalid &&
+                    viewEmployeeForm.get('branchId')?.touched
                 }"
               >
                 <option null selected disabled>Choose Branch</option>
                 <option
                   *ngFor="let branch of _branch"
-                  value="{{ branch.branchId }}"
+                  [ngValue]="branch.branchId"
                 >
                   {{ branch.branchName }}
                 </option>
               </select>
               <small
                 *ngIf="
-                  viewEmployeeForm?.get('empBranch')?.invalid &&
-                  viewEmployeeForm?.get('empBranch')?.touched
+                  viewEmployeeForm?.get('branchId')?.invalid &&
+                  viewEmployeeForm?.get('branchId')?.touched
                 "
                 class="text-danger text-red-600"
               >
@@ -549,23 +553,22 @@
                     viewEmployeeForm.get('empDesig')?.invalid &&
                     viewEmployeeForm.get('empDesig')?.touched
                 }"
-                
-              >
+                >
                 <option null selected disabled>Choose Designation</option>
                 <option
-                  *ngFor="let designation of _designation"
-                  [value]="designation.index"
+                  *ngFor="let desig of designationList"
+                  [value]="desig.empDesig"
                 >
-                  {{ designation.name }}
+                  {{ desig.empDesignation }}
                 </option>
               </select>
               <small
                 *ngIf="
                   viewEmployeeForm?.get('empDesig')?.invalid &&
-                  viewEmployeeForm?.get('empDesig')?.touched 
+                  viewEmployeeForm?.get('empDesig')?.touched
                 "
                 class="text-danger text-red-600"
-              >
+                >
                 Designation should not be null!
               </small>
             </div>
@@ -575,7 +578,7 @@
                 <input
                   type="radio"
                   formControlName="empFlag"
-                  value="202"
+                  [value]="202"
                   class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   [ngClass]="{
                     error:
@@ -592,7 +595,7 @@
               <div class="me-4 flex items-center">
                 <input
                   type="radio"
-                  value="403"
+                  [value]="403"
                   formControlName="empFlag"
                   class="h-4 w-4 border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                   [ngClass]="{

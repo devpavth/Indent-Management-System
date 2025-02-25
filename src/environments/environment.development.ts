@@ -28,8 +28,8 @@ export const environment = {
   fetchNewLevel: Url + bassEmployeeApi + '/level/getnew',
   confirmNewLevel: Url + bassEmployeeApi + '/level/addnew',
   updateLevelForDesgination: Url + bassEmployeeApi + '/alter/level/desig',
-  removeRoleFromDesignation:
-    Url + bassEmployeeApi + '/desig/role/remove',
+  removeRoleFromDesignation: Url + bassEmployeeApi + '/desig/role/remove',
+  fetchDesignationFromLevel: Url + bassEmployeeApi + '/level/get/',
   getDesignation: Url + bassEmployeeApi + '/empDesignation',
   getDesignationRoleMapping: Url + bassEmployeeApi + '/desig/getactive',
   getDesignationRole: Url + bassEmployeeApi + '/role/getactive',

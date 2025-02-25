@@ -90,45 +90,64 @@ export class EmployeeServiceService {
     );
   }
 
-  assigningRoleToDesignation(designationId: number | undefined, roleId: number){
+  assigningRoleToDesignation(
+    designationId: number | undefined,
+    roleId: number,
+  ) {
     let params = new HttpParams();
 
-    if(designationId !== undefined){
+    if (designationId !== undefined) {
       params = params.append('empDesig', designationId.toString());
     }
     params = params.append('roleId', roleId.toString());
 
-    return this.http.post(environment.assigningRoleToDesignation, {}, {params})
+    return this.http.post(
+      environment.assigningRoleToDesignation,
+      {},
+      { params },
+    );
   }
 
-  fetchLevelForDesignation(): Observable<LevelMapping[]>{
+  fetchLevelForDesignation(): Observable<LevelMapping[]> {
     return this.http.get<LevelMapping[]>(environment.fetchLevelForDesignation);
   }
 
-  postNewDesignation(levelId: number, designName: string){
+  postNewDesignation(levelId: number, designName: string) {
     // console.log('tseting api:', environment.postNewDesignation + levelId, designName);
     return this.http.post(environment.postNewDesignation + levelId, {
       empDesignation: designName,
     });
   }
 
-  fetchNewLevel(){
+  fetchNewLevel() {
     return this.http.get(environment.fetchNewLevel);
   }
 
-  confirmNewLevel(){
+  confirmNewLevel() {
     return this.http.post(environment.confirmNewLevel, '');
   }
 
-  updateLevelForDesignation(levelId: number | undefined, designId: number | undefined){
-    return this.http.put(environment.updateLevelForDesgination + 
-      `?levelId=${levelId}&empDesig=${designId}`, ''
-    )
+  updateLevelForDesignation(
+    levelId: number | undefined,
+    designId: number | undefined,
+  ) {
+    return this.http.put(
+      environment.updateLevelForDesgination +
+        `?levelId=${levelId}&empDesig=${designId}`,
+      '',
+    );
   }
 
-  removeRoleFromDesignation(desigId: number | undefined, roleId: number){
-    return this.http.delete(environment.removeRoleFromDesignation + 
-      `?empDesig=${desigId}&roleId=${roleId}`
-    )
+  removeRoleFromDesignation(desigId: number | undefined, roleId: number) {
+    return this.http.delete(
+      environment.removeRoleFromDesignation +
+        `?empDesig=${desigId}&roleId=${roleId}`,
+    );
+  }
+
+  fetchDesignationFromLevel(levelId: number): Observable<LevelMapping>{
+    return this.http.get<LevelMapping>(
+      environment.fetchDesignationFromLevel + levelId,
+    );
   }
 }

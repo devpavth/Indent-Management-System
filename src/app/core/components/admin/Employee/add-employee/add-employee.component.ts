@@ -14,7 +14,7 @@ import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { Router } from '@angular/router';
-import { DesignationRoleMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import { DesignationRoleMapping, LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 
 // If all conditions met, return no error
 
@@ -31,6 +31,9 @@ export class AddEmployeeComponent implements OnInit {
   pincodeList: any[] = [];
 
   cityDropDownOptions: any;
+  levelForDesignation: LevelMapping[] = [];
+  levelList: LevelMapping | undefined;
+  designationList: DesignationRoleMapping[] = [];
 
   Spinner: boolean = false;
 
@@ -47,63 +50,60 @@ export class AddEmployeeComponent implements OnInit {
     this.maxDate = currentDate.toISOString().split('T')[0];
   }
   ngOnInit(): void {
-
-    this.addEmployeeForm.get('pin')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((pincode)=>{
-        if(this.isPincodeSelected){
-          return of([]);
-        }
-        this.noPincode = false;
-        if(!pincode?.trim()){
-          this.pincodeList = [];
-          return of([]);
-        }
-        return this.sharedService.fetchPincode(pincode).pipe(
-          catchError((error)=>{
-            if(error.status === 404){
-              console.log("Employee API Error:", error);
-              this.noPincode = true;
-            }
+    this.addEmployeeForm
+      .get('pin')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((pincode) => {
+          if (this.isPincodeSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
-        const postOfficeArray = response?.[0]?.postOffice ?? [];
-        console.log("postOfficeArray:", postOfficeArray);
-        this.pincodeList = postOfficeArray;
-        console.log("reponse from pincode:", response);
-        console.log("fetching postOffice from pincode:", response.postOffice);
-        console.log("fetching pincode with live search:", this.pincodeList);
-        if(this.pincodeList.length > 0){
-          const cityDropDownOptions = this.pincodeList.map(
-            (address) => ({
-              label: `${address.name}, ${address.city}`,
-              value: `${address.name}, ${address.city}`
-            })
-          );
-          console.log("City dropdown options:", cityDropDownOptions);
-
-            this.addEmployeeForm.patchValue(
-              {
-                city: cityDropDownOptions[0].value,
-                state: this.pincodeList[0].state,
-                country: this.pincodeList[0].country,
-              },
-              {emitEvent: false}
-            )
-            this.cityDropDownOptions = cityDropDownOptions;
           }
+          this.noPincode = false;
+          if (!pincode?.trim()) {
+            this.pincodeList = [];
+            return of([]);
+          }
+          return this.sharedService.fetchPincode(pincode).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('Employee API Error:', error);
+                this.noPincode = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
+        const postOfficeArray = response?.[0]?.postOffice ?? [];
+        console.log('postOfficeArray:', postOfficeArray);
+        this.pincodeList = postOfficeArray;
+        console.log('reponse from pincode:', response);
+        console.log('fetching postOffice from pincode:', response.postOffice);
+        console.log('fetching pincode with live search:', this.pincodeList);
+        if (this.pincodeList.length > 0) {
+          const cityDropDownOptions = this.pincodeList.map((address) => ({
+            label: `${address.name}, ${address.city}`,
+            value: `${address.name}, ${address.city}`,
+          }));
+          console.log('City dropdown options:', cityDropDownOptions);
+
+          this.addEmployeeForm.patchValue(
+            {
+              city: cityDropDownOptions[0].value,
+              state: this.pincodeList[0].state,
+              country: this.pincodeList[0].country,
+            },
+            { emitEvent: false },
+          );
+          this.cityDropDownOptions = cityDropDownOptions;
+        }
         this.isPincodeSelected = false;
-      }
-    )
+      });
     this.fetchAllBranch();
     this.fetchDesignation();
     this.fetchAllDesignation();
+    this.fetchLevelForDesignation();
   }
 
   fetchAllBranch() {
@@ -236,9 +236,21 @@ export class AddEmployeeComponent implements OnInit {
     return null;
   }
 
+  fetchLevelForDesignation(){
+    this.empService.fetchLevelForDesignation().subscribe(
+      (res) => {
+        console.log("fetching level list:", res);
+        this.levelForDesignation = res;
+      },
+      (error) => {
+        console.log("error while fetching level:", error);
+      }
+    )
+  }
+
   addEmployee(employeeData: any) {
     console.table(employeeData);
-    console.log("employee created successfully:", employeeData);
+    console.log('employee created successfully:', employeeData);
 
     this.Spinner = true;
 
@@ -247,17 +259,19 @@ export class AddEmployeeComponent implements OnInit {
         console.log('server res:', res);
 
         this.Spinner = false;
-        this.empPopUpMsg= "Employee added Successfully.";
+        this.empPopUpMsg = 'Employee added Successfully.';
         this.isSuccess = true;
 
         // this.addEmployeeForm.reset();
       },
       (error) => {
-        console.log(error);
+        console.log("error while creating employee:", error);
+        this.Spinner = false
 
         if (error.status == 200) {
-          console.log("200 status for creating employee:", error);
-        } if(error.status === 400) {
+          console.log('200 status for creating employee:', error);
+        }
+        if (error.status === 400) {
           this.isToast = true;
           this.warningToastMsg = error.error.errorMessege;
           setTimeout(() => {
@@ -266,7 +280,8 @@ export class AddEmployeeComponent implements OnInit {
         }
         if (error.status == 500) {
           // this.addEmployeeForm.reset();
-          this.warningToastMsg = 'Employee added successfully, but unable to send email.';
+          this.warningToastMsg =
+            'Employee added successfully, but unable to send email.';
           this.isToast = true;
           setTimeout(() => {
             this.isToast = false;
@@ -296,12 +311,32 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-  fetchAllDesignation(){
+  fetchAllDesignation() {
     this.empService.getDesignationRoleMapping().subscribe(
-      (res: DesignationRoleMapping[]) =>{
-        console.log("fetching designation role:", res);
-      },(error) =>{
-        console.log("error while fetching role:", error);
+      (res: DesignationRoleMapping[]) => {
+        console.log('fetching designation role:', res);
+      },
+      (error) => {
+        console.log('error while fetching role:', error);
+      },
+    );
+  }
+
+  fetchDesignationFromLevel(event: Event){
+    const selectElement = event.target as HTMLSelectElement;
+    const levelId = Number(selectElement.value);
+
+    console.log("levelId:", levelId);
+
+    this.empService.fetchDesignationFromLevel(levelId).subscribe(
+      (res: LevelMapping) => {
+        console.log("fetching designation from level:", res);
+        this.levelList = res;
+        this.designationList = this.levelList.designationTables;
+        console.log("this.designationList:", this.designationList);
+      },
+      (error) => {
+        console.log('error while fetching designation from level:', error);
       }
     )
   }
@@ -341,12 +376,12 @@ export class AddEmployeeComponent implements OnInit {
     console.log('verifyEmailId called with:', data);
     this.empService.verifyEmail(data).subscribe(
       (res) => {
-        console.log("Email Response:",res);
+        console.log('Email Response:', res);
         this.isVerifiedEmail = true;
       },
       (error) => {
         if (error.status == 208) {
-          console.log("Email error response:",error);
+          console.log('Email error response:', error);
           this.isVerifiedEmail = true;
         } else if (error.statusText == 'OK') {
           this.isVerifiedEmail = false;

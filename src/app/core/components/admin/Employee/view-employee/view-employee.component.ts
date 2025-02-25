@@ -5,6 +5,8 @@ import { SharedServiceService } from '../../../service/shared-service/shared-ser
 import { AdminProductServiceService } from '../../admin-services/admin-product-service.service';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import { DesignationRoleMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 
 @Component({
   selector: 'app-view-employee',
@@ -45,6 +47,9 @@ export class ViewEmployeeComponent implements OnInit {
   noPincode: boolean = false;
   pincodeList: any[] = [];
   cityDropDownOptions: any;
+  levelForDesignation: LevelMapping[] = [];
+  levelList: LevelMapping | undefined;
+  designationList: DesignationRoleMapping[] = [];
 
   ngOnInit() {
     console.log(this.EmployeeCode);
@@ -52,7 +57,7 @@ export class ViewEmployeeComponent implements OnInit {
     this.EmployeeService.getEmployeeDetails(this.EmployeeCode).subscribe(
       (res) => {
         this._employeeDetails = res;
-        console.log(res);
+        console.log("fetching employee details:", res);
 
         this.viewEmployeeForm = new FormGroup({
           employeeId: new FormControl(this._employeeDetails.employeeId),
@@ -103,14 +108,27 @@ export class ViewEmployeeComponent implements OnInit {
           empRole: new FormControl(this._employeeDetails.empRole, [
             Validators.required,
           ]),
-          empBranch: new FormControl(this._employeeDetails.empBranch, [
+          branchId: new FormControl(this._employeeDetails.branchId, [
+            Validators.required,
+          ]),
+
+          branchCode: new FormControl(this._employeeDetails.branchCode, [
+            Validators.required,
+          ]),
+
+          levelId: new FormControl(this._employeeDetails.levelId, [
             Validators.required,
           ]),
 
           empDesig: new FormControl(this._employeeDetails.empDesig, [
             Validators.required,
           ]),
-          empFlag: new FormControl(this._employeeDetails.empFlag.toString(), [
+
+          empDesignation: new FormControl(this._employeeDetails.empDesignation, [
+            Validators.required,
+          ]),
+
+          empFlag: new FormControl(this._employeeDetails.empFlag, [
             Validators.required,
           ]),
           empJoiningDate: new FormControl(
@@ -132,64 +150,69 @@ export class ViewEmployeeComponent implements OnInit {
 
         // this.viewEmployeeForm.markAllAsTouched();
 
-        this.viewEmployeeForm.get('pin').valueChanges
-        .pipe(
-          debounceTime(300),
-          switchMap((pincode) => {
-            if(this.isPincodeSelected){
-              return of([]);
-            }
-            this.noPincode = false;
-            if(!pincode || pincode.toString().length !== 6){
-              this.pincodeList = [];
-              return of([]);
-            }
-            return this.countryStateCity.fetchPincode(pincode).pipe(
-              catchError((error) => {
-                if(error.status === 404){
-                  console.log("Pincode API Error:", error);
-                  this.noPincode = true;
-                }
-                return of([]);
-              })
-            )
-          })
-        )
-        .subscribe(
-          (response: any) => {
-            const postOfficeArray = response?.[0]?.postOffice ?? [];
-            console.log("postOfficeArray:", postOfficeArray);
-            this.pincodeList = postOfficeArray;
-            console.log("reponse from pincode:", response);
-            console.log("fetching postOffice from pincode:", response.postOffice);
-            console.log("fetching pincode with live search:", this.pincodeList);
+        console.log('Form Value', this.viewEmployeeForm.value);
+        console.log("empDesig value:", this.viewEmployeeForm.value.empDesig)
 
-            if(response?.[0]?.status === "Error"
-                && this.pincodeList.length === 0
-            ){
-              console.log("Pincode API Error:", response?.[0]?.status);
+        this.viewEmployeeForm
+          .get('pin')
+          .valueChanges.pipe(
+            debounceTime(300),
+            switchMap((pincode) => {
+              if (this.isPincodeSelected) {
+                return of([]);
+              }
+              this.noPincode = false;
+              if (!pincode || pincode.toString().length !== 6) {
+                this.pincodeList = [];
+                return of([]);
+              }
+              return this.countryStateCity.fetchPincode(pincode).pipe(
+                catchError((error) => {
+                  if (error.status === 404) {
+                    console.log('Pincode API Error:', error);
+                    this.noPincode = true;
+                  }
+                  return of([]);
+                }),
+              );
+            }),
+          )
+          .subscribe((response: any) => {
+            const postOfficeArray = response?.[0]?.postOffice ?? [];
+            console.log('postOfficeArray:', postOfficeArray);
+            this.pincodeList = postOfficeArray;
+            console.log('reponse from pincode:', response);
+            console.log(
+              'fetching postOffice from pincode:',
+              response.postOffice,
+            );
+            console.log('fetching pincode with live search:', this.pincodeList);
+
+            if (
+              response?.[0]?.status === 'Error' &&
+              this.pincodeList.length === 0
+            ) {
+              console.log('Pincode API Error:', response?.[0]?.status);
               this.noPincode = true;
 
-              this.viewEmployeeForm.patchValue({
-                city: '',
-                state: '',
-                country: ''
-              },
-              {emitEvent: false}
-            )
+              this.viewEmployeeForm.patchValue(
+                {
+                  city: '',
+                  state: '',
+                  country: '',
+                },
+                { emitEvent: false },
+              );
             }
 
-            console.log("fetching pincode with live search:", this.pincodeList);
+            console.log('fetching pincode with live search:', this.pincodeList);
 
-
-            if(this.pincodeList.length > 0){
-              const cityDropDownOptions = this.pincodeList.map(
-                (address) => ({
-                  label: `${address.name}, ${address.city}`,
-                  value: `${address.name}, ${address.city}`
-                })
-              );
-              console.log("City dropdown options:", cityDropDownOptions);
+            if (this.pincodeList.length > 0) {
+              const cityDropDownOptions = this.pincodeList.map((address) => ({
+                label: `${address.name}, ${address.city}`,
+                value: `${address.name}, ${address.city}`,
+              }));
+              console.log('City dropdown options:', cityDropDownOptions);
 
               this.viewEmployeeForm.patchValue(
                 {
@@ -197,30 +220,70 @@ export class ViewEmployeeComponent implements OnInit {
                   state: this.pincodeList[0].state,
                   country: this.pincodeList[0].country,
                 },
-                {emitEvent: false}
-              )
+                { emitEvent: false },
+              );
 
               this.cityDropDownOptions = cityDropDownOptions;
             }
             this.isPincodeSelected = false;
-          }
-        )
+          });
 
         this.fetchState(this._employeeDetails.country);
         this.fetchCity(this._employeeDetails.state);
         this.fetchAllBranch();
 
-        this.fetchDesignation();
+        this.fetchLevelForDesignation();
+
+        this.fetchDesignationFromLevel(this._employeeDetails.levelId);
+
         Object.keys(this.viewEmployeeForm.controls).forEach((form) => {
           this.viewEmployeeForm.get(form)?.disable();
         });
+
+        this.viewEmployeeForm.get('levelId').valueChanges.subscribe(
+          (levelId: number) => {
+            if(levelId){
+              this.fetchDesignationFromLevel(levelId);
+
+              // this.viewEmployeeForm.get('empDesig')?.markAsTouched();
+            }
+          }
+        )
+      },
+    );
+  }
+
+  fetchLevelForDesignation() {
+    this.EmployeeService.fetchLevelForDesignation().subscribe(
+      (res) => {
+        console.log('fetching level list:', res);
+        this.levelForDesignation = res;
+      },
+      (error) => {
+        console.log('error while fetching level list:', error);
+      },
+    );
+  }
+
+  fetchDesignationFromLevel(levelId: number) {
+
+    this.EmployeeService.fetchDesignationFromLevel(levelId).subscribe(
+      (res) => {
+        console.log('fetching designation list:', res);
+        this.levelList = res;
+        this.designationList = this.levelList.designationTables;
+
+        console.log('this.designationList:', this.designationList);
+      },
+      (error) => {
+        console.log('error while fetching designation list:', error);
       },
     );
   }
 
   fetchAllBranch() {
-    this.branchService.getBranch().subscribe((res) => {
-      console.log(res);
+    this.branchService.getBranch().subscribe((res: any) => {
+      console.log("fetching branch List:", res);
 
       this._branch = res;
     });
@@ -262,59 +325,61 @@ export class ViewEmployeeComponent implements OnInit {
     // this.viewEmployeeForm.get('empDesig').Validators().required;
     // this.viewEmployeeForm.get('empDesig')?.clearValidators();
     // this.viewEmployeeForm.get('empDesig')?.updateValueAndValidity();
-    
+
     // this.viewEmployeeForm.get('empDesig').m
 
     this.EmployeeService.getDesignation().subscribe((res: any) => {
-      console.log("fetching designation:",res);
+      console.log('fetching designation:', res);
       let check = this.viewEmployeeForm.get('empRole')?.value;
       if (check == 'Level 1') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 1')
           .map((key) => ({ index: key, name: res[key][0] }));
-        console.log("fetching designation in level 1:",this._designation);
+        console.log('fetching designation in level 1:', this._designation);
       } else if (check == 'Level 2') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 2')
           .map((key) => ({ index: key, name: res[key][0] }));
-        console.log("fetching designation in level 2:",this._designation);
+        console.log('fetching designation in level 2:', this._designation);
       } else if (check == 'Level 3') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 3')
           .map((key) => ({ index: key, name: res[key][0] }));
-          console.log("fetching designation in level 3:",this._designation);
+        console.log('fetching designation in level 3:', this._designation);
       } else if (check == 'Level 4') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 4')
           .map((key) => ({ index: key, name: res[key][0] }));
-          console.log("fetching designation in level 4:",this._designation);
+        console.log('fetching designation in level 4:', this._designation);
       } else if (check == 'Level 5') {
         this._designation = Object.keys(res)
           .filter((key) => res[key][1] === 'Level 5')
           .map((key) => ({ index: key, name: res[key][0] }));
-          console.log("fetching designation in level 5:",this._designation);
+        console.log('fetching designation in level 5:', this._designation);
       } else {
         this._designation = [{ index: 0, name: 'Not Data' }];
       }
-      console.log("Designation fetched:", this._designation);
+      console.log('Designation fetched:', this._designation);
 
-      if(this._designation.length > 0 && this.isSave){
-        this.viewEmployeeForm.get('empDesig').setValue(this._designation[0].index)
+      if (this._designation.length > 0 && this.isSave) {
+        this.viewEmployeeForm
+          .get('empDesig')
+          .setValue(this._designation[0].index);
       }
     });
   }
 
   updateEmployeeDetails(data: any) {
-    console.log("successfully updating the employee data:", data);
+    console.log('successfully updating the employee data:', data);
 
     this.EmployeeService.updateEmployeeDetails(data).subscribe((res) => {
-      console.log("successfully updated the employee details:",res);
+      console.log('successfully updated the employee details:', res);
     });
     this.showSuccess.emit(true);
   }
 
   deleteEmployeeDetails(test: any) {
-    console.log("deleting employee details:",test);
+    console.log('deleting employee details:', test);
 
     this.isDeletePop.emit(true);
     this.AdminService.employeeCode = test;
