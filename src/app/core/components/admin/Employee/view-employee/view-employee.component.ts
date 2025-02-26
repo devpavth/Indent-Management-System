@@ -242,11 +242,16 @@ export class ViewEmployeeComponent implements OnInit {
 
         this.viewEmployeeForm.get('levelId').valueChanges.subscribe(
           (levelId: number) => {
-            if(levelId){
-              this.fetchDesignationFromLevel(levelId);
+            if(levelId && levelId !== this._employeeDetails.levelId){ 
+              this.viewEmployeeForm.get('empDesig')?.reset('');
 
-              // this.viewEmployeeForm.get('empDesig')?.markAsTouched();
             }
+
+            this.fetchDesignationFromLevel(levelId);
+            this.viewEmployeeForm
+              .get('empDesig')
+              ?.setValidators([Validators.required]);
+            this.viewEmployeeForm.get('empDesig').updateValueAndValidity();
           }
         )
       },

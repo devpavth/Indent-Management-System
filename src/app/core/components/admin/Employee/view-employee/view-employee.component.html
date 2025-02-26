@@ -490,7 +490,7 @@
               >
                 <option null selected disabled>Choose Role</option>
                 <option *ngFor="let level of levelForDesignation" 
-                  [value]="level.levelId">
+                  [ngValue]="level.levelId">
                   {{ level.levelName }}
                 </option>
               </select>
@@ -557,7 +557,7 @@
                 <option null selected disabled>Choose Designation</option>
                 <option
                   *ngFor="let desig of designationList"
-                  [value]="desig.empDesig"
+                  [ngValue]="desig.empDesig"
                 >
                   {{ desig.empDesignation }}
                 </option>

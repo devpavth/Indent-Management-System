@@ -95,6 +95,7 @@ const routes: Routes = [
         canActivate: [authGuard],
         data: { roles: ['ROLE_IT_ADMIN'] },
       },
+     
     ],
   },
   {
