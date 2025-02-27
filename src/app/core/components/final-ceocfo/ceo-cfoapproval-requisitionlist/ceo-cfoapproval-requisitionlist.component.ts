@@ -1,6 +1,7 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
-// import { undefined } from '../../procurement/procurement-requestlist/procurement-requestlist.component';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
+import { Request as AppRequest} from '../../../models/request/request.model';
 
 @Component({
   selector: 'app-ceo-cfoapproval-requisitionlist',
@@ -8,14 +9,17 @@ import { RequestService } from '../../service/Request/request.service';
   styleUrl: './ceo-cfoapproval-requisitionlist.component.css',
 })
 export class CeoCfoapprovalRequisitionlistComponent {
-  currentDate: string | undefined;
+  currentDate: string;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
+  userId: string | null = '';
+  specialRoleId: number = 0;
+
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
-  ngOnInit() {
-    console.log('checking procurement list');
-    this.fetchRequestList();
-  }
+
+  empService = inject(EmployeeServiceService);
+
+  specialRolesProcessList: AppRequest[] = [];
 
   constructor(
     private req: RequestService,
@@ -25,6 +29,24 @@ export class CeoCfoapprovalRequisitionlistComponent {
     this.currentDate = today.toISOString().split('T')[0];
     this.maxDate = today.toISOString().split('T')[0];
   }
+
+  ngOnInit() {
+    console.log('checking procurement list');
+    this.userId = sessionStorage.getItem('userId');
+
+    this.empService.getEmployeeDetails(this.userId).subscribe(
+      (res: any) => {
+        console.log('fetching employee details:', res);
+        this.specialRoleId = res.specialRoleId;
+        console.log('this.specialRoleId:', this.specialRoleId);
+        this.fetchRequestList();
+      },
+      (error) => {
+        console.log('error while employee details:', error);
+      },
+    );
+  }
+
   isProcess = true;
   isCompleted = false;
   isHold = false;
@@ -47,23 +69,26 @@ export class CeoCfoapprovalRequisitionlistComponent {
     ) {
       let status = 102;
       this.isViewSelectedDate = false;
-      this.req.fetchPrctReqList(status).subscribe(
-        (res) => {
-          this.userRequest = res;
-          console.log('fetching procurement request processing list:', res);
-        },
-        (error) => {
-          console.log(
-            'error while fetching processing procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            this.userRequest = undefined;
-          } else if (error.status === 404) {
-            this.userRequest = undefined;
-          }
-        },
-      );
+      console.log('this.specialRoleId in method:', this.specialRoleId);
+      this.req
+        .fetchSpecialRolesRequestIsProcess(status, this.specialRoleId)
+        .subscribe(
+          (res: any) => {
+            this.specialRolesProcessList = res;
+            console.log('fetching special roles request processing list:', res);
+          },
+          (error) => {
+            console.log(
+              'error while fetching processing special roles request:',
+              error,
+            );
+            if (error.status == 204) {
+              this.userRequest = undefined;
+            } else if (error.status === 404) {
+              this.userRequest = undefined;
+            }
+          },
+        );
     }
     if (
       this.isProcess == false &&
@@ -72,27 +97,29 @@ export class CeoCfoapprovalRequisitionlistComponent {
       this.isRejected == false
     ) {
       this.isViewSelectedDate = true;
-      this.req.fetchPrctReqList(202, this.currentDate).subscribe(
-        (res: any) => {
-          console.log('fetching completed procurement request:', res);
-          // let list: any[] = res;
-          // console.log("listing completed:", list);
-          // list = list.filter((l) => l.requestStatus == 102);
-          // console.log("filtering completed request:", list);
-          this.userRequest = res;
-        },
-        (error) => {
-          console.log(
-            'error while fetching completed procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            this.userRequest = undefined;
-          } else if (error.status === 404) {
-            this.userRequest = undefined;
-          }
-        },
-      );
+      this.req
+        .fetchSpecialRolesRequestIsAccept(202, this.specialRoleId, this.currentDate)
+        .subscribe(
+          (res: any) => {
+            console.log('fetching completed special roles request:', res);
+            // let list: any[] = res;
+            // console.log("listing completed:", list);
+            // list = list.filter((l) => l.requestStatus == 102);
+            // console.log("filtering completed request:", list);
+            // this.userRequest = res;
+          },
+          (error) => {
+            console.log(
+              'error while fetching completed special roles request:',
+              error,
+            );
+            if (error.status == 204) {
+              this.specialRolesProcessList = [];
+            } else if (error.status === 404) {
+              this.specialRolesProcessList = [];
+            }
+          },
+        );
     }
     if (
       this.isProcess == false &&
@@ -126,23 +153,23 @@ export class CeoCfoapprovalRequisitionlistComponent {
       this.isRejected == true
     ) {
       this.isViewSelectedDate = true;
-      this.req.fetchPrctReqList(406, this.currentDate).subscribe(
-        (res: any) => {
-          console.log('fetching procurement request rejected list:', res);
-          this.userRequest = res;
-        },
-        (error) => {
-          console.log(
-            'error while fetching rejected procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            this.userRequest = undefined;
-          } else if (error.status === 404) {
-            this.userRequest = undefined;
-          }
-        },
-      );
+      // this.req.fetchPrctReqList(406, this.currentDate).subscribe(
+      //   (res: any) => {
+      //     console.log('fetching procurement request rejected list:', res);
+      //     this.userRequest = res;
+      //   },
+      //   (error) => {
+      //     console.log(
+      //       'error while fetching rejected procurement request:',
+      //       error,
+      //     );
+      //     if (error.status == 204) {
+      //       this.userRequest = undefined;
+      //     } else if (error.status === 404) {
+      //       this.userRequest = undefined;
+      //     }
+      //   },
+      // );
     }
   }
 
@@ -207,11 +234,10 @@ export class CeoCfoapprovalRequisitionlistComponent {
     console.log(sno);
     this.reqId = sno;
     this.indentNumber = indentNO;
-    if(this.isCompleted === true){
+    if (this.isCompleted === true) {
       this.isViewQuoteCompare = true;
     }
   }
-
 
   refresh(data: any) {
     this.isView = data;

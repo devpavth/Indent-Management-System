@@ -223,12 +223,13 @@ export class RequestService {
     );
   }
 
-  fetchQuoteComparisonPDF(sno: number, headOfAccId: number){
+  fetchQuoteComparisonPDF(sno: number, headOfAccId: number) {
     return this.http.get(
-      environment.fetchQuoteComparisonPDF + 
-      `?sno=${sno}&headOfAccId=${headOfAccId}`, {
-        responseType: 'blob'
-      }
+      environment.fetchQuoteComparisonPDF +
+        `?sno=${sno}&headOfAccId=${headOfAccId}`,
+      {
+        responseType: 'blob',
+      },
     );
   }
 
@@ -236,14 +237,31 @@ export class RequestService {
   //   return this.http.get(environment.fetchNormalRequest + `?startDate=${startDate}&endDate=${endDate}`)
   // }
 
-  fetchConsolidatedQuotePDF(reqId: number){
+  fetchConsolidatedQuotePDF(reqId: number) {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    })
+      Authorization: `Bearer ${token}`,
+    });
     return this.http.get(environment.fetchConsolidatedQuotePDF + reqId, {
       headers,
-      responseType: 'blob'
+      responseType: 'blob',
     });
+  }
+
+  fetchSpecialRolesRequestIsProcess(
+    statusCode: number,
+    specialRoleId: number,
+  ): Observable<Request[]> {
+    return this.http.get<Request[]>(
+      environment.fetchSpecialRolesRequestIsProcess +
+        `${statusCode}?specialRoleId=${specialRoleId}`,
+    );
+  }
+
+  fetchSpecialRolesRequestIsAccept(statusCode: number, specialRoleId: number, startDate: string){
+    return this.http.get(
+      environment.fetchSpecialRolesRequestIsAccept +
+        `${statusCode}?specialRoleId=${specialRoleId}&startDate=${startDate}`,
+    );
   }
 }

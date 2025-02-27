@@ -84,7 +84,14 @@ const routes: Routes = [
             (m) => m.FinalCeocfoModule,
           ),
         canActivate: [authGuard],
-        data: { roles: ['ROLE_PROCUREMENT_AUTH'] },
+        data: {
+          roles: [
+            'ROLE_CEO',
+            'ROLE_DIRECTOR_FINANCE',
+            'ROLE_PROCUREMENT_MANAGER',
+            'ROLE_HEAD_ADMIN',
+          ],
+        },
       },
       {
         path: '',
@@ -95,7 +102,6 @@ const routes: Routes = [
         canActivate: [authGuard],
         data: { roles: ['ROLE_IT_ADMIN'] },
       },
-     
     ],
   },
   {

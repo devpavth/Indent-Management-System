@@ -1,0 +1,33 @@
+export interface Employeedetails {
+  addressLine1: string;
+  addressLine2: string;
+  branchCode: string;
+  branchId: number;
+  branchMobilenumber: string;
+  branchName: string;
+  city: string;
+  country: string;
+  createdBy: string;
+  createdTime: string;
+  empDateofBirth: string;
+  empDesig: number;
+  empDesignation: string;
+  empEmail: string;
+  empFirstName: string;
+  empFlag: number;
+  empGender: string;
+  empJoiningDate: string;
+  empLastName: string;
+  empPhone: string;
+  empRole: string;
+  empStatus: number;
+  employeeId: string;
+  gstNumber: string;
+  levelId: number;
+  manager: string;
+  pin: string;
+  signUploaded: boolean;
+  sno: number;
+  specialRoleId: number;
+  state: string;
+}

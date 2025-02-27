@@ -36,6 +36,7 @@ export const environment = {
   fetchDesignationAssignedRole: Url + bassEmployeeApi + '/desig/get/',
   assigningRoleToDesignation: Url + bassEmployeeApi + '/desig/role/addnew',
   searchPincode: Url + 'api/searchPincode/',
+  postSignature: Url + bassEmployeeApi + '/add-signature',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',
@@ -135,6 +136,11 @@ export const environment = {
   fetchNormalRequest: Url + baseRequestApi + '/getnormalrequest',
   fetchConsolidatedQuotePDF:
     Url + baseRequestApi + '/quote/consolidate/generate-report/',
+
+  fetchSpecialRolesRequestIsProcess:
+    Url + baseRequestApi + '/requestforspecialroles/',
+  fetchSpecialRolesRequestIsAccept:
+    Url + baseRequestApi + '/requestforspecialroles/',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

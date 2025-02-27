@@ -3,6 +3,7 @@ import { environment } from '../../../../../environments/environment.development
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
 import { DesignationRoleMapping, LevelMapping, RoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
+import { Employeedetails } from '../../../models/employee/employeedetails.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,8 +23,8 @@ export class EmployeeServiceService {
       }),
     );
   }
-  getEmployeeDetails(user: any) {
-    return this.http.get(environment.getUserDetail + user);
+  getEmployeeDetails(user: any): Observable<Employeedetails> {
+    return this.http.get<Employeedetails>(environment.getUserDetail + user);
   }
   getAllEmployeeDetails(sno: any) {
     return this.http.get(environment.getAllEmployeeDetails);
@@ -145,9 +146,13 @@ export class EmployeeServiceService {
     );
   }
 
-  fetchDesignationFromLevel(levelId: number): Observable<LevelMapping>{
+  fetchDesignationFromLevel(levelId: number): Observable<LevelMapping> {
     return this.http.get<LevelMapping>(
       environment.fetchDesignationFromLevel + levelId,
     );
+  }
+
+  uploadSignature(formData: any) {
+    return this.http.post(environment.postSignature, formData);
   }
 }

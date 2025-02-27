@@ -536,14 +536,17 @@ export class EmployeeListComponent implements OnInit {
       console.log('Employee ID to delete:', empId);
 
       this.employeeService.deleteEmployee(empId).subscribe(
-        (res) => {
+        (res: any) => {
           if (res !== null) {
             console.log('deleting employee:', res);
+            this.isSuccess = true;
+            this.empPopUpMsg = res.errorMessege;
           } else {
             console.log('Employee deleted successfully, no response data.');
           }
         },
         (error) => {
+          console.log("error while deleting employee data:", error);
           if (error.status == 200) {
             this.fetchEmployeeList(this.userid);
             console.log('userid:', this.userid);

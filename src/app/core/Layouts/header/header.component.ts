@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 import { SharedServiceService } from '../../components/service/shared-service/shared-service.service';
@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private readonly userDetailService: EmployeeServiceService,
     public sharedData: SharedServiceService,
+    private elRef: ElementRef
   ) {
     this.randomColor = this.getRandomColor();
   }
@@ -74,6 +75,14 @@ export class HeaderComponent implements OnInit {
       this.profile = false;
     }, 9000);
   }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event){
+    if(!this.elRef.nativeElement.contains(event.target)){
+      this.profile = false;
+    }
+  }
+
   signOut() {
     sessionStorage.clear();
   }

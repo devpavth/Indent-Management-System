@@ -30,6 +30,7 @@ import { WarningPopupComponent } from './warning-popup/warning-popup.component';
 import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popup/warning-roleassigning-popup.component';
 import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpopup.component';
 import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-acceptedpopup.component';
+import { UploadSignatureComponent } from './upload-signature/upload-signature.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-accepte
     WarningRoleassigningPopupComponent,
     QuoteSuccesspopupComponent,
     QuoteAcceptedpopupComponent,
+    UploadSignatureComponent,
   ],
   imports: [
     CommonModule,
@@ -89,7 +91,8 @@ import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-accepte
     OnlyNumberDirective,
     OtpComponent,
     WarningPopupComponent,
-    WarningRoleassigningPopupComponent
+    WarningRoleassigningPopupComponent,
+    UploadSignatureComponent,
   ],
 })
 export class SharedModule {}

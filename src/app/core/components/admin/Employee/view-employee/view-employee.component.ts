@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
@@ -19,6 +19,7 @@ export class ViewEmployeeComponent implements OnInit {
     private readonly countryStateCity: SharedServiceService,
     private AdminService: AdminProductServiceService,
     private branchService: BranchService,
+    private elRef: ElementRef
   ) {}
   @Output() closeEmployeePop = new EventEmitter<boolean>();
   @Input() EmployeeCode: any;
@@ -254,6 +255,24 @@ export class ViewEmployeeComponent implements OnInit {
             this.viewEmployeeForm.get('empDesig').updateValueAndValidity();
           }
         )
+
+
+        this.viewEmployeeForm.get('branchId').valueChanges.subscribe(
+          (branchId: number) => {
+            if(branchId){
+              const selectedBranch = this._branch.find(
+                (branch: any) => branch.branchId === branchId)
+
+              console.log("selectedBranch:", selectedBranch);
+
+              if(selectedBranch){
+                this.viewEmployeeForm.patchValue({
+                  branchCode: selectedBranch.branchCode
+                })
+              }
+            }
+          }
+        )
       },
     );
   }
@@ -310,6 +329,16 @@ export class ViewEmployeeComponent implements OnInit {
     this.isStyle = true;
     this.closeEmployeePop.emit(false);
   }
+
+  // @HostListener('document: click', ['$event'])
+  // clickOutside(event: Event){
+  //   if(this.elRef.nativeElement.contains(event.target)){
+  //     this.closeEmployeePop.emit(false);
+  //     console.log("clicking outside view...");
+  //     console.log("clicking outside view...");
+  //     console.log("clicking outside view...");
+  //   }
+  // }
 
   enableEdit() {
     Object.keys(this.viewEmployeeForm.controls).forEach((form) => {
@@ -379,8 +408,12 @@ export class ViewEmployeeComponent implements OnInit {
 
     this.EmployeeService.updateEmployeeDetails(data).subscribe((res) => {
       console.log('successfully updated the employee details:', res);
+
+      if(res !== null){
+        this.showSuccess.emit(true);
+      }
+      
     });
-    this.showSuccess.emit(true);
   }
 
   deleteEmployeeDetails(test: any) {
