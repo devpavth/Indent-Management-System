@@ -18,6 +18,8 @@ export class UploadSignatureComponent {
   route = inject(Router);
   isToast: boolean = false;
   successToastMsg: string = '';
+  isErrorToast: boolean = false;
+  errorToastMsg: string = '';
 
   ngOnInit() {
     console.log('specialRoleId:', this.specialRoleId);
@@ -38,7 +40,15 @@ export class UploadSignatureComponent {
       const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg'];
 
       if (!allowedExtensions.includes(file.type)) {
-        alert('Invalid file format! Please upload a JPG, JPEG, or PNG image.');
+        // alert('Invalid file format! Please upload a JPG, JPEG, or PNG image.');
+        this.isErrorToast = true;
+        this.errorToastMsg = "Invalid file format! Please upload a JPG, JPEG, or PNG image.";
+        this.previewUrl = null;
+        this.selectedFile = null;
+        setTimeout(() => {
+          this.isErrorToast = false;
+        }, 3000);
+
         return;
       }
 
@@ -57,13 +67,13 @@ export class UploadSignatureComponent {
     console.log('specialRoleId:', this.specialRoleId);
     if (this.specialRoleId === undefined || this.specialRoleId === null) {
       console.error('specialRoleId is required!');
-      alert('Special Role ID is missing.');
+      // alert('Special Role ID is missing.');
       return;
     }
 
     if (!this.selectedFile) {
       console.error('No file selected!');
-      alert('Please select a file first.');
+      // alert('Please select a file first.');
       return;
     }
     const formData = new FormData();

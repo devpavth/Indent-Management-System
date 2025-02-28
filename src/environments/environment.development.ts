@@ -141,6 +141,9 @@ export const environment = {
     Url + baseRequestApi + '/requestforspecialroles/',
   fetchSpecialRolesRequestIsAccept:
     Url + baseRequestApi + '/requestforspecialroles/',
+
+  acceptSpecialRoleRequest:
+    Url + baseRequestApi + '/acceptspecialroleauth',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

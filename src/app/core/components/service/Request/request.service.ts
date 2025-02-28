@@ -258,10 +258,21 @@ export class RequestService {
     );
   }
 
-  fetchSpecialRolesRequestIsAccept(statusCode: number, specialRoleId: number, startDate: string){
+  fetchSpecialRolesRequestIsAccept(
+    statusCode: number,
+    specialRoleId: number,
+    startDate: string,
+  ) {
     return this.http.get(
       environment.fetchSpecialRolesRequestIsAccept +
         `${statusCode}?specialRoleId=${specialRoleId}&startDate=${startDate}`,
+    );
+  }
+
+  acceptSpecialRoleRequest(specialRoleId: number, reqList: {sno: number}[]){
+    return this.http.post(
+      environment.acceptSpecialRoleRequest + `?specialRoleId=${specialRoleId}`,
+      reqList,
     );
   }
 }

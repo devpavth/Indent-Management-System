@@ -1,7 +1,7 @@
 <div *ngIf="!isView" class="p-4 sm:ml-64">
   <div>
     <div class="mb-2 rounded-lg px-2 py-2">
-      <h1 class="font-semibold text-purple-800">CEO & CFO Approval</h1>
+      <h1 class="font-semibold text-purple-800">PO Approval</h1>
     </div>
   </div>
   <section class="dark:bg-gray-900">
@@ -18,7 +18,7 @@
               <div class="relative mr-28">
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                >
+                  >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -38,6 +38,28 @@
                   class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder="Search"
                 />
+              </div>
+            </div>
+
+            <div 
+              *ngIf="isAnyCheckboxSelected()"
+              class="relative group"
+              >
+              <button 
+                type="submit"
+                [disabled]="!signUploaded"
+                (click)="acceptSelectedRequestSpecialRole()"
+                [ngClass]="{
+                  'bg-blue-300 hover:bg-blue-300 border-blue-300': !signUploaded
+                }"
+                class="border border-blue-700 text-white font-medium px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700">
+                Accept
+              </button>
+              <div 
+                  *ngIf="!signUploaded"
+                  class="absolute left-1/4 -top-[50%] z-10 min-w-[250px] -translate-x-1/2 rounded-lg bg-black px-3 py-2 text-sm text-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  Before accepting the indent request, you need to upload a signature
               </div>
             </div>
 
@@ -267,6 +289,17 @@
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
+                <th *ngIf="isProcess"
+                  class="pl-4 pr-2 py-3"
+                  >
+                  <button
+                    *ngIf="isAnyCheckboxSelected()"
+                    (click)="toggleSelectAll()"
+                    class="text-purple-900 uppercase"
+                    >
+                    {{isAllSelected() ? 'Clear All' : 'Select All'}}
+                  </button>
+                </th>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <div>Indent ID</div>
@@ -349,8 +382,16 @@
             <tbody>
               <tr
                 class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
+                [ngClass]="{'bg-purple-100': selectedRequests.has(req.sno)}"
                 *ngFor="let req of specialRolesProcessList"
-              >
+                > 
+                <th *ngIf="isProcess" class="pl-4 pr-2 py-3">
+                  <input 
+                    type="checkbox"
+                    [checked]="selectedRequests.has(req.sno)"
+                    (change)="toggleSelection(req.sno, $event)"
+                  >
+                </th>
                 <th
                   scope="row"
                   #reqID
@@ -433,12 +474,17 @@
     </div>
   </section>
 </div>
-<!-- <section *ngIf="isView" class="">
-  <app-view-procurementreq
+<section *ngIf="isView" class="">
+  <app-viewceo-cfoapproval-requisition
     [reqId]="reqId"
+    [indentNumber]="indentNumber"
+    [isCompleted]="isCompleted"
     (closeView)="refresh($event)"
-  ></app-view-procurementreq>
-</section> -->
+  ></app-viewceo-cfoapproval-requisition>
+</section>
+<section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-success-pop (close)="closepop($event)"></app-success-pop>
+</section>
 <!-- <section *ngIf="isViewQuoteCompare" class="">
   <app-view-acceptedprocurementreq
     [reqId]="reqId"
