@@ -37,6 +37,7 @@ export const environment = {
   assigningRoleToDesignation: Url + bassEmployeeApi + '/desig/role/addnew',
   searchPincode: Url + 'api/searchPincode/',
   postSignature: Url + bassEmployeeApi + '/add-signature',
+  fetchUploadedSignature: Url + bassEmployeeApi + '/get-signature',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',
@@ -142,8 +143,12 @@ export const environment = {
   fetchSpecialRolesRequestIsAccept:
     Url + baseRequestApi + '/requestforspecialroles/',
 
-  acceptSpecialRoleRequest:
-    Url + baseRequestApi + '/acceptspecialroleauth',
+  acceptSpecialRoleRequest: Url + baseRequestApi + '/acceptspecialroleauth',
+  fetchDateWiseAllIndentReport: Url + baseRequestApi + '/getdatewiserequest',
+  fetchUrgentIndentReport: Url + baseRequestApi + '/geturgentrequest',
+  fetchNormalIndentReport: Url + baseRequestApi + '/getnormalrequest',
+  fetchCompletedIndentReport: Url + baseRequestApi + '/getcompletedindent',
+  fetchRejectedIndentReport: Url + baseRequestApi + '/getrejectedindent',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

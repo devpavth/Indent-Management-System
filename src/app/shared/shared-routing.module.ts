@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'unauth', component: UnauthorizedComponent },
   { path: '404', component: PageNotFoundComponent },
-  { path: 'networkerror', component: NetworkErrorComponent },
+  { path: 'networkerror', component: NetworkErrorComponent }
 ];
 
 @NgModule({

@@ -58,7 +58,8 @@ export class PdfUploadComponent {
     name: string;
     isViewCloseIcon: boolean;
   }[] = [];
-  productIds: { productId: number; quotedPrice: number }[] = [];
+  productIds: { productId: number; prdGstPct: number; quotedPrice: number }[] =
+    [];
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
   isToast: boolean = false;
@@ -481,6 +482,7 @@ export class PdfUploadComponent {
 
     this.productIds = this.filterProductHeadData.map((item) => ({
       productId: item.productId,
+      prdGstPct: item.prdGstPct,
       quotedPrice: 0,
     }));
     console.log('productIds:', this.productIds);
@@ -524,6 +526,7 @@ export class PdfUploadComponent {
         qcProductsArray.push(
           new FormGroup({
             productId: new FormControl(product.productId),
+            prdGstPct: new FormControl(product.prdGstPct),
             quotedPrice: new FormControl(product.quotedPrice),
           }),
         );

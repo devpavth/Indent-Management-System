@@ -9,13 +9,14 @@ import { EmployeeServiceService } from '../../core/components/service/Employee/e
 })
 export class UploadSignatureComponent {
   @Input() specialRoleId: number | undefined;
+  @Input() isViewUploadSignature!: boolean;
   @Output() close = new EventEmitter<boolean>();
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
 
   empService = inject(EmployeeServiceService);
-
   route = inject(Router);
+
   isToast: boolean = false;
   successToastMsg: string = '';
   isErrorToast: boolean = false;
@@ -42,7 +43,8 @@ export class UploadSignatureComponent {
       if (!allowedExtensions.includes(file.type)) {
         // alert('Invalid file format! Please upload a JPG, JPEG, or PNG image.');
         this.isErrorToast = true;
-        this.errorToastMsg = "Invalid file format! Please upload a JPG, JPEG, or PNG image.";
+        this.errorToastMsg =
+          'Invalid file format! Please upload a JPG, JPEG, or PNG image.';
         this.previewUrl = null;
         this.selectedFile = null;
         setTimeout(() => {
@@ -93,6 +95,9 @@ export class UploadSignatureComponent {
         setTimeout(() => {
           this.isToast = false;
           this.close.emit(true);
+          if(this.isViewUploadSignature){
+            this.route.navigate(['/home/updateSign']);
+          }         
         }, 3000);
       },
       (error) => {

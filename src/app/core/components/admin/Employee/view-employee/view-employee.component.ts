@@ -330,13 +330,11 @@ export class ViewEmployeeComponent implements OnInit {
     this.closeEmployeePop.emit(false);
   }
 
-  // @HostListener('document: click', ['$event'])
-  // clickOutside(event: Event){
-  //   if(this.elRef.nativeElement.contains(event.target)){
+  // @HostListener('document:click', ['$event'])
+  // clickOutside(event: Event) {
+  //   if (!this.elRef.nativeElement.contains(event.target)) {
   //     this.closeEmployeePop.emit(false);
-  //     console.log("clicking outside view...");
-  //     console.log("clicking outside view...");
-  //     console.log("clicking outside view...");
+  //     console.log("Clicked outside the component, closing...");
   //   }
   // }
 

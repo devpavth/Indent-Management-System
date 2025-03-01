@@ -1,0 +1,97 @@
+<div class="p-4 sm:ml-64">
+    <section class="dark:bg-gray-900">
+        <div class="mx-auto">
+            <div
+                class="overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
+                >
+                <h2
+                    class="font-bold text-lg text-center m-4 text-purple-500"
+                    >Indent Report
+                </h2>
+
+                <div class="grid grid-cols-4 mt-6 gap-4 px-6">
+                    <label class="text-purple-500 text-md font-semibold">Select Report</label>
+                    <label class="text-purple-500 text-md font-semibold">Select Branch</label>
+                    <label class="text-purple-500 text-md font-semibold">From Date</label>
+                    <label class="text-purple-500 text-md font-semibold">To Date</label>
+                </div>
+
+                <div class="grid grid-cols-4 -mt-4 gap-4 p-6">
+                    <select 
+                        class="w-full text-md text-gray-700 rounded-lg border border-purple-300"
+                        (change)="selectedReport($event)"
+                        >
+                        <option value="" disabled selected>Choose Report</option>
+                        <option 
+                            *ngFor="let report of indentReportList"
+                            [value]="report.reportId"
+                            >
+                            {{report.reportName}}
+                        </option>
+                    </select>
+
+                    <select 
+                        class="w-full text-md text-gray-700 rounded-lg border border-purple-300"
+                        (change)="selectedBranch($event)"
+                        >
+                        <option value="" disabled selected>Choose Branch</option>
+                        <option 
+                            *ngFor="let branch of branchList"
+                            [value]="branch.branchId"
+                            >
+                            {{branch.branchName}}
+                        </option>
+                    </select>
+
+                    <input type="date"
+                        class="input-form w-full"
+                        [(ngModel)]="startDate"
+                        name="startDate"
+                        required
+                    />
+
+                    <input type="date" 
+                        class="input-form w-full"
+                        [(ngModel)]="endDate"
+                        name="endDate"
+                        required
+                    />
+                </div>
+
+                <div class="flex justify-end mr-6 mb-4"
+                    >
+                    <button
+                        type="submit"
+                        (click)="generateIndentReport(startDate, endDate)"
+                        [disabled]="!startDate || !endDate || selectedBranchId < 0 || !selectedReportId"
+                        [ngClass]="{
+                        'bg-gray-400 hover:bg-gray-400': !startDate || !endDate || selectedBranchId < 0 || !selectedReportId
+                        }"
+                        class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500"
+                        >
+                        Generate Report
+                    </button>
+                </div>
+                <div class="relative">
+                    <div
+                        *ngIf="isLoading"
+                        class="absolute -mt-10 inset-0 flex items-center justify-center bg-white bg-opacity-70"
+                        >
+                        <div class="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <iframe
+                        *ngIf="!isLoading && pdfURL" 
+                        [src]="pdfURL" 
+                        width="100%" height="700px"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<section
+  *ngIf="isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
+</section>

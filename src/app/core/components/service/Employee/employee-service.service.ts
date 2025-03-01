@@ -155,4 +155,10 @@ export class EmployeeServiceService {
   uploadSignature(formData: any) {
     return this.http.post(environment.postSignature, formData);
   }
+
+  fetchUploadedSignature(){
+    return this.http.get(environment.fetchUploadedSignature, 
+      {responseType: 'blob'}
+    );
+  }
 }
