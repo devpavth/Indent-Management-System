@@ -8,6 +8,7 @@ import { FunderService } from '../../service/Funder/funder.service';
 import { VendorService } from '../../service/vendor/vendor.service';
 import { catchError, debounceTime, from, of, switchMap, tap } from 'rxjs';
 import { BranchService } from '../../service/Branch/branch.service';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-request-form',
@@ -153,15 +154,18 @@ export class RequestFormComponent implements OnInit {
           // this.isVendorView = true;
           return of([]);
         }
-        return this.productService.fetchLiveProductDetails({searchTerm}).pipe(
+
+        let httpParams = new HttpParams().set('searchTerm', searchTerm);
+        
+        return this.productService.fetchLiveProductDetails(httpParams).pipe(
           catchError((error) => {
-            if(error.status === 404){
-              console.log("error while fetching product data:", error);
+            if (error.status === 404) {
+              console.log('error while fetching product data:', error);
               this.noResults = true;
             }
             return of([]);
-          })
-        )
+          }),
+        );
       })
     ).subscribe(
       (response: any) => {

@@ -15,6 +15,10 @@ export class TProductComponent implements OnInit {
   user: any;
   userData: any;
   isAddTransactionView: boolean = true;
+  isErrorToast: boolean = false;
+  errorToastMsg: string = '';
+  isViewTransaction: boolean = false;
+  confirmTranscationMsg: string = '';
 
   private employeeService = inject(EmployeeServiceService);
 
@@ -43,12 +47,30 @@ export class TProductComponent implements OnInit {
   fetchTransaction(id: any) {
     console.log(id);
 
-    this.productService.productTransaction(id).subscribe((res: any) => {
-      console.log(res);
-      this.transactionData = res;
-      const { transPrdDetails } = res;
+    this.productService.productTransaction(id).subscribe(
+      (res: any) => {
+        console.log('fetching transaction details:', res);
+        this.transactionData = res;
+        const { transPrdDetails } = res;
 
-      this.inwardPrdDetails = transPrdDetails;
-    });
+        this.inwardPrdDetails = transPrdDetails;
+      },
+      (error) => {
+        console.log('error while fetching transaction details:', error);
+        this.isErrorToast = true;
+        this.errorToastMsg = error.error;
+        setTimeout(() => {
+          this.isErrorToast = false;
+        }, 3000);
+      },
+    );
+  }
+
+  confirmIndentTransaction() {
+    this.isViewTransaction = true;
+  }
+
+  closePopUp(closeIcon: boolean) {
+    this.isViewTransaction = closeIcon;
   }
 }

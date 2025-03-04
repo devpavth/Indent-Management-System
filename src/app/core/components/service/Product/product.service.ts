@@ -90,14 +90,14 @@ export class ProductService {
     return this.productHttp.post(environment.addHeadOfAcc, data);
   }
 
-  fetchLiveProductDetails(params: {[key: string]: string}){
-    let httpParams = new HttpParams();
+  fetchLiveProductDetails(httpParams: HttpParams){
+    // let httpParams = new HttpParams();
 
-    Object.keys(params).forEach((key) => {
-      httpParams = httpParams.append(key, params[key]);
-    });
+    // Object.keys(params).forEach((key) => {
+    //   httpParams = httpParams.append(key, params[key]);
+    // });
 
-    console.log("httpParams:", httpParams.toString());
+    // console.log("httpParams:", httpParams.toString());
 
     return this.productHttp.get(environment.fetchLiveProductDetails, {params: httpParams});
   }

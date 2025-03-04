@@ -7,6 +7,7 @@ import { InwardAlertComponent } from './inward-alert/inward-alert.component';
 
 import { TransactionRoutingModule } from './transaction-routing.module';
 import { SharedModule } from "../../../../shared/shared.module";
+import { ConfirmindentTransactionPopupComponent } from './confirmindent-transaction-popup/confirmindent-transaction-popup.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { SharedModule } from "../../../../shared/shared.module";
     ViewTransactionComponent,
     TProductComponent,
     InwardAlertComponent,
+    ConfirmindentTransactionPopupComponent,
   ],
   imports: [CommonModule, TransactionRoutingModule, SharedModule],
 })

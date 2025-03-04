@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ProductService } from '../../../service/Product/product.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-stock',
@@ -72,13 +73,16 @@ export class StockComponent implements OnInit {
 
   vendorData: any;
   isErrorToast: boolean = false;
-  errorToastMsg: string = "";
+  errorToastMsg: string = '';
+  selectedBranchId: number = 0;
+  prdClosingStock: number = 0;
 
   user: any;
   userData: any;
   roles: string | null = null;
   isLevelView: boolean = true;
   isAddTransactionView: boolean = false;
+  isProductIdDisabled: boolean = true;
 
   constructor(
     private branchService: BranchService,
@@ -97,7 +101,7 @@ export class StockComponent implements OnInit {
       productId: [],
       prdUnit: [],
       itemprebox: [],
-      prdQty: [],
+      prdQty: ['', [Validators.required, this.quantityValidator.bind(this)]],
       purchasedPrice: [],
       gstPercentage: [],
     });
@@ -118,24 +122,38 @@ export class StockComponent implements OnInit {
           console.log(`Product Name Changed for Index:`, searchTerm);
           if (this.isProductSelected) {
             this.isProductSelected = false;
+            this.inwardForm.get('prdQty')?.clearValidators();
+            this.inwardForm.get('prdQty')?.updateValueAndValidity();
             return of([]);
           }
           this.noResults = false;
           this.storeProductData = [];
           if (!searchTerm?.trim() || !isNaN(searchTerm)) {
+            this.inwardForm.get('prdQty')?.clearValidators();
+            this.inwardForm.get('prdQty')?.updateValueAndValidity();
             return of([]);
           }
-          return this.productService
-            .fetchLiveProductDetails({ searchTerm })
-            .pipe(
-              catchError((error) => {
-                if (error.status === 404) {
-                  console.log('error while fetching product data:', error);
-                  this.noResults = true;
-                }
-                return of([]);
-              }),
+
+          let httpParams = new HttpParams().set('searchTerm', searchTerm);
+
+          if (this.inwardFormHeader.get('inwardFromCode')?.value == 268) {
+            httpParams = httpParams.append(
+              'branchId',
+              this.selectedBranchId.toString(),
             );
+          }
+
+          console.log('API Params:', httpParams.toString());
+
+          return this.productService.fetchLiveProductDetails(httpParams).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('error while fetching product data:', error);
+                this.noResults = true;
+              }
+              return of([]);
+            }),
+          );
         }),
       )
       .subscribe((response: any) => {
@@ -237,6 +255,8 @@ export class StockComponent implements OnInit {
 
       this.filteredBranch = this._branch.slice(0, 1);
 
+      console.log('filteredBranch:', this.filteredBranch);
+
       if (
         this._branch &&
         Array.isArray(this._branch) &&
@@ -255,6 +275,23 @@ export class StockComponent implements OnInit {
       //   this.filteredToBranch = this._branch.slice(1);
       // }
     });
+  }
+
+  selectedBranch(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    console.log('selectElement:', selectElement);
+
+    const selectedValue = selectElement.value;
+    console.log('selectedValue:', selectedValue);
+
+    if (!selectedValue || isNaN(Number(selectedValue))) {
+      console.warn('Invalid branch selection. Setting to default.');
+      this.selectedBranchId = 0; // Or handle appropriately
+      return;
+    }
+
+    this.selectedBranchId = Number(selectedValue);
+    console.log('this.selectedBranchId:', this.selectedBranchId);
   }
 
   // onFromBranchChange(selectedBranchId: any){
@@ -289,8 +326,8 @@ export class StockComponent implements OnInit {
     console.log('productData:', this.productData);
     console.log('product data prdQty:', this.productData[0].prdMinQty);
 
-    //
-
+    this.prdClosingStock = this.productData[0].prdClosingStock;
+    console.log('this.prdClosingStock:', this.prdClosingStock);
     this.inwardForm.patchValue({
       // productId: product.productId,
       prdUnit: product.prdUnit,
@@ -313,6 +350,13 @@ export class StockComponent implements OnInit {
     );
 
     this.storeProductData = [];
+  }
+
+  quantityValidator(control: AbstractControl) {
+    if (control.value && control.value > this.prdClosingStock) {
+      return { quantityExceeded: true };
+    }
+    return null;
   }
 
   onSelectVendor(vendor: any) {
@@ -467,6 +511,8 @@ export class StockComponent implements OnInit {
         this.header.vendorName = branchDetails.branchName;
       }
     }
+
+    this.isProductIdDisabled = false;
 
     console.log('this.header:', this.header);
   }

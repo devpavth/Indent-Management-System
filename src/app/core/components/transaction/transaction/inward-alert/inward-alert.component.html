@@ -11,17 +11,16 @@
       <h1 class="text-left ml-4 mb-2 text-lg text-purple-600 mt-2 font-semibold">Inward Alert</h1>
       <div
         class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
-      > 
+        > 
         
-        
-        <!-- <h1>8734jjhrj</h1> -->
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-          >
+            *ngIf="_inwardForBranch.length > 0; else noTransactions"
+            >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-            >
+              >
               <tr>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
@@ -50,9 +49,7 @@
                 <th scope="col" class="px-4 py-3">Branch Name</th>
                 <th scope="col" class="px-4 py-3">Date</th>
                 <th scope="col" class="px-4 py-3">Created By</th>
-                <!-- <th scope="col" class="px-4 py-3">Country</th> -->
-                <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                              <th scope="col" class="px-4 py-3">Price</th> -->
+                
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
@@ -95,8 +92,19 @@
                 </td>
               </tr>
             </tbody>
+            
           </table>
+
+          
         </div>
+        <ng-template #noTransactions>
+          <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
+            <div class="text-center">
+              <img src="../../../../../assets/Img/9264882.svg" class="w-52 mx-auto" alt="No data available"/>
+              <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Transactions Available</p>
+            </div>
+          </div>
+        </ng-template>
         <!-- <nav
           class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
           aria-label="Table navigation"
