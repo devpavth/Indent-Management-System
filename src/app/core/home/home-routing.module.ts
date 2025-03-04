@@ -25,7 +25,7 @@ const routes: Routes = [
             'ROLE_BRANCH_AUTH',
             'ROLE_ADMIN_AUTH',
             'ROLE_FINANCE_AUTH',
-            'ROLE_PROCUREMENT_AUTH',
+            'ROLE_QUOTE_COMPARE',
             'ROLE_DIRECTOR_FINANCE',
             'ROLE_PROCUREMENT_MANAGER',
             'ROLE_CEO',
@@ -75,7 +75,7 @@ const routes: Routes = [
             (m) => m.ProcurementModule,
           ),
         canActivate: [authGuard],
-        data: { roles: ['ROLE_PROCUREMENT_AUTH'] },
+        data: { roles: ['ROLE_QUOTE_COMPARE'] },
       },
       {
         path: '',
@@ -101,6 +101,20 @@ const routes: Routes = [
           ),
         canActivate: [authGuard],
         data: { roles: ['ROLE_IT_ADMIN'] },
+      },
+      {
+        path: '',
+        loadChildren: () =>
+          import(
+            '../components/transaction/transaction/transaction.module'
+          ).then((m) => m.TransactionModule),
+        canActivate: [authGuard],
+        data: {
+          roles: [
+            'ROLE_PRD_INW_ALERT',
+            'ROLE_ADD_PRD_TRANS',
+          ],
+        },
       },
     ],
   },

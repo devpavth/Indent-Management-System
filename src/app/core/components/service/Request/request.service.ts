@@ -269,49 +269,70 @@ export class RequestService {
     );
   }
 
-  acceptSpecialRoleRequest(specialRoleId: number, reqList: {sno: number}[]){
+  acceptSpecialRoleRequest(specialRoleId: number, reqList: { sno: number }[]) {
     return this.http.post(
       environment.acceptSpecialRoleRequest + `?specialRoleId=${specialRoleId}`,
       reqList,
     );
   }
 
-  fetchDateWiseAllIndentReport(startDate: Date | undefined, endDate: Date | undefined){
+  fetchDateWiseAllIndentReport(
+    branchCode: string | undefined,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
     return this.http.get(
       environment.fetchDateWiseAllIndentReport +
-        `?startDate=${startDate}&endDate=${endDate}`,
-      {responseType: 'blob'}
+        `?branchCode=${branchCode}&startDate=${startDate}&endDate=${endDate}`,
+      { responseType: 'blob' },
     );
   }
 
-  fetchUrgentIndentReport(startDate: Date | undefined, endDate: Date | undefined){
-    return this.http.get(environment.fetchUrgentIndentReport +
-      `?startDate=${startDate}&endDate=${endDate}`,
-      {responseType: 'blob'}
-    )
+  fetchUrgentIndentReport(
+    branchCode: string | undefined,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
+    return this.http.get(
+      environment.fetchUrgentIndentReport +
+        `?branchCode=${branchCode}&startDate=${startDate}&endDate=${endDate}`,
+      { responseType: 'blob' },
+    );
   }
 
-  fetchNormalIndentReport(startDate: Date | undefined, endDate: Date | undefined){
+  fetchNormalIndentReport(
+    branchCode: string | undefined,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
     return this.http.get(
       environment.fetchNormalIndentReport +
-        `?startDate=${startDate}&endDate=${endDate}`,
-      {responseType: 'blob'}
+        `?branchCode=${branchCode}&startDate=${startDate}&endDate=${endDate}`,
+      { responseType: 'blob' },
     );
   }
 
-  fetchCompletedIndentReport(startDate: Date | undefined, endDate: Date | undefined){
+  fetchCompletedIndentReport(
+    branchCode: string | undefined,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
     return this.http.get(
       environment.fetchCompletedIndentReport +
-        `?startDate=${startDate}&endDate=${endDate}`,
-        {responseType: 'blob'}
+        `?branchCode=${branchCode}&startDate=${startDate}&endDate=${endDate}`,
+      { responseType: 'blob' },
     );
   }
 
-  fetchRejectedIndentReport(startDate: Date | undefined, endDate: Date | undefined){
+  fetchRejectedIndentReport(
+    branchCode: string | undefined,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
     return this.http.get(
       environment.fetchRejectedIndentReport +
-        `?startDate=${startDate}&endDate=${endDate}`,
-        {responseType: 'blob'}
+        `?branchCode=${branchCode}&startDate=${startDate}&endDate=${endDate}`,
+      { responseType: 'blob' },
     );
   }
 }

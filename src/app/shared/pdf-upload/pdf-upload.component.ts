@@ -68,6 +68,8 @@ export class PdfUploadComponent {
   deleteToastMsg: string = '';
   isQuoteUploaded: boolean = false;
   isQuoteAccepted: boolean = false;
+  isViewQuoteCompareMsg: boolean = false;
+  quoteCompareAmtPopUpMsg: string = '';
   Spinner: boolean = false;
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
@@ -669,11 +671,10 @@ export class PdfUploadComponent {
         }
 
         if (this.selectedVendorName.length === 3) {
-          this.isSuccessToast = true;
-          this.deleteToastMsg = 'Scroll Down to Comparison Table';
-          setTimeout(() => {
-            this.isSuccessToast = false;
-          }, 3000);
+          this.isViewQuoteCompareMsg = true;
+          this.quoteCompareAmtPopUpMsg =
+            'The amount to be entered should be the total amount for the particular product in the PDF, calculated as: (Unit Price * GST * Quantity).';
+      
         }
       }
     }
@@ -683,6 +684,15 @@ export class PdfUploadComponent {
     this.currentHeadOfAccId = this.previousHeadofAccId;
     this.isWarningPopup = data;
     // this.isQuoteUploaded = data;
+  }
+
+  closeAmtPopup(closeIcon: boolean){
+    this.isViewQuoteCompareMsg = closeIcon;
+    this.isSuccessToast = true;
+    this.deleteToastMsg = 'Scroll Down to Comparison Table';
+    setTimeout(() => {
+      this.isSuccessToast = false;
+    }, 3000);
   }
 
   removeVendor(vendorIndex: number) {

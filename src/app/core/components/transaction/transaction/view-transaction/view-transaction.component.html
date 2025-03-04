@@ -1,54 +1,56 @@
 <section class="h-screen overflow-x-auto bg-black bg-opacity-50">
-    <div class="flex">
-      <div class="w-1/2"></div>
-      <div class="animate-slide-in-right w-screen border bg-white shadow-xl">
-        <div class="flex items-center justify-between border bg-purple-50">
-          <div class="m-4">
-            <button (click)="closeVendor.emit(false)">
-              <svg
-                class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  class=""
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18 17.94 6M18 18 6.06 6"
-                />
-              </svg>
-            </button>
-          </div>
-          <div class="mr-4">
-            <h1 class="text-xl font-semibold text-purple-800">View Transaction</h1>
-          </div>
+  <div class="flex">
+    <div class="w-1/2"></div>
+    <div class="animate-slide-in-right w-screen border bg-white shadow-xl">
+      <div class="flex items-center justify-between border bg-purple-50">
+        <div class="m-4">
+          <button (click)="closeVendor.emit(false)">
+            <svg
+              class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                class=""
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+          </button>
         </div>
-  
-        <!-- form f -->
-  
-        <form [formGroup]="TransactionForm" class="p-8">
-          <!-- ddddd -->
-          <div class="p-4 md:px-10 md:pb-2 md:pt-6">
-            <div class="mb-6 grid gap-6 md:grid-cols-6">
-              <div class="col-span-3">
-                <label
-                  for="first_name"
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Transaction Code</label
-                >
-                <input
-                  type="text"
-                  formControlName="prdtrnsCode"
-                  class="input-form"
-                  required
-                />
-                <!-- <small
+        <div class="mr-4">
+          <h1 class="text-xl font-semibold text-purple-800">
+            View Transaction
+          </h1>
+        </div>
+      </div>
+
+      <!-- form f -->
+
+      <form [formGroup]="TransactionForm" class="p-8">
+        <!-- ddddd -->
+        <div class="p-4 md:px-10 md:pb-2 md:pt-6">
+          <div class="mb-6 grid gap-6 md:grid-cols-6">
+            <div class="col-span-3">
+              <label
+                for="first_name"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Transaction Code</label
+              >
+              <input
+                type="text"
+                formControlName="prdtrnsCode"
+                class="input-form"
+                required
+              />
+              <!-- <small
                   *ngIf="
                     TransactionForm?.get('vendorName')?.invalid &&
                     TransactionForm?.get('vendorName')?.touched
@@ -57,22 +59,22 @@
                 >
                   Vendor Name Should not be Empty!
                 </small> -->
-              </div>
-              
-              <div class="col-span-3">
-                <label
-                  for="last_name"
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Reference No</label
-                >
-                <input
-                  type="number"
-                  formControlName="tranRefNo"
-                  class="input-form"
-                  required
-                  [value]="transactionList?.tranRefNo"
-                />
-                <!-- <small
+            </div>
+
+            <div class="col-span-3">
+              <label
+                for="last_name"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Reference No</label
+              >
+              <input
+                type="number"
+                formControlName="tranRefNo"
+                class="input-form"
+                required
+                [value]="transactionList?.tranRefNo"
+              />
+              <!-- <small
                   *ngIf="
                     TransactionForm?.get('vdrContactPersonName')?.invalid &&
                     TransactionForm?.get('vdrContactPersonName')?.touched
@@ -81,144 +83,156 @@
                 >
                   Contact Person Name Should not be Empty!
                 </small> -->
-              </div>
-  
-              
-              <div class="col-span-3">
-                <label
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Created By</label
-                >
-                <div class="relative">
-                  <input
-                    type="text"
-                    formControlName="tranUpdBy"
-                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                    [value]="transactionList?.tranUpdBy"
-                  />
-                    <!-- <option
+            </div>
+
+            <div class="col-span-3">
+              <label
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Created By</label
+              >
+              <div class="relative">
+                <input
+                  type="text"
+                  formControlName="tranUpdBy"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  [value]="transactionList?.tranUpdBy"
+                />
+                <!-- <option
                       *ngFor="let branch of _BranchName"
                       value="{{ branch.branchId }}"
                     >
                       {{ branch.branchName }}
                     </option> -->
-                </div>
-              </div>
-
-              <div class="col-span-3">
-                <label
-                  class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >Date</label
-                >
-                  <input
-                    type="date"
-                    class="input-form"
-                    formControlName="tranUpdOn"
-                    required
-                    [value]="transactionList?.tranUpdOn | date:'yyyy-MM-dd'"
-                  />
               </div>
             </div>
-  
-           
-            <section *ngIf="transactionList" class="p-4 -ml-5">
-              <div class="mx-auto rounded-lg bg-white p-6 shadow-md">
-                <div class="mb-4 grid grid-cols-2 gap-4">
-                  <div class="mb-4">
-                    <h2 class="font-semibold">From Branch:</h2>
-                    <p>{{ transactionList?.vendorDto?.branchName }}</p>
-                    
-                    <p>{{ transactionList?.vendorDto?.add1 }}</p>
-                    <p>{{ transactionList?.vendorDto?.add2 }}</p>
-                    <p>
-                      {{ transactionList?.vendorDto?.city }},
-                      {{ transactionList?.vendorDto?.state }}
-                    </p>
-                    <p>Pincode - {{ transactionList?.vendorDto?.pinCode }}, India</p>
 
-                    
-                    <p>GSTIN: {{ transactionList?.vendorDto?.gstNumber }}</p>
-                    <p>
-                      Ph: {{ transactionList?.vendorDto?.branchMobilenumber }} 
-                    </p>
-                  </div>
-                  <div>
-                    <h2 class="font-semibold">To Branch:</h2>
-                    <p>{{ transactionList?.branchDto?.branchName }}</p>
+            <div class="col-span-3">
+              <label
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Date</label
+              >
+              <input
+                type="date"
+                class="input-form"
+                formControlName="tranUpdOn"
+                required
+                [value]="transactionList?.tranUpdOn | date: 'yyyy-MM-dd'"
+              />
+            </div>
+          </div>
 
-                    <p>{{ transactionList?.branchDto?.add1 }}</p>
-                    <p>{{ transactionList?.branchDto?.add2 }}</p>
+          <section *ngIf="transactionList" class="-ml-5 p-4">
+            <div class="mx-auto rounded-lg bg-white p-6 shadow-md">
+              <div class="mb-4 grid grid-cols-2 gap-4">
+                <div class="mb-4">
+                  <h2 class="font-semibold">From Branch:</h2>
+                  <p>{{ transactionList?.vendorDto?.branchName }}</p>
 
-                    <p>{{ transactionList?.branchDto?.city }}</p>
-                    <p>{{ transactionList?.branchDto?.state }}</p>
+                  <p>{{ transactionList?.vendorDto?.add1 }}</p>
+                  <p>{{ transactionList?.vendorDto?.add2 }}</p>
+                  <p>
+                    {{ transactionList?.vendorDto?.city }},
+                    {{ transactionList?.vendorDto?.state }}
+                  </p>
+                  <p>
+                    Pincode - {{ transactionList?.vendorDto?.pinCode }}, India
+                  </p>
 
-                    <p>Pincode - {{ transactionList?.branchDto?.pinCode }}, India</p>
-                    <p>GSTIN: {{ transactionList?.branchDto?.gstNumber }}</p>
-                    <p>Ph: {{ transactionList?.branchDto?.branchMobilenumber }}</p>
-                  </div>
+                  <p>GSTIN: {{ transactionList?.vendorDto?.gstNumber }}</p>
+                  <p>
+                    Ph: {{ transactionList?.vendorDto?.branchMobilenumber }}
+                  </p>
                 </div>
+                <div>
+                  <h2 class="font-semibold">To Branch:</h2>
+                  <p>{{ transactionList?.branchDto?.branchName }}</p>
 
-                <div class="col-span-full mb-3 flex justify-between">
-                  <h1 class="text-xl font-semibold text-purple-800">Product Details</h1>
+                  <p>{{ transactionList?.branchDto?.add1 }}</p>
+                  <p>{{ transactionList?.branchDto?.add2 }}</p>
+
+                  <p>{{ transactionList?.branchDto?.city }}</p>
+                  <p>{{ transactionList?.branchDto?.state }}</p>
+
+                  <p>
+                    Pincode - {{ transactionList?.branchDto?.pinCode }}, India
+                  </p>
+                  <p>GSTIN: {{ transactionList?.branchDto?.gstNumber }}</p>
+                  <p>
+                    Ph: {{ transactionList?.branchDto?.branchMobilenumber }}
+                  </p>
                 </div>
-
-                <table
-                  class="mb-4 w-full overflow-hidden rounded-lg border border-black bg-gray-50 shadow-md"
-                  >
-                  <thead>
-                    <tr class="bg-purple-700 text-white">
-                      <th class="p-2 text-left">#</th>
-                      <th class="p-2 text-left">Item</th>
-                      <th class="p-2 text-right">Rate / Item</th>
-                      <th class="p-2 text-right">Qty</th>
-                      <th class="p-2 text-right">Gst Percentage</th>
-
-                      <th class="p-2 text-right">Total Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      class="border-b-2 border-gray-600/20"
-                      *ngFor="let item of inwardPrdDetails; let i = index"
-                    >
-                      <td class="p-2">{{ i + 1 }}</td>
-                      <td class="p-2">
-                        {{ item?.transProductData?.prdmdlName }} - {{ item?.transProductData?.prdbrndName
-                        }}<br />
-                        <span class="text-sm">HSN: {{ item.transProductData.prdHsnCode }}</span
-                        ><br />
-                        <span class="text-sm">{{ item.transProductData.prdDescription }}</span
-                        ><br />
-                        <span class="text-sm"
-                          >Head of Account : {{ item.transProductData.headOfAccName }}</span
-                        >
-                        <br />
-                        <span class="text-sm"
-                          >Product Code : {{ item.transProductData.prdCode }}</span
-                        >
-                      </td>
-                      <td class="p-2 text-right">{{ item.purchasedPrice | currency:'INR'}}</td>
-                      <td class="p-2 text-right">{{ item.prdQty }}</td>
-                      <td class="p-2 text-right">{{ item.gstPercentage }} %</td>
-                      <td class="p-2 text-right">{{ item.itemTotalPrice | currency:'INR'}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <div class="w-full text-end">
-                  <h1 class="font-semibold">
-                    Total Price :
-                    <span class="text-gray-700">{{ transactionList?.totalPrice | currency:'INR'}}</span>
-                  </h1>
-                </div>
-
               </div>
-            </section>
 
-            
-            
+              <div class="col-span-full mb-3 flex justify-between">
+                <h1 class="text-xl font-semibold text-purple-800">
+                  Product Details
+                </h1>
+              </div>
 
-            <!-- <form [formGroup]="TransactionForm">
+              <table
+                class="mb-4 w-full overflow-hidden rounded-lg border border-black bg-gray-50 shadow-md"
+              >
+                <thead>
+                  <tr class="bg-purple-700 text-white">
+                    <th class="p-2 text-left">#</th>
+                    <th class="p-2 text-left">Item</th>
+                    <th class="p-2 text-right">Rate / Item</th>
+                    <th class="p-2 text-right">Qty</th>
+                    <th class="p-2 text-right">Gst Percentage</th>
+
+                    <th class="p-2 text-right">Total Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    class="border-b-2 border-gray-600/20"
+                    *ngFor="let item of inwardPrdDetails; let i = index"
+                  >
+                    <td class="p-2">{{ i + 1 }}</td>
+                    <td class="p-2">
+                      {{ item?.transProductData?.prdmdlName }} -
+                      {{ item?.transProductData?.prdbrndName }}<br />
+                      <span class="text-sm"
+                        >HSN: {{ item.transProductData.prdHsnCode }}</span
+                      ><br />
+                      <span class="text-sm">{{
+                        item.transProductData.prdDescription
+                      }}</span
+                      ><br />
+                      <span class="text-sm"
+                        >Head of Account :
+                        {{ item.transProductData.headOfAccName }}</span
+                      >
+                      <br />
+                      <span class="text-sm"
+                        >Product Code :
+                        {{ item.transProductData.prdCode }}</span
+                      >
+                    </td>
+                    <td class="p-2 text-right">
+                      {{ item.purchasedPrice | currency: "INR" }}
+                    </td>
+                    <td class="p-2 text-right">{{ item.prdQty }}</td>
+                    <td class="p-2 text-right">{{ item.gstPercentage }} %</td>
+                    <td class="p-2 text-right">
+                      {{ item.itemTotalPrice | currency: "INR" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="w-full text-end">
+                <h1 class="font-semibold">
+                  Total Price :
+                  <span class="text-gray-700">{{
+                    transactionList?.totalPrice | currency: "INR"
+                  }}</span>
+                </h1>
+              </div>
+            </div>
+          </section>
+
+          <!-- <form [formGroup]="TransactionForm">
   
               <div
                 formArrayName="transPrdDetails"
@@ -459,44 +473,50 @@
                 
               </div>
             </form> -->
-          </div>
-          <div class="mt-8 flex justify-end gap-4">
-           
-            <div *ngIf="isSave">
-              <button
-                [disabled]="TransactionForm.invalid"
-                (click)="acceptTransactionDetails(TransactionForm.get('prdtrnsCode')?.value)"
-                type="submit"
-                class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+        </div>
+        <div class="mt-8 flex justify-end gap-4">
+          <div *ngIf="isSave">
+            <button
+              [disabled]="TransactionForm.invalid"
+              (click)="
+                acceptTransactionDetails(
+                  TransactionForm.get('prdtrnsCode')?.value
+                )
+              "
+              type="submit"
+              class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
+            >
+              <svg
+                *ngIf="isSaveIcon"
+                class="mr-1 inline-flex h-5 w-5 items-center justify-center text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
               >
-                <svg
-                  *ngIf="isSaveIcon"
-                  class="mr-1 inline-flex h-5 w-5 items-center justify-center text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-  
-                Accept
-              </button>
-            </div>
-  
-            
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
 
-  
+              Accept
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="isSuccess">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="closeSuccess($event)"
+  ></app-success>
+</section>

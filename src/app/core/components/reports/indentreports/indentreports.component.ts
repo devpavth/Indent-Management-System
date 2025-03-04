@@ -19,7 +19,8 @@ export class IndentreportsComponent {
   branchList: Branch[] = [];
   startDate: Date | undefined;
   endDate: Date | undefined;
-  selectedBranchId: number = 0;
+  selectedBranchCode: string = '';
+  selectedBranchName: string = '';
   selectedReportId: number = 0;
   pdfURL: SafeResourceUrl | null = null;
   isLoading: boolean = false;
@@ -61,7 +62,7 @@ export class IndentreportsComponent {
         this.branchList.unshift({
           branchId: 0,
           branchName: 'All',
-          branchCode: '',
+          branchCode: ' ',
         });
         console.log('this.branchList:', this.branchList);
       },
@@ -80,9 +81,9 @@ export class IndentreportsComponent {
 
   selectedBranch(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    this.selectedBranchId = Number(selectElement.value);
+    this.selectedBranchCode = selectElement.value;
 
-    console.log('this.selectedBranchId:', this.selectedBranchId);
+    console.log('this.selectedBranchCode:', this.selectedBranchCode);
   }
 
   // generateIndentReport(
@@ -139,11 +140,15 @@ export class IndentreportsComponent {
   //   }
   // }
 
-  generateIndentReport(startDate: Date | undefined, endDate: Date | undefined) {
+  generateIndentReport(selectedBranchCode: string, startDate: Date | undefined, endDate: Date | undefined) {
     this.isLoading = true;
+
+    const branchCodeToPass =
+      selectedBranchCode === ' ' ? ' ' : selectedBranchCode;
 
     const reportApiMap: {
       [key: number]: (
+        branchCode: string | undefined,
         startDate: Date | undefined,
         endDate: Date | undefined,
       ) => Observable<Blob>;
@@ -158,11 +163,12 @@ export class IndentreportsComponent {
     const fetchReport = reportApiMap[this.selectedReportId];
 
     if(fetchReport){
-      fetchReport(startDate, endDate).subscribe(
+      fetchReport(branchCodeToPass, startDate, endDate).subscribe(
         (res: Blob) => {
-          const blob = new Blob([res], {type: 'application/pdf'});
+          const blob = new Blob([res], { type: 'application/pdf' });
           const objectUrl = window.URL.createObjectURL(blob);
-          this.pdfURL = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
+          this.pdfURL =
+            this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
           console.log(
             `Fetching report for Report ID: ${this.selectedReportId}`,
             res,
@@ -192,9 +198,8 @@ export class IndentreportsComponent {
           } else {
             console.error('Error while fetching report:', error);
           }
-
-        }
-      )
+        },
+      );
     }else{
       console.log('Invalid Report ID:', this.selectedReportId);
       this.isLoading = false;

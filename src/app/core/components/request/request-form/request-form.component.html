@@ -574,7 +574,6 @@
               >Unit Price
             </label>
             <input
-              readonly
               formControlName="unitPrice"
               type="number"
               class="input-rose"
@@ -840,7 +839,7 @@
           </div>
         </div>
       </section>
-      <section class="rounded-b-lg bg-violet-50 pb-4" *ngIf="isVendorView">
+      <!-- <section class="rounded-b-lg bg-violet-50 pb-4" *ngIf="isVendorView">
         <div class="flex justify-between border-t rounded-t-lg bg-[#bd68ee] px-4 py-4">
           <h1 class="font-bold text-white">Indent Footer</h1>
         </div>
@@ -857,11 +856,11 @@
                 <form class="flex items-center" [formGroup]="assignedVendor">
                   <label for="simple-search" class="sr-only">Search</label>
                   <div class="relative w-full">
-                    <!-- <app-auto-complete
+                    <app-auto-complete
                       [suggestions]="vendor"
                       [displayFields]="['vendorName']"
                       (selectionChanged)="onSelectionValue($event, 2)"
-                    ></app-auto-complete> -->
+                    ></app-auto-complete>
                     <div
                       class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
                     >
@@ -911,7 +910,7 @@
                   </ul>
                 </form>
               </div>
-              <!-- <div
+              <div
                 class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
               >
                 <button
@@ -934,7 +933,7 @@
                   </svg>
                   Add Vendor
                 </button>
-              </div> -->
+              </div>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full rounded-lg text-left text-sm text-gray-500">
@@ -1001,7 +1000,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
     </div>
     <!-- final save -->
 

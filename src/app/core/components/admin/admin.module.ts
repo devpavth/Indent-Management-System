@@ -28,17 +28,13 @@ import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
 import { FunderListComponent } from './Funder/funder-list/funder-list.component';
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 import { FundaddComponent } from './Funder/fundadd/fundadd.component';
-import { StockComponent } from './Products/stock/stock.component';
 import { ProductStockComponent } from './Products/product-stock/product-stock.component';
-import { TProductComponent } from './Transaction/t-product/t-product.component';
 import { RStockComponent } from './report/r-stock/r-stock.component';
 import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
 
 import { ViewListComponent } from './Branch/view-list/view-list.component';
 import { AddListComponent } from './Branch/add-list/add-list.component';
 import { EditListComponent } from './Branch/edit-list/edit-list.component';
-import { InwardAlertComponent } from './Transaction/inward-alert/inward-alert.component';
-import { ViewTransactionComponent } from './Transaction/view-transaction/view-transaction.component';
 import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
 import { ViewDesignationRoleComponent } from './Employee/view-designation-role/view-designation-role.component';
 import { AddNewdesignationComponent } from './Employee/add-newdesignation/add-newdesignation.component';
@@ -71,17 +67,13 @@ import { UpdatelevelFordesignationComponent } from './Employee/updatelevel-forde
     FunderListComponent,
     ViewFunderComponent,
     FundaddComponent,
-    StockComponent,
     ProductStockComponent,
-    TProductComponent,
     RStockComponent,
     HeadOfAccComponent,
 
     ViewListComponent,
     AddListComponent,
     EditListComponent,
-    InwardAlertComponent,
-    ViewTransactionComponent,
     RoleMappingComponent,
     ViewDesignationRoleComponent,
     AddNewdesignationComponent,

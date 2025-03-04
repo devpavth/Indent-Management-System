@@ -71,9 +71,12 @@ export class StockComponent implements OnInit {
   filteredToBranch: any;
 
   vendorData: any;
+  isErrorToast: boolean = false;
+  errorToastMsg: string = "";
 
   user: any;
   userData: any;
+  roles: string | null = null;
   isLevelView: boolean = true;
   isAddTransactionView: boolean = false;
 
@@ -160,6 +163,13 @@ export class StockComponent implements OnInit {
       });
 
     this.user = sessionStorage.getItem('userId');
+    this.roles = sessionStorage.getItem('roles');
+    console.log('this.roles in stock:', this.roles);
+
+    if (!this.roles?.includes('ROLE_ADD_PRD_TRANS')) {
+      this.isLevelView = false;
+    }
+
     if (this.user) {
       this.employeeService.getEmployeeDetails(this.user).subscribe((res) => {
         console.table(res);
@@ -171,10 +181,10 @@ export class StockComponent implements OnInit {
           typeof this.userData.empRole,
         );
 
-        if (this.userData.empRole !== 'Level 4') {
-          console.log('logging');
-          this.isLevelView = false;
-        }
+        // if (this.userData.empRole !== 'Level 4') {
+        //   console.log('logging');
+        //   this.isLevelView = false;
+        // }
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
@@ -519,6 +529,12 @@ export class StockComponent implements OnInit {
         },
         (error) => {
           console.log('error while saving outward data:', error);
+
+          this.isErrorToast = true;
+          this.errorToastMsg = error.error.error;
+          setTimeout(() => {
+            this.isErrorToast = false;
+          }, 3000);
           // if (error.status == 200) {
 
           //   this.isSuccess = true;

@@ -493,6 +493,12 @@
     (clearQuotation)="clearPreviousQuotation()"
   ></app-warning-popup>
 </section>
+<section *ngIf="isViewQuoteCompareMsg">
+  <app-warning-quotecompare-message
+    [quoteCompareAmtPopUpMsg]="quoteCompareAmtPopUpMsg"
+    (close)="closeAmtPopup($event)"
+  ></app-warning-quotecompare-message>
+</section>
 <section *ngIf="isQuoteUploaded" class="absolute left-0 right-0 top-0 z-50 h-screen">
   <app-quote-successpopup
     [quotedHeadOfAccName]="quotedHeadOfAccName"

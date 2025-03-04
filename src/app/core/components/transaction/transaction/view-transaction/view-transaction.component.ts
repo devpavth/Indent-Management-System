@@ -29,6 +29,8 @@ export class ViewTransactionComponent {
 
   transactionList: any;
   inwardPrdDetails: any;
+  isSuccess: boolean = false;
+  successData: { show: number; text: string } | undefined;
 
   private productService = inject(ProductService);
 
@@ -136,14 +138,22 @@ export class ViewTransactionComponent {
 
   acceptTransactionDetails(code: any) {
     this.productService.confirmInward(code).subscribe(
-      (res) => {
+      (res: any) => {
         console.log('accepting inward alert transaction:', res);
-        this.closeVendor.emit(false);
+        this.isSuccess = true;
+        this.successData = { show: 2, text: res.error };
+        console.log('this.successData:', this.successData);
+        // this.closeVendor.emit(false);
       },
       (error) => {
         console.log('error while accepting inward alert transaction:', error);
       },
     );
+  }
+
+  closeSuccess(closeIcon: boolean){
+    this.isSuccess = closeIcon;
+    this.closeVendor.emit(false);
   }
 
   // getBranchName() {

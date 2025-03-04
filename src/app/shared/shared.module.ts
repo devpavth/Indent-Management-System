@@ -31,6 +31,7 @@ import { WarningRoleassigningPopupComponent } from './warning-roleassigning-popu
 import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpopup.component';
 import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-acceptedpopup.component';
 import { UploadSignatureComponent } from './upload-signature/upload-signature.component';
+import { WarningQuotecompareMessageComponent } from './warning-quotecompare-message/warning-quotecompare-message.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { UploadSignatureComponent } from './upload-signature/upload-signature.co
     QuoteSuccesspopupComponent,
     QuoteAcceptedpopupComponent,
     UploadSignatureComponent,
+    WarningQuotecompareMessageComponent,
   ],
   imports: [
     CommonModule,

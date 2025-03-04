@@ -6,15 +6,14 @@ import { EmployeeServiceService } from '../../../service/Employee/employee-servi
 @Component({
   selector: 'app-inward-alert',
   templateUrl: './inward-alert.component.html',
-  styleUrl: './inward-alert.component.css'
+  styleUrl: './inward-alert.component.css',
 })
 export class InwardAlertComponent {
-
-   _inwardForBranch: any;
+  _inwardForBranch: any;
   transactionData: any;
   Spinner: boolean = true;
 
-  user: any; 
+  user: any;
   userData: any;
   branchId: any;
   branchName: any;
@@ -26,7 +25,7 @@ export class InwardAlertComponent {
 
   constructor(private vendorService: VendorService) {}
   ngOnInit() {
-    console.log("checking inward alert");
+    console.log('checking inward alert');
 
     this.user = sessionStorage.getItem('userId');
     if (this.user) {
@@ -34,16 +33,15 @@ export class InwardAlertComponent {
         console.table(res);
         this.userData = res;
 
-        console.log("this.userData:", this.userData);
-        console.log("this.userData with branchId:", this.userData.branchId);
+        console.log('this.userData:', this.userData);
+        console.log('this.userData with branchId:', this.userData.branchId);
         this.branchId = this.userData.branchId;
 
         if (this.branchId) {
           this.fetchallinwardForBranch();
         } else {
-          console.error("branchId is undefined!");
+          console.error('branchId is undefined!');
         }
-
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
@@ -57,9 +55,15 @@ export class InwardAlertComponent {
       (res: any) => {
         this._inwardForBranch = res;
         this.Spinner = false;
-        console.log("fetching inward transaction for branch:",res);
-        console.log("fetching inward transaction for branch:",res?.[0]?.fromBranch?.branchName);
-        console.log("fetching inward transaction for branch with barnch name:", this._inwardForBranch?.[0]?.fromBranch?.branchName);
+        console.log('fetching inward transaction for branch:', res);
+        console.log(
+          'fetching inward transaction for branch:',
+          res?.[0]?.fromBranch?.branchName,
+        );
+        console.log(
+          'fetching inward transaction for branch with barnch name:',
+          this._inwardForBranch?.[0]?.fromBranch?.branchName,
+        );
         this.branchName = this._inwardForBranch?.[0]?.fromBranch?.branchName;
       },
       (error) => {

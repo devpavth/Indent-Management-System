@@ -717,3 +717,9 @@
     (closeSuccess)="closeSuccess($event)"
   ></app-success>
 </section>
+<section
+  *ngIf="isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
+</section>
