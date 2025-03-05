@@ -335,4 +335,10 @@ export class RequestService {
       { responseType: 'blob' },
     );
   }
+
+  fetchHeadOfAccByIndent(indentId: string){
+    return this.http.get(
+      environment.fetchHeadOfAccByIndent + `?requestNo=${indentId}`,
+    );
+  }
 }

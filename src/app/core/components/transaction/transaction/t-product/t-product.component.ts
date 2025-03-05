@@ -18,7 +18,7 @@ export class TProductComponent implements OnInit {
   isErrorToast: boolean = false;
   errorToastMsg: string = '';
   isViewTransaction: boolean = false;
-  confirmTranscationMsg: string = '';
+  confirmTransactionMsg: string = '';
 
   private employeeService = inject(EmployeeServiceService);
 
@@ -68,6 +68,7 @@ export class TProductComponent implements OnInit {
 
   confirmIndentTransaction() {
     this.isViewTransaction = true;
+    this.confirmTransactionMsg = "Do you want to add an Transaction based on Indent";
   }
 
   closePopUp(closeIcon: boolean) {

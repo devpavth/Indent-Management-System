@@ -39,7 +39,7 @@
                   <label
                     for="Branch"
                     class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >Reference No :</label
+                    >{{RefIndentLabel}}</label
                   >
                 </div>
 
@@ -50,6 +50,31 @@
                   required
                 />
               </div>
+              <!-- <div class="col-span-4" *ngIf="isViewHeadOfAccSelectField">
+                 <label
+                    for="Branch"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >Select Head of Account
+                  </label>
+                  <select 
+                    class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    (change)="selectedHeadOfacc($event)"
+                    >
+                    <option
+                      value=""
+                      disabled
+                      selected
+                      class="bg-purple-700 text-white"
+                    >
+                      Choose Head of Account
+                    </option>
+                    <option 
+                      *ngFor="let head of indentHeadOfAccDetails"
+                      [value]="head?.headOfAccId">
+                      {{head.headOfAccName}}
+                    </option>
+                  </select>
+              </div> -->
               <div class="col-span-4">
                 <div>
                   <label
@@ -76,10 +101,35 @@
                   </select>
                 </div>
               </div>
+              <div class="col-span-4" *ngIf="isViewHeadOfAccSelectField">
+                 <label
+                    for="Branch"
+                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                    >Select Head of Account
+                  </label>
+                  <select 
+                    class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    (change)="selectedHeadOfacc($event)"
+                    >
+                    <option
+                      value=""
+                      disabled
+                      selected
+                      class="bg-purple-700 text-white"
+                    >
+                      Choose Head of Account
+                    </option>
+                    <option 
+                      *ngFor="let head of indentHeadOfAccDetails"
+                      [value]="head?.headOfAccId">
+                      {{head.headOfAccName}}
+                    </option>
+                  </select>
+              </div>
               <div
                 *ngIf="inwardFormHeader.get('inwardFromCode')?.value == 269"
                 class="col-span-4"
-              >
+                >
                 <div class="flex items-center gap-2">
                   <label
                     for="Branch"
@@ -93,25 +143,14 @@
                     type="text"
                     #id
                     formControlName="vendorId"
+                    [ngClass]="{
+                      'pointer-events-none': isViewHeadOfAccSelectField
+                    }"
                     class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                    [value]="selectVendorName"
                     required
                   />
-                  <!-- <option
-                      value=""
-                      null
-                      selected
-                      disabled
-                      class="bg-purple-700 text-white"
-                    >
-                      Choose Vendor
-                    </option>
-                    <option
-                      *ngFor="let v of vendorList"
-                      value="{{ v.vendorId }}"
-                    >
-                      {{ v.vendorName }}
-                    </option> -->
-                  <!-- </select> -->
+                  
                   <div
                     *ngIf="noVendor"
                     class="absolute mt-12 text-sm text-red-600"
@@ -119,7 +158,7 @@
                     <small>No Vendor found.</small>
                   </div>
                   <ul
-                    *ngIf="vendorSearchList && vendorSearchList.length > 0"
+                    *ngIf="vendorSearchList && vendorSearchList.length > 0 && !isManualVendorSelection"
                     class="absolute z-10 mt-12 w-96 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
                   >
                     <li
@@ -324,14 +363,14 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-3"
+          <div *ngIf="!isIndentConfirmed" class="flex items-center gap-3"
             >
             <h3
-            class="mb-4 mt-12 text-lg font-semibold text-gray-900 dark:text-white"
-            >
-            Add Product Details
-          </h3>
-          <div class="mb-2 mt-10 flex cursor-pointer items-center gap-1">
+              class="mb-4 mt-12 text-lg font-semibold text-gray-900 dark:text-white"
+              >
+              Add Product Details
+            </h3>
+            <div class="mb-2 mt-10 flex cursor-pointer items-center gap-1">
                 <svg
                   class="h-4 w-4 text-gray-900 dark:text-white"
                   aria-hidden="true"
@@ -356,7 +395,7 @@
               </div>
           </div>
           
-          <form [formGroup]="inwardForm">
+          <form [formGroup]="inwardForm" *ngIf="!isIndentConfirmed">
             <div class="mb-4 grid gap-4 sm:grid-cols-8">
               <div class="col-span-full">
                 <!-- Start coding here -->
@@ -660,7 +699,7 @@
         </h3>
         <div
           class="relative mt-3 overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"
-        >
+          >
           <div class="overflow-x-auto">
             <table
               class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
@@ -688,7 +727,7 @@
                     scope="row"
                     class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
                   >
-                    {{ p.productCode }}
+                    {{ p.prdCode }}
                   </th>
                   <td class="px-4 py-3">{{ p.purchasedPrice }}</td>
                   <td class="px-4 py-3">{{ p.prdQty }}</td>
@@ -775,4 +814,12 @@
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
   <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
+</section>
+
+<section *ngIf="isViewTransaction" class="absolute left-0 right-0 top-0 z-50 h-screen">
+  <app-confirmindent-transaction-popup
+    [confirmTransactionMsg]="confirmTransactionMsg"
+    (close)="closePopUp($event)"
+    (confirmIndentTrans)="confirmIndentTrans()"
+   ></app-confirmindent-transaction-popup>
 </section>

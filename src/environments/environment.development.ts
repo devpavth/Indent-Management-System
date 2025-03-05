@@ -149,6 +149,7 @@ export const environment = {
   fetchNormalIndentReport: Url + baseRequestApi + '/getnormalrequest',
   fetchCompletedIndentReport: Url + baseRequestApi + '/getcompletedindent',
   fetchRejectedIndentReport: Url + baseRequestApi + '/getrejectedindent',
+  fetchHeadOfAccByIndent: Url + baseRequestApi + '/gethoaccdetailsforindent',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

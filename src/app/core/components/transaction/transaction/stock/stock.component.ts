@@ -4,10 +4,11 @@ import { ProductService } from '../../../service/Product/product.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
-import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, filter, of, switchMap } from 'rxjs';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
+import { RequestService } from '../../../service/Request/request.service';
 
 @Component({
   selector: 'app-stock',
@@ -22,6 +23,7 @@ export class StockComponent implements OnInit {
   route = inject(Router);
 
   private employeeService = inject(EmployeeServiceService);
+  reqService = inject(RequestService);
 
   isBox: boolean = false;
   gstPercentages: number[] = [0, 5, 12, 18, 28];
@@ -83,6 +85,16 @@ export class StockComponent implements OnInit {
   isLevelView: boolean = true;
   isAddTransactionView: boolean = false;
   isProductIdDisabled: boolean = true;
+  isViewTransaction: boolean = false;
+  confirmTransactionMsg: string = '';
+  RefIndentLabel: string = 'Reference No:';
+  isIndentConfirmed!: boolean;
+  isViewHeadOfAccSelectField: boolean = false;
+  indentHeadOfAccDetails: any[] = [];
+  selectedHeadOfAccId: number = 0;
+  selectVendorName: string = '';
+  selectVendorId: number = 0;
+  isManualVendorSelection: boolean  = false;
 
   constructor(
     private branchService: BranchService,
@@ -209,6 +221,26 @@ export class StockComponent implements OnInit {
     }
 
     this.fetchAllBranch();
+    this.isViewTransaction = true;
+    this.confirmTransactionMsg =
+      'Do you want to add a Transaction based on Indent';
+
+    console.log('tranRefNo Control:', this.inwardFormHeader.get('tranRefNo'));
+
+    this.inwardFormHeader
+      .get('tranRefNo')
+      ?.valueChanges.pipe(
+        debounceTime(500),
+        filter((value) => {
+          console.log('User input detected:', value);
+          console.log('isIndentConfirmed:', this.isIndentConfirmed);
+          return this.isIndentConfirmed && value.trim() !== '';
+        }),
+      )
+      .subscribe((value) => {
+        console.log('API should be triggered with:', value);
+        this.fetchHeadOfAccByIndent(value);
+      });
     // this.fetchVendorList();
   }
 
@@ -245,6 +277,68 @@ export class StockComponent implements OnInit {
         this.vendorSearchList = response;
         this.isVendorSelected = false;
       });
+  }
+
+  fetchHeadOfAccByIndent(indentNo: string) {
+    console.log('Calling API with:', indentNo);
+    this.reqService.fetchHeadOfAccByIndent(indentNo).subscribe(
+      (res: any) => {
+        console.log('fetching head of acc using indent:', res);
+        this.isViewHeadOfAccSelectField = true;
+        this.indentHeadOfAccDetails = res;
+      },
+      (error) => {
+        console.log('error while fetching head of acc:', error);
+        this.isErrorToast = true;
+        this.errorToastMsg = error.error.errorMessege;
+        setTimeout(() => {
+          this.isErrorToast = false;
+        }, 3000);
+      },
+    );
+  }
+
+  selectedHeadOfacc(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.selectedHeadOfAccId = Number(selectElement.value);
+
+    console.log('this.selectedHeadOfAccId:', this.selectedHeadOfAccId);
+
+    const selectHeadOfAcc = this.indentHeadOfAccDetails.find(
+      (head) => head.headOfAccId === this.selectedHeadOfAccId,
+    );
+
+    if (selectHeadOfAcc) {
+      this.selectVendorName = selectHeadOfAcc.assgndVendorData.vendorName;
+      this.selectVendorId = selectHeadOfAcc.assgndVendorData.vendorId;
+
+      this.productList = selectHeadOfAcc.productDetailsDTOs.map(
+        (item: any) => ({
+          ...item,
+          purchasedPrice: item.unitPrice,
+          prdQty: item.qty,
+          gstPercentage: item.prdGstPct,
+          total: { itemPrice: item.itemTotalPrice },
+        }),
+      );
+
+      console.log('this.productList in headOfAcc:', this.productList);
+
+      console.log('Selected Vendor Name:', this.selectVendorName);
+
+      this.isManualVendorSelection = true;
+
+      this.inwardFormHeader.get('vendorId')?.setValue(this.selectVendorName);
+
+      this.vendorSearchList = [];
+
+      console.log(
+        'condition:',
+        this.inwardFormHeader.get('inwardFromCode')?.value === 269,
+      );
+
+      console.log('After patchValue:', this.inwardFormHeader.value);
+    }
   }
 
   fetchAllBranch() {
@@ -449,7 +543,7 @@ export class StockComponent implements OnInit {
         ...data,
         prdUnit: this.productData[0].prdUnit,
         total,
-        productCode: this.productData[0].prdCode,
+        prdCode: this.productData[0].prdCode,
         productId: this.productData[0].productId,
       });
       console.log(total);
@@ -489,6 +583,13 @@ export class StockComponent implements OnInit {
 
     if (this.inwardFormHeader.get('inwardFromCode')?.value === '269') {
       this.header.vendorId = this.selectedVendorId;
+    }
+
+    if(this.isIndentConfirmed){
+      if (this.inwardFormHeader.get('inwardFromCode')?.value === '269') {
+        this.header.vendorId = this.selectVendorId;
+      }
+      
     }
 
     let branch: any[] = this._branch;
@@ -534,6 +635,12 @@ export class StockComponent implements OnInit {
     this.productList = this.productList.filter(
       (p) => p.productId !== product.productId,
     );
+  }
+
+  confirmIndentTrans() {
+    this.RefIndentLabel = 'Indent No';
+    this.isIndentConfirmed = true;
+    console.log('Indent confirmed! Now API should trigger when user types.');
   }
 
   onSubmit() {
@@ -607,5 +714,9 @@ export class StockComponent implements OnInit {
     // Fetch initial data if necessary
     this.fetchAllBranch();
     // this.fetchVendorList();
+  }
+
+  closePopUp(closeIcon: boolean) {
+    this.isViewTransaction = closeIcon;
   }
 }

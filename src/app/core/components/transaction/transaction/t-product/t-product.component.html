@@ -43,7 +43,7 @@
             <button
               *ngIf="isAddTransactionView"
               type="button"
-              (click)="confirmIndentTransaction()"
+              routerLink="/home/inoutstock"
               class="an flex items-center justify-center rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
               >
               <svg
@@ -329,9 +329,3 @@
   <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>
 
-<section *ngIf="isViewTransaction" class="absolute left-0 right-0 top-0 z-50 h-screen">
-  <app-confirmindent-transaction-popup
-    [confirmTranscationMsg]="confirmTranscationMsg"
-    (close)="closePopUp($event)"
-   ></app-confirmindent-transaction-popup>
-</section>

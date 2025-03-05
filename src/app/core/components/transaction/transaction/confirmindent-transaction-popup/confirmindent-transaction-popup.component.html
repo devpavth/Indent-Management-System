@@ -36,17 +36,18 @@
         ></iframe> -->
 
         <iframe 
-            class="w-20"
+            class="w-16 h-16"
             src="https://lottie.host/embed/1f9d5d26-13bc-4825-9e43-6ee305ab625d/hqtWFUjx0w.lottie">
         </iframe>
       </div>
       <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        {{confirmTranscationMsg}}
+        {{confirmTransactionMsg}}
       </p>
 
       <div class="flex flex-row justify-end items-end">
         <button type="button" class="py-3 px-4 mr-4 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900"
-        >
+            (click)="confirmIndentTransaction()"
+            >
                 OK
         </button>
         <button type="button" class="py-3 px-4 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900"

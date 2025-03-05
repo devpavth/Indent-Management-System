@@ -7,13 +7,19 @@ import { Router } from '@angular/router';
   styleUrl: './confirmindent-transaction-popup.component.css',
 })
 export class ConfirmindentTransactionPopupComponent {
-  @Input() confirmTranscationMsg: string = '';
+  @Input() confirmTransactionMsg: string = '';
   @Output() close = new EventEmitter<boolean>();
+  @Output() confirmIndentTrans = new EventEmitter<boolean>();
 
   route = inject(Router);
 
-  closePopup(){
-    this.route.navigate(['/home/inoutstock'])
+  closePopup() {
+    this.close.emit();
+  }
+
+  confirmIndentTransaction(){
+    this.confirmIndentTrans.emit();
+    this.close.emit(false);
   }
 
   onClose() {
