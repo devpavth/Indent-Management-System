@@ -192,6 +192,8 @@ export class ProductListComponent implements OnInit {
   }
   toggleView(action: Boolean, check: number, productData: any) {
     if (check == 1) {
+      console.log("check boolean:", check);
+      console.log('productData:', productData);
       this.isProductList = action;
       this.productData = productData;
     }

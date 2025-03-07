@@ -2,20 +2,23 @@
   <h1 class="mb-4 pt-5 text-center text-xl font-bold text-purple-600">
     Quote Comparison Sheet
   </h1>
-  <label for="" class="ml-4 text-lg font-bold text-purple-600"
-    >INDENT ID:</label
-  >
-  <input
-    type="text"
-    class="m-4 rounded-lg text-center text-lg font-semibold"
-    [value]="requestData?.requestNo"
-    readonly
-  />
+
+  <!-- <div class="flex flex-col items-start mt-4"> -->
+    <label class="ml-4 -mb-4 text-lg font-semibold text-purple-600"
+      >Indent Id:</label
+    >
+    <input
+      type="text"
+      class="m-4 rounded-lg pointer-events-none border-none text-start -mb-1 text-lg font-semibold focus:border-none"
+      [value]="requestData?.requestNo"
+      readonly
+    />
+  <!-- </div> -->
+  
 
   <div
-    class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
-    
-  >
+    class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"    
+    >
     <div class="w-full md:w-1/2">
       <form class="flex items-center" [formGroup]="comparisonQuoteForm">
         <label for="simple-search" class="sr-only">Search</label>
@@ -27,18 +30,21 @@
             "
             [formGroupName]="headIndex"
             >
-            <div>
-              <label for="" class="text-lg font-semibold text-purple-600"
+
+            <div class="flex flex-col">
+              <label class="text-lg font-semibold mb-2 text-purple-600"
                 >Head of Account:</label
               >
               <select
-                class="m-4 w-64 rounded-lg border border-gray-500"
+                class="w-96 rounded-lg border mb-2 border-gray-500"
                 (change)="selectedHeadOfAcc($event)"
                 formControlName="headOfAccId"
                 [value]="currentHeadOfAccId"
               >
                 <option 
-                  value="" disabled>Choose Head of Account</option>
+                  value="" selected disabled
+                  class="bg-gray-400 text-white"
+                  >Choose Head of Account</option>
                 <option
                   *ngFor="let head of uniqueProductHeadData"
                   [value]="head.headOfAccId"
@@ -77,9 +83,9 @@
                 </div> -->
                 <input
                   type="text"
-                  class="w-full rounded border p-0"
+                  class="rounded border p-0"
                   id="simple-search"
-                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+                  class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-96 rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder="Search Vendor..."
                   #searchInput
                   (input)="onSearchChange($event)"
@@ -90,7 +96,7 @@
                   required=""
                 />
 
-                <div *ngIf="noVendor" class="absolute mt-2 text-sm text-red-600">
+                <div *ngIf="noVendor" class="absolute mt-12 text-sm text-red-600">
                   <small>No vendor found.</small>
                 </div>
                 <ul
@@ -309,8 +315,18 @@
     
   </div>
 
+  <div>
+    <h3 
+      *ngIf="
+        filterProductHeadData.length > 0 &&
+        selectedVendorName.length > 2 &&
+        pdfSrc.length > 2
+      "
+      class="m-4 text-lg text-purple-600 font-semibold"
+      >Comparison Table</h3>
+  </div>
   <div
-    class="mt-6 flex flex-row items-center space-x-4"
+    class="-mt-6 flex flex-row items-center"
     *ngIf="
       filterProductHeadData.length > 0 &&
       selectedVendorName.length > 2 &&
@@ -318,10 +334,10 @@
     "
     >
     <div class="-m-1.5">
-      <div class="inline-block min-w-full p-1.5 align-middle">
+      <div class="inline-block max-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
         <div class="m-4 overflow-hidden rounded-lg border">
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="max-w-full divide-y divide-gray-200"> 
             <thead
               class="dark:bg-white-700 dark:text-white-400 bg-purple-500 text-sm uppercase text-white"
             >
@@ -331,6 +347,14 @@
                   class="px-5 py-4 text-start text-sm font-medium uppercase"
                 >
                   Product
+                </th>
+
+                <th
+                  scope="col"
+                  *ngIf="isViewItemPerBox"
+                  class="px-5 py-4 text-start text-sm font-medium uppercase"
+                >
+                  Items/Box
                 </th>
 
                 <th
@@ -364,6 +388,20 @@
                   <p class="w-48 text-xs text-gray-400 text-justify">
                     {{ product.prdDescription }}
                   </p>
+                </td>
+
+                <td class="px-5 py-4 text-center text-sm text-gray-800"
+                  *ngIf="isViewItemPerBox"
+                  >
+                  <input
+                    type="number"
+                    class="w-24 rounded-lg"
+                    [(ngModel)]="totalPiecesPerProduct[i]"
+                    (input)="calculateTotalPieces(i)"
+                    (keypress)="allowOnlyNumbers($event)"
+                    (paste)="preventPaste($event)"
+                    [hidden]="product.prdUnit !== 200"
+                  />
                 </td>
 
                 <td class="px-5 py-4 text-center text-sm text-gray-800">
@@ -409,8 +447,8 @@
 
   <!-- Quote Section -->
   <section class="bg-white" *ngIf="pdfSrc.length > 0">
-    <div class="mx-auto px-4 py-8 lg:py-16">
-      <form action="#" class="grid grid-cols-3 gap-2">
+    <div class="px-4 py-8 lg:py-16">
+      <form action="#" class="mr-44 grid grid-cols-3 gap-2">
         <ng-container *ngFor="let file of pdfFiles; let i = index">
           <div class="col-span-1 -mt-8">
             <label

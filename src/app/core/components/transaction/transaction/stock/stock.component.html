@@ -287,7 +287,7 @@
                             inwardFormHeader.get('inwardFromCode')?.value ===
                             '269'
                           "
-                        >
+                          >
                           Vendor
                         </td>
 
@@ -577,7 +577,7 @@
                     placeholder="Quantity"
                     required
                   />
-                  <p *ngIf="inwardForm.get('prdQty')?.errors?.['quantityExceeded']" 
+                  <p *ngIf="inwardForm.get('prdQty')?.errors?.['quantityExceeded'] && inwardFormHeader.get('inwardFromCode')?.value === '268'" 
                     class="absolute w-56 -bottom-10 left-0 text-red-500 text-sm">
                     Quantity cannot exceed available stock ({{ prdClosingStock }}).
                   </p>
@@ -713,7 +713,7 @@
                   <th scope="col" class="px-4 py-3">Quantity</th>
                   <th scope="col" class="px-4 py-3">Gst Percentage</th>
                   <th scope="col" class="px-4 py-3">Total Price</th>
-                  <th scope="col" class="px-4 py-3">
+                  <th scope="col" class="px-4 py-3" *ngIf="!isIndentConfirmed">
                     <span class="sr-only">Actions</span>
                   </th>
                 </tr>
@@ -735,7 +735,7 @@
                   <td class="px-4 py-3">
                     {{ p.total.itemPrice | currency: "INR" }}
                   </td>
-                  <td class="flex items-center justify-end px-2 py-3">
+                  <td class="flex items-center justify-end px-2 py-3" *ngIf="!isIndentConfirmed">
                     <button
                       (click)="deleteItem(p)"
                       type="submit"

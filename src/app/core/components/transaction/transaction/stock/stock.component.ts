@@ -241,6 +241,11 @@ export class StockComponent implements OnInit {
         console.log('API should be triggered with:', value);
         this.fetchHeadOfAccByIndent(value);
       });
+
+
+    this.inwardFormHeader.get('inwardFromCode')?.valueChanges.subscribe(() => {
+      this.inwardForm.get('prdQty')?.updateValueAndValidity();
+    });
     // this.fetchVendorList();
   }
 
@@ -311,6 +316,10 @@ export class StockComponent implements OnInit {
     if (selectHeadOfAcc) {
       this.selectVendorName = selectHeadOfAcc.assgndVendorData.vendorName;
       this.selectVendorId = selectHeadOfAcc.assgndVendorData.vendorId;
+
+      this.vendorData = [selectHeadOfAcc.assgndVendorData];
+
+      console.log('this.vendorData in headofacc:', this.vendorData);
 
       this.productList = selectHeadOfAcc.productDetailsDTOs.map(
         (item: any) => ({
@@ -447,7 +456,17 @@ export class StockComponent implements OnInit {
   }
 
   quantityValidator(control: AbstractControl) {
-    if (control.value && control.value > this.prdClosingStock) {
+    const inwardFromCode = this.inwardFormHeader.get('inwardFromCode')?.value;
+
+    // For debug
+    // console.log('inwardFromCode:', inwardFromCode);
+    // console.log('inwardFromCode:', typeof inwardFromCode);
+
+    if (
+      control.value &&
+      inwardFromCode === '268' &&
+      control.value > this.prdClosingStock
+    ) {
       return { quantityExceeded: true };
     }
     return null;
@@ -588,6 +607,7 @@ export class StockComponent implements OnInit {
     if(this.isIndentConfirmed){
       if (this.inwardFormHeader.get('inwardFromCode')?.value === '269') {
         this.header.vendorId = this.selectVendorId;
+        // data.vendorId = this.selectVendorId;
       }
       
     }
@@ -598,8 +618,11 @@ export class StockComponent implements OnInit {
     console.log('vendor:', vendor);
 
     let branchDetails = branch.find((f) => f.branchId == data.vendorId);
+    console.log('branchDetails:', branchDetails);
     let vendorDetails = vendor?.find((v) => v.vendorId == data.vendorId);
+    console.log('vendorDetails:', vendorDetails);
     let branchDetails1 = branch.find((f) => f.branchId == data.branchId);
+    console.log('branchDetails1:', branchDetails1);
     if (branchDetails1) {
       this.header.branchName = branchDetails1.branchName;
     }

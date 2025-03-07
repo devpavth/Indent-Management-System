@@ -89,7 +89,8 @@ export class LoginComponent implements OnInit {
 
           console.log(this.userData);
         } else {
-          alert('error');
+          // alert('error');
+          this.passwordVerified = 1;
         }
       },
       (error) => {

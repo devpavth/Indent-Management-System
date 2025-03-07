@@ -35,6 +35,7 @@ export class PdfUploadComponent {
   ven1Price: number[] = [];
   ven2Price: number[] = [];
   ven3Price: number[] = [];
+  totalPiecesPerProduct: number[] = [];
   leastPrice: number = 0;
   leastPricedVendorName: string = '';
   leastPricedVendorId: number = 0;
@@ -58,8 +59,11 @@ export class PdfUploadComponent {
     name: string;
     isViewCloseIcon: boolean;
   }[] = [];
-  productIds: { productId: number; prdGstPct: number; quotedPrice: number }[] =
-    [];
+  productIds: {
+    productId: number;
+    totalPieces: number;
+    quotedPrice: number;
+  }[] = [];
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
   isToast: boolean = false;
@@ -71,6 +75,7 @@ export class PdfUploadComponent {
   isViewQuoteCompareMsg: boolean = false;
   quoteCompareAmtPopUpMsg: string = '';
   Spinner: boolean = false;
+  isViewItemPerBox: boolean = false;
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
   filterQuotedHeadOfAcc: indentProductList[] = [];
@@ -117,6 +122,7 @@ export class PdfUploadComponent {
   quotationProductArr() {
     return this.fb.group({
       productId: null,
+      totalPieces: [],
       quotedPrice: [],
     });
   }
@@ -482,9 +488,19 @@ export class PdfUploadComponent {
 
     console.log('this.filterProductHeadData:', this.filterProductHeadData);
 
+    this.isViewItemPerBox = this.filterProductHeadData.some(
+      (head) => head.prdUnit === 200,
+    );
+
+    // if(this.filterProductHeadData.find(
+    //   (head) => head.prdStatus === 200
+    // )){
+    //   this.isViewItemPerBox = true;
+    // }
+
     this.productIds = this.filterProductHeadData.map((item) => ({
       productId: item.productId,
-      prdGstPct: item.prdGstPct,
+      totalPieces: 0,
       quotedPrice: 0,
     }));
     console.log('productIds:', this.productIds);
@@ -528,7 +544,7 @@ export class PdfUploadComponent {
         qcProductsArray.push(
           new FormGroup({
             productId: new FormControl(product.productId),
-            prdGstPct: new FormControl(product.prdGstPct),
+            totalPieces: new FormControl(product.totalPieces),
             quotedPrice: new FormControl(product.quotedPrice),
           }),
         );
@@ -674,7 +690,6 @@ export class PdfUploadComponent {
           this.isViewQuoteCompareMsg = true;
           this.quoteCompareAmtPopUpMsg =
             'The amount to be entered should be the total amount for the particular product in the PDF, calculated as: (Unit Price * GST * Quantity).';
-      
         }
       }
     }
@@ -686,7 +701,7 @@ export class PdfUploadComponent {
     // this.isQuoteUploaded = data;
   }
 
-  closeAmtPopup(closeIcon: boolean){
+  closeAmtPopup(closeIcon: boolean) {
     this.isViewQuoteCompareMsg = closeIcon;
     this.isSuccessToast = true;
     this.deleteToastMsg = 'Scroll Down to Comparison Table';
@@ -852,6 +867,56 @@ export class PdfUploadComponent {
 
   calculateVen3Price(index: number) {
     this.updateVendorPrice(index, 2, this.ven3Price, 2);
+  }
+
+  calculateTotalPieces(index: number) {
+    console.log('index in total pieces:', index);
+    console.log('amt in pieces:', this.totalPiecesPerProduct);
+
+    const headOfAccIndex = 0; // Assuming one HeadOfAcc; modify if needed
+
+    const qcHeadOfAccArray = this.comparisonQuoteForm.get(
+      'qcHeadOfAcc',
+    ) as FormArray;
+
+    if (!qcHeadOfAccArray || !qcHeadOfAccArray.at(headOfAccIndex)) {
+      console.log('Invalid headOfAccIndex:', headOfAccIndex);
+      return;
+    }
+
+    const qcVendorsArray = qcHeadOfAccArray
+      .at(headOfAccIndex)
+      .get('qcVendors') as FormArray;
+
+    if (!qcVendorsArray) {
+      console.log('qcVendorsArray is undefined at index', headOfAccIndex);
+      return;
+    }
+
+    // 🔥 Loop through ALL vendors instead of hardcoding `vendorIndex = 0`
+    qcVendorsArray.controls.forEach((vendor, vendorIdx) => {
+      if (!vendor || !vendor.get('qcProducts')) {
+        console.log(`qcProducts is undefined for vendor ${vendorIdx}`);
+        return;
+      }
+
+      const qcProductsArray = vendor.get('qcProducts') as FormArray;
+
+      if (!qcProductsArray.at(index)) {
+        console.log(`qcProductsArray does not have an entry at index ${index}`);
+        return;
+      }
+
+      // ✅ Update `totalPieces` for ALL vendors at the given `index`
+      qcProductsArray
+        .at(index)
+        .patchValue({ totalPieces: this.totalPiecesPerProduct[index] });
+
+      console.log(
+        `Updated qcProductsArray for Vendor ${vendorIdx + 1}:`,
+        qcProductsArray.value,
+      );
+    });
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
