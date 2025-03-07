@@ -9,6 +9,7 @@ import { EmployeeServiceService } from '../../../service/Employee/employee-servi
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { RequestService } from '../../../service/Request/request.service';
+import { Product } from '../../../../models/product/product.model';
 
 @Component({
   selector: 'app-stock',
@@ -62,7 +63,7 @@ export class StockComponent implements OnInit {
 
   isProductSelected: boolean = false;
   noResults: boolean = false;
-  storeProductData: any[] = [];
+  storeProductData: Product[] = [];
 
   isVendorSelected: boolean = false;
   noVendor: boolean = false;
@@ -168,7 +169,7 @@ export class StockComponent implements OnInit {
           );
         }),
       )
-      .subscribe((response: any) => {
+      .subscribe((response: Product[]) => {
         this.storeProductData = response;
         console.log('fetching product data from backend:', response);
 
@@ -421,7 +422,7 @@ export class StockComponent implements OnInit {
   //   )
   // }
 
-  onSelectProduct(product: any) {
+  onSelectProduct(product: Product) {
     console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
 

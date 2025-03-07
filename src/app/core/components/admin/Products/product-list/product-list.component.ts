@@ -1,5 +1,8 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, OnInit, Output, ViewChild } from '@angular/core';
 import { ProductService } from '../../../service/Product/product.service';
+import { catchError, debounceTime, distinctUntilChanged, fromEvent, of, Subject, switchMap, tap } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { Product } from '../../../../models/product/product.model';
 
 @Component({
   selector: 'app-product-list',
@@ -7,6 +10,10 @@ import { ProductService } from '../../../service/Product/product.service';
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent implements OnInit {
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+
+  searchSubject: Subject<string> = new Subject();
+
   isProductList: Boolean = false;
   productList: any[] | undefined;
   otherPrdLen: number = 0;
@@ -27,14 +34,74 @@ export class ProductListComponent implements OnInit {
   activeProductList: any[] = [];
   otherProductList: any[] = [];
 
+  storeProductList: Product[] = [];
+  noResults: boolean = false;
+  isProductSelected: boolean = false;
+  searchText: string = '';
+
   activeProduct: string = 'active';
   isShowPagination: boolean = true;
 
   ngOnInit() {
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          if (this.isProductSelected) {
+            return of([]);
+          }
+          this.noResults = false;
+          if (!searchTerm || searchTerm.length < 3) {
+            this.storeProductList = [];
+            return of([]);
+          }
+
+          let httpParams = new HttpParams().set('searchTerm', searchTerm);
+          console.log('API Params:', httpParams.toString());
+
+          return this.productService.fetchLiveProductDetails(httpParams).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('product api error:', error);
+                this.noResults = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: Product[]) => {
+        console.log('fetching product data from backend:', response);
+
+        if (response.length > 0) {
+          this.storeProductList = response;
+        }
+        this.isProductSelected = false;
+      });
+
     this.fetchProductList(this.offSet, this.pageSize, 'active');
     this.fetchProductList(this.offSet, this.pageSize, 'other');
   }
   constructor(private productService: ProductService) {}
+
+  onSearchChange(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const searchTerm = inputElement.value;
+    this.searchSubject.next(searchTerm);
+  }
+
+  onSelectProduct(product: Product) {
+    this.isProductSelected = true;
+    this.toggleView(true, 1, product);
+    this.storeProductList = [];
+    this.searchText = '';
+  }
+
+  clearSearch(){
+    this.searchText = '';
+    this.storeProductList = [];
+    this.noResults = false;
+  }
 
   fetchProductList(
     offSet: number,
@@ -192,7 +259,7 @@ export class ProductListComponent implements OnInit {
   }
   toggleView(action: Boolean, check: number, productData: any) {
     if (check == 1) {
-      console.log("check boolean:", check);
+      console.log('check boolean:', check);
       console.log('productData:', productData);
       this.isProductList = action;
       this.productData = productData;

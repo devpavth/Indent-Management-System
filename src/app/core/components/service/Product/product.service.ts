@@ -3,6 +3,7 @@ import { environment } from '../../../../../environments/environment.development
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
 import { Vendor } from '../../../models/vendor/vendor.type';
+import { Product } from '../../../models/product/product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -90,7 +91,7 @@ export class ProductService {
     return this.productHttp.post(environment.addHeadOfAcc, data);
   }
 
-  fetchLiveProductDetails(httpParams: HttpParams){
+  fetchLiveProductDetails(httpParams: HttpParams): Observable<Product[]>{
     // let httpParams = new HttpParams();
 
     // Object.keys(params).forEach((key) => {
@@ -99,7 +100,7 @@ export class ProductService {
 
     // console.log("httpParams:", httpParams.toString());
 
-    return this.productHttp.get(environment.fetchLiveProductDetails, {params: httpParams});
+    return this.productHttp.get<Product[]>(environment.fetchLiveProductDetails, {params: httpParams});
   }
 
   fetchLiveVendorDetails(params: {[key: string]: string}): Observable<Vendor[]>{

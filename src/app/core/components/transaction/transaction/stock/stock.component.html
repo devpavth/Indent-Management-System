@@ -159,13 +159,13 @@
                   </div>
                   <ul
                     *ngIf="vendorSearchList && vendorSearchList.length > 0 && !isManualVendorSelection"
-                    class="absolute z-10 mt-12 w-96 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    class="absolute z-10 mt-12 w-[420px] rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
                   >
                     <li
                       *ngFor="let ven of vendorSearchList"
                       (click)="onSelectVendor(ven)"
-                      class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                    >
+                      class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:rounded-lg dark:text-white dark:hover:bg-gray-600"
+                      >
                       {{ ven.vendorName }}
                     </li>
                   </ul>
@@ -444,7 +444,7 @@
                           *ngFor="let prod of storeProductData"
                           (click)="onSelectProduct(prod)"
                           class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                        >
+                          >
                           {{ prod.prdcatgName }} - {{ prod.prdbrndName }} -
                           {{ prod.prdmdlName }} - {{ prod.prdDescription }}
                         </li>

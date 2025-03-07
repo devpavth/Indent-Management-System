@@ -1,4 +1,4 @@
-<div class="bg-white shadow-md">
+<div class="bg-white rounded-md shadow-md">
   <h1 class="mb-4 pt-5 text-center text-xl font-bold text-purple-600">
     Quote Comparison Sheet
   </h1>
@@ -62,7 +62,7 @@
                 class="flex flex-row gap-4"
                 >
                 <div
-                  class="pointer-events-none absolute mt-32 inset-y-0 left-0 flex items-center pl-3"
+                  class="pointer-events-none absolute mt-[140px] inset-y-0 left-0 flex items-center pl-3"
                   >
                   <svg
                     aria-hidden="true"
@@ -101,7 +101,7 @@
                 </div>
                 <ul
                   *ngIf="storeVendorList && storeVendorList.length > 0"
-                  class="absolute z-10 mt-12 w-5/6 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                  class="absolute z-10 mt-12 w-4/6 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
                 >
                   <li
                     *ngFor="let ven of storeVendorList"
@@ -195,12 +195,12 @@
   <!-- PDF Display Section -->
   <div *ngIf="selectedVendorName.length > 0" class="flex">
     <div>
-      <section class="bg-white" *ngIf="selectedVendorName.length > 0">
+      <section class="bg-white -mt-10" *ngIf="selectedVendorName.length > 0">
         <div class="px-4 py-8">
-          <h3 class="mb-4 text-lg font-semibold text-purple-700">
+          <h3 class="mb-2 text-lg font-semibold text-purple-700">
             Vendor Quote Assessment
           </h3>
-          <form action="#" class="grid grid-cols-3 gap-4">
+          <form action="#" class="grid grid-cols-3 gap-4 w-[1070px]">
             <ng-container *ngFor="let ven of selectedVendorName; let i = index">
               <div class="col-span-1 rounded-lg border p-2 shadow-md">
                 <div class="mb-2 flex items-center justify-between">
@@ -333,11 +333,11 @@
       pdfSrc.length > 2
     "
     >
-    <div class="-m-1.5">
+    <div class="w-[1120px] -m-1.5">
       <div class="inline-block max-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
         <div class="m-4 overflow-hidden rounded-lg border">
-          <table class="max-w-full divide-y divide-gray-200"> 
+          <table class="table-fixed w-full divide-y divide-gray-200"> 
             <thead
               class="dark:bg-white-700 dark:text-white-400 bg-purple-500 text-sm uppercase text-white"
             >
@@ -448,7 +448,7 @@
   <!-- Quote Section -->
   <section class="bg-white" *ngIf="pdfSrc.length > 0">
     <div class="px-4 py-8 lg:py-16">
-      <form action="#" class="mr-44 grid grid-cols-3 gap-2">
+      <form action="#" class="mr-1 grid grid-cols-3 gap-2">
         <ng-container *ngFor="let file of pdfFiles; let i = index">
           <div class="col-span-1 -mt-8">
             <label

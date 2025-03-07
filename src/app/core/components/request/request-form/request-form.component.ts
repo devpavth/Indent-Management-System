@@ -9,6 +9,7 @@ import { VendorService } from '../../service/vendor/vendor.service';
 import { catchError, debounceTime, from, of, switchMap, tap } from 'rxjs';
 import { BranchService } from '../../service/Branch/branch.service';
 import { HttpParams } from '@angular/common/http';
+import { Product } from '../../../models/product/product.model';
 
 @Component({
   selector: 'app-request-form',
@@ -69,7 +70,7 @@ export class RequestFormComponent implements OnInit {
 
   isProductSelected: boolean = false;
   noResults: boolean = false;
-  storeProductData: any[] = [];
+  storeProductData: Product[] = [];
   isVendorView: boolean = true;
 
   isEnableSave: boolean = true;
@@ -168,7 +169,7 @@ export class RequestFormComponent implements OnInit {
         );
       })
     ).subscribe(
-      (response: any) => {
+      (response: Product[]) => {
         this.storeProductData = response;
         console.log("fetching product data from backend:", response);
 
@@ -650,7 +651,7 @@ export class RequestFormComponent implements OnInit {
     );
   }
 
-  onSelectProduct(product: any){
+  onSelectProduct(product: Product){
     console.log("after selecting the product from the list", product);
     this.isProductSelected = true;
     this.productData = [product];
