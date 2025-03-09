@@ -37,15 +37,18 @@ export class AddFunderComponent {
     });
   }
   onSubmit(data: any) {
-    console.log("posting funder form value:", data);
-    this.funderService.registerFunder(data).subscribe((res: any) => {
-      console.log("successfully saved the funder value:", res);
-      this.isSuccess = true;
-      this.successData = { show: 5, text: res.errorMessege };
-      console.log("this.successData:", this.successData);
-    },(error) => {
-      console.log("error while saving the funder value:", error);
-    }); 
+    console.log('posting funder form value:', data);
+    this.funderService.registerFunder(data).subscribe(
+      (res: any) => {
+        console.log('successfully saved the funder value:', res);
+        this.isSuccess = true;
+        this.successData = { show: 5, text: res.errorMessege };
+        console.log('this.successData:', this.successData);
+      },
+      (error) => {
+        console.log('error while saving the funder value:', error);
+      },
+    );
   }
 
   closeSuccess(data: boolean) {

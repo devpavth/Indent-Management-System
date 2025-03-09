@@ -13,9 +13,6 @@ import { ViewBranchComponent } from './Branch/view-branch/view-branch.component'
 
 import { AddVendorComponent } from './vendor/add-vendor/add-vendor.component';
 import { VendorListComponent } from './vendor/vendor-list/vendor-list.component';
-import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
-import { FunderListComponent } from './Funder/funder-list/funder-list.component';
-import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 import { RStockComponent } from './report/r-stock/r-stock.component';
 import { HeadOfAccComponent } from './Products/head-of-acc/head-of-acc.component';
 import { ViewListComponent } from './Branch/view-list/view-list.component';
@@ -36,9 +33,6 @@ const routes: Routes = [
   { component: ViewBranchComponent, path: 'viewBranch' },
   { component: AddVendorComponent, path: 'addVendor' },
   { component: VendorListComponent, path: 'vendorList' },
-  { component: AddFunderComponent, path: 'addFunder' },
-  { component: FunderListComponent, path: 'funderList' },
-  { component: ViewFunderComponent, path: 'viewFunder' },
   { component: RStockComponent, path: 'stockReport' },
   { component: HeadOfAccComponent, path: 'headOfAcc' },
   { component: ViewListComponent, path: 'viewList/:id' },
