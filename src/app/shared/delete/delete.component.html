@@ -71,3 +71,10 @@
     </div>
   </div>
 </section>
+
+<section
+  *ngIf="isToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="successToastMsg"></app-success-toast>
+</section>

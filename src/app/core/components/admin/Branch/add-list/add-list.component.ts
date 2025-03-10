@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-list',
@@ -15,6 +16,13 @@ export class AddListComponent implements OnInit {
 
   assProjListIds: any;
   activeLink: any;
+
+  route = inject(Router);
+
+  isDeleteToast: boolean = false;
+  errorToastMsg: string = '';
+  isToast: boolean = false;
+  successToastMsg: string = '';
 
   constructor(
     private branchService: BranchService,
@@ -37,7 +45,22 @@ export class AddListComponent implements OnInit {
     // console.log(project);
     this.assProjList.push({ programId: project, programStatus: 200 });
     this.assProjListIds = this.assProjList.map((item) => item.programId);
-    console.log(this.assProjList);
+    console.log('this.assProjList:', this.assProjList);
+    this.isToast = true;
+    this.successToastMsg = 'Program Added Successfully';
+    setTimeout(() => {
+      this.isToast = false;
+    }, 3000);
+  }
+
+  showSuccessToast() {
+    if (!this.assProjListIds) {
+      this.isToast = true;
+      this.successToastMsg = `Please assign atleast one program to ${this.department} department`;
+      setTimeout(() => {
+        this.isToast = false;
+      }, 3000);
+    }
   }
 
   deleteProject(programId: any) {
@@ -62,18 +85,37 @@ export class AddListComponent implements OnInit {
       departName: this.department,
       departProgram: this.assProjList,
     };
-    console.log(departList);
-    this.branchService.addNewDepart(departList).subscribe((res: any) => {
-      console.log(res);
-    });
+    console.log('departList:', departList);
+    this.branchService.addNewDepart(departList).subscribe(
+      (res: any) => {
+        console.log('adding department name:', res);
+        this.isToast = true;
+        this.successToastMsg = res.error;
+        setTimeout(() => {
+          this.isToast = false;
+          this.route.navigate(['/home/viewList/1']);
+        }, 3000);
+      },
+      (error) => {
+        console.log('error adding department name:', error);
+        this.isDeleteToast = true;
+        this.errorToastMsg = error.error[0];
+        setTimeout(() => {
+          this.isDeleteToast = false;
+        }, 3000);
+      },
+    );
   }
 
   onSubmitProj() {
     console.log(this.project);
-    this.branchService
-      .addNewProj({ proName: this.project })
-      .subscribe((res) => {
-        console.log(res);
-      });
+    this.branchService.addNewProj({ proName: this.project }).subscribe(
+      (res) => {
+        console.log('successfully added program:', res);
+      },
+      (error) => {
+        console.log('error while adding program:', error);
+      },
+    );
   }
 }

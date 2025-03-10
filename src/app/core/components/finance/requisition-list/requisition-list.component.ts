@@ -11,6 +11,7 @@ export class RequisitionListComponent implements OnInit {
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
+  noRequest: boolean = false;
 
   ngOnInit() {
     this.fetchRequestList();
@@ -43,6 +44,7 @@ export class RequisitionListComponent implements OnInit {
         (res) => {
           this.userRequest = res;
           console.log('fetching finance request processing list:', res);
+          this.noRequest = false;
         },
         (error) => {
           console.log(
@@ -53,6 +55,7 @@ export class RequisitionListComponent implements OnInit {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -72,6 +75,7 @@ export class RequisitionListComponent implements OnInit {
           // list = list.filter((l) => l.requestStatus == 102);
           // console.log("filtering completed request:", list);
           this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching completed finance request:', error);
@@ -79,6 +83,7 @@ export class RequisitionListComponent implements OnInit {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -94,6 +99,7 @@ export class RequisitionListComponent implements OnInit {
         (res: any) => {
           console.log('fetching finance request on hold list:', res);
           this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching on hold finance request:', error);
@@ -101,6 +107,7 @@ export class RequisitionListComponent implements OnInit {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -116,6 +123,7 @@ export class RequisitionListComponent implements OnInit {
         (res: any) => {
           console.log('fetching finance request rejected list:', res);
           this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching rejected finance request:', error);
@@ -123,6 +131,7 @@ export class RequisitionListComponent implements OnInit {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );

@@ -1,12 +1,12 @@
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
     <section>
-      <div class="mb-4 rounded-lg bg-white px-10 py-5">
+      <div class="mb-4 rounded-lg bg-white px-5 py-5">
         <form [formGroup]="headOfAccForm">
           <div>
             <label
               for="brand"
-              class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+              class="mb-2 block text-base font-medium text-gray-900 dark:text-white"
               >Add New Head of Account</label
             >
             <div class="flex gap-4">
@@ -50,10 +50,10 @@
     <div class="mx-auto">
       <div
         class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
-      >
-        <div
-          class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
         >
+        <!-- <div
+          class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+          >
           <div class="w-full md:w-1/2">
             <div class="flex items-center">
               <label for="simple-search" class="sr-only">Search</label>
@@ -83,37 +83,8 @@
               </div>
             </div>
           </div>
-          <div
-            class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
-          >
-            <!-- <button
-              type="button"
-              routerLink="/home/addProduct"
-              class="an flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-            >
-              <svg
-                class="mr-2 h-4 w-4"
-                fill="currentColor"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                  d="M5 12h14m-7 7V5"
-                />
-              </svg>
-
-              Add Head of Account
-            </button> -->
-          </div>
-        </div>
+          
+        </div> -->
 
         <div class="overflow-x-auto" #test>
           <table
@@ -176,10 +147,10 @@
                               <td class="px-4 py-3"></td> -->
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
-                  <button
+                  <!-- <button
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
-                  >
+                    >
                     <svg
                       class="h-5 w-5 text-blue-600 group-hover:text-blue-50 dark:text-white"
                       aria-hidden="true"
@@ -188,7 +159,7 @@
                       height="24"
                       fill="currentColor"
                       viewBox="0 0 24 24"
-                    >
+                      >
                       <path
                         fill-rule="evenodd"
                         d="M11.32 6.176H5c-1.105 0-2 .949-2 2.118v10.588C3 20.052 3.895 21 5 21h11c1.105 0 2-.948 2-2.118v-7.75l-3.914 4.144A2.46 2.46 0 0 1 12.81 16l-2.681.568c-1.75.37-3.292-1.263-2.942-3.115l.536-2.839c.097-.512.335-.983.684-1.352l2.914-3.086Z"
@@ -200,11 +171,11 @@
                         clip-rule="evenodd"
                       />
                     </svg>
-                  </button>
+                  </button> -->
                   <button
-                    class="group inline-flex items-center justify-center rounded-full bg-red-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    class="group inline-flex pointer-events-none items-center justify-center rounded-full bg-red-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-red-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
-                  >
+                    >
                     <svg
                       class="h-5 w-5 text-red-600 group-hover:text-red-50 dark:text-white"
                       aria-hidden="true"
@@ -226,10 +197,10 @@
             </tbody>
           </table>
         </div>
-        <nav
+        <!-- <nav
           class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
           aria-label="Table navigation"
-        >
+          >
           <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
             Showing
             <span class="font-semibold text-gray-900 dark:text-white"
@@ -281,7 +252,7 @@
               </li>
 
               <li>
-                <!-- [disabled]="currentPage * itemsPerPage >= productList.length" -->
+
                 <button
                   (click)="onPageChange(currentPage + 1)"
                   [disabled]="endPage == listLength"
@@ -305,8 +276,15 @@
               </li>
             </ul>
           </div>
-        </nav>
+        </nav> -->
       </div>
     </div>
   </section>
 </div>
+
+<section
+  *ngIf="isToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="successToastMsg"></app-success-toast>
+</section>

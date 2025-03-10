@@ -20,6 +20,7 @@ export class ProgramManagerApprovalComponent {
   selectedDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
+  noRequest: boolean = false;
 
   constructor(private rService: RequestService) {
     const today = new Date();
@@ -47,13 +48,16 @@ export class ProgramManagerApprovalComponent {
           console.log('filtering processing request:', list);
 
           this._yourReq = list;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching processing request:', error);
           if (error.status == 204) {
             this._yourReq = undefined;
+            // this.noRequest = true;
           } else if (error.status === 404) {
             this._yourReq = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -74,13 +78,16 @@ export class ProgramManagerApprovalComponent {
             // list = list.filter((l) => l.requestStatus == 102);
             // console.log("filtering completed request:", list);
             this._yourReq = res;
+            this.noRequest = false;
           },
           (error) => {
             console.log('error while fetching completed request:', error);
             if (error.status == 204) {
               this._yourReq = undefined;
+              // this.noRequest = true;
             } else if (error.status === 404) {
               this._yourReq = undefined;
+              this.noRequest = true;
             }
           },
         );
@@ -100,13 +107,16 @@ export class ProgramManagerApprovalComponent {
             list = list.filter((l) => l.requestStatus == 406);
             console.log('filtering rejected request:', list);
             this._yourReq = list;
+            this.noRequest = false;
           },
           (error) => {
             console.log('error while fetching rejected request:', error);
             if (error.status == 204) {
               this._yourReq = undefined;
+              // this.noRequest = true;
             } else if (error.status === 404) {
               this._yourReq = undefined;
+              this.noRequest = true;
             }
           },
         );

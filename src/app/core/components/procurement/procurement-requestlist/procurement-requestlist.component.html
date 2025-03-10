@@ -407,7 +407,7 @@
                   </button>
                   <div
                     *ngIf="isAcceptedView && selectedRequestId === req.sno"
-                    class="dropdown-container absolute overflow-hidden right-0 -mt-12 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    class="dropdown-container absolute overflow-hidden right-0 -mt-2 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
                   >
                     <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
                       
@@ -424,6 +424,13 @@
                           Consolidated Quote
                         </button>
                       </li>
+                      <li>
+                        <button 
+                          (click)="openPurchaseOrderReport(req.sno)"
+                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                          Covert To Purchase Order
+                        </button>
+                      </li>
                     </ul>
                   </div>
                 </td>
@@ -431,6 +438,14 @@
             </tbody>
           </table>
         </div>
+        <ng-container *ngIf="noRequest">
+          <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
+            <div class="text-center">
+              <img src="../../../../../assets/Img/9264882.svg" class="w-52 mx-auto" alt="No data available"/>
+              <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Request Available</p>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </section>
@@ -454,4 +469,12 @@
     (closeView)="refresh($event)"
   >
   </app-view-consolidatedquote>
+</section>
+
+<section *ngIf="isViewPurchaseOrder">
+  <app-view-purchaseorder
+    [reqId]="reqId"
+    [indentNumber]="indentNumber"
+    (closeView)="refresh($event)"
+  ></app-view-purchaseorder>
 </section>

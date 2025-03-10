@@ -150,6 +150,8 @@ export const environment = {
   fetchCompletedIndentReport: Url + baseRequestApi + '/getcompletedindent',
   fetchRejectedIndentReport: Url + baseRequestApi + '/getrejectedindent',
   fetchHeadOfAccByIndent: Url + baseRequestApi + '/gethoaccdetailsforindent',
+
+  generatePurchaseOrder: Url + baseRequestApi + '/generate/purchaseorder/',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

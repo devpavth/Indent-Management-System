@@ -13,6 +13,9 @@ export class DeleteComponent {
   @Input() deleteData: any;
   @Output() close = new EventEmitter<boolean>();
 
+  isToast: boolean = false;
+  successToastMsg: string = '';
+
   constructor(
     private funderService: FunderService,
     private productService: ProductService,
@@ -37,13 +40,13 @@ export class DeleteComponent {
       );
     }
     if (this.deleteData.action == 2) {
-      console.log("deleting consoling product data:",this.deleteData);
+      console.log('deleting consoling product data:', this.deleteData);
       this.productService.deleteProduct(this.deleteData.deleteId).subscribe(
         (res) => {
-          console.log("deleting product data:",res);
+          console.log('deleting product data:', res);
         },
         (error) => {
-          console.log("error while deleting product data:", error);
+          console.log('error while deleting product data:', error);
           if (error.status == 200) {
             this.close.emit(false);
           }
@@ -54,11 +57,11 @@ export class DeleteComponent {
       console.log(this.deleteData);
       this.vendorService.deleteVendor(this.deleteData.deleteId).subscribe(
         (res) => {
-          console.log("successfully deleting the vendor:",res);
+          console.log('successfully deleting the vendor:', res);
           this.close.emit(false);
         },
         (error) => {
-          console.log("error while deleting the vendor:", error);
+          console.log('error while deleting the vendor:', error);
           if (error.status == 200) {
             this.close.emit(false);
           }
@@ -70,8 +73,15 @@ export class DeleteComponent {
     if (this.deleteData.action == 4) {
       console.log(this.deleteData);
       this.branchService.deleteDepartment(this.deleteData.deleteId).subscribe(
-        (res) => {
+        (res: any) => {
           console.log(res);
+          // this.close.emit(false);
+          this.isToast = true;
+          this.successToastMsg = res.error;
+          setTimeout(() => {
+            this.isToast = false;
+            this.close.emit(false);
+          }, 3000);
         },
         (error) => {
           console.log(error);

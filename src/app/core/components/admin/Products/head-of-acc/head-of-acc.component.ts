@@ -15,6 +15,9 @@ export class HeadOfAccComponent implements OnInit {
 
   headOfAccList: any[] = [];
 
+  isToast: boolean = false;
+  successToastMsg: string = '';
+
   headOfAccForm: FormGroup;
   constructor(
     private productService: ProductService,
@@ -55,15 +58,22 @@ export class HeadOfAccComponent implements OnInit {
   onSubmit(accData: string) {
     this.productService.addHeadOfAcc(accData).subscribe(
       (res: any) => {
-        console.log(res);
+        console.log('succesfully added new headofacc:', res);
+        this.fetchHeadOfAcc();
+        this.headOfAccForm.reset();
+        this.isToast = true;
+        this.successToastMsg = res.error;
+        setTimeout(() => {
+          this.isToast = false;
+        }, 3000);
       },
       (error) => {
-        console.log(error);
+        console.log('error while adding headofacc', error);
 
-        if (error.status == 200) {
-          this.fetchHeadOfAcc();
-          this.headOfAccForm.reset();
-        }
+        // if (error.status == 200) {
+        //   this.fetchHeadOfAcc();
+        //   this.headOfAccForm.reset();
+        // }
       },
     );
   }

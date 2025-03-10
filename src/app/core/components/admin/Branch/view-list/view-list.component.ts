@@ -45,9 +45,10 @@ export class ViewListComponent {
     if (this.activeId == 1) {
       this.branchService.getAllDepartments().subscribe((res: any) => {
         console.log(res);
-        let list: any[] = res;
-        this.headOfAccList = list.slice(startIndex, endIndex);
-        this.listLength = this.headOfAccList.length;
+        this.headOfAccList = res;
+        // let list: any[] = res;
+        // this.headOfAccList = list.slice(startIndex, endIndex);
+        // this.listLength = this.headOfAccList.length;
       });
     } else if (this.activeId == 2) {
       this.branchService.getAllProj().subscribe((res: any) => {

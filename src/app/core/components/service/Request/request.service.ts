@@ -341,4 +341,10 @@ export class RequestService {
       environment.fetchHeadOfAccByIndent + `?requestNo=${indentId}`,
     );
   }
+
+  generatePurchaseOrderPDF(sno: number, headOfAccId: number){
+    return this.http.get(
+      environment.generatePurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
+    );
+  }
 }

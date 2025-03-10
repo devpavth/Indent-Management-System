@@ -9,6 +9,7 @@ import { ProcurementRequestlistComponent } from './procurement-requestlist/procu
 import { ViewProcurementreqComponent } from './view-procurementreq/view-procurementreq.component';
 import { ViewAcceptedprocurementreqComponent } from './view-acceptedprocurementreq/view-acceptedprocurementreq.component';
 import { ViewConsolidatedquoteComponent } from './view-consolidatedquote/view-consolidatedquote.component';
+import { ViewPurchaseorderComponent } from './view-purchaseorder/view-purchaseorder.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ViewConsolidatedquoteComponent } from './view-consolidatedquote/view-co
     ViewProcurementreqComponent,
     ViewAcceptedprocurementreqComponent,
     ViewConsolidatedquoteComponent,
+    ViewPurchaseorderComponent,
   ],
   imports: [
     CommonModule,

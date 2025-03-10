@@ -10,7 +10,10 @@ export class ProcurementRequestlistComponent {
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
+  noRequest: boolean = false;
+
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
+
   ngOnInit() {
     console.log('checking procurement list');
     this.fetchRequestList();
@@ -32,6 +35,7 @@ export class ProcurementRequestlistComponent {
   isAcceptedView: boolean = false;
   isViewQuoteCompare: boolean = false;
   isViewConsolidatedQuote: boolean = false;
+  isViewPurchaseOrder: boolean = false;
   userRequest: any;
   selectedRequestId: number | null = null;
 
@@ -51,6 +55,7 @@ export class ProcurementRequestlistComponent {
         (res) => {
           this.userRequest = res;
           console.log('fetching procurement request processing list:', res);
+          this.noRequest = false;
         },
         (error) => {
           console.log(
@@ -61,6 +66,7 @@ export class ProcurementRequestlistComponent {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -80,6 +86,7 @@ export class ProcurementRequestlistComponent {
           // list = list.filter((l) => l.requestStatus == 102);
           // console.log("filtering completed request:", list);
           this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log(
@@ -90,60 +97,61 @@ export class ProcurementRequestlistComponent {
             this.userRequest = undefined;
           } else if (error.status === 404) {
             this.userRequest = undefined;
+            this.noRequest = true;
           }
         },
       );
     }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == false &&
-      this.isHold == true &&
-      this.isRejected == false
-    ) {
-      this.isViewSelectedDate = false;
-      this.req.fetchPrctReqList(418).subscribe(
-        (res: any) => {
-          console.log('fetching procurement request on hold list:', res);
-          this.userRequest = res;
-        },
-        (error) => {
-          console.log(
-            'error while fetching on hold procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            this.userRequest = undefined;
-          } else if (error.status === 404) {
-            this.userRequest = undefined;
-          }
-        },
-      );
-    }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == false &&
-      this.isHold == false &&
-      this.isRejected == true
-    ) {
-      this.isViewSelectedDate = true;
-      this.req.fetchPrctReqList(406, this.currentDate).subscribe(
-        (res: any) => {
-          console.log('fetching procurement request rejected list:', res);
-          this.userRequest = res;
-        },
-        (error) => {
-          console.log(
-            'error while fetching rejected procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            this.userRequest = undefined;
-          } else if (error.status === 404) {
-            this.userRequest = undefined;
-          }
-        },
-      );
-    }
+    // if (
+    //   this.isProcess == false &&
+    //   this.isCompleted == false &&
+    //   this.isHold == true &&
+    //   this.isRejected == false
+    // ) {
+    //   this.isViewSelectedDate = false;
+    //   this.req.fetchPrctReqList(418).subscribe(
+    //     (res: any) => {
+    //       console.log('fetching procurement request on hold list:', res);
+    //       this.userRequest = res;
+    //     },
+    //     (error) => {
+    //       console.log(
+    //         'error while fetching on hold procurement request:',
+    //         error,
+    //       );
+    //       if (error.status == 204) {
+    //         this.userRequest = undefined;
+    //       } else if (error.status === 404) {
+    //         this.userRequest = undefined;
+    //       }
+    //     },
+    //   );
+    // }
+    // if (
+    //   this.isProcess == false &&
+    //   this.isCompleted == false &&
+    //   this.isHold == false &&
+    //   this.isRejected == true
+    // ) {
+    //   this.isViewSelectedDate = true;
+    //   this.req.fetchPrctReqList(406, this.currentDate).subscribe(
+    //     (res: any) => {
+    //       console.log('fetching procurement request rejected list:', res);
+    //       this.userRequest = res;
+    //     },
+    //     (error) => {
+    //       console.log(
+    //         'error while fetching rejected procurement request:',
+    //         error,
+    //       );
+    //       if (error.status == 204) {
+    //         this.userRequest = undefined;
+    //       } else if (error.status === 404) {
+    //         this.userRequest = undefined;
+    //       }
+    //     },
+    //   );
+    // }
   }
 
   viewRequest(event: Event, data: number, indentNO: string) {
@@ -212,12 +220,19 @@ export class ProcurementRequestlistComponent {
     }
   }
 
-  openConsolidatedQuote(sno: number){
+  openConsolidatedQuote(sno: number) {
     console.log('sno in openConsolidatedQuote:', sno);
     this.reqId = sno;
 
-    if(this.isCompleted === true){
+    if (this.isCompleted === true) {
       this.isViewConsolidatedQuote = true;
+    }
+  }
+
+  openPurchaseOrderReport(sno: number){
+    this.reqId = sno;
+    if(this.isCompleted === true){
+      this.isViewPurchaseOrder = true;
     }
   }
 
@@ -226,6 +241,7 @@ export class ProcurementRequestlistComponent {
     // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
     this.isViewConsolidatedQuote = data;
+    this.isViewPurchaseOrder = data;
     this.fetchRequestList();
   }
 }

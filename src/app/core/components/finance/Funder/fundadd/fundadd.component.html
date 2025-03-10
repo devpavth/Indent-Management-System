@@ -186,3 +186,9 @@
 >
   <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>
+<section *ngIf="isSuccess">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="closeSuccess($event)"
+  ></app-success>
+</section>

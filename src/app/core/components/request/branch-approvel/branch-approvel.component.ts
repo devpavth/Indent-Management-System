@@ -19,7 +19,8 @@ export class BranchApprovelComponent implements OnInit {
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
-  
+  noRequest: boolean = false;
+
   constructor(private rService: RequestService) {
     const today = new Date();
     this.currentDate = today.toISOString().split('T')[0];
@@ -44,13 +45,18 @@ export class BranchApprovelComponent implements OnInit {
           console.log('fetching branch request processing list:', list);
 
           this._yourReq = list;
+          this.noRequest = false;
         },
         (error) => {
-          console.log("error while fetching branch request processing list:", error);
+          console.log(
+            'error while fetching branch request processing list:',
+            error,
+          );
           if (error.status == 204) {
             this._yourReq = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this._yourReq = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -68,13 +74,18 @@ export class BranchApprovelComponent implements OnInit {
           // list = list.filter((l) => l.requestStatus == 102);
           // console.log('fetching branch request accepted list:', list);
           this._yourReq = res;
+          this.noRequest = false;
         },
         (error) => {
-          console.log("error while fetching branch request accepted list:", error);
+          console.log(
+            'error while fetching branch request accepted list:',
+            error,
+          );
           if (error.status == 204) {
             this._yourReq = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this._yourReq = undefined;
+            this.noRequest = true;
           }
         },
       );
@@ -92,13 +103,18 @@ export class BranchApprovelComponent implements OnInit {
           list = list.filter((l) => l.requestStatus == 406);
           console.log('fetching branch request rejected list:', list);
           this._yourReq = list;
+          this.noRequest = false;
         },
         (error) => {
-          console.log("error while fetching branch request rejected list:", error);
+          console.log(
+            'error while fetching branch request rejected list:',
+            error,
+          );
           if (error.status == 204) {
             this._yourReq = undefined;
-          }else if(error.status === 404){
+          } else if (error.status === 404) {
             this._yourReq = undefined;
+            this.noRequest = true;
           }
         },
       );
