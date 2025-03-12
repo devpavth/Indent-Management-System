@@ -18,6 +18,7 @@ import {
   ProRequestdata,
 } from '../../core/models/proRequestData/pro-requestdata.model';
 import { ProcurementQuotedataService } from '../../core/components/service/procurementQuotedata/procurement-quotedata.service';
+import { ToastService } from '../../core/components/service/toast/toast.service';
 
 @Component({
   selector: 'app-pdf-upload',
@@ -66,9 +67,9 @@ export class PdfUploadComponent {
   }[] = [];
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
-  isToast: boolean = false;
+  // isToast: boolean = false;
   isSuccessToast: boolean = false;
-  warningToastMsg: string = '';
+  // warningToastMsg: string = '';
   deleteToastMsg: string = '';
   isQuoteUploaded: boolean = false;
   isQuoteAccepted: boolean = false;
@@ -89,6 +90,7 @@ export class PdfUploadComponent {
   productService = inject(ProductService);
   route = inject(ActivatedRoute);
   proQuoteService = inject(ProcurementQuotedataService);
+  toastService = inject(ToastService);
 
   reqId: number = 0;
 
@@ -330,13 +332,8 @@ export class PdfUploadComponent {
       (v) => v.name === vendor.vendorName,
     );
     if (vendorExists) {
-      this.isToast = true;
-      this.warningToastMsg = 'Selected Vendor already exists';
+      this.toastService.showWarning('Selected Vendor already exists');
       this.storeVendorList = [];
-      setTimeout(() => {
-        this.isToast = false;
-      }, 3000);
-
       return;
     }
 
@@ -637,12 +634,15 @@ export class PdfUploadComponent {
           'this.pdfFiles.some(f => f.name === file.name)',
           this.pdfFiles.some((f) => f.name === file.name),
         );
-        this.isToast = true;
-        this.warningToastMsg =
-          'System Detected the Selected PDF is already Uploaded';
-        setTimeout(() => {
-          this.isToast = false;
-        }, 3000);
+
+        this.toastService.showWarning(
+          'System Detected the Selected PDF is already Uploaded',
+        );
+        // this.warningToastMsg =
+        //   'System Detected the Selected PDF is already Uploaded';
+        // setTimeout(() => {
+        //   this.isToast = false;
+        // }, 3000);
         return;
       }
 
@@ -795,6 +795,12 @@ export class PdfUploadComponent {
         },
         (error) => {
           console.log('Upload failed:', error);
+
+          this.toastService.showWarning(error.error.errorMessege);
+          
+          if(error.status === 208){
+            this.toastService.showWarning(error.error.text);
+          }
         },
       );
   }

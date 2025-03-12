@@ -14,6 +14,7 @@ import {
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { FunderService } from '../../service/Funder/funder.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-view-requistion',
@@ -23,7 +24,9 @@ import { catchError, debounceTime, of, switchMap } from 'rxjs';
 export class ViewRequistionComponent implements OnInit {
   @Input() reqId: any;
   @Output() closeView = new EventEmitter<boolean>();
+
   dataService = inject(RequestService);
+  toastService = inject(ToastService)
 
   // _requestDetails: any = {};
   _requestDetails = signal<any>(null);
@@ -51,8 +54,8 @@ export class ViewRequistionComponent implements OnInit {
   assignedDonors: any[] = [];
   assignedFunder: any[] = [];
   assignnewFunder: any[] = [];
-  isToast: boolean = false;
-  warningToastMsg: any;
+  // isToast: boolean = false;
+  // warningToastMsg: any;
 
   isViewAction: boolean = true;
   isViewAcceptRejectAction: boolean = false;
@@ -234,11 +237,8 @@ export class ViewRequistionComponent implements OnInit {
     if (funderExists) {
       console.log("Funder already exists in assignedFunder, blocking search.");
       this.isViewFundDetails = false;
-      this.isToast = true;
-      this.warningToastMsg = `${donor.funderName} already exists in Funder cart.`;
-      setTimeout(() => {
-        this.isToast = false;
-      }, 3000)
+
+      this.toastService.showWarning(`${donor.funderName} already exists in Funder cart.`);
       return;
     }
 
@@ -504,9 +504,13 @@ onSubmit(funderData: any): void {
       (error) => {
         console.error("error while approving the financial:", error);
 
-        if (error.status) {
-          alert('Successfully Failed!');
+        if(error.status === 208){
+           this.toastService.showWarning(error.error.text);
         }
+
+        // if (error.status) {
+        //   alert('Successfully Failed!');
+        // }
       },
     );
   }
@@ -566,8 +570,12 @@ onSubmit(funderData: any): void {
         },
         (error) => {
           console.log("error while rejecting the request:", error);
+          if(error.status === 208){
+            this.toastService.showWarning(error.error.text);
+          }
+
           if (error.status == 200) {
-            alert('This Request is Rejected');
+            // alert('This Request is Rejected');
             this.closeView.emit(false);
           }
         },

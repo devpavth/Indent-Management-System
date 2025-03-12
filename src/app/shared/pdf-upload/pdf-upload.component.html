@@ -514,10 +514,10 @@
   </section>
 </div>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isWarningToast"
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
 </section>
 <section
   *ngIf="isSuccessToast"

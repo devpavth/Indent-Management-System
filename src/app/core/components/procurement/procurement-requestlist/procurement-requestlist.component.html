@@ -262,7 +262,7 @@
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-          >
+            >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
             >
@@ -339,8 +339,7 @@
                     </button>
                   </div>
                 </th>
-                <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                            <th scope="col" class="px-4 py-3">Price</th> -->
+
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
@@ -350,7 +349,7 @@
               <tr
                 class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
                 *ngFor="let req of userRequest"
-              >
+                >
                 <th
                   scope="row"
                   #reqID
@@ -384,8 +383,7 @@
                     >{{ req.totalPrice | currency: "INR" }}</span
                   >
                 </td>
-                <!-- <td class="px-4 py-3"></td>
-                            <td class="px-4 py-3"></td> -->
+  
                 <td class="relative flex items-center justify-end px-4 py-3">
                   <button
                     (click)="viewRequest($event, req.sno, req.requestNo)"
@@ -405,12 +403,11 @@
                       />
                     </svg>
                   </button>
-                  <div
+                  <!-- <div
                     *ngIf="isAcceptedView && selectedRequestId === req.sno"
                     class="dropdown-container absolute overflow-hidden right-0 -mt-2 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
-                  >
-                    <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
-                      
+                    >
+                    <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">                      
                       <li>
                         <button (click)="openQuoteComparison(req.sno, req.requestNo)" 
                           class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -432,11 +429,45 @@
                         </button>
                       </li>
                     </ul>
-                  </div>
+                  </div> -->
                 </td>
               </tr>
             </tbody>
           </table>
+          <ng-container *ngFor="let req of userRequest">
+            <div
+              *ngIf="isAcceptedView && selectedRequestId === req.sno"
+              [ngStyle]="{ bottom: dropdownPosition.top + 'px', right: dropdownPosition.right + 'px' }"
+              class="dropdown-container absolute z-50 overflow-hidden w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+              >
+              <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
+                <li>
+                  <button 
+                    (click)="openQuoteComparison(req.sno, req.requestNo)"
+                    class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    Comparison Quote
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    (click)="openConsolidatedQuote(req.sno)"
+                    class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    Consolidated Quote
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    (click)="openPurchaseOrderReport(req.sno)"
+                    class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    Convert To Purchase Order
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+
+
+
         </div>
         <ng-container *ngIf="noRequest">
           <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">

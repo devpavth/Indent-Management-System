@@ -1041,10 +1041,10 @@
      (close)="close($event)"></app-view-fund-details>
 </section>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isWarningToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
 </section>
 <section *ngIf="isRejectPop">
   <app-cdelete-pop (close)="closepop($event)"></app-cdelete-pop>

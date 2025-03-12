@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-purchaseorder',
@@ -18,9 +19,12 @@ export class ViewPurchaseorderComponent {
 
   _requestDetails = signal<any>(null);
 
+  pdfURL: SafeResourceUrl | null = null;
+
   selectedHeadOfAccId: number | null = null;
   purchaseOrderData: any;
   branchList: any;
+  isLoading: boolean = false;
 
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
@@ -48,6 +52,8 @@ export class ViewPurchaseorderComponent {
     console.log('reqId:', this.reqId);
     this.fetchDetails(this.reqId);
   }
+
+  constructor(private sanitizer: DomSanitizer){}
 
   fetchDetails(reqId: number) {
     this.requestService.viewReq(reqId).subscribe(
@@ -103,6 +109,7 @@ export class ViewPurchaseorderComponent {
   selectedHeadOfAcc(event: Event | number) {
     if (typeof event === 'number') {
       this.selectedHeadOfAccId = event;
+      this.generatePurchaseOrder(this.selectedHeadOfAccId);
     } else {
       const selectElement = event.target as HTMLSelectElement;
       this.selectedHeadOfAccId = Number(selectElement.value);
@@ -111,6 +118,7 @@ export class ViewPurchaseorderComponent {
   }
 
   generatePurchaseOrder(headOfAccId: number) {
+    this.isLoading = true;
     this.requestService
       .generatePurchaseOrderPDF(this.reqId, headOfAccId)
       .subscribe(
@@ -119,25 +127,45 @@ export class ViewPurchaseorderComponent {
           this.purchaseOrderData = res;
           this.branchList = this.purchaseOrderData.indentBranch;
 
-          if (headOfAccId) {
-            this.headOfProduct =
-              this.purchaseOrderData.headofAcc.length > 0
-                ? this.purchaseOrderData.headofAcc.find(
-                    (h: any) => h.headOfAccId === headOfAccId,
-                  ).productDetailsDTOs
-                : [];
-            this.viewPDF([
-              this.purchaseOrderData.headofAcc.find(
-                (h: any) => h.headOfAccId === headOfAccId,
-              ),
-            ]);
-          } else {
+          if(headOfAccId === 0){
+            this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
+              (h: any) => h.productDetailsDTOs,
+            );
             this.viewPDF(this.purchaseOrderData.headofAcc);
           }
+          else{
+            const selectedHead = this.purchaseOrderData.headofAcc.find(
+              (h: any) => h.headOfAccId === headOfAccId,
+            );
+
+            this.headOfProduct = selectedHead ? selectedHead.productDetailsDTOs : [];
+            this.viewPDF([selectedHead]);
+          }
+
+          this.isLoading = false;
+
+          // if (headOfAccId) {
+          //   this.headOfProduct =
+          //     this.purchaseOrderData.headofAcc.length > 0
+          //       ? this.purchaseOrderData.headofAcc.find(
+          //           (h: any) => h.headOfAccId === headOfAccId,
+          //         ).productDetailsDTOs
+          //       : [];
+          //   this.viewPDF([
+          //     this.purchaseOrderData.headofAcc.find(
+          //       (h: any) => h.headOfAccId === headOfAccId,
+          //     ),
+          //   ]);
+          //   this.isLoading = false;
+          // } else {
+          //   this.viewPDF(this.purchaseOrderData.headofAcc);
+          //   this.isLoading = false;
+          // }
 
         },
         (error) => {
           console.log('error while fetching purchase order details:', error);
+          this.isLoading = false;
         },
       );
   }
@@ -357,31 +385,31 @@ export class ViewPurchaseorderComponent {
         84,
       );
 
-      const groupedProducts = this.headOfProduct.reduce((acc, item) => {
-        if (!acc[item.headOfAccId]) {
-          acc[item.headOfAccId] = {
-            name: item.headOfAccName,
-            totalTaxable: 0,
-            products: [],
-          };
-        }
+      // const groupedProducts = this.headOfProduct.reduce((acc, item) => {
+      //   if (!acc[item.headOfAccId]) {
+      //     acc[item.headOfAccId] = {
+      //       name: item.headOfAccName,
+      //       totalTaxable: 0,
+      //       products: [],
+      //     };
+      //   }
 
-        const taxableValue = item.unitPrice * item.qty;
-        acc[item.headOfAccId].totalTaxable += taxableValue;
-        acc[item.headOfAccId].products.push({
-          id: item.id,
-          name: `${item.prdbrndName} - ${item.prdmdlName}\n${item.prdDescription.trim()}\nHSN: ${item.prdHsnCode}`,
-          unitPrice: item.unitPrice.toFixed(2),
-          qty: item.qty,
-          taxableValue: taxableValue.toFixed(2),
-          taxAmt: `${(taxableValue * (item.prdGstPct / 100)).toFixed(2)} (${item.prdGstPct}%)`,
-          totalAmount: (
-            taxableValue +
-            taxableValue * (item.prdGstPct / 100)
-          ).toFixed(2),
-        });
-        return acc;
-      }, {});
+      //   const taxableValue = item.unitPrice * item.qty;
+      //   acc[item.headOfAccId].totalTaxable += taxableValue;
+      //   acc[item.headOfAccId].products.push({
+      //     id: item.id,
+      //     name: `${item.prdbrndName} - ${item.prdmdlName}\n${item.prdDescription.trim()}\nHSN: ${item.prdHsnCode}`,
+      //     unitPrice: item.unitPrice.toFixed(2),
+      //     qty: item.qty,
+      //     taxableValue: taxableValue.toFixed(2),
+      //     taxAmt: `${(taxableValue * (item.prdGstPct / 100)).toFixed(2)} (${item.prdGstPct}%)`,
+      //     totalAmount: (
+      //       taxableValue +
+      //       taxableValue * (item.prdGstPct / 100)
+      //     ).toFixed(2),
+      //   });
+      //   return acc;
+      // }, {});
 
       // Table
       const finalY = 89;
@@ -395,147 +423,194 @@ export class ViewPurchaseorderComponent {
 
       let gstGroupedBreakdown: any = {};
 
-      Object.values(groupedProducts).forEach((group: any, index) => {
-        if (index > 0) {
-          doc.addPage();
-        }
+      // const sectionY = finalY + index * 10 + index * 50;
 
-        const sectionY = finalY + index * 10 + index * 50;
+      // doc.setLineWidth(0.5);
+      // doc.setFillColor(240, 253, 244);
+      // doc.setDrawColor(80, 205, 90);
+      // doc.rect(10, sectionY, doc.internal.pageSize.width - 24, 8, 'FD');
 
-        doc.setLineWidth(0.5);
-        doc.setFillColor(240, 253, 244);
-        doc.setDrawColor(80, 205, 90);
-        doc.rect(10, sectionY, doc.internal.pageSize.width - 24, 8, 'FD');
+      // doc.setFont('helvetica', 'bold');
+      // doc.setFontSize(10);
+      // doc.text(
+      //   head.headOfAccName,
+      //   doc.internal.pageSize.width / 2,
+      //   sectionY + 5,
+      //   { align: 'center' },
+      // );
 
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(10);
-        doc.text(
-          head.headOfAccName,
-          doc.internal.pageSize.width / 2,
-          sectionY + 5,
-          { align: 'center' },
-        );
+      const tableBody: any[][] = [];
 
-        if (!head.productDetailsDTOs || head.productDetailsDTOs.length === 0) {
-          doc.setFontSize(10);
-          doc.setTextColor(255, 0, 0);
-          doc.text(`No Products Available For This Head of Account`, 10, 60);
-          return;
-        }
-
-        const tableBody: any[][] = [];
-
-        head.productDetailsDTOs.forEach((item: any) => {
-          const unitPrice = item.unitPrice;
-          const unitQty = item.qty;
-          const taxableValue = item.unitPrice * item.qty;
-          const taxAmt = taxableValue * (item.prdGstPct / 100);
-          const totalAmount = taxableValue + taxAmt;
-          const gstPercent = item.prdGstPct;
-
-          tableBody.push([
-            serialNumber++,
-            `${item.prdbrndName} - ${item.prdmdlName}\n${item.prdDescription.trim()}\nHSN: ${item.prdHsnCode}`,
-            item.unitPrice.toFixed(2),
-            item.qty,
-            taxableValue.toFixed(2),
-            `${taxAmt.toFixed(2)} (${item.prdGstPct}%)`,
-            totalAmount.toFixed(2),
-          ]);
-
-          grandTotalUnitPrice += unitPrice;
-          grandTotalQty += unitQty;
-          grandTotalTaxable += taxableValue;
-          grandTotalTaxAmt += taxAmt;
-          grandTotalAmount += totalAmount;
-
-          if (!gstGroupedBreakdown[gstPercent]) {
-            gstGroupedBreakdown[gstPercent] = {
-              taxAmt: 0,
-            };
-          }
-          gstGroupedBreakdown[gstPercent].taxAmt += taxAmt;
-        });
+      head.productDetailsDTOs.forEach((item: any) => {
+        const unitPrice = item.unitPrice;
+        const unitQty = item.qty;
+        const taxableValue = item.unitPrice * item.qty;
+        const taxAmt = taxableValue * (item.prdGstPct / 100);
+        const totalAmount = taxableValue + taxAmt;
+        const gstPercent = item.prdGstPct;
 
         tableBody.push([
-          {
-            content: 'Subtotal:',
-            colSpan: 2,
-            styles: { fontStyle: 'bold', halign: 'right' },
-          },
-          {
-            content: `${grandTotalUnitPrice.toFixed(2)}`,
-            styles: { fontStyle: 'bold' },
-          },
-          {
-            content: `${grandTotalQty.toFixed(2)}`,
-            styles: { fontStyle: 'bold' },
-          },
-          {
-            content: `${grandTotalTaxable.toFixed(2)}`,
-            styles: { fontStyle: 'bold' },
-          },
-          {
-            content: `${grandTotalTaxAmt.toFixed(2)}`,
-            styles: { fontStyle: 'bold' },
-          },
-          {
-            content: `${grandTotalAmount.toFixed(2)}`,
-            styles: { fontStyle: 'bold' },
-          },
+          serialNumber++,
+          `${item.prdbrndName} - ${item.prdmdlName}\n${item.prdDescription.trim()}\nHSN: ${item.prdHsnCode}`,
+          item.unitPrice.toFixed(2),
+          item.qty,
+          taxableValue.toFixed(2),
+          `${taxAmt.toFixed(2)} (${item.prdGstPct}%)`,
+          totalAmount.toFixed(2),
         ]);
 
-        autoTable(doc, {
-          startY: finalY + 8,
-          head: [
-            [
-              '#',
-              'Item',
-              'Rate/Item',
-              'Qty',
-              'Taxable Value',
-              'Tax Amount',
-              'Amount',
-            ],
+        grandTotalUnitPrice += unitPrice;
+        grandTotalQty += unitQty;
+        grandTotalTaxable += taxableValue;
+        grandTotalTaxAmt += taxAmt;
+        grandTotalAmount += totalAmount;
+
+        if (!gstGroupedBreakdown[gstPercent]) {
+          gstGroupedBreakdown[gstPercent] = {
+            taxAmt: 0,
+          };
+        }
+        gstGroupedBreakdown[gstPercent].taxAmt += taxAmt;
+      });
+
+      tableBody.push([
+        {
+          content: 'Subtotal:',
+          colSpan: 2,
+          styles: { fontStyle: 'bold', halign: 'right' },
+        },
+        {
+          content: `${grandTotalUnitPrice.toFixed(2)}`,
+          styles: { fontStyle: 'bold' },
+        },
+        {
+          content: `${grandTotalQty.toFixed(2)}`,
+          styles: { fontStyle: 'bold' },
+        },
+        {
+          content: `${grandTotalTaxable.toFixed(2)}`,
+          styles: { fontStyle: 'bold' },
+        },
+        {
+          content: `${grandTotalTaxAmt.toFixed(2)}`,
+          styles: { fontStyle: 'bold' },
+        },
+        {
+          content: `${grandTotalAmount.toFixed(2)}`,
+          styles: { fontStyle: 'bold' },
+        },
+      ]);
+
+      // const drawHeadOfAccHeader = (doc: any, head: any) => {
+      //   const pageWidth = doc.internal.pageSize.width;
+      //   const sectionY = (doc as any).lastAutoTable.finalY || 105;
+
+      //   // ✅ Draw a Green Header Bar
+      //   doc.setLineWidth(0.5);
+      //   doc.setFillColor(240, 253, 244);
+      //   doc.setDrawColor(80, 205, 90);
+      //   doc.rect(10, sectionY - 15, pageWidth - 24, 8, 'FD');
+
+      //   // ✅ Write Head of Account Name Centered
+      //   doc.setFont('helvetica', 'bold');
+      //   doc.setFontSize(10);
+      //   doc.text(head.headOfAccName, pageWidth / 2, sectionY - 10, {
+      //     align: 'center',
+      //   });
+      // };
+
+      autoTable(doc, {
+        startY: finalY + 8,
+        head: [
+          [
+            '#',
+            'Item',
+            'Rate/Item',
+            'Qty',
+            'Taxable Value',
+            'Tax Amount',
+            'Amount',
           ],
-          body: tableBody,
-          theme: 'grid',
-          margin: { left: 10 },
-          headStyles: {
-            fillColor: [240, 253, 244],
-            textColor: [0, 0, 0],
-            lineWidth: 0.5,
-            lineColor: [80, 205, 90],
-          },
-          styles: {
-            lineWidth: 0.1,
-            lineColor: [80, 205, 90],
-          },
-          didParseCell: (data) => {
-            if (data.section === 'body' && data.column.index === 1) {
-              // "Item" column
-              if (data.row.index >= 0) {
-                // Ensure it's a valid row
-                if (data.cell.text.length > 0) {
-                  data.cell.styles.fontStyle = 'bold'; // Make full cell bold (temporary)
-                }
+        ],
+        body: tableBody,
+        theme: 'grid',
+        margin: { left: 10 },
+        headStyles: {
+          fillColor: [240, 253, 244],
+          textColor: [0, 0, 0],
+          lineWidth: 0.5,
+          lineColor: [80, 205, 90],
+        },
+        styles: {
+          lineWidth: 0.1,
+          lineColor: [80, 205, 90],
+        },
+        didParseCell: (data) => {
+          if (data.section === 'body' && data.column.index === 1) {
+            // "Item" column
+            if (data.row.index >= 0) {
+              // Ensure it's a valid row
+              if (data.cell.text.length > 0) {
+                data.cell.styles.fontStyle = 'bold'; // Make full cell bold (temporary)
               }
             }
-          },
-          didDrawCell: (data) => {
-            if (data.row.section === 'head') {
-              doc.setDrawColor(80, 205, 90); // Set border color (Green)
-              doc.setLineWidth(0.75); // Adjust thickness if needed
-              doc.line(
-                data.cell.x, // X start
-                data.cell.y + data.cell.height, // Y start (bottom of cell)
-                data.cell.x + data.cell.width, // X end
-                data.cell.y + data.cell.height, // Y end (same as start)
-              );
-            }
-          },
-        });
+          }
+        },
+        didDrawCell: (data) => {
+          if (data.row.section === 'head') {
+            doc.setDrawColor(80, 205, 90); // Set border color (Green)
+            doc.setLineWidth(0.75); // Adjust thickness if needed
+            doc.line(
+              data.cell.x, // X start
+              data.cell.y + data.cell.height, // Y start (bottom of cell)
+              data.cell.x + data.cell.width, // X end
+              data.cell.y + data.cell.height, // Y end (same as start)
+            );
+          }
+        },
+        // didDrawPage: (data: any) => {
+        //   // ✅ Always draw the Head of Account Name at the top of every page
+        //   drawHeadOfAccHeader(doc, head);
+        // },
       });
+
+      // if ((doc as any).lastAutoTable.finalY > 250) {
+      //   doc.addPage();
+      //   drawHeadOfAccHeader(doc, head);
+      // }
+
+
+      
+
+      // Object.values(groupedProducts).forEach((group: any, index) => {
+      //   if (index > 0) {
+      //     doc.addPage();
+      //   }
+
+      //   const sectionY = finalY + index * 10 + index * 50;
+
+      //   doc.setLineWidth(0.5);
+      //   doc.setFillColor(240, 253, 244);
+      //   doc.setDrawColor(80, 205, 90);
+      //   doc.rect(10, sectionY, doc.internal.pageSize.width - 24, 8, 'FD');
+
+      //   doc.setFont('helvetica', 'bold');
+      //   doc.setFontSize(10);
+      //   doc.text(
+      //     head.headOfAccName,
+      //     doc.internal.pageSize.width / 2,
+      //     sectionY + 5,
+      //     { align: 'center' },
+      //   );
+
+      //   if (!head.productDetailsDTOs || head.productDetailsDTOs.length === 0) {
+      //     doc.setFontSize(10);
+      //     doc.setTextColor(255, 0, 0);
+      //     doc.text(`No Products Available For This Head of Account`, 10, 60);
+      //     return;
+      //   }
+
+      // });
 
       // Correct way to get lastAutoTable position
       let summaryY = (doc as any).lastAutoTable
@@ -632,6 +707,8 @@ export class ViewPurchaseorderComponent {
     // Open PDF in new tab for preview
     const pdfBlob = doc.output('blob');
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, '_blank');
+    // window.open(pdfUrl);
+
+    this.pdfURL = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
   }
 }

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-view-request',
@@ -13,9 +14,11 @@ export class ViewRequestComponent implements OnInit {
   isRejected: boolean = false;
   isApproved: boolean = false;
   isRejectPop: boolean = false;
-  isToast: boolean = false;
-  warningToastMsg: string = '';
+  // isToast: boolean = false;
+  // warningToastMsg: string = '';
   commendArray: { key: string; value: string }[] = [];
+
+  toastService = inject(ToastService);
 
   date: any = new Date();
   _requestDetails: any;
@@ -61,17 +64,22 @@ export class ViewRequestComponent implements OnInit {
           },
           (error) => {
             console.log('error in approving program manager:', error);
-            this.isToast = true;
-            this.warningToastMsg = error.error.errorMessege;
+            this.isRejected = false;
+
+            this.toastService.showWarning(error.error.text);
+  
             setTimeout(() => {
-              this.isToast = false;
               this.closeView.emit(false);
             }, 3000);
+
             if (error.status === 202) {
               this.isApproved = true;
             }
             if (error.status === 208) {
               console.error('Approve error: Action already made');
+              // this.isRejectPop = false;
+              this.isRejected = false;
+              // this.isRejectPop = false;
             }
           },
         );
@@ -85,6 +93,14 @@ export class ViewRequestComponent implements OnInit {
             this.isApproved = true;
           },
           (error) => {
+            this.isRejected = false;
+
+            this.toastService.showWarning(error.error.text);
+
+            setTimeout(() => {
+              this.closeView.emit(false);
+            }, 3000);
+
             if (error.status === 202) {
               this.isApproved = true;
             }
@@ -105,6 +121,14 @@ export class ViewRequestComponent implements OnInit {
             this.isApproved = true;
           },
           (error) => {
+            this.isRejected = false;
+
+            this.toastService.showWarning(error.error.text);
+
+            setTimeout(() => {
+              this.closeView.emit(false);
+            }, 3000);
+
             if (error.status === 202) {
               this.isApproved = true;
             }
@@ -128,12 +152,22 @@ export class ViewRequestComponent implements OnInit {
         },
         (error) => {
           console.log('error while rejecting the request:', error);
+          this.isRejected = false;
+
+          this.toastService.showWarning(error.error.text);
+
+          setTimeout(() => {
+            this.closeView.emit(false);
+          }, 3000);
+
           if (error.status === 202) {
             this.isRejected = false;
             this.isRejectPop = true;
           }
           if (error.status === 208) {
             console.error('Rejected error: Action already made');
+            this.isRejected = false;
+            console.log('isRejected:', this.isRejected);
           }
         },
       );
@@ -147,6 +181,14 @@ export class ViewRequestComponent implements OnInit {
           this.isRejectPop = true;
         },
         (error) => {
+          this.isRejected = false;
+
+          this.toastService.showWarning(error.error.text);
+
+          setTimeout(() => {
+              this.closeView.emit(false);
+          }, 3000);
+
           if (error.status === 202) {
             this.isRejected = false;
             this.isRejectPop = true;
@@ -166,6 +208,14 @@ export class ViewRequestComponent implements OnInit {
           this.isRejectPop = true;
         },
         (error) => {
+          this.isRejected = false;
+
+          this.toastService.showWarning(error.error.text);
+
+          setTimeout(() => {
+            this.closeView.emit(false);
+          }, 3000);
+          
           if (error.status === 202) {
             this.isRejected = false;
             this.isRejectPop = true;

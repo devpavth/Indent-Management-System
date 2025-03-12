@@ -71,6 +71,13 @@
                         </option>
                     </select>
                 </div>
+
+                <div class="mt-8 relative">
+                    <div *ngIf="isLoading" class="absolute mt-2 inset-0 flex items-center justify-center bg-white bg-opacity-70">
+                        <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <iframe *ngIf="!isLoading && pdfURL" [src]="pdfURL" width="100%" height="700px"></iframe>
+                </div>
                 
               </div>
             </div>

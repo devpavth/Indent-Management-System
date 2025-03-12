@@ -5,10 +5,10 @@
   <app-cdelete-pop (close)="closepop($event)"></app-cdelete-pop>
 </section>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isWarningToast"
   class="fixed left-6 right-2 top-20 z-50 flex w-full items-center justify-center"
 >
-  <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
+  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
 </section>
 <section
   class="scroll fixed left-0 right-0 h-screen overflow-y-auto bg-black bg-opacity-50"

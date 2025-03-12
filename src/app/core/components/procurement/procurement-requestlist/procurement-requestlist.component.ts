@@ -12,6 +12,8 @@ export class ProcurementRequestlistComponent {
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
 
+  dropdownPosition = { top: 0, right: 0 };
+
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit() {
@@ -168,9 +170,29 @@ export class ProcurementRequestlistComponent {
         this.closeDropdownTimeout = null;
       }
 
+
       if (this.selectedRequestId === data) {
         this.selectedRequestId = null;
         this.isAcceptedView = false;
+
+         const buttonElement = (event.currentTarget as HTMLElement).closest(
+           'button',
+         ) as HTMLElement;
+         if (!buttonElement) return;
+
+         // ✅ Capture the table row element
+         const tableRow = buttonElement.closest('tr') as HTMLElement;
+         if (!tableRow) return;
+
+         // ✅ Capture the button's exact position
+         const rect = buttonElement.getBoundingClientRect();
+         const tableRect = tableRow.getBoundingClientRect();
+
+         // ✅ Calculate the accurate position (NO JUMP NOW)
+         this.dropdownPosition = {
+           top: rect.bottom + window.scrollY,
+           right: window.innerWidth - rect.right,
+         };
       } else {
         this.selectedRequestId = data;
         this.isAcceptedView = true;
