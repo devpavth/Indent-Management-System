@@ -175,27 +175,25 @@ export class ProcurementRequestlistComponent {
         this.selectedRequestId = null;
         this.isAcceptedView = false;
 
-         const buttonElement = (event.currentTarget as HTMLElement).closest(
-           'button',
-         ) as HTMLElement;
-         if (!buttonElement) return;
+        const buttonElement = (event.currentTarget as HTMLElement).closest(
+          'button',
+        );
+        if (!buttonElement) return;
 
-         // ✅ Capture the table row element
-         const tableRow = buttonElement.closest('tr') as HTMLElement;
-         if (!tableRow) return;
+        const tableRow = buttonElement.closest('tr');
+        if (!tableRow) return;
 
-         // ✅ Capture the button's exact position
-         const rect = buttonElement.getBoundingClientRect();
-         const tableRect = tableRow.getBoundingClientRect();
+        const buttonRect = buttonElement.getBoundingClientRect();
+        const tableRect = tableRow.getBoundingClientRect();
 
-         // ✅ Calculate the accurate position (NO JUMP NOW)
-         this.dropdownPosition = {
-           top: rect.bottom + window.scrollY,
-           right: window.innerWidth - rect.right,
-         };
+        this.dropdownPosition = {
+          top: buttonRect.top + window.scrollY,
+          right: buttonRect.right + window.scrollX, 
+        };
       } else {
         this.selectedRequestId = data;
         this.isAcceptedView = true;
+
       }
     }
   }

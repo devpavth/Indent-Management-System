@@ -519,6 +519,24 @@ export class ViewPurchaseorderComponent {
       //   });
       // };
 
+      const drawHeadOfAccHeader = (doc: any, head: any) => {
+        const pageWidth = doc.internal.pageSize.width;
+        const sectionY = 90; // Always start at a fixed position on each page
+
+        // Draw a Green Header Bar
+        doc.setLineWidth(0.5);
+        doc.setFillColor(240, 253, 244);
+        doc.setDrawColor(80, 205, 90);
+        doc.rect(10, sectionY, pageWidth - 24, 8, 'FD');
+
+        // Write Head of Account Name Centered
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.text(head.headOfAccName, pageWidth / 2, sectionY + 5, {
+          align: 'center',
+        });
+      };
+
       autoTable(doc, {
         startY: finalY + 8,
         head: [
@@ -568,11 +586,14 @@ export class ViewPurchaseorderComponent {
             );
           }
         },
-        // didDrawPage: (data: any) => {
-        //   // ✅ Always draw the Head of Account Name at the top of every page
-        //   drawHeadOfAccHeader(doc, head);
-        // },
+        didDrawPage: (data: any) => {
+          // ✅ Always draw the Head of Account Name at the top of every page
+          drawHeadOfAccHeader(doc, head);
+        },
       });
+
+
+      
 
       // if ((doc as any).lastAutoTable.finalY > 250) {
       //   doc.addPage();

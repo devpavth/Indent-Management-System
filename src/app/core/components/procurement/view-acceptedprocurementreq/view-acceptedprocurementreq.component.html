@@ -1,5 +1,5 @@
-<div class="absolute top-12 left-4 right-0 z-50 w-4/5 bg-gradient-to-t from-gray-900 to-purple-950 p-8 sm:ml-64">
-  <button class="fixed ml-24" (click)="closeView.emit(false)">
+<div class="fixed top-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-purple-950 py-5 sm:ml-64">
+  <button class="fixed top-20 right-12" (click)="closeView.emit(false)">
     <svg
       class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
       aria-hidden="true"
@@ -19,9 +19,9 @@
       />
     </svg>
   </button>
-  <section class="">
+  <section class="scroll mt-10 h-screen overflow-auto">
     <div class="mx-40">
-      <div class="rounded-xl bg-white shadow-lg">
+      <div class="rounded-xl mt-8 bg-white shadow-lg">
        
         <div class="items-center justify-between">
           <div class=" ">
@@ -31,20 +31,21 @@
               <!-- Card -->
               <div class="flex flex-col p-4 sm:p-10">
                 <h2
-                class="text-purple-600 text-xl font-semibold text-center mb-2"
+                class="text-purple-600 text-xl font-bold text-center mb-2"
                 >Quote Comparison Sheet</h2>
                 
 
                 <div class="flex flex-row items-center">               
                   <label for=""
-                      class="mt-6 text-lg font-bold text-purple-600"
+                      class="mt-6 text-lg font-semibold text-purple-600"
                       >
-                      INDENT ID:
+                      Indent ID
+                      <span class="ml-[72px]">:</span>
                   </label>
 
                   <input
                       type="text"
-                      class="ml-4 mt-4 rounded-lg text-center text-lg font-semibold"
+                      class="ml-[18px] mt-4 rounded-lg text-center text-lg font-semibold"
                       [value]="indentNumber"
                       readonly
                   />
@@ -53,10 +54,11 @@
                 <div
                     class="flex flex-row items-center mt-6 space-y-3 md:flex-row md:space-x-4 md:space-y-0"
                     >
-                    <label for=""
+                    <label
                         class="text-lg font-semibold text-purple-600"
                         >
-                        Head of Account:
+                        Head of Account
+                        <span class="ml-[5px]">:</span>
                     </label>
                     <select 
                         class="m-4 w-64 rounded-lg border border-gray-500"

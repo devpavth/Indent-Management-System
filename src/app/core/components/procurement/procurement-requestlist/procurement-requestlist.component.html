@@ -434,11 +434,15 @@
               </tr>
             </tbody>
           </table>
-          <ng-container *ngFor="let req of userRequest">
+          <ng-container *ngFor="let req of userRequest; let i = index">
             <div
               *ngIf="isAcceptedView && selectedRequestId === req.sno"
-              [ngStyle]="{ bottom: dropdownPosition.top + 'px', right: dropdownPosition.right + 'px' }"
-              class="dropdown-container absolute z-50 overflow-hidden w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+              [ngStyle]="{ 
+                'top': dropdownPosition.top + 'px', 
+                'right': dropdownPosition.right + 'px',
+                'margin-top': (52 + (i * 52)) + 'px' 
+              }"
+              class="dropdown-container absolute overflow-hidden w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
               >
               <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
                 <li>

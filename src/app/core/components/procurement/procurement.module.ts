@@ -27,5 +27,8 @@ import { ViewPurchaseorderComponent } from './view-purchaseorder/view-purchaseor
     FormsModule,
     ReactiveFormsModule,
   ],
+  exports: [
+    ViewConsolidatedquoteComponent
+  ]
 })
 export class ProcurementModule {}

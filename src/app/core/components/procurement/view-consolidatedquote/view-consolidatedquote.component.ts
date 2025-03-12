@@ -16,23 +16,29 @@ export class ViewConsolidatedquoteComponent {
 
   pdfUrl: SafeResourceUrl | null = null;
 
-  ngOnInit(){
+  isLoading: boolean = false;
+
+  ngOnInit() {
     console.log('reqId in consolidated component:', this.reqId);
 
     this.fetchConsolidatedQuotePDF(this.reqId);
   }
 
-  fetchConsolidatedQuotePDF(reqId: number){
+  fetchConsolidatedQuotePDF(reqId: number) {
+    this.isLoading = true;
     this.requestService.fetchConsolidatedQuotePDF(reqId).subscribe(
       (res: Blob) => {
-        const blob = new Blob([res], {type: 'application/pdf'});
+        const blob = new Blob([res], { type: 'application/pdf' });
         const objectUrl = window.URL.createObjectURL(blob);
         this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
         // window.open(this.pdfUrl);
-        console.log("Fetching consolidated quote pdf:", res);
-      },(error) =>{
-        console.log("error while fetching consolidated quote pdf:", error);
-      }
-    )
+        console.log('Fetching consolidated quote pdf:', res);
+        this.isLoading = false;
+      },
+      (error) => {
+        console.log('error while fetching consolidated quote pdf:', error);
+        this.isLoading = false;
+      },
+    );
   }
 }

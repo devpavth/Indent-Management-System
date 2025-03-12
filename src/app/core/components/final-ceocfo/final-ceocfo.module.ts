@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ViewceoCfoapprovalRequisitionComponent } from './viewceo-cfoapproval-requisition/viewceo-cfoapproval-requisition.component';
 import { UpdateSignatureComponent } from './update-signature/update-signature.component';
 import { SharedModule } from "../../../shared/shared.module";
+import { ProcurementModule } from "../procurement/procurement.module";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,6 @@ import { SharedModule } from "../../../shared/shared.module";
     ViewceoCfoapprovalRequisitionComponent,
     UpdateSignatureComponent
   ],
-  imports: [CommonModule, FinalCeocfoRoutingModule, FormsModule, ReactiveFormsModule, SharedModule],
+  imports: [CommonModule, FinalCeocfoRoutingModule, FormsModule, ReactiveFormsModule, SharedModule, ProcurementModule],
 })
 export class FinalCeocfoModule {}

@@ -31,20 +31,21 @@
               <!-- Card -->
               <div class="flex flex-col p-4 sm:p-10">
                 <h2
-                class="text-purple-600 text-xl font-semibold text-center mb-2"
+                class="text-purple-600 text-xl font-bold text-center mb-2"
                 >Quote Comparison Sheet</h2>
                 
 
                 <div class="flex flex-row items-center">               
                     <label for=""
-                        class="mt-6 text-lg font-bold text-purple-600"
+                        class="mt-6 text-lg font-semibold text-purple-600"
                         >
-                        INDENT ID:
+                        Indent ID
+                        <span class="ml-[72px]">:</span>
                     </label>
 
                     <input
                         type="text"
-                        class="ml-4 mt-4 rounded-lg text-center text-lg font-semibold"
+                        class="ml-[18px] mt-4 rounded-lg text-center text-lg font-semibold"
                         [value]="indentNumber"
                         readonly
                     />
@@ -56,7 +57,8 @@
                     <label for=""
                         class="text-lg font-semibold text-purple-600"
                         >
-                        Head of Account:
+                        Head of Account
+                        <span class="ml-[5px]">:</span>
                     </label>
                     <select 
                         class="m-4 w-64 rounded-lg border border-gray-500"

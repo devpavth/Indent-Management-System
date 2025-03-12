@@ -459,7 +459,9 @@
                         </button>
                       </li>
                       <li>
-                        <button class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                        <button
+                          (click)="openConsolidatedQuote(req.sno)" 
+                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
                           Consolidated Quote
                         </button>
                       </li>
@@ -470,6 +472,14 @@
             </tbody>
           </table>
         </div>
+        <ng-container *ngIf="noRequest">
+          <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
+            <div class="text-center">
+              <img src="../../../../../assets/Img/9264882.svg" class="w-52 mx-auto" alt="No data available"/>
+              <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Request Available</p>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </section>
@@ -484,6 +494,13 @@
 </section>
 <section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
   <app-success-pop (close)="closepop($event)"></app-success-pop>
+</section>
+<section *ngIf="isViewConsolidatedQuote">
+  <app-view-consolidatedquote
+    [reqId]="reqId"
+    (closeView)="refresh($event)"
+  >
+  </app-view-consolidatedquote>
 </section>
 <!-- <section *ngIf="isViewQuoteCompare" class="">
   <app-view-acceptedprocurementreq

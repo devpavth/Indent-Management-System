@@ -17,6 +17,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
   selectedRequests: Set<number> = new Set();
   isApproved: boolean = false;
   signUploaded!: boolean;
+  isViewConsolidatedQuote: boolean = false;
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -59,6 +60,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
   isAcceptedView: boolean = false;
   isViewQuoteCompare: boolean = false;
   selectedRequestId: number | null = null;
+  noRequest: boolean = false;
 
   reqId: any;
   indentNumber: string = '';
@@ -79,6 +81,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
           (res: any) => {
             this.specialRolesProcessList = res;
             console.log('fetching special roles request processing list:', res);
+            this.noRequest = false;
           },
           (error) => {
             console.log(
@@ -89,6 +92,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
               this.specialRolesProcessList = [];
             } else if (error.status === 404) {
               this.specialRolesProcessList = [];
+              this.noRequest = true;
             }
           },
         );
@@ -115,6 +119,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
             // list = list.filter((l) => l.requestStatus == 102);
             // console.log("filtering completed request:", list);
             // this.userRequest = res;
+            this.noRequest = false;
           },
           (error) => {
             console.log(
@@ -125,6 +130,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
               this.specialRolesProcessList = [];
             } else if (error.status === 404) {
               this.specialRolesProcessList = [];
+              this.noRequest = true;
             }
           },
         );
@@ -306,10 +312,19 @@ export class CeoCfoapprovalRequisitionlistComponent {
     }
   }
 
+  openConsolidatedQuote(sno: number) {
+    this.reqId = sno;
+
+    if (this.isCompleted === true) {
+      this.isViewConsolidatedQuote = true;
+    }
+  }
+
   refresh(data: any) {
     this.isView = data;
     // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
+    this.isViewConsolidatedQuote = data;
     this.fetchRequestList();
   }
 
