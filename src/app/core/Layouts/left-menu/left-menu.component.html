@@ -475,7 +475,50 @@
           *ngIf="tAdmin && isLevelView"
           id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster space-y-2 py-2"
-        >
+          >
+          <li>
+            <button
+              type="button"
+              class="left-menu group"
+              (click)="toggleCompany()"
+            >
+              <span
+                class="ml-9 flex-1 whitespace-nowrap text-left rtl:text-right"
+                >Company</span
+              >
+
+              <svg
+                class="h-3 w-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+            <ul *ngIf="company">
+              <li
+                routerLink="/home/employeeList"
+                class="left-submenu group ml-3 cursor-pointer"
+              >
+                Company Details
+              </li>
+              <li
+                routerLink="/home/designationRoleMapping"
+                class="left-submenu group ml-3 cursor-pointer"
+              >
+                Logo
+              </li>
+            </ul>
+           
+          </li>
           <li>
             <button
               type="button"

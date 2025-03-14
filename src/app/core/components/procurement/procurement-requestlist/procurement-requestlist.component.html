@@ -459,12 +459,22 @@
                     Consolidated Quote
                   </button>
                 </li>
-                <li>
+                <li class="relative group">
                   <button 
                     (click)="openPurchaseOrderReport(req.sno)"
-                    class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                    (mouseenter)="showTooltipForFewSec(req.sno)"
+                    [ngClass]="{
+                      'cursor-not-allowed': req.requestStatus !== 100
+                    }"
+                    class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600 relative">
                     Convert To Purchase Order
                   </button>
+                  <div 
+                    *ngIf="tooltipSno === req.sno && req.requestStatus !== 100"
+                    class="absolute left-1/2 bottom-full w-64 bg-gray-800 text-white text-xs rounded-lg font-medium p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-x-1/2"
+                    >
+                    Indent request is still processing. After completion, you can view the purchase order.
+                  </div>
                 </li>
               </ul>
             </div>

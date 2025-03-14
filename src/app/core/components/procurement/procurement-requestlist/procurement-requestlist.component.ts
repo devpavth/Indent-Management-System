@@ -40,6 +40,7 @@ export class ProcurementRequestlistComponent {
   isViewPurchaseOrder: boolean = false;
   userRequest: any;
   selectedRequestId: number | null = null;
+  tooltipSno: number | null = null;
 
   reqId: any;
   indentNumber: string = '';
@@ -170,7 +171,6 @@ export class ProcurementRequestlistComponent {
         this.closeDropdownTimeout = null;
       }
 
-
       if (this.selectedRequestId === data) {
         this.selectedRequestId = null;
         this.isAcceptedView = false;
@@ -188,12 +188,11 @@ export class ProcurementRequestlistComponent {
 
         this.dropdownPosition = {
           top: buttonRect.top + window.scrollY,
-          right: buttonRect.right + window.scrollX, 
+          right: buttonRect.right + window.scrollX,
         };
       } else {
         this.selectedRequestId = data;
         this.isAcceptedView = true;
-
       }
     }
   }
@@ -249,11 +248,19 @@ export class ProcurementRequestlistComponent {
     }
   }
 
-  openPurchaseOrderReport(sno: number){
+  openPurchaseOrderReport(sno: number) {
     this.reqId = sno;
-    if(this.isCompleted === true){
+    if (this.isCompleted === true) {
       this.isViewPurchaseOrder = true;
     }
+  }
+
+  showTooltipForFewSec(sno: number) {
+    this.tooltipSno = sno;
+
+    setTimeout(() => {
+      this.tooltipSno = null;
+    }, 3000);
   }
 
   refresh(data: any) {

@@ -38,6 +38,7 @@ export const environment = {
   searchPincode: Url + 'api/searchPincode/',
   postSignature: Url + bassEmployeeApi + '/add-signature',
   fetchUploadedSignature: Url + bassEmployeeApi + '/get-signature',
+  fetchEmployeeProfileDetails: Url + bassEmployeeApi + '/get-profiledata',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',

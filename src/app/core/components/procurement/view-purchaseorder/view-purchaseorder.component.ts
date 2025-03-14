@@ -173,10 +173,13 @@ export class ViewPurchaseorderComponent {
   viewPDF(headOfAccList: any[]) {
     console.log('headOfAccList:', headOfAccList);
     const doc = new jsPDF();
+    let currentPage = 1;
+
     headOfAccList.forEach((head: any, index: any) => {
       if (index > 0) {
-        // ✅ Add a new page after each Head of Account (Except first page)
+        // Add a new page after each Head of Account (Except first page)
         doc.addPage();
+        currentPage++;
       }
 
       // Set font size
@@ -501,25 +504,11 @@ export class ViewPurchaseorderComponent {
         },
       ]);
 
-      // const drawHeadOfAccHeader = (doc: any, head: any) => {
-      //   const pageWidth = doc.internal.pageSize.width;
-      //   const sectionY = (doc as any).lastAutoTable.finalY || 105;
 
-      //   // ✅ Draw a Green Header Bar
-      //   doc.setLineWidth(0.5);
-      //   doc.setFillColor(240, 253, 244);
-      //   doc.setDrawColor(80, 205, 90);
-      //   doc.rect(10, sectionY - 15, pageWidth - 24, 8, 'FD');
-
-      //   // ✅ Write Head of Account Name Centered
-      //   doc.setFont('helvetica', 'bold');
-      //   doc.setFontSize(10);
-      //   doc.text(head.headOfAccName, pageWidth / 2, sectionY - 10, {
-      //     align: 'center',
-      //   });
-      // };
+      let isFirstPageForHead = true;
 
       const drawHeadOfAccHeader = (doc: any, head: any) => {
+        if (!isFirstPageForHead) return;
         const pageWidth = doc.internal.pageSize.width;
         const sectionY = 90; // Always start at a fixed position on each page
 
@@ -535,7 +524,10 @@ export class ViewPurchaseorderComponent {
         doc.text(head.headOfAccName, pageWidth / 2, sectionY + 5, {
           align: 'center',
         });
+        isFirstPageForHead = false;
       };
+
+      isFirstPageForHead = true;
 
       autoTable(doc, {
         startY: finalY + 8,
@@ -587,12 +579,22 @@ export class ViewPurchaseorderComponent {
           }
         },
         didDrawPage: (data: any) => {
-          // ✅ Always draw the Head of Account Name at the top of every page
+          // Always draw the Head of Account Name at the top of every page
           drawHeadOfAccHeader(doc, head);
+          // isFirstPageForHead = false;
+           const totalPages = doc.internal.pages.length;
+           doc.setFont('helvetica', 'normal');
+           doc.setFontSize(8);
+           doc.text(
+             `Page ${currentPage} of ${totalPages}`,
+             pageWidth / 2,
+             doc.internal.pageSize.height - 10,
+             { align: 'center' },
+           );
         },
       });
 
-
+      // isFirstPageForHead = true;
       
 
       // if ((doc as any).lastAutoTable.finalY > 250) {
@@ -702,6 +704,7 @@ export class ViewPurchaseorderComponent {
       alignRight(`Round Off: ${roundOffValue}`, summaryY);
 
       const totalY = summaryY + lineHeight * 2;
+      doc.setDrawColor(80, 205, 90);
       doc.setLineWidth(0.3);
       doc.line(pagePDFWidth - 60, totalY - 7, pagePDFWidth - 12, totalY - 7);
 
@@ -712,17 +715,107 @@ export class ViewPurchaseorderComponent {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
 
-      const pageNumber = doc.internal.pages.length - 1;
-      const totalPages = this.purchaseOrderData.headofAcc.length;
+      const pageSignWidth = doc.internal.pageSize.width;
+      const pageSignHeight = doc.internal.pageSize.height;
+      const signatureBoxHeight = 30;
+      const signatureY = pageSignHeight - 45;
 
-      // ✅ Page Footer
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(8);
-      doc.text(
-        `Page ${pageNumber} of ${totalPages}`,
-        90,
-        doc.internal.pageSize.height - 10,
+      const columnWidth = (pageWidth - 20) / 4;
+      
+      doc.setDrawColor(80, 205, 90);
+      doc.setLineWidth(0.5);
+
+      doc.rect(10, signatureY, pageSignWidth - 20, signatureBoxHeight);
+      for(let i=1; i<4; i++){
+        doc.line(
+          10 + i * columnWidth,
+          signatureY,
+          10 + i * columnWidth,
+          signatureY + signatureBoxHeight,
+        );
+      }
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+
+      const columnTitles = this.purchaseOrderData.authoritiesSignDtos.map(
+        (auth: any) => auth.roleName,
       );
+      console.log("columnTitles:", columnTitles);
+
+      const columnSignatures = this.purchaseOrderData.authoritiesSignDtos.map(
+        (auth: any) => auth.signature,
+      );
+
+      // const columnTitles = [
+      //   'PROCUREMENT MANAGER',
+      //   'CEO',
+      //   'DIRECTOR FINANCE',
+      //   'HEAD ADMIN',
+      // ];
+
+      const columnCenterXList = columnTitles.map(
+        (_: any, index: number) => 10 + index * columnWidth + columnWidth / 2,
+      );
+
+      const textY = signatureY + signatureBoxHeight / 2 + 3; // Adjust for vertical centering
+      const lineBoxHeight = 5;
+      const signatureHeight = 12;
+
+      columnSignatures.forEach((signature: string, index: number) => {
+        if (signature) {
+          const columnCenterX = columnCenterXList[index] - 10; // Adjusting for width
+          const signatureYPos = textY - signatureHeight - 4; // Place signature above "Signature"
+
+          try{
+              doc.addImage(
+              signature,
+              'AUTO',
+              columnCenterX,
+              signatureYPos,
+              20,
+              signatureHeight,
+            );
+          }
+          catch(error){
+            console.log('Error adding signature image:', error);
+          }
+        }
+      });
+
+      // First row: "Signature" text centered across all columns
+      columnCenterXList.forEach((columnCenterX: number) => {
+        doc.text('Signature', columnCenterX, textY, {
+          align: 'center',
+        });
+      });
+
+      // Second row: Role names properly wrapped and centered
+      columnTitles.forEach((title: string, index: number) => {
+        const columnCenterX = columnCenterXList[index];
+        const wrappedText = doc.splitTextToSize(title, columnWidth - 10);
+        const totalTextHeight = wrappedText.length * lineBoxHeight;
+        const adjustedTextY = textY + 5; // Adjust for proper spacing
+
+        wrappedText.forEach((line: string, i: number) => {
+          const lineWidth = doc.getTextWidth(line);
+          const adjustedTextX = columnCenterX - lineWidth / 2;
+          doc.text(line, adjustedTextX, adjustedTextY + i * lineBoxHeight);
+        });
+      });
+
+      const pageNumberY = signatureY + signatureBoxHeight + 10;
+      
+      // doc.setFontSize(8);
+      // doc.text(
+      //   `Page ${currentPage} of ${doc.internal.pages.length}`,
+      //   pageWidth / 2,
+      //   doc.internal.pageSize.height - 10,
+      //   { align: 'center' },
+      // );
+
+      currentPage++;
+
     });
 
     // Open PDF in new tab for preview

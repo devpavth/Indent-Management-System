@@ -39,6 +39,15 @@ export class DashboardComponent implements OnInit {
         console.log('error while fetching employee details:', error);
       },
     );
+
+    this.empService.fetchEmployeeProfileDetails().subscribe(
+      (res) => {
+        console.log("fetching profile details:", res);
+      },
+      (error) => {
+        console.log("error while fetching profile details:", error);
+      }
+    )
   }
 
   clearUploadSignature(closeIcon: boolean) {

@@ -161,4 +161,8 @@ export class EmployeeServiceService {
       {responseType: 'blob'}
     );
   }
+
+  fetchEmployeeProfileDetails(){
+    return this.http.get(environment.fetchEmployeeProfileDetails);
+  }
 }

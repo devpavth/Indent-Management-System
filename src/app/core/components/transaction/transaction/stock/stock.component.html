@@ -787,14 +787,14 @@
         </div>
       </div>
       <div
-        *ngIf="productList.length > 0"
+        *ngIf="productList.length > 0 && header"
         class="mt-8 flex items-center justify-end"
-      >
+        >
         <button
           type="submit"
           (click)="onSubmit()"
           class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
-        >
+          >
           Save
         </button>
       </div>

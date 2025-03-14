@@ -18,6 +18,7 @@ export class LeftMenuComponent {
   product: boolean = false;
   branch: boolean = false;
   employee: boolean = false;
+  company: boolean = false;
 
   employeeService = inject(EmployeeServiceService);
   user: any;
@@ -64,8 +65,6 @@ export class LeftMenuComponent {
     //   console.log('checking user role.');
     //   this.isAccessUserFinance = true;
     // }
-
-    
   }
 
   toggleRequest() {
@@ -75,9 +74,13 @@ export class LeftMenuComponent {
     this.tAdmin = !this.tAdmin;
   }
 
-  toggleEmployee(){
+  toggleCompany(){
+    this.company = !this.company;
+  }
+
+  toggleEmployee() {
     this.employee = !this.employee;
-  } 
+  }
 
   toggleTransaction() {
     this.transaction = !this.transaction;
