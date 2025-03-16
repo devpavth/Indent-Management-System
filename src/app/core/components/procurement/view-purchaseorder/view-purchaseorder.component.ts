@@ -173,14 +173,17 @@ export class ViewPurchaseorderComponent {
   viewPDF(headOfAccList: any[]) {
     console.log('headOfAccList:', headOfAccList);
     const doc = new jsPDF();
-    let currentPage = 1;
+    // let currentPage = 1;
+    let totalPages = 0;
 
     headOfAccList.forEach((head: any, index: any) => {
       if (index > 0) {
         // Add a new page after each Head of Account (Except first page)
         doc.addPage();
-        currentPage++;
+        // currentPage++;
       }
+
+      totalPages = doc.getNumberOfPages();
 
       // Set font size
       doc.setFontSize(12);
@@ -582,15 +585,15 @@ export class ViewPurchaseorderComponent {
           // Always draw the Head of Account Name at the top of every page
           drawHeadOfAccHeader(doc, head);
           // isFirstPageForHead = false;
-           const totalPages = doc.internal.pages.length;
-           doc.setFont('helvetica', 'normal');
-           doc.setFontSize(8);
-           doc.text(
-             `Page ${currentPage} of ${totalPages}`,
-             pageWidth / 2,
-             doc.internal.pageSize.height - 10,
-             { align: 'center' },
-           );
+          //  const totalPages = doc.internal.pages.length;
+          //  doc.setFont('helvetica', 'normal');
+          //  doc.setFontSize(8);
+          //  doc.text(
+          //    `Page ${currentPage} of ${totalPages}`,
+          //    pageWidth / 2,
+          //    doc.internal.pageSize.height - 10,
+          //    { align: 'center' },
+          //  );
         },
       });
 
@@ -805,6 +808,18 @@ export class ViewPurchaseorderComponent {
       });
 
       const pageNumberY = signatureY + signatureBoxHeight + 10;
+
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i); // Set focus to the correct page
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
+
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 10, {
+          align: 'center',
+        });
+      }
       
       // doc.setFontSize(8);
       // doc.text(
@@ -814,7 +829,7 @@ export class ViewPurchaseorderComponent {
       //   { align: 'center' },
       // );
 
-      currentPage++;
+      // currentPage++;
 
     });
 
