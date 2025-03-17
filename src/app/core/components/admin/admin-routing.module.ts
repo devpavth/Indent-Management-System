@@ -19,6 +19,7 @@ import { ViewListComponent } from './Branch/view-list/view-list.component';
 import { AddListComponent } from './Branch/add-list/add-list.component';
 import { EditListComponent } from './Branch/edit-list/edit-list.component';
 import { RoleMappingComponent } from './Employee/role-mapping/role-mapping.component';
+import { CompanyDetailsComponent } from './Company/company-details/company-details.component';
 
 const routes: Routes = [
   // { path: '', redirectTo: 'employeeList', pathMatch: 'full' },
@@ -39,6 +40,7 @@ const routes: Routes = [
   { component: AddListComponent, path: 'addList/:id' },
   { component: EditListComponent, path: 'editList/:id' },
   { component: RoleMappingComponent, path: 'designationRoleMapping' },
+  { component: CompanyDetailsComponent, path: 'companyList'},
 ];
 
 @NgModule({

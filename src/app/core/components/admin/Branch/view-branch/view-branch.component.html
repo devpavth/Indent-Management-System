@@ -147,9 +147,14 @@
                 placeholder="000 000"
                 required
               />
-              <div *ngIf="noPincode && viewBranchForm.get('pinCode')?.value?.toString().length === 6" 
-                class="absolute mt-1 text-sm text-red-600">
-                  <small>No Pincode found.</small>
+              <div
+                *ngIf="
+                  noPincode &&
+                  viewBranchForm.get('pinCode')?.value?.toString().length === 6
+                "
+                class="absolute mt-1 text-sm text-red-600"
+              >
+                <small>No Pincode found.</small>
               </div>
             </div>
 
@@ -161,7 +166,10 @@
               >
               <select class="input-form" formControlName="city" required>
                 <option null selected disabled>Choose Town/City</option>
-                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                <option
+                  *ngFor="let option of cityDropDownOptions"
+                  value="{{ option.value }}"
+                >
                   {{ option.label }}
                 </option>
               </select>
@@ -180,13 +188,13 @@
                 (change)="fetchCity(statevalue.value)"
                 readonly
               />
-                <!-- <option null selected disabled>Choose State</option>
+              <!-- <option null selected disabled>Choose State</option>
                 <option *ngFor="let state of _state" value="{{ state.sname }}">
                   {{ state.sname }}
                 </option> -->
               <!-- </select> -->
             </div>
-            
+
             <div>
               <label
                 for="country"
@@ -200,13 +208,10 @@
                 (change)="fetchState(countryvalue.value)"
                 readonly
               />
-                <!-- <option null selected disabled>Choose Country</option>
+              <!-- <option null selected disabled>Choose Country</option>
                 <option value="India">India</option> -->
               <!-- </select> -->
             </div>
-            
-
-            
           </div>
           <!-- <label
             for="Pincode"
@@ -271,7 +276,9 @@
           </div> -->
           <div class="mb-4 grid grid-cols-2 items-center gap-6">
             <div>
-              <select class="input-form" type="text" #department required>
+              <select class="input-form" type="text" #department 
+                [disabled]="!isEditMode"
+                required>
                 <option
                   *ngFor="
                     let department of departmentProvidedList;
@@ -286,6 +293,7 @@
             <div>
               <button
                 type="button"
+                [disabled]="!isEditMode"
                 (click)="addDepartList(department.value)"
                 class="mb-2 mt-2 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 active:translate-y-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
               >
@@ -361,10 +369,12 @@
               <button
                 (click)="updateBranch(viewBranchForm.value)"
                 type="submit"
+                [disabled]="loading"
                 *ngIf="isSave"
                 class="me-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-600 dark:focus:ring-green-800"
               >
                 <svg
+                  *ngIf="!loading"
                   class="mr-1 inline-flex h-5 w-5 items-center justify-center text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +392,11 @@
                   />
                 </svg>
 
-                Save
+                <span *ngIf="!loading">Save</span>
+                <span *ngIf="loading" class="flex items-center gap-2">
+                  <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Saving...</span>
+                </span>
               </button>
             </div>
           </div>
@@ -392,8 +406,14 @@
   </div>
 </section>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+</section>
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { Branch } from '../../../models/branch/branch.model';
 import { Observable } from 'rxjs';
+import { Company } from '../../../models/company/company.model';
 
 @Injectable({
   providedIn: 'root',
@@ -81,5 +82,9 @@ export class BranchService {
 
   deleteDepartmentProgram(departId: any, programId: any){
     return this.http.post(`${environment.deleteDepartmentProgram}${departId}/${programId}`, '');
+  }
+
+  fetchCompanyName(): Observable<Company>{
+    return this.http.get<Company>(environment.fetchCompany);
   }
 }

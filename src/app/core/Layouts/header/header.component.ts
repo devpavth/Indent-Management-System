@@ -1,7 +1,9 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 import { SharedServiceService } from '../../components/service/shared-service/shared-service.service';
+import { BranchService } from '../../components/service/Branch/branch.service';
+import { Company } from '../../models/company/company.model';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -10,6 +12,8 @@ import { SharedServiceService } from '../../components/service/shared-service/sh
 export class HeaderComponent implements OnInit {
   user: any; // fetch user
   userData: any; //fetch user data object
+
+  companyDetails: Company | undefined;
 
   //User data
   // FirstName :any
@@ -34,10 +38,12 @@ export class HeaderComponent implements OnInit {
 
   randomColor: string | undefined;
 
+  branchService = inject(BranchService);
+
   constructor(
     private readonly userDetailService: EmployeeServiceService,
     public sharedData: SharedServiceService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
   ) {
     this.randomColor = this.getRandomColor();
   }
@@ -54,6 +60,20 @@ export class HeaderComponent implements OnInit {
         sessionStorage.setItem('branchId', this.userData.branchCode);
       });
     }
+
+    this.fetchCompany();
+  }
+
+  fetchCompany(){
+    this.branchService.fetchCompanyName().subscribe(
+      (res: Company) => {
+        console.log("fetching coming details:", res);
+        this.companyDetails = res;
+      },
+      (error) => {
+        console.log("error while fetching company details", error);
+      }
+    )
   }
 
   getRandomColor(): string {
@@ -77,8 +97,8 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  clickOutside(event: Event){
-    if(!this.elRef.nativeElement.contains(event.target)){
+  clickOutside(event: Event) {
+    if (!this.elRef.nativeElement.contains(event.target)) {
       this.profile = false;
     }
   }

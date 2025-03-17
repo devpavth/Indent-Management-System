@@ -284,15 +284,14 @@
                   <option *ngFor="let u of units" value="{{ u.id }}">
                     {{ u.name }}
                   </option>
-  
                 </select>
                 <small
-                    *ngIf="
-                      ProductForm?.get('prdUnit')?.invalid &&
-                      ProductForm?.get('prdUnit')?.touched
-                    "
-                    class="text-danger text-red-600"
-                  >
+                  *ngIf="
+                    ProductForm?.get('prdUnit')?.invalid &&
+                    ProductForm?.get('prdUnit')?.touched
+                  "
+                  class="text-danger text-red-600"
+                >
                   Select Unit of Material!
                 </small>
               </div>
@@ -369,16 +368,15 @@
                   required
                 >
                   <option *ngFor="let g of gst" value="{{ g }}">{{ g }}</option>
-                  
                 </select>
                 <small
-                    *ngIf="
-                      ProductForm?.get('prdGstPct')?.invalid &&
-                      ProductForm?.get('prdGstPct')?.touched
-                    "
-                    class="text-danger text-red-600"
-                  >
-                    Select GST Percentage!
+                  *ngIf="
+                    ProductForm?.get('prdGstPct')?.invalid &&
+                    ProductForm?.get('prdGstPct')?.touched
+                  "
+                  class="text-danger text-red-600"
+                >
+                  Select GST Percentage!
                 </small>
               </div>
               <div class="col-span-2">
@@ -444,26 +442,29 @@
                 (click)="onSubmit(ProductForm.value)"
                 type="submit"
                 [ngClass]="{
-                  'bg-gray-400':
-                    ProductForm.invalid,
-                  'hover:bg-gray-400':
-                    ProductForm.invalid
+                  'bg-gray-400': ProductForm.invalid,
+                  'hover:bg-gray-400': ProductForm.invalid
                 }"
                 class="inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
               >
                 <svg
+                  *ngIf="!loading"
                   class="-ml-1 mr-1 h-6 w-6"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
-                >
+                  >
                   <path
                     fill-rule="evenodd"
                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                Save
+                <span *ngIf="!loading">Save</span>
+                <span *ngIf="loading" class="flex items-center gap-2">
+                  <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span>Saving...</span>
+                </span>
               </button>
             </div>
           </form>

@@ -7,6 +7,12 @@ export class ToastService {
   isWarningToast: boolean = false;
   warningToastMsg: string = '';
 
+  isErrorToast: boolean = false;
+  errorToastMsg: string = '';
+
+  isSuccessToast: boolean = false;
+  successToastMsg: string = '';
+
   constructor() {}
 
   showWarning(message: string){
@@ -15,6 +21,24 @@ export class ToastService {
 
     setTimeout(() => {
       this.isWarningToast = false;
+    }, 3000);
+  }
+
+  showError(message: string){
+    this.isErrorToast = true;
+    this.errorToastMsg = message;
+
+    setTimeout(() => {
+      this.isErrorToast = false;
+    }, 3000);
+  }
+
+  showSuccess(message: string){
+    this.isSuccessToast = true;
+    this.successToastMsg = message;
+
+    setTimeout(() => {
+      this.isSuccessToast = false;
     }, 3000);
   }
 }

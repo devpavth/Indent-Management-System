@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeServiceService } from '../../core/components/service/Employee/employee-service.service';
+import { ToastService } from '../../core/components/service/toast/toast.service';
 
 @Component({
   selector: 'app-upload-signature',
@@ -16,11 +17,7 @@ export class UploadSignatureComponent {
 
   empService = inject(EmployeeServiceService);
   route = inject(Router);
-
-  isToast: boolean = false;
-  successToastMsg: string = '';
-  isErrorToast: boolean = false;
-  errorToastMsg: string = '';
+  toastService = inject(ToastService);
 
   ngOnInit() {
     console.log('specialRoleId:', this.specialRoleId);
@@ -42,14 +39,17 @@ export class UploadSignatureComponent {
 
       if (!allowedExtensions.includes(file.type)) {
         // alert('Invalid file format! Please upload a JPG, JPEG, or PNG image.');
-        this.isErrorToast = true;
-        this.errorToastMsg =
-          'Invalid file format! Please upload a JPG, JPEG, or PNG image.';
+        this.toastService.showError(
+          'Invalid file format! Please upload a JPG, JPEG, or PNG image.',
+        );
+        // this.isErrorToast = true;
+        // this.errorToastMsg =
+        //   'Invalid file format! Please upload a JPG, JPEG, or PNG image.';
         this.previewUrl = null;
         this.selectedFile = null;
-        setTimeout(() => {
-          this.isErrorToast = false;
-        }, 3000);
+        // setTimeout(() => {
+        //   this.isErrorToast = false;
+        // }, 3000);
 
         return;
       }
@@ -90,10 +90,12 @@ export class UploadSignatureComponent {
       (res: any) => {
         console.log('successfully uploaded signature:', res);
         // this.close.emit(true);
-        this.isToast = true;
-        this.successToastMsg = res.errorMessege;
+
+        this.toastService.showSuccess(res.errorMessege);
+        // this.isToast = true;
+        // this.successToastMsg = res.errorMessege;
         setTimeout(() => {
-          this.isToast = false;
+          // this.isToast = false;
           this.close.emit(true);
           if(this.isViewUploadSignature){
             this.route.navigate(['/home/updateSign']);

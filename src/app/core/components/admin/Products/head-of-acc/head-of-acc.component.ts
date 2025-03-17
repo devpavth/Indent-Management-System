@@ -17,6 +17,7 @@ export class HeadOfAccComponent implements OnInit {
 
   isToast: boolean = false;
   successToastMsg: string = '';
+  loading: boolean = false;
 
   headOfAccForm: FormGroup;
   constructor(
@@ -56,6 +57,7 @@ export class HeadOfAccComponent implements OnInit {
   }
 
   onSubmit(accData: string) {
+    this.loading = true;
     this.productService.addHeadOfAcc(accData).subscribe(
       (res: any) => {
         console.log('succesfully added new headofacc:', res);
@@ -66,9 +68,11 @@ export class HeadOfAccComponent implements OnInit {
         setTimeout(() => {
           this.isToast = false;
         }, 3000);
+        this.loading = false;
       },
       (error) => {
         console.log('error while adding headofacc', error);
+        this.loading = false;
 
         // if (error.status == 200) {
         //   this.fetchHeadOfAcc();

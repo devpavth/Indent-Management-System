@@ -4,12 +4,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { Router } from '@angular/router';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { Pincode } from '../../../../models/pincode/pincode.model';
 @Component({
   selector: 'app-add-branch',
   templateUrl: './add-branch.component.html',
   styleUrl: './add-branch.component.css',
 })
 export class AddBranchComponent implements OnInit {
+  loading: boolean = false;
   constructor(
     private readonly countryStateCity: SharedServiceService,
     private fb: FormBuilder,
@@ -19,8 +21,22 @@ export class AddBranchComponent implements OnInit {
       branchName: [, [Validators.required, Validators.minLength(2)]],
       manager: [, [Validators.required, Validators.minLength(2)]],
       branchMobilenumber: [, [Validators.required, Validators.minLength(10)]],
-      add1: [, [Validators.required, Validators.minLength(20), Validators.maxLength(150)]],
-      add2: [, [Validators.required, Validators.minLength(20), Validators.maxLength(100)]],
+      add1: [
+        ,
+        [
+          Validators.required,
+          Validators.minLength(20),
+          Validators.maxLength(150),
+        ],
+      ],
+      add2: [
+        ,
+        [
+          Validators.required,
+          Validators.minLength(20),
+          Validators.maxLength(100),
+        ],
+      ],
       country: [, [Validators.required, Validators.minLength(2)]],
       city: [, [Validators.required, Validators.minLength(2)]],
       state: [, [Validators.required, Validators.minLength(2)]],
@@ -37,59 +53,57 @@ export class AddBranchComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.addBranchForm.get('pinCode')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((pincode) => {
-        if(this.isPincodeSelected){
-          return of([]);
-        }
-        this.noPincode = false;
-        if(!pincode?.trim()){
-          this.pincodeList = [];
-          return of([]);
-        }
-        return this.countryStateCity.fetchPincode(pincode).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("Pincode API Error:", error);
-              this.noPincode = true;
-            }
+    this.addBranchForm
+      .get('pinCode')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((pincode) => {
+          if (this.isPincodeSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
+          }
+          this.noPincode = false;
+          if (!pincode?.trim()) {
+            this.pincodeList = [];
+            return of([]);
+          }
+          return this.countryStateCity.fetchPincode(pincode).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('Pincode API Error:', error);
+                this.noPincode = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
         const postOfficeArray = response?.[0]?.postOffice ?? [];
-        console.log("postOfficeArray:", postOfficeArray);
+        console.log('postOfficeArray:', postOfficeArray);
 
         this.pincodeList = postOfficeArray;
-        console.log("reponse from pincode:", response);
-        console.log("fetching pincode with live search:", this.pincodeList);
+        console.log('reponse from pincode:', response);
+        console.log('fetching pincode with live search:', this.pincodeList);
 
-        if(this.pincodeList.length > 0){
-          const cityDropDownOptions = this.pincodeList.map(
-            (address) => ({
-              label: `${address.name}, ${address.city}`,
-              value: `${address.name}, ${address.city}`
-            })
-          )
-          console.log("cityDropDownOptions:", cityDropDownOptions);
+        if (this.pincodeList.length > 0) {
+          const cityDropDownOptions = this.pincodeList.map((address) => ({
+            label: `${address.name}, ${address.city}`,
+            value: `${address.name}, ${address.city}`,
+          }));
+          console.log('cityDropDownOptions:', cityDropDownOptions);
 
-          this.addBranchForm.patchValue({
-            city: cityDropDownOptions[0].value,
-            state: this.pincodeList[0].state,
-            country: this.pincodeList[0].country
-          },
-          {emitEvent: false}
-        )
-        this.cityDropDownOptions = cityDropDownOptions;
+          this.addBranchForm.patchValue(
+            {
+              city: cityDropDownOptions[0].value,
+              state: this.pincodeList[0].state,
+              country: this.pincodeList[0].country,
+            },
+            { emitEvent: false },
+          );
+          this.cityDropDownOptions = cityDropDownOptions;
         }
         this.isPincodeSelected = false;
-      }
-    )
+      });
     this.fetchDeptList();
   }
 
@@ -101,7 +115,7 @@ export class AddBranchComponent implements OnInit {
 
   isPincodeSelected: boolean = false;
   noPincode: boolean = false;
-  pincodeList: any[] = [];
+  pincodeList: Pincode[] = [];
   cityDropDownOptions: any;
 
   private route = inject(Router);
@@ -161,15 +175,22 @@ export class AddBranchComponent implements OnInit {
     };
     console.log(list);
 
-    this.branchService.addBranch(list).subscribe((res) => {
-      console.log("adding branch details:",res);
-      this.route.navigate(["home/branchList"]);
-      
-    },(error) => {
-      if(error.status === 200){
-        console.log("status 200 ok:", error);
-        this.route.navigate(["home/branchList"]);
-      }
-    });
+    this.loading = true;
+
+    this.branchService.addBranch(list).subscribe(
+      (res) => {
+        console.log('adding branch details:', res);
+        this.loading = false;
+        this.route.navigate(['home/branchList']);
+      },
+      (error) => {
+        this.loading = false;
+        if (error.status === 200) {
+          console.log('status 200 ok:', error);
+          this.loading = false;
+          this.route.navigate(['home/branchList']);
+        }
+      },
+    );
   }
 }

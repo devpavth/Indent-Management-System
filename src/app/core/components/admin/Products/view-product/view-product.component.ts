@@ -25,6 +25,7 @@ export class ViewProductComponent implements OnInit {
   isEdit: boolean = true;
   isSaveIcon: boolean = true;
   isDelete: boolean = false;
+  loading: boolean = false;
 
   isStockView: boolean = false;
   deleteProduct: any;
@@ -176,12 +177,14 @@ export class ViewProductComponent implements OnInit {
   onUpdateProduct(data: any) {
     console.log('successfully updated product data:', data);
 
+    this.loading = true;
     if (this.productData.prdStatus === 200) {
       this.productService
         .updateProductDetails(this.productData.productId, data)
         .subscribe(
           (res: any) => {
             console.log('successfully updated the active product:', res);
+            this.loading = false; 
 
             this.isToast = true;
             this.deleteToastMsg = res.error;
@@ -192,6 +195,7 @@ export class ViewProductComponent implements OnInit {
           },
           (error) => {
             console.log('error while updating the active product data:', error);
+            this.loading = false;
           },
         );
     }
@@ -201,6 +205,7 @@ export class ViewProductComponent implements OnInit {
         .subscribe(
           (res: any) => {
             console.log('successfully updated the other product data:', res);
+            this.loading = false;
             this.productUpdated.emit(this.productData.productId);
             this.isToast = true;
             this.deleteToastMsg = res.error;
@@ -212,6 +217,7 @@ export class ViewProductComponent implements OnInit {
           },
           (error) => {
             console.log('error while updating the other product data:', error);
+            this.loading = false;
             if (error.status === 500) {
               this.isDeleteToast = true;
               this.errorToastMsg = 'This product might be already updated';

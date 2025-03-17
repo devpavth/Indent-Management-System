@@ -855,7 +855,7 @@
 
             <button
               type="button"
-              [disabled]="addVendorForm.invalid"
+              [disabled]="addVendorForm.invalid || loading"
               (click)="submitVendorDetails(addVendorForm.value)"
               [ngClass]="{
                 'bg-gray-400':
@@ -865,11 +865,21 @@
               }"
               class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
-              Submit
+              <span *ngIf="!loading">Submit</span>
+              <span *ngIf="loading" class="flex items-center gap-2">
+                <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span>Submitting...</span>
+              </span>
             </button>
           </div>
         </div>
       </form>
     </div>
   </div>
+</section>
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>

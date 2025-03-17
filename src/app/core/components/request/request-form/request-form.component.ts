@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { RequestService } from '../../service/Request/request.service';
@@ -10,6 +10,7 @@ import { catchError, debounceTime, from, of, switchMap, tap } from 'rxjs';
 import { BranchService } from '../../service/Branch/branch.service';
 import { HttpParams } from '@angular/common/http';
 import { Product } from '../../../models/product/product.model';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-request-form',
@@ -19,7 +20,7 @@ import { Product } from '../../../models/product/product.model';
 export class RequestFormComponent implements OnInit {
   isHeader: boolean = true;
   isProductAdd: boolean = false;
-  isTost: boolean = false;
+  // isTost: boolean = false;
   isOtherProduct: boolean = false;
   isEditHeader: boolean = false;
   isSuccessPop: boolean = false;
@@ -51,7 +52,8 @@ export class RequestFormComponent implements OnInit {
   subtotalSum: number = 0;
   inwords: string = '';
 
-  deleteToastMsg: any;
+  // deleteToastMsg: any;
+  toastService = inject(ToastService);
 
   employeeData: any | undefined;
 
@@ -376,11 +378,13 @@ export class RequestFormComponent implements OnInit {
         })
       }
     });
-    this.deleteToastMsg = 'Header Added Successfully';
-    this.isTost = true;
-    setTimeout(() => {
-      this.isTost = false;
-    }, 3000);
+
+    this.toastService.showSuccess('Header Added Successfully');
+    // this.deleteToastMsg = 'Header Added Successfully';
+    // this.isTost = true;
+    // setTimeout(() => {
+    //   this.isTost = false;
+    // }, 3000);
     this.headerData = data;
     console.log(data);
   }
@@ -416,12 +420,13 @@ export class RequestFormComponent implements OnInit {
     /*  */
     console.log("product:", product);
     //this.isVendorView = false;
-  
-    this.deleteToastMsg = 'Item Added';
-    this.isTost = true;
-    setTimeout(() => {
-      this.isTost = false;
-    }, 3000);
+    
+    this.toastService.showSuccess('Item Added');
+    // this.deleteToastMsg = 'Item Added';
+    // this.isTost = true;
+    // setTimeout(() => {
+    //   this.isTost = false;
+    // }, 3000);
 
     const existingIndex = this.productList.findIndex(
       (p) => p.productId === product.productId,
@@ -505,28 +510,34 @@ export class RequestFormComponent implements OnInit {
 
   deleteProduct(i: any) {
     this.productList.splice(i, 1);
-    this.deleteToastMsg = 'Item Deleted';
-    this.isTost = true;
-    setTimeout(() => {
-      this.isTost = false;
-    }, 3000); // Hide the toast after 3 seconds
+
+    this.toastService.showSuccess('Item Deleted');
+    // this.deleteToastMsg = 'Item Deleted';
+    // this.isTost = true;
+    // setTimeout(() => {
+    //   this.isTost = false;
+    // }, 3000); 
     this.calculateSums();
   }
   deleteFunder(i: any) {
     this.funderList?.splice(i, 1);
-    this.deleteToastMsg = 'Funder Deleted';
-    this.isTost = true;
-    setTimeout(() => {
-      this.isTost = false;
-    }, 3000);
+
+    this.toastService.showSuccess('Funder Deleted');
+    // this.deleteToastMsg = 'Funder Deleted';
+    // this.isTost = true;
+    // setTimeout(() => {
+    //   this.isTost = false;
+    // }, 3000);
   }
   deleteVendor(i: any) {
     this.vendorList?.splice(i, 1);
-    this.deleteToastMsg = 'Vendor Deleted';
-    this.isTost = true;
-    setTimeout(() => {
-      this.isTost = false;
-    }, 3000);
+
+    this.toastService.showSuccess('Vendor Deleted');
+    // this.deleteToastMsg = 'Vendor Deleted';
+    // this.isTost = true;
+    // setTimeout(() => {
+    //   this.isTost = false;
+    // }, 3000);
   }
 
   onSelectionValue(selectedValue: any, check: number) {

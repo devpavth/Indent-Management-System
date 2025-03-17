@@ -54,7 +54,7 @@ export class AddListComponent implements OnInit {
   }
 
   showSuccessToast() {
-    if (!this.assProjListIds) {
+    if (!this.assProjListIds && this.department) {
       this.isToast = true;
       this.successToastMsg = `Please assign atleast one program to ${this.department} department`;
       setTimeout(() => {

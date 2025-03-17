@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class AddProductComponent implements OnInit {
   addingData: any;
   isCloseAdding: boolean = false;
+  loading: boolean = false;
 
   groupList: any;
   catList: any;
@@ -44,7 +45,7 @@ export class AddProductComponent implements OnInit {
     private productService: ProductService,
   ) {
     this.ProductForm = this.fb.group({
-      prdGrpId: ['',[Validators.required]],
+      prdGrpId: ['', [Validators.required]],
       prdCatgId: [],
       prdBrndId: [],
       prdmdlName: [],
@@ -97,19 +98,22 @@ export class AddProductComponent implements OnInit {
   }
 
   onSubmit(data: any) {
-    console.log("product data:",data);
+    console.log('product data:', data);
 
+    this.loading = true;
     this.productService.postProduct(data).subscribe(
       (res) => {
-        console.log("successfully product data saved:",res);
+        console.log('successfully product data saved:', res);
+        this.ProductForm.reset();
+        this.ProductForm.get('prdStatus')?.patchValue(200);
+        this.route.navigate(['home/productList']);
+        this.loading = false;
       },
       (error) => {
-        console.log("error while saving data:",error);
-
+        console.log('error while saving data:', error);
+        this.loading = false;
         if (error.status == 200) {
-          this.ProductForm.reset();
-          this.ProductForm.get('prdStatus')?.patchValue(200);
-          this.route.navigate(['home/productList'])
+          this.loading = false;
         }
       },
     );

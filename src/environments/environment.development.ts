@@ -89,6 +89,7 @@ export const environment = {
   updateProj: Url + baseBranchApi + '/updateprogram/',
   editProj: Url + baseBranchApi + '/getById/',
   updateDepart: Url + baseBranchApi + '/addprgusedepartid/',
+  fetchCompany: Url + baseBranchApi + '/get/company',
 
   //requestIndent
   programlist: Url + baseRequestApi + '/getallprogram',

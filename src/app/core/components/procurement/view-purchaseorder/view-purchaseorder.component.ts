@@ -1,9 +1,18 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BranchService } from '../../service/Branch/branch.service';
+import { Company } from '../../../models/company/company.model';
 
 @Component({
   selector: 'app-view-purchaseorder',
@@ -16,6 +25,7 @@ export class ViewPurchaseorderComponent {
   @Output() closeView = new EventEmitter<boolean>();
 
   requestService = inject(RequestService);
+  branchService = inject(BranchService);
 
   _requestDetails = signal<any>(null);
 
@@ -25,6 +35,7 @@ export class ViewPurchaseorderComponent {
   purchaseOrderData: any;
   branchList: any;
   isLoading: boolean = false;
+  companyDetails: Company | undefined;
 
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
@@ -51,9 +62,22 @@ export class ViewPurchaseorderComponent {
   ngOnInit() {
     console.log('reqId:', this.reqId);
     this.fetchDetails(this.reqId);
+    this.fetchCompanyDetails();
   }
 
-  constructor(private sanitizer: DomSanitizer){}
+  constructor(private sanitizer: DomSanitizer) {}
+
+  fetchCompanyDetails(){
+    this.branchService.fetchCompanyName().subscribe(
+      (res) => {
+        console.log("fetching company details:", res);
+        this.companyDetails = res;
+      },
+      (error) => {
+        console.log("error while fetching company details:", error);
+      }
+    )
+  }
 
   fetchDetails(reqId: number) {
     this.requestService.viewReq(reqId).subscribe(
@@ -127,18 +151,19 @@ export class ViewPurchaseorderComponent {
           this.purchaseOrderData = res;
           this.branchList = this.purchaseOrderData.indentBranch;
 
-          if(headOfAccId === 0){
+          if (headOfAccId === 0) {
             this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
               (h: any) => h.productDetailsDTOs,
             );
             this.viewPDF(this.purchaseOrderData.headofAcc);
-          }
-          else{
+          } else {
             const selectedHead = this.purchaseOrderData.headofAcc.find(
               (h: any) => h.headOfAccId === headOfAccId,
             );
 
-            this.headOfProduct = selectedHead ? selectedHead.productDetailsDTOs : [];
+            this.headOfProduct = selectedHead
+              ? selectedHead.productDetailsDTOs
+              : [];
             this.viewPDF([selectedHead]);
           }
 
@@ -161,7 +186,6 @@ export class ViewPurchaseorderComponent {
           //   this.viewPDF(this.purchaseOrderData.headofAcc);
           //   this.isLoading = false;
           // }
-
         },
         (error) => {
           console.log('error while fetching purchase order details:', error);
@@ -174,7 +198,6 @@ export class ViewPurchaseorderComponent {
     console.log('headOfAccList:', headOfAccList);
     const doc = new jsPDF();
     // let currentPage = 1;
-    let totalPages = 0;
 
     headOfAccList.forEach((head: any, index: any) => {
       if (index > 0) {
@@ -182,8 +205,6 @@ export class ViewPurchaseorderComponent {
         doc.addPage();
         // currentPage++;
       }
-
-      totalPages = doc.getNumberOfPages();
 
       // Set font size
       doc.setFontSize(12);
@@ -218,11 +239,11 @@ export class ViewPurchaseorderComponent {
       // Company Information
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text(`${this.purchaseOrder.company.name}`, 10, 20);
+      doc.text(`${this.companyDetails?.companyName.toUpperCase()}`, 10, 20);
 
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(9);
-      const gstText = `GSTIN ${this.purchaseOrder.company.gst}`;
+      const gstText = `GSTIN ${this.companyDetails?.gstNumber}`;
       const gstWidth = doc.getTextWidth(gstText);
 
       const adjustedY = 25;
@@ -236,9 +257,9 @@ export class ViewPurchaseorderComponent {
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
-      doc.text(`${this.purchaseOrder.company.addressLine1}`, 10, 29);
-      doc.text(`${this.purchaseOrder.company.addressLine2}`, 10, 33);
-      doc.text(`${this.purchaseOrder.company.addressLine3}`, 10, 37);
+      doc.text(`${this.companyDetails?.add1}`, 10, 29);
+      doc.text(`${this.companyDetails?.add2}`, 10, 33);
+      doc.text(`${this.companyDetails?.city}, ${this.companyDetails?.state}, ${this.companyDetails?.pinCode}`, 10, 37);
       const mobileLabel = 'Mobile'; // Bold text
       const mobileValue = ` ${this.purchaseOrder.company.phone}`; // Normal text
       const emailLabel = 'Email'; // Bold text
@@ -507,7 +528,6 @@ export class ViewPurchaseorderComponent {
         },
       ]);
 
-
       let isFirstPageForHead = true;
 
       const drawHeadOfAccHeader = (doc: any, head: any) => {
@@ -598,15 +618,11 @@ export class ViewPurchaseorderComponent {
       });
 
       // isFirstPageForHead = true;
-      
 
       // if ((doc as any).lastAutoTable.finalY > 250) {
       //   doc.addPage();
       //   drawHeadOfAccHeader(doc, head);
       // }
-
-
-      
 
       // Object.values(groupedProducts).forEach((group: any, index) => {
       //   if (index > 0) {
@@ -724,12 +740,12 @@ export class ViewPurchaseorderComponent {
       const signatureY = pageSignHeight - 45;
 
       const columnWidth = (pageWidth - 20) / 4;
-      
+
       doc.setDrawColor(80, 205, 90);
       doc.setLineWidth(0.5);
 
       doc.rect(10, signatureY, pageSignWidth - 20, signatureBoxHeight);
-      for(let i=1; i<4; i++){
+      for (let i = 1; i < 4; i++) {
         doc.line(
           10 + i * columnWidth,
           signatureY,
@@ -744,7 +760,7 @@ export class ViewPurchaseorderComponent {
       const columnTitles = this.purchaseOrderData.authoritiesSignDtos.map(
         (auth: any) => auth.roleName,
       );
-      console.log("columnTitles:", columnTitles);
+      console.log('columnTitles:', columnTitles);
 
       const columnSignatures = this.purchaseOrderData.authoritiesSignDtos.map(
         (auth: any) => auth.signature,
@@ -770,8 +786,8 @@ export class ViewPurchaseorderComponent {
           const columnCenterX = columnCenterXList[index] - 10; // Adjusting for width
           const signatureYPos = textY - signatureHeight - 4; // Place signature above "Signature"
 
-          try{
-              doc.addImage(
+          try {
+            doc.addImage(
               signature,
               'AUTO',
               columnCenterX,
@@ -779,8 +795,7 @@ export class ViewPurchaseorderComponent {
               20,
               signatureHeight,
             );
-          }
-          catch(error){
+          } catch (error) {
             console.log('Error adding signature image:', error);
           }
         }
@@ -809,18 +824,25 @@ export class ViewPurchaseorderComponent {
 
       const pageNumberY = signatureY + signatureBoxHeight + 10;
 
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i); // Set focus to the correct page
-        const pageWidth = doc.internal.pageSize.width;
-        const pageHeight = doc.internal.pageSize.height;
+      // console.log('totalPages before loop:', totalPages);
 
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 10, {
-          align: 'center',
-        });
-      }
-      
+      // for (let i = 1; i <= totalPages; i++) {
+      //   doc.setPage(i); // Set focus to the correct page
+      //   console.log('i before:', i);
+      //   console.log('totalPages inside loop mid:', totalPages);
+      //   const pageWidth = doc.internal.pageSize.width;
+      //   const pageHeight = doc.internal.pageSize.height;
+
+      //   console.log('totalPages inside loop:', totalPages);
+      //   console.log('i after:', i);
+
+      //   doc.setFontSize(8);
+      //   doc.setFont('helvetica', 'normal');
+      //   doc.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 10, {
+      //     align: 'center',
+      //   });
+      // }
+
       // doc.setFontSize(8);
       // doc.text(
       //   `Page ${currentPage} of ${doc.internal.pages.length}`,
@@ -830,8 +852,24 @@ export class ViewPurchaseorderComponent {
       // );
 
       // currentPage++;
-
     });
+
+    const totalPages = doc.getNumberOfPages();
+    console.log('Final totalPages:', totalPages);
+
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      const pageWidth = doc.internal.pageSize.width;
+      const pageHeight = doc.internal.pageSize.height;
+
+      console.log(`Adding page number: Page ${i} of ${totalPages}`);
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Page ${i} of ${totalPages}`, pageWidth / 2, pageHeight - 10, {
+        align: 'center',
+      });
+    }
 
     // Open PDF in new tab for preview
     const pdfBlob = doc.output('blob');

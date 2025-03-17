@@ -15,6 +15,7 @@ import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { Router } from '@angular/router';
 import { DesignationRoleMapping, LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import { Pincode } from '../../../../models/pincode/pincode.model';
 
 // If all conditions met, return no error
 
@@ -28,7 +29,7 @@ export class AddEmployeeComponent implements OnInit {
   designation: any;
   isPincodeSelected: boolean = false;
   noPincode: boolean = false;
-  pincodeList: any[] = [];
+  pincodeList: Pincode[] = [];
 
   cityDropDownOptions: any;
   levelForDesignation: LevelMapping[] = [];

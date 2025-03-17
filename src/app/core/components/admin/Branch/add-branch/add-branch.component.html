@@ -115,7 +115,7 @@
               <div class="relative">
                 <div
                   class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                  >
+                >
                   <svg
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
                     aria-hidden="true"
@@ -144,33 +144,32 @@
                   }"
                 />
               </div>
-                <div
+              <div
+                *ngIf="
+                  (addBranchForm.controls['branchMobilenumber'].invalid &&
+                    addBranchForm.controls['branchMobilenumber'].touched) ||
+                  addBranchForm.controls['branchMobilenumber'].dirty
+                "
+              >
+                <small
+                  class="text-danger ml-2 text-red-600"
                   *ngIf="
-                    (addBranchForm.controls['branchMobilenumber'].invalid &&
-                      addBranchForm.controls['branchMobilenumber'].touched) ||
-                    addBranchForm.controls['branchMobilenumber'].dirty
+                    addBranchForm.controls['branchMobilenumber'].errors?.[
+                      'required'
+                    ]
                   "
-                >
-                  <small
-                    class="text-danger ml-2 text-red-600"
-                    *ngIf="
-                      addBranchForm.controls['branchMobilenumber'].errors?.[
-                        'required'
-                      ]
-                    "
-                    >Branch Mobile Number is Required !
-                  </small>
-                  <small
-                    class="text-danger ml-2 text-red-600"
-                    *ngIf="
-                      addBranchForm.controls['branchMobilenumber'].errors?.[
-                        'minlength'
-                      ]
-                    "
-                    >Mobile Number is Not Valid !
-                  </small>
-                </div>
-              
+                  >Branch Mobile Number is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="
+                    addBranchForm.controls['branchMobilenumber'].errors?.[
+                      'minlength'
+                    ]
+                  "
+                  >Mobile Number is Not Valid !
+                </small>
+              </div>
             </div>
 
             <div>
@@ -249,7 +248,7 @@
               <small
                 class="text-danger ml-2 text-red-600"
                 *ngIf="addBranchForm.controls['add1'].errors?.['maxlength']"
-                >Address-1 length out of bound !  
+                >Address-1 length out of bound !
               </small>
             </div>
           </div>
@@ -303,15 +302,13 @@
               />
               <div
                 *ngIf="
-                  (addBranchForm.controls['pinCode'].invalid &&
-                    addBranchForm.controls['pinCode'].touched)              
+                  addBranchForm.controls['pinCode'].invalid &&
+                  addBranchForm.controls['pinCode'].touched
                 "
-                >
+              >
                 <small
                   class="text-danger ml-2 text-red-600"
-                  *ngIf="
-                    addBranchForm.controls['pinCode'].errors?.['required']
-                  "
+                  *ngIf="addBranchForm.controls['pinCode'].errors?.['required']"
                   >Pincode is Required !
                 </small>
                 <small
@@ -329,25 +326,31 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Town/City</label
               >
-              <select class="input-form" formControlName="city" 
+              <select
+                class="input-form"
+                formControlName="city"
                 [ngClass]="{
                   error:
                     addBranchForm.get('city')?.invalid &&
                     addBranchForm.get('city')?.touched
                 }"
-                required>
+                required
+              >
                 <!-- <option null selected disabled>Choose Town/City</option> -->
-                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                <option
+                  *ngFor="let option of cityDropDownOptions"
+                  value="{{ option.value }}"
+                >
                   {{ option.label }}
                 </option>
               </select>
               <small
                 *ngIf="
-                    addBranchForm.controls['city'].invalid &&
-                    addBranchForm.controls['city'].touched
-                    "
-                  class="text-danger ml-2 text-red-600"
-                >
+                  addBranchForm.controls['city'].invalid &&
+                  addBranchForm.controls['city'].touched
+                "
+                class="text-danger ml-2 text-red-600"
+              >
                 City is required!
               </small>
             </div>
@@ -370,7 +373,7 @@
                 (change)="fetchCity(statevalue.value)"
                 readonly
               />
-                <!-- <option null selected disabled>Choose State</option>
+              <!-- <option null selected disabled>Choose State</option>
                 <option *ngFor="let state of _state" value="{{ state.sname }}">
                   {{ state.sname }}
                 </option> -->
@@ -379,7 +382,7 @@
                 *ngIf="
                   addBranchForm.controls['state'].invalid &&
                   addBranchForm.controls['state'].touched
-                  "
+                "
                 class="text-danger ml-2 text-red-600"
               >
                 State is required!
@@ -405,22 +408,19 @@
                 (change)="fetchState(countryvalue.value)"
                 readonly
               />
-                <!-- <option null selected disabled>Choose Country</option>
+              <!-- <option null selected disabled>Choose Country</option>
                 <option value="India">India</option> -->
               <!-- </select> -->
               <small
                 *ngIf="
                   addBranchForm.controls['country'].invalid &&
                   addBranchForm.controls['country'].touched
-                  "
+                "
                 class="text-danger ml-2 text-red-600"
-                >
+              >
                 Country is required!
               </small>
             </div>
-            
-            
-            
           </div>
           <label
             for="Pincode"
@@ -486,18 +486,20 @@
           </div>
 
           <button
-            [disabled]="addBranchForm.invalid"
+            [disabled]="addBranchForm.invalid || loading"
             (click)="submitBranchForm(addBranchForm.value)"
             type="button"
             [ngClass]="{
-              'bg-gray-400':
-                addBranchForm.invalid,
-              'hover:bg-gray-400':
-                addBranchForm.invalid
+              'bg-gray-400': addBranchForm.invalid,
+              'hover:bg-gray-400': addBranchForm.invalid
             }"
             class="mb-2 mt-2 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 active:translate-y-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
           >
-            Submit
+            <span *ngIf="!loading">Submit</span>
+            <span *ngIf="loading" class="flex items-center gap-2">
+              <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Submitting...</span>
+            </span>
           </button>
         </div>
       </form>

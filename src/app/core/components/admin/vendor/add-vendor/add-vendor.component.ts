@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { Pincode } from '../../../../models/pincode/pincode.model';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-add-vendor',
@@ -17,10 +19,14 @@ export class AddVendorComponent implements OnInit {
   addVendorForm: FormGroup;
 
   private sharedService = inject(SharedServiceService);
+  toastService = inject(ToastService);
+
   isPincodeSelected: boolean = false;
   noPincode: boolean = false;
-  pincodeList: any[] = [];
+  pincodeList: Pincode[] = [];
   cityDropDownOptions: any;
+
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -115,7 +121,7 @@ export class AddVendorComponent implements OnInit {
         console.log('postOfficeArray:', postOfficeArray);
 
         this.pincodeList = postOfficeArray;
-        console.log('reponse from pincode:', response);
+        console.log('response from pincode:', response);
         console.log('typeof Pincode API Error:', typeof response?.[0]?.status);
 
         if (
@@ -187,13 +193,18 @@ export class AddVendorComponent implements OnInit {
 
   submitVendorDetails(data: any) {
     console.log('sending new vendor data:', data);
+    this.loading = true;
     this.vendorService.addVendor(data).subscribe(
       (res) => {
         console.log('new vendor added successfully:', res);
+        this.loading = false;
         this.route.navigate(['/home/vendorList']);
       },
       (error) => {
         console.log(error);
+        this.loading = false;
+
+        this.toastService.showError(error.error.errorMessege);
         if (error.status == 200) {
           this.route.navigate(['/home/vendorList']);
         }

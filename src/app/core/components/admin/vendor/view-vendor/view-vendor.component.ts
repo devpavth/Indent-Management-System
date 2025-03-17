@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
+import { Pincode } from '../../../../models/pincode/pincode.model';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-view-vendor',
@@ -23,13 +25,11 @@ export class ViewVendorComponent {
   _BranchName: any;
   isPincodeSelected: boolean = false;
   noPincode: boolean = false;
-  pincodeList: any[] = [];
+  pincodeList: Pincode[] = [];
   cityDropDownOptions: any;
 
-  isToast: boolean = false;
-  deleteToastMsg: any;
-
   private sharedService = inject(SharedServiceService);
+  toastService = inject(ToastService);
 
   UpdateVendorForm: FormGroup;
   constructor(
@@ -175,7 +175,13 @@ export class ViewVendorComponent {
   showBankData() {
     return this.fb.group({
       ifsCode: [''],
-      bankAccNo: [''],
+      bankAccNo: ['',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]*$'),
+          Validators.maxLength(15)
+        ]
+      ],
       vdrAccId: [this.vendorData?.vendorAcccountDetails[0]?.vdrAccId],
     });
   }
@@ -199,10 +205,12 @@ export class ViewVendorComponent {
     this.vendorService.updateVendor(id, data).subscribe(
       (res: any) => {
         console.log('vendor is successfully updated:', res);
-        this.isToast = true;
-        this.deleteToastMsg = res.errorMessege;
+
+        this.toastService.showSuccess(res.errorMessege);
+        // this.isToast = true;
+        // this.deleteToastMsg = res.errorMessege;
         setTimeout(() => {
-          this.isToast = false;
+          // this.isToast = false;
           this.closeVendor.emit(false);
         }, 3000);
       },

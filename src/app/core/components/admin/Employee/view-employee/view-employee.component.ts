@@ -7,6 +7,7 @@ import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 import { DesignationRoleMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import { Pincode } from '../../../../models/pincode/pincode.model';
 
 @Component({
   selector: 'app-view-employee',
@@ -46,7 +47,7 @@ export class ViewEmployeeComponent implements OnInit {
   isStyle = false;
   isPincodeSelected: boolean = false;
   noPincode: boolean = false;
-  pincodeList: any[] = [];
+  pincodeList: Pincode[] = [];
   cityDropDownOptions: any;
   levelForDesignation: LevelMapping[] = [];
   levelList: LevelMapping | undefined;

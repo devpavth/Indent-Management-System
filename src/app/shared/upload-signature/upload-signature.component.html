@@ -93,14 +93,14 @@
   </div>
 </div>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="successToastMsg"></app-success-toast>
+  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
 </section>
 <section
-  *ngIf="isErrorToast"
+  *ngIf="toastService.isErrorToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>
