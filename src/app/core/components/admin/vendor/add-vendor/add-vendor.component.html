@@ -818,11 +818,13 @@
                   >
                   <input
                     id="bankAccNo"
-                    type="number"
+                    type="text"
                     formControlName="bankAccNo"
                     class="input-form"
                     autocomplete="postal-code"
                     placeholder=""
+                    [maxlength]="15"
+                    (keypress)="validateNumberInput($event)"
                     [ngClass]="{
                       error:
                         addVendorForm.get('bankAccNo')?.invalid &&
@@ -836,7 +838,7 @@
                       addVendorForm?.get('bankAccNo')?.touched
                     "
                     class="text-danger text-red-600"
-                  >
+                    >
                     Invalid Account Number!
                   </small>
                 </div>

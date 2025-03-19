@@ -178,6 +178,13 @@ export class AddVendorComponent implements OnInit {
     });
   }
 
+  validateNumberInput(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   addbank() {
     this.vendorAcccountDetails.push(this.showBankData());
   }

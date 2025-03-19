@@ -463,6 +463,7 @@
                   <button 
                     (click)="openPurchaseOrderReport(req.sno)"
                     (mouseenter)="showTooltipForFewSec(req.sno)"
+                    [disabled]="req.requestStatus !== 100"
                     [ngClass]="{
                       'cursor-not-allowed': req.requestStatus !== 100
                     }"

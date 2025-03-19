@@ -97,9 +97,9 @@ export class UploadSignatureComponent {
         setTimeout(() => {
           // this.isToast = false;
           this.close.emit(true);
-          if(this.isViewUploadSignature){
+          if (this.isViewUploadSignature) {
             this.route.navigate(['/home/updateSign']);
-          }         
+          }
         }, 3000);
       },
       (error) => {

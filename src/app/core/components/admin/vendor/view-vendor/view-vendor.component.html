@@ -801,7 +801,8 @@
                     class="input-form"
                     autocomplete="postal-code"
                     placeholder=""
-                    [max]="15"
+                    [maxlength]="15"
+                    (keypress)="validateNumberInput($event)"
                     [ngClass]="{
                       error:
                         UpdateVendorForm.get('bankAccNo')?.invalid &&
@@ -809,24 +810,15 @@
                     }"
                     required
                   />
-                  <div
+                  <small
                     *ngIf="
                       UpdateVendorForm?.get('bankAccNo')?.invalid &&
                       UpdateVendorForm?.get('bankAccNo')?.touched
                     "
                     class="text-danger text-red-600"
                     >
-                    <small
-                      *ngIf="UpdateVendorForm.get('bankAccNo')?.errors?.['pattern']"
-                      >
-                        Account number must contain only numbers.
-                    </small>
-                    <small
-                      *ngIf="UpdateVendorForm.get('bankAccNo')?.errors?.['maxlength']"
-                      >
-                      Account number cannot exceed 15 digits.
-                    </small>
-                  </div>
+                    Invalid Account Number!
+                  </small>
                 </div>
               </div>
             </div>

@@ -87,4 +87,14 @@ export class BranchService {
   fetchCompanyName(): Observable<Company>{
     return this.http.get<Company>(environment.fetchCompany);
   }
+
+  uploadCompanyLogo(formData: any){
+    return this.http.put(environment.uploadCompanyLogo, formData);
+  }
+
+  updateCompanyName(updatedCompanyName: string){
+    return this.http.put(environment.updateCompanyName, {
+      companyName: updatedCompanyName,
+    });
+  }
 }

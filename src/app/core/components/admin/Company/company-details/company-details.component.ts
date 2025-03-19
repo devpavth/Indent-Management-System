@@ -8,28 +8,39 @@ import { Company } from '../../../../models/company/company.model';
   styleUrl: './company-details.component.css',
 })
 export class CompanyDetailsComponent {
-
   branchService = inject(BranchService);
 
   companyDetails: Company | undefined;
+
+  isViewCompanyDetails: boolean = false;
+  Spinner: boolean = true;
 
   ngOnInit() {
     this.fetchCompanyDetails();
   }
 
-  fetchCompanyDetails(){
+  fetchCompanyDetails() {
     this.branchService.fetchCompanyName().subscribe(
       (res) => {
-        console.log("fetching company details:", res);
+        console.log('fetching company details:', res);
         this.companyDetails = res;
+        this.Spinner = false;
       },
       (error) => {
-        console.log("error while fetching company details:", error);
-      }
-    )
+        console.log('error while fetching company details:', error);
+      },
+    );
   }
 
-  updateCompanyDetails(){
-    
+  updateCompanyDetails() {
+    this.isViewCompanyDetails = true;
+  }
+
+  closeCompanyModal(closeIcon: boolean){
+    this.isViewCompanyDetails = !closeIcon;
+
+    if(closeIcon){
+      this.fetchCompanyDetails();
+    }
   }
 }

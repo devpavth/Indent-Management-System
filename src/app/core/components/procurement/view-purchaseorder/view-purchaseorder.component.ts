@@ -34,6 +34,8 @@ export class ViewPurchaseorderComponent {
   selectedHeadOfAccId: number | null = null;
   purchaseOrderData: any;
   branchList: any;
+  contactPersonList: any;
+  indentList: any;
   isLoading: boolean = false;
   companyDetails: Company | undefined;
 
@@ -51,7 +53,7 @@ export class ViewPurchaseorderComponent {
       addressLine3: 'Bengaluru Urban, KARNATAKA, 560102',
       phone: '+91 8197999930',
       email: 'saigovind@cloute.co.in',
-      website: 'www.cloute.co.in',
+      website: 'Sathish',
     },
     total: 534775,
     taxAmount: 81575.82,
@@ -70,7 +72,7 @@ export class ViewPurchaseorderComponent {
   fetchCompanyDetails(){
     this.branchService.fetchCompanyName().subscribe(
       (res) => {
-        console.log("fetching company details:", res);
+        console.log("fetching company details in purchase order:", res);
         this.companyDetails = res;
       },
       (error) => {
@@ -150,6 +152,8 @@ export class ViewPurchaseorderComponent {
           console.log('fetching purchase order details:', res);
           this.purchaseOrderData = res;
           this.branchList = this.purchaseOrderData.indentBranch;
+          this.contactPersonList = this.purchaseOrderData.contactPersonData;
+          this.indentList = this.purchaseOrderData.indentHeaders;
 
           if (headOfAccId === 0) {
             this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
@@ -255,25 +259,35 @@ export class ViewPurchaseorderComponent {
       const spacing = 3; // Adjust spacing as needed
       doc.text(`PAN AAGCC3235L`, 10 + gstWidth + spacing, adjustedY);
 
+      if(this.companyDetails?.companyLogo){
+        const companyLogo = `data:image/png;base64,${this.companyDetails.companyLogo}`;
+        const logoX = doc.internal.pageSize.width - 40;
+        const logoY = 15;
+        const logoWidth = 30;
+        const logoHeight = 30;
+
+        doc.addImage(companyLogo, 'PNG', logoX, logoY, logoWidth, logoHeight);
+      }
+
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.text(`${this.companyDetails?.add1}`, 10, 29);
       doc.text(`${this.companyDetails?.add2}`, 10, 33);
       doc.text(`${this.companyDetails?.city}, ${this.companyDetails?.state}, ${this.companyDetails?.pinCode}`, 10, 37);
-      const mobileLabel = 'Mobile'; // Bold text
-      const mobileValue = ` ${this.purchaseOrder.company.phone}`; // Normal text
-      const emailLabel = 'Email'; // Bold text
-      const emailValue = ` ${this.purchaseOrder.company.email}`; // Normal text
-      const websiteLabel = 'Website';
-      const websiteValue = ` ${this.purchaseOrder.company.website}`;
+      const mobileLabel = 'Mobile:'; 
+      const mobileValue = ` ${this.contactPersonList.empPhone}`; 
+      const emailLabel = 'Contact Person Email:'; 
+      const emailValue = ` ${this.contactPersonList.empEmail}`; 
+      const websiteLabel = 'Contact Person Name:';
+      const websiteValue = ` ${this.contactPersonList.empFirstName} ${this.contactPersonList.empLastName}`;
 
       // Measure width for positioning
       doc.setFont('helvetica', 'bold');
       const mobileLabelWidth = doc.getTextWidth(mobileLabel);
-      doc.text(mobileLabel, 10, 41);
+      doc.text(mobileLabel, 10, 48);
 
       doc.setFont('helvetica', 'normal');
-      doc.text(mobileValue, 10 + mobileLabelWidth, 41);
+      doc.text(mobileValue, 10 + mobileLabelWidth, 48);
 
       // Add spacing and position Email
       const spacingBetween = 3; // Adjust space between Mobile & Email
@@ -283,7 +297,7 @@ export class ViewPurchaseorderComponent {
       doc.text(
         emailLabel,
         10 + mobileLabelWidth + doc.getTextWidth(mobileValue) + spacingBetween,
-        41,
+        48,
       );
 
       doc.setFont('helvetica', 'normal');
@@ -294,15 +308,15 @@ export class ViewPurchaseorderComponent {
           doc.getTextWidth(mobileValue) +
           spacingBetween +
           emailLabelWidth,
-        41,
+        48,
       );
 
       doc.setFont('helvetica', 'bold');
       const websiteLabelWidth = doc.getTextWidth(websiteLabel);
-      doc.text(websiteLabel, 10, 45);
+      doc.text(websiteLabel, 10, 44);
 
       doc.setFont('helvetica', 'normal');
-      doc.text(websiteValue, 10 + websiteLabelWidth, 45);
+      doc.text(websiteValue, 10 + websiteLabelWidth, 44);
 
       const purchaseOrderLabel = 'Purchase Order #: ';
       const purchaseOrderValue = 'CLTPUR2425-31';
@@ -312,7 +326,7 @@ export class ViewPurchaseorderComponent {
       const paymentByValue = '18 Feb 2025';
 
       // Starting X position (below website)
-      const startPOY = 52;
+      const startPOY = 55;
       let currentPOX = 10; // Left margin
 
       // Purchase Order #
@@ -343,7 +357,7 @@ export class ViewPurchaseorderComponent {
 
       doc.setFontSize(9);
       doc.setFont('helvetica', 'bold');
-      doc.text('Vendor Details:', 10, 60); // Heading
+      doc.text('Vendor Details:', 10, 62); // Heading
 
       // Vendor Name
       doc.setFontSize(9);
@@ -354,26 +368,26 @@ export class ViewPurchaseorderComponent {
       const rightColumnX = 73; // Aligns "Vendor Billing Address" under purchaseOrderDateLabel
 
       // Vendor Details Heading (Left Side)
-      doc.text('Vendor Details:', leftColumnX, 60);
+      doc.text('Vendor Details:', leftColumnX, 62);
 
       // Vendor Billing Address Heading (Right Side)
-      doc.text('Vendor Billing Address:', rightColumnX, 60);
+      doc.text('Vendor Billing Address:', rightColumnX, 62);
 
       // Vendor Information (Left)
       doc.setFontSize(9);
-      doc.text(`${head.assgndVendorData.vendorName}`, leftColumnX, 65);
-      doc.text(`GSTIN: ${head.assgndVendorData.vdrGstNo}`, leftColumnX, 69);
+      doc.text(`${head.assgndVendorData.vendorName}`, leftColumnX, 67);
+      doc.text(`GSTIN: ${head.assgndVendorData.vdrGstNo}`, leftColumnX, 71);
       doc.setFont('helvetica', 'normal');
-      doc.text(`${head.assgndVendorData.vdrEmail}`, leftColumnX, 73);
+      doc.text(`${head.assgndVendorData.vdrEmail}`, leftColumnX, 75);
 
       // Vendor Billing Address (Right)
       doc.setFont('helvetica', 'normal');
-      doc.text(`${head.assgndVendorData.vdrAdd1}`, rightColumnX, 65);
-      doc.text(`${head.assgndVendorData.vdrAdd2}`, rightColumnX, 69);
+      doc.text(`${head.assgndVendorData.vdrAdd1}`, rightColumnX, 67);
+      doc.text(`${head.assgndVendorData.vdrAdd2}`, rightColumnX, 71);
       doc.text(
         `${head.assgndVendorData.vdrCity}, ${head.assgndVendorData.vdrState}, ${head.assgndVendorData.vdrPincode}`,
         rightColumnX,
-        73,
+        75,
       );
       // doc.text(`${this.vendorList[0].vdrCountry}`, rightColumnX, 77);
 
@@ -382,7 +396,7 @@ export class ViewPurchaseorderComponent {
 
       const placeOfSupplyLabel = 'Place of Supply:';
       const placeofSupplyX = 10;
-      const placeofSupplyY = 80;
+      const placeofSupplyY = 82;
 
       doc.text(placeOfSupplyLabel, placeofSupplyX, placeofSupplyY);
 
@@ -409,8 +423,30 @@ export class ViewPurchaseorderComponent {
       doc.text(
         `${this.branchList.gstNumber.slice(0, 2)}-${this.branchList.state}`,
         10,
-        84,
+        86,
       );
+
+      const indentLabel = 'Indent ID:';
+      const indentX = 73;
+      doc.text(indentLabel, indentX, 86);
+
+      const indentLabelWidth = doc.getTextWidth(indentLabel);
+      const indentSpacing = 1;
+
+      doc.setFont('helvetica', 'normal');
+      doc.text(`${this.indentList.requestNo}`, indentX + indentLabelWidth + indentSpacing, 86);
+
+      doc.setFont('helvetica', 'bold');
+      const deptLabel = 'Department:';
+      const deptX = 135;
+      doc.text(deptLabel, deptX, 86);
+
+      const deptLabelWidth = doc.getTextWidth(deptLabel);
+      const deptSpacing = 1;
+
+      doc.setFont('helvetica', 'normal');
+      doc.text(`${this.branchList.deptName}`, deptX + deptLabelWidth + deptSpacing, 86);
+
 
       // const groupedProducts = this.headOfProduct.reduce((acc, item) => {
       //   if (!acc[item.headOfAccId]) {

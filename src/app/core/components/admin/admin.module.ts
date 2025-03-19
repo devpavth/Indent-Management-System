@@ -37,6 +37,8 @@ import { AddNewdesignationComponent } from './Employee/add-newdesignation/add-ne
 import { AddNewlevelComponent } from './Employee/add-newlevel/add-newlevel.component';
 import { UpdatelevelFordesignationComponent } from './Employee/updatelevel-fordesignation/updatelevel-fordesignation.component';
 import { CompanyDetailsComponent } from './Company/company-details/company-details.component';
+import { ViewCompanydetailsComponent } from './Company/view-companydetails/view-companydetails.component';
+import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-companylogo.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -73,6 +75,8 @@ import { CompanyDetailsComponent } from './Company/company-details/company-detai
     AddNewlevelComponent,
     UpdatelevelFordesignationComponent,
     CompanyDetailsComponent,
+    ViewCompanydetailsComponent,
+    UploadCompanylogoComponent,
   ],
   imports: [
     CommonModule,

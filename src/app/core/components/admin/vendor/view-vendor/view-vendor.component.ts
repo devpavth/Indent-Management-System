@@ -175,13 +175,7 @@ export class ViewVendorComponent {
   showBankData() {
     return this.fb.group({
       ifsCode: [''],
-      bankAccNo: ['',
-        [
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(15)
-        ]
-      ],
+      bankAccNo: [''],
       vdrAccId: [this.vendorData?.vendorAcccountDetails[0]?.vdrAccId],
     });
   }
@@ -196,6 +190,14 @@ export class ViewVendorComponent {
     this.isSave = true;
     this.isEdit = false;
   }
+
+  validateNumberInput(event: KeyboardEvent){
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   updateVendorDetails(data: any) {
     console.log('sending updated vendor data:', data);
     let id = this.UpdateVendorForm.get('vendorId')?.value;
@@ -212,6 +214,7 @@ export class ViewVendorComponent {
         setTimeout(() => {
           // this.isToast = false;
           this.closeVendor.emit(false);
+          this.route.navigate(['/home/vendorList']);
         }, 3000);
       },
       (error) => {
