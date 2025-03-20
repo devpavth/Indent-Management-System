@@ -146,7 +146,7 @@ export class ViewBranchComponent implements OnInit {
     this.branchService.getBranchDetails(this.getBranchCode).subscribe((res) => {
       console.log('fetching branch details:', res);
       this._branch = res;
-      this._department = this._branch.departments;
+      // this._department = this._branch.departments;
       console.log('fetching department:', this._department);
 
       this.viewBranchForm.patchValue({
@@ -162,7 +162,7 @@ export class ViewBranchComponent implements OnInit {
         state: this._branch.state,
         pinCode: this._branch.pinCode,
         gstNumber: this._branch.gstNumber,
-        departments: this._branch.departments.deptName,
+        // departments: this._branch.departments.deptName,
       });
       this.fetchState(this._branch.country);
 

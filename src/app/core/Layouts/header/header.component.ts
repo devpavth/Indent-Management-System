@@ -3,7 +3,7 @@ import { OnInit } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 import { SharedServiceService } from '../../components/service/shared-service/shared-service.service';
 import { BranchService } from '../../components/service/Branch/branch.service';
-import { Company } from '../../models/company/company.model';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -13,7 +13,8 @@ export class HeaderComponent implements OnInit {
   user: any; // fetch user
   userData: any; //fetch user data object
 
-  companyDetails: Company | undefined;
+  companyName: string | null = '';
+  companyLogo: string | null = '';
 
   //User data
   // FirstName :any
@@ -49,6 +50,7 @@ export class HeaderComponent implements OnInit {
   }
   ngOnInit(): void {
     this.user = sessionStorage.getItem('userId');
+    console.log('this.user in header:', this.user);
     if (this.user) {
       this.userDetailService.getEmployeeDetails(this.user).subscribe((res) => {
         console.table(res);
@@ -61,20 +63,13 @@ export class HeaderComponent implements OnInit {
       });
     }
 
-    this.fetchCompany();
+    this.companyName = sessionStorage.getItem('companyName');
+    console.log('this.companyName in header:', this.companyName);
+
+    this.companyLogo = sessionStorage.getItem('companyLogo');
+
   }
 
-  fetchCompany(){
-    this.branchService.fetchCompanyName().subscribe(
-      (res: Company) => {
-        console.log("fetching coming details:", res);
-        this.companyDetails = res;
-      },
-      (error) => {
-        console.log("error while fetching company details", error);
-      }
-    )
-  }
 
   getRandomColor(): string {
     // Generate random RGB values

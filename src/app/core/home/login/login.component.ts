@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../components/service/Auth/auth.service';
+import { BranchService } from '../../components/service/Branch/branch.service';
+import { Company } from '../../models/company/company.model';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +12,11 @@ import { AuthService } from '../../components/service/Auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   window: any;
+
+  branchService = inject(BranchService);
+
+  companyDetails: Company | undefined;
+
   constructor(
     private Router: Router,
     private readonly auth: AuthService,
@@ -24,7 +31,7 @@ export class LoginComponent implements OnInit {
   userData: any;
   userid: any;
   branchid: any;
-  userRole: string = "";
+  userRole: string = '';
 
   isPasswordHidden = true; //password visiable
   passwordEnabled: boolean = false; //password enable
@@ -75,17 +82,19 @@ export class LoginComponent implements OnInit {
         this.userData = res;
         // console.log(res);
 
-        if ((res != null)) {
+        if (res != null) {
           this.userid = this.userData?.employeeId;
           this.userRole = this.userData?.roles;
           console.log('this.userRole:', this.userRole);
           console.log('this.userRole:', typeof this.userRole);
 
-
           sessionStorage.setItem('userId', this.userid);
           sessionStorage.setItem('token', this.userData.token);
           sessionStorage.setItem('roles', JSON.stringify(this.userRole));
-          this.Router.navigate(['home/dashboard']);
+
+          this.fetchCompanyDetails();
+
+          // this.Router.navigate(['home/dashboard']);
 
           console.log(this.userData);
         } else {
@@ -102,5 +111,41 @@ export class LoginComponent implements OnInit {
         }
       },
     );
+  }
+
+  fetchCompanyDetails() {
+    this.branchService.fetchCompanyName().subscribe(
+      (res) => {
+        console.log('fetching company details:', res);
+        this.companyDetails = res;
+        
+        sessionStorage.setItem('companyName', this.companyDetails.companyName);
+
+        if (this.companyDetails.companyLogo) {
+          console.log("Company Logo before storing:", this.companyDetails.companyLogo);
+          sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
+        }
+
+        this.Router.navigate(['home/dashboard']);
+        
+        // sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
+        // this.Spinner = false;
+      },
+      (error) => {
+        console.log('error while fetching company details:', error);
+      },
+    );
+  }
+
+  arrayBufferToBase64(buffer: Uint8Array): string {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary);
   }
 }

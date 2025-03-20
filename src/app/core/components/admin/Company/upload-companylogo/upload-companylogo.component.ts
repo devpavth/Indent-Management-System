@@ -25,7 +25,7 @@ export class UploadCompanylogoComponent {
 
       const allowedExtensions = ['image/png'];
       const maxSizeInMB = 1;
-      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;  
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
       if (!allowedExtensions.includes(file.type)) {
         this.toastService.showError(
@@ -38,7 +38,7 @@ export class UploadCompanylogoComponent {
         return;
       }
 
-      if(file.size > maxSizeInBytes){
+      if (file.size > maxSizeInBytes) {
         this.toastService.showError(
           `File size exceeds ${maxSizeInMB}MB! Please upload a smaller image.`,
         );
@@ -60,8 +60,8 @@ export class UploadCompanylogoComponent {
     }
   }
 
-  uploadLogo(){
-    if(!this.selectedFile){
+  uploadLogo() {
+    if (!this.selectedFile) {
       console.log('No file selected!');
       return;
     }
@@ -69,13 +69,13 @@ export class UploadCompanylogoComponent {
     const formData = new FormData();
     formData.append('logoFile', this.selectedFile, this.selectedFile.name);
 
-    for(const pair of (formData as any).entries()){
+    for (const pair of (formData as any).entries()) {
       console.log(`${pair[0]}:`, pair[1]);
     }
 
     this.branchService.uploadCompanyLogo(formData).subscribe(
       (res: any) => {
-        console.log("successfully uploaded logo:", res);
+        console.log('successfully uploaded logo:', res);
 
         this.toastService.showSuccess(res.error);
         setTimeout(() => {
@@ -84,10 +84,11 @@ export class UploadCompanylogoComponent {
         }, 3000);
       },
       (error) => {
-        console.log("error while uploading logo:", error);
-      }
-    )
+        console.log('error while uploading logo:', error);
+      },
+    );
   }
+
 
   onClose() {
     this.close.emit(true);

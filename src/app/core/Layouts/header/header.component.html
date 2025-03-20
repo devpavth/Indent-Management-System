@@ -58,13 +58,13 @@
       >
         <!-- border-r -->
         <a
-          routerLink="/home/request"
+          routerLink="/home/dashboard"
           class="flex flex-shrink-0 items-center pr-2"
         >
           <img
-            *ngIf="companyDetails?.companyLogo; else defaultLogo"
+            *ngIf="companyLogo; else defaultLogo"
             class="animation-rotate h-10 w-auto scale-110 rounded-full"
-            [src]="'data:image/png;base64,'+ companyDetails?.companyLogo"
+            [src]="'data:image/png;base64,'+ companyLogo"
             alt="Logo"
           />
 
@@ -88,7 +88,7 @@
             <h1
               class="an text-xl font-semibold text-white hover:text-amber-200"
             >
-               {{companyDetails?.companyName}}
+               {{companyName}}
             </h1>
           </div>
         </a>

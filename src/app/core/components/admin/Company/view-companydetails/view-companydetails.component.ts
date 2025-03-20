@@ -22,15 +22,15 @@ export class ViewCompanydetailsComponent {
   toastService = inject(ToastService);
   route = inject(Router);
 
-  ngOnInit(){
-    if(this.companyDetails?.companyName){
+  ngOnInit() {
+    if (this.companyDetails?.companyName) {
       this.updatedCompanyName = this.companyDetails.companyName;
       this.initialCompanyName = this.companyDetails.companyName;
     }
   }
 
-  isDisabled(): boolean{
-    return this.initialCompanyName.trim() === this.updatedCompanyName.trim()
+  isDisabled(): boolean {
+    return this.initialCompanyName.trim() === this.updatedCompanyName.trim();
   }
 
   uploadLogo() {
@@ -40,7 +40,9 @@ export class ViewCompanydetailsComponent {
   updateCompanyName(updatedCompanyName: string) {
     this.branchService.updateCompanyName(updatedCompanyName).subscribe(
       (res: any) => {
-        console.log("successfully updated company name:", res);
+        console.log('successfully updated company name:', res);
+
+        sessionStorage.setItem('companyName', updatedCompanyName);
 
         this.toastService.showSuccess(res.error);
 
@@ -50,21 +52,25 @@ export class ViewCompanydetailsComponent {
         }, 3000);
       },
       (error) => {
-        console.log("error while updating company name:", error);
-      }
-    )
+        console.log('error while updating company name:', error);
+      },
+    );
   }
 
-  fetchCompanyDetails(){
+  fetchCompanyDetails() {
     this.branchService.fetchCompanyName().subscribe(
       (res) => {
         console.log('fetching company details:', res);
         this.companyDetails = res;
+
+        if (this.companyDetails.companyLogo) {
+          sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
+        }
       },
       (error) => {
         console.log('error while fetching company details:', error);
-      }
-    )
+      },
+    );
   }
 
   onClose() {
@@ -74,7 +80,7 @@ export class ViewCompanydetailsComponent {
   closeUploadCompanyLogo(closeIcon: boolean) {
     this.isViewUploadLogo = !closeIcon;
 
-    if(closeIcon){
+    if (closeIcon) {
       this.fetchCompanyDetails();
     }
   }

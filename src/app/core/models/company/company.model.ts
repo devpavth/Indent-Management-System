@@ -4,7 +4,7 @@ export interface Company {
   branchMobilenumber: string;
   city: string;
   companyId: number;
-  companyLogo: Uint8Array;
+  companyLogo: string;
   companyName: string;
   country: string;
   gstNumber: string;

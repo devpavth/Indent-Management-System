@@ -20,19 +20,30 @@
 
       <div class="flex flex-col items-center">
         <label for="file-upload"
-          class="cursor-pointer flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+          class="cursor-pointer flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-gray-700 relative overflow-hidden"
           >
-          <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l4-4m-4 4l-4-4M4 16h16"></path>
-          </svg>
+          <ng-container *ngIf="!previewUrl; else imagePreview">
+                <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l4-4m-4 4l-4-4M4 16h16"></path>
+                </svg>
 
-          <span class="text-gray-500 text-sm dark:text-gray-400">Click to Upload Logo</span>
+                <span class="text-gray-500 text-sm dark:text-gray-400">Click to Upload Logo</span>
+          </ng-container>
+
+          <ng-template #imagePreview>
+            <img 
+            [src]="previewUrl" 
+            class="absolute inset-0 w-full h-full object-cover rounded-lg"
+            alt="Company Logo Preview"
+            >
+          </ng-template>
+          
         </label>
 
         <input id="file-upload" type="file" (change)="onFileSelected($event)" class="hidden" accept="image/*"/>
       </div>
 
-      <div 
+      <!-- <div 
         *ngIf="previewUrl"
         class="mt-4 flex justify-center"
         >
@@ -41,7 +52,7 @@
           alt="Signature Preview"
           class="h-24 w-auto rounded-md border border-gray-300"
         />
-      </div>
+      </div> -->
 
       <button
         (click)="uploadLogo()"

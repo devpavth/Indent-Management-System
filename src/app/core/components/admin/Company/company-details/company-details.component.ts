@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { Company } from '../../../../models/company/company.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-company-details',
@@ -9,6 +10,7 @@ import { Company } from '../../../../models/company/company.model';
 })
 export class CompanyDetailsComponent {
   branchService = inject(BranchService);
+  route = inject(Router);
 
   companyDetails: Company | undefined;
 
@@ -36,11 +38,12 @@ export class CompanyDetailsComponent {
     this.isViewCompanyDetails = true;
   }
 
-  closeCompanyModal(closeIcon: boolean){
+  closeCompanyModal(closeIcon: boolean) {
     this.isViewCompanyDetails = !closeIcon;
 
-    if(closeIcon){
-      this.fetchCompanyDetails();
+    if (closeIcon) {
+      // this.fetchCompanyDetails();
+      this.route.navigate(['/home/companyList']);
     }
   }
 }
