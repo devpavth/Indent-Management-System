@@ -1,5 +1,7 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { Request } from '../../../models/request/request.model';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-procurement-requestlist',
@@ -11,13 +13,35 @@ export class ProcurementRequestlistComponent {
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
+  showSearchInfo: boolean = false;
+
+  requestList: Request | undefined;
 
   dropdownPosition = { top: 0, right: 0 };
+
+  toastService = inject(ToastService);
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit() {
     console.log('checking procurement list');
+    this.req.getDebouncedSearchObservable().subscribe((indentCode) => {
+      this.req.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+          this.viewRequest(event as Event , this.requestList?.sno, this.requestList?.requestNo);
+        },
+        (error) => {
+          console.log('error while fetching indent details:', error);
+
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
     this.fetchRequestList();
   }
 
@@ -39,11 +63,12 @@ export class ProcurementRequestlistComponent {
   isViewConsolidatedQuote: boolean = false;
   isViewPurchaseOrder: boolean = false;
   userRequest: any;
-  selectedRequestId: number | null = null;
+  selectedRequestId: number | undefined;
   tooltipSno: number | null = null;
+  isSkeletonLoader: boolean = true;
 
   reqId: any;
-  indentNumber: string = '';
+  indentNumber: string | undefined = '';
 
   fetchRequestList() {
     if (
@@ -59,12 +84,15 @@ export class ProcurementRequestlistComponent {
           this.userRequest = res;
           console.log('fetching procurement request processing list:', res);
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching processing procurement request:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -90,12 +118,15 @@ export class ProcurementRequestlistComponent {
           // console.log("filtering completed request:", list);
           this.userRequest = res;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching completed procurement request:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -157,7 +188,7 @@ export class ProcurementRequestlistComponent {
     // }
   }
 
-  viewRequest(event: Event, data: number, indentNO: string) {
+  viewRequest(event: Event, data: number | undefined, indentNO: string | undefined) {
     event.stopPropagation();
     console.log(data);
     this.reqId = data;
@@ -172,7 +203,7 @@ export class ProcurementRequestlistComponent {
       }
 
       if (this.selectedRequestId === data) {
-        this.selectedRequestId = null;
+        this.selectedRequestId = undefined;
         this.isAcceptedView = false;
 
         const buttonElement = (event.currentTarget as HTMLElement).closest(
@@ -204,7 +235,7 @@ export class ProcurementRequestlistComponent {
       !(event.target as HTMLElement).closest('.dropdown-container') &&
       !(event.target as HTMLElement).closest('.dropdown-button')
     ) {
-      this.selectedRequestId = null;
+      this.selectedRequestId = undefined;
     }
   }
 
@@ -218,7 +249,7 @@ export class ProcurementRequestlistComponent {
     if (dropdown && !dropdown.contains(event.target as Node)) {
       if (!this.closeDropdownTimeout) {
         this.closeDropdownTimeout = setTimeout(() => {
-          this.selectedRequestId = null;
+          this.selectedRequestId = undefined;
           this.closeDropdownTimeout = null;
         }, 300);
       }
@@ -261,6 +292,30 @@ export class ProcurementRequestlistComponent {
     setTimeout(() => {
       this.tooltipSno = null;
     }, 3000);
+  }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchInfo = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event) {
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if (!enteredIndentCode) {
+      return;
+    }
+
+    this.req.triggerSearch(enteredIndentCode);
   }
 
   refresh(data: any) {

@@ -11,7 +11,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class ViewAcceptedprocurementreqComponent {
   @Input() reqId: number = 0;
-  @Input() indentNumber: string = '';
+  @Input() indentNumber: string | undefined = '';
   @Output() closeView = new EventEmitter<boolean>();
   _requestDetails = signal<any>(null);
   requestService = inject(RequestService);

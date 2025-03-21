@@ -19,7 +19,9 @@
       />
     </svg>
   </button>
-  <section class="">
+  <section [ngClass]="{
+    'h-screen': isFullScreenError
+  }">
     <div class="mx-40">
       <div class="rounded-xl bg-white shadow-lg">
        
@@ -132,4 +134,11 @@
 </div>
 <section *ngIf="isApproved" class="absolute left-0 right-0 top-0 z-50 h-screen">
   <app-success-pop (close)="closepop($event)"></app-success-pop>
+</section>
+
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>

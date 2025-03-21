@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { Request } from '../../../models/request/request.model';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-branch-approvel',
@@ -11,7 +13,7 @@ export class BranchApprovelComponent implements OnInit {
   isCompleted = false;
   isRejected = false;
   isViewReq = false;
-  branch = sessionStorage.getItem('branchId');
+  branch = sessionStorage.getItem('branchCode');
 
   reqId: any;
   showBranch: number = 0;
@@ -20,6 +22,12 @@ export class BranchApprovelComponent implements OnInit {
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
+  showSearchInfo: boolean = false;
+  isSkeletonLoader: boolean = true;
+
+  requestList: Request | undefined;
+
+  toastService = inject(ToastService);
 
   constructor(private rService: RequestService) {
     const today = new Date();
@@ -27,6 +35,28 @@ export class BranchApprovelComponent implements OnInit {
     this.maxDate = today.toISOString().split('T')[0];
   }
   ngOnInit() {
+    this.rService.getDebouncedSearchObservable().subscribe((indentCode) => {
+      this.rService.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+
+          if (this.branch === this.requestList?.branchCode) {
+            this.viewRequest(this.requestList.sno);
+          } else {
+            this.toastService.showError("You can't view other branch indent");
+          }
+        },
+        (error) => {
+          console.log('error while fetching indent details:', error);
+
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
     this.fetchRequestList();
   }
 
@@ -46,12 +76,16 @@ export class BranchApprovelComponent implements OnInit {
 
           this._yourReq = list;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching branch request processing list:',
             error,
           );
+
+          this.isSkeletonLoader = false;
+
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -75,12 +109,14 @@ export class BranchApprovelComponent implements OnInit {
           // console.log('fetching branch request accepted list:', list);
           this._yourReq = res;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching branch request accepted list:',
             error,
           );
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -104,12 +140,15 @@ export class BranchApprovelComponent implements OnInit {
           console.log('fetching branch request rejected list:', list);
           this._yourReq = list;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching branch request rejected list:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -119,6 +158,30 @@ export class BranchApprovelComponent implements OnInit {
         },
       );
     }
+  }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchInfo = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event){
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if(!enteredIndentCode){
+      return;
+    }
+
+    this.rService.triggerSearch(enteredIndentCode);
   }
 
   viewRequest(data: any) {

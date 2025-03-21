@@ -4,6 +4,9 @@ import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { Employeedetails } from '../../../models/employee/employeedetails.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../service/toast/toast.service';
+import { Specialrolesign } from '../../../models/specialrolesign/specialrolesign';
 
 @Component({
   selector: 'app-viewceo-cfoapproval-requisition',
@@ -12,13 +15,14 @@ import { Employeedetails } from '../../../models/employee/employeedetails.model'
 })
 export class ViewceoCfoapprovalRequisitionComponent {
   @Input() reqId: number = 0;
-  @Input() indentNumber: string = '';
+  @Input() indentNumber: string | undefined = '';
   @Input() isCompleted!: boolean;
   @Output() closeView = new EventEmitter<boolean>();
 
   requestService = inject(RequestService);
   sanitizer = inject(DomSanitizer);
   empService = inject(EmployeeServiceService);
+  toastService = inject(ToastService);
 
   _requestDetails = signal<any>(null);
   isLoading: boolean = false;
@@ -26,12 +30,15 @@ export class ViewceoCfoapprovalRequisitionComponent {
   selectedHeadOfAccId: number | null = null;
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
+  authoritiesList: Specialrolesign[] = [];
+
   userId: string | null = '';
   employeeDetails: Employeedetails | undefined;
   specialRoleId: number = 0;
   isViewAcceptBtn: boolean = false;
   isApproved: boolean = false;
   signUploaded!: boolean;
+  isFullScreenError: boolean = false;
 
   ngOnInit() {
     console.log('isCompleted:', this.isCompleted);
@@ -66,6 +73,32 @@ export class ViewceoCfoapprovalRequisitionComponent {
         console.log('fetching indent request details:', res);
         this._requestDetails.set(res);
         this.productHeadData = this._requestDetails()?.productDetails;
+
+        this.authoritiesList = this._requestDetails().authoritiesSigns;
+
+        console.log('this.authoritiesList:', this.authoritiesList);
+
+        if (this.authoritiesList === null) {
+          this.isViewAcceptBtn = false;
+
+          this.toastService.showError(`Quote Comparison Not Done For ${this.indentNumber} Indent`);
+          this.isFullScreenError = true;
+
+          setTimeout(() => {
+            this.closeView.emit(false);
+          }, 3000);
+        }
+
+    
+        this.isViewAcceptBtn = this.authoritiesList.some(
+          (req) => req.specialRoleId === this.specialRoleId && req.status === 102
+        )
+
+        // if(this.authoritiesList.map(
+        //   (req) => req.status === 102
+        // )){
+        //   this.isViewAcceptBtn = true;
+        // }
 
         this.uniqueProductHeadData = [
           ...new Map(
@@ -117,7 +150,7 @@ export class ViewceoCfoapprovalRequisitionComponent {
       this.selectedHeadOfAccId = Number(selectElement.value);
     }
 
-    this.isViewAcceptBtn = this.selectedHeadOfAccId === 0;
+    // this.isViewAcceptBtn = this.selectedHeadOfAccId === 0;
 
     if (this.selectedHeadOfAccId || this.selectedHeadOfAccId === 0) {
       this.fetchQuote(this.selectedHeadOfAccId);
@@ -126,6 +159,7 @@ export class ViewceoCfoapprovalRequisitionComponent {
 
   fetchQuote(headOfAccId: number) {
     this.isLoading = true;
+    this.isFullScreenError = true;
 
     this.requestService
       .fetchQuoteComparisonPDF(this.reqId, headOfAccId)
@@ -137,10 +171,36 @@ export class ViewceoCfoapprovalRequisitionComponent {
           this.pdfURL =
             this.sanitizer.bypassSecurityTrustResourceUrl(objectUrl);
           this.isLoading = false;
+          this.isFullScreenError = false;
         },
-        (error) => {
+        (error: HttpErrorResponse) => {
           console.log('error while fetching comparison quote pdf', error);
           this.isLoading = false;
+
+          if (error.error instanceof Blob) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              try {
+                const errorMessage = JSON.parse(reader.result as string);
+                console.error('Backend Error:', errorMessage);
+
+                this.isFullScreenError = true;
+                this.pdfURL = null;
+                this.toastService.showError(
+                  'Quote Comparison not done for this Head of Account',
+                );
+
+                setTimeout(() => {
+                  this.closeView.emit(false);
+                }, 3000);
+              } catch (e) {
+                console.error('Failed to parse error response:', e);
+              }
+            };
+            reader.readAsText(error.error);
+          } else {
+            console.error('Error while fetching quote pdf:', error);
+          }
         },
       );
   }

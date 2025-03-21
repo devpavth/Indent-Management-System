@@ -20,6 +20,8 @@ export class ViewRequestComponent implements OnInit {
 
   toastService = inject(ToastService);
 
+  companyLogo = sessionStorage.getItem('companyLogo');
+
   date: any = new Date();
   _requestDetails: any;
   isViewProgramManagerApproval: boolean = false;

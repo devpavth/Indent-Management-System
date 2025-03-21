@@ -79,6 +79,8 @@ export class ViewProcurementreqComponent {
   isRejectPop: boolean = false;
   isWarningPopup: boolean = false;
 
+  companyLogo = sessionStorage.getItem('companyLogo');
+
   approvelAmt: number | undefined;
   commendArray: { key: string; value: string }[] = [];
   funderId!: number;
@@ -154,13 +156,28 @@ export class ViewProcurementreqComponent {
       console.log('fetching data:', res);
       this._requestDetails.set(res);
 
+      const procurementStatusCode =
+        this._requestDetails()?.prctAuthData?.authStatusCode;
+
+      if(procurementStatusCode === 102){
+        this.isViewAction = true;
+      }
+
+      if(procurementStatusCode === 202){
+        this.isViewAction = false;
+      }
+
+      if(procurementStatusCode === 301){
+        this.isViewAction = false;
+      }
+
       const authStatusCode =
         this._requestDetails()?.financeAuthData?.authStatusCode;
       console.log('Finance Auth Status:', authStatusCode);
       console.log('Finance Auth Status:', typeof authStatusCode);
 
       if (authStatusCode === 202) {
-        this.isViewAction = true;
+        // this.isViewAction = true;
         this.assignedFunder = this._requestDetails()?.assignedDonors;
         console.log('this.assignedFunder:', this.assignedFunder);
 

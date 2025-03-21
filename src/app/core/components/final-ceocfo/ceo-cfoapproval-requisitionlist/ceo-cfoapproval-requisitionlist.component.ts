@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { Request as AppRequest} from '../../../models/request/request.model';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-ceo-cfoapproval-requisitionlist',
@@ -19,9 +20,13 @@ export class CeoCfoapprovalRequisitionlistComponent {
   signUploaded!: boolean;
   isViewConsolidatedQuote: boolean = false;
 
+  showSearchResult: boolean = false;
+  requestList: AppRequest | undefined;
+
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   empService = inject(EmployeeServiceService);
+  toastService = inject(ToastService);
 
   specialRolesProcessList: AppRequest[] = [];
 
@@ -36,6 +41,23 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
   ngOnInit() {
     console.log('checking procurement list');
+    this.req.getDebouncedSearchObservable().subscribe((indentCode) => {
+      this.req.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+          this.viewRequest(event as Event, this.requestList?.sno, this.requestList?.requestNo);
+        },
+        (error) => {
+          console.log('error while fetching indent details:', error);
+
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
     this.userId = sessionStorage.getItem('userId');
 
     this.empService.getEmployeeDetails(this.userId).subscribe(
@@ -59,11 +81,12 @@ export class CeoCfoapprovalRequisitionlistComponent {
   isView = false;
   isAcceptedView: boolean = false;
   isViewQuoteCompare: boolean = false;
-  selectedRequestId: number | null = null;
+  selectedRequestId: number | null | undefined = null;
   noRequest: boolean = false;
+  isSkeletonLoader: boolean = true;
 
   reqId: any;
-  indentNumber: string = '';
+  indentNumber: string | undefined = '';
 
   fetchRequestList() {
     if (
@@ -82,12 +105,14 @@ export class CeoCfoapprovalRequisitionlistComponent {
             this.specialRolesProcessList = res;
             console.log('fetching special roles request processing list:', res);
             this.noRequest = false;
+            this.isSkeletonLoader = false;
           },
           (error) => {
             console.log(
               'error while fetching processing special roles request:',
               error,
             );
+            this.isSkeletonLoader = false;
             if (error.status == 204) {
               this.specialRolesProcessList = [];
             } else if (error.status === 404) {
@@ -120,12 +145,15 @@ export class CeoCfoapprovalRequisitionlistComponent {
             // console.log("filtering completed request:", list);
             // this.userRequest = res;
             this.noRequest = false;
+            this.isSkeletonLoader = false;
           },
           (error) => {
             console.log(
               'error while fetching completed special roles request:',
               error,
             );
+
+            this.isSkeletonLoader = false;
             if (error.status == 204) {
               this.specialRolesProcessList = [];
             } else if (error.status === 404) {
@@ -187,6 +215,30 @@ export class CeoCfoapprovalRequisitionlistComponent {
     }
   }
 
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchResult = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchResult = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event) {
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if (!enteredIndentCode) {
+      return;
+    }
+
+    this.req.triggerSearch(enteredIndentCode);
+  }
+
   isAnyCheckboxSelected(): boolean {
     return this.selectedRequests.size > 0;
   }
@@ -246,7 +298,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
       );
   }
 
-  viewRequest(event: Event, data: number, indentNO: string) {
+  viewRequest(event: Event, data: number | undefined, indentNO: string | undefined) {
     event.stopPropagation();
     console.log(data);
     this.reqId = data;

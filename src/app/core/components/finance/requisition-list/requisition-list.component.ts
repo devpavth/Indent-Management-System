@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
+import { ToastService } from '../../service/toast/toast.service';
+import { Request } from '../../../models/request/request.model';
 
 @Component({
   selector: 'app-requisition-list',
@@ -12,8 +14,31 @@ export class RequisitionListComponent implements OnInit {
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
+  showSearchInfo: boolean = false;
+  isSkeletonLoader: boolean = true;
+
+  requestList: Request | undefined;
+
+  toastService = inject(ToastService);
 
   ngOnInit() {
+    this.req.getDebouncedSearchObservable().subscribe((indentCode) => {
+      this.req.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+          this.viewRequest(this.requestList?.sno);
+        },
+        (error) => {
+          console.log('error while fetching indent details:', error);
+
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
     this.fetchRequestList();
   }
 
@@ -45,12 +70,15 @@ export class RequisitionListComponent implements OnInit {
           this.userRequest = res;
           console.log('fetching finance request processing list:', res);
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching processing finance request:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -76,9 +104,11 @@ export class RequisitionListComponent implements OnInit {
           // console.log("filtering completed request:", list);
           this.userRequest = res;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log('error while fetching completed finance request:', error);
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -100,9 +130,11 @@ export class RequisitionListComponent implements OnInit {
           console.log('fetching finance request on hold list:', res);
           this.userRequest = res;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log('error while fetching on hold finance request:', error);
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -124,9 +156,11 @@ export class RequisitionListComponent implements OnInit {
           console.log('fetching finance request rejected list:', res);
           this.userRequest = res;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log('error while fetching rejected finance request:', error);
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -137,6 +171,31 @@ export class RequisitionListComponent implements OnInit {
       );
     }
   }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchInfo = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event) {
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if (!enteredIndentCode) {
+      return;
+    }
+
+    this.req.triggerSearch(enteredIndentCode);
+  }
+
   viewRequest(data: any) {
     console.log(data);
     this.reqId = data;

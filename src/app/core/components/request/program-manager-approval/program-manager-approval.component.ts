@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { debounceTime, Subject } from 'rxjs';
+import { ToastService } from '../../service/toast/toast.service';
+import { Request } from '../../../models/request/request.model';
 
 @Component({
   selector: 'app-program-manager-approval',
@@ -11,7 +14,7 @@ export class ProgramManagerApprovalComponent {
   isCompleted = false;
   isRejected = false;
   isViewReq = false;
-  branch = sessionStorage.getItem('branchId');
+  branch = sessionStorage.getItem('branchCode');
 
   reqId: any;
   showManager: number = 0;
@@ -21,6 +24,15 @@ export class ProgramManagerApprovalComponent {
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
+  showSearchInfo: boolean = false;
+  isSkeletonLoader: boolean = true;
+
+  requestList: Request | undefined;
+
+  searchSubject = new Subject<string>();
+
+  toastService = inject(ToastService);
+
 
   constructor(private rService: RequestService) {
     const today = new Date();
@@ -29,6 +41,29 @@ export class ProgramManagerApprovalComponent {
   }
 
   ngOnInit() {
+    this.rService.getDebouncedSearchObservable()
+    .subscribe(indentCode => {
+      this.rService.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+
+          if (this.branch === this.requestList?.branchCode) {
+            this.viewRequest(this.requestList.sno);
+          } else {
+            this.toastService.showError("You can't view other branch indent");
+          }
+        },
+        (error) => {
+        console.log('error while fetching indent details:', error);
+
+        if(error.error.status === 204){
+          this.toastService.showError(error.error.errorMessege);
+        }
+      }
+      )
+    })
+
     this.fetchRequestList();
   }
 
@@ -49,9 +84,11 @@ export class ProgramManagerApprovalComponent {
 
           this._yourReq = list;
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log('error while fetching processing request:', error);
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
             // this.noRequest = true;
@@ -79,9 +116,11 @@ export class ProgramManagerApprovalComponent {
             // console.log("filtering completed request:", list);
             this._yourReq = res;
             this.noRequest = false;
+            this.isSkeletonLoader = false;
           },
           (error) => {
             console.log('error while fetching completed request:', error);
+            this.isSkeletonLoader = false;
             if (error.status == 204) {
               this._yourReq = undefined;
               // this.noRequest = true;
@@ -108,9 +147,11 @@ export class ProgramManagerApprovalComponent {
             console.log('filtering rejected request:', list);
             this._yourReq = list;
             this.noRequest = false;
+            this.isSkeletonLoader = false;
           },
           (error) => {
             console.log('error while fetching rejected request:', error);
+            this.isSkeletonLoader = false;
             if (error.status == 204) {
               this._yourReq = undefined;
               // this.noRequest = true;
@@ -121,6 +162,30 @@ export class ProgramManagerApprovalComponent {
           },
         );
     }
+  }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchInfo = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event){
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if(!enteredIndentCode){
+      return;
+    }
+
+    this.rService.triggerSearch(enteredIndentCode);
   }
 
   viewRequest(data: any) {

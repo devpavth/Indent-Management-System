@@ -21,7 +21,7 @@ import { Company } from '../../../models/company/company.model';
 })
 export class ViewPurchaseorderComponent {
   @Input() reqId: number = 0;
-  @Input() indentNumber: string = '';
+  @Input() indentNumber: string | undefined = '';
   @Output() closeView = new EventEmitter<boolean>();
 
   requestService = inject(RequestService);

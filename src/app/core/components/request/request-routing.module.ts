@@ -12,7 +12,7 @@ const routes: Routes = [
   { component: RequestFormComponent, path: 'request' },
   { component: BranchApprovelComponent, path: 'branchApprovel' },
   { component: AdminApprovelComponent, path: 'adminApprovel' },
-  { component: YourRequestComponent, path: 'yourRequest' },
+  { component: YourRequestComponent, path: 'userRequest' },
   { component: ViewRequestComponent, path: 'viewRequest' },
   { component: OtherProductComponent, path: 'others' },
   { component: ProgramManagerApprovalComponent, path: 'managerApproval'},

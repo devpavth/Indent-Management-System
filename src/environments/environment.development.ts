@@ -99,7 +99,7 @@ export const environment = {
   postIndent: Url + baseRequestApi + '/newrequest',
   branchApprovelList: Url + baseRequestApi + '/branchrequest/',
   adminAprovalList: Url + baseRequestApi + '/requestsforadmin/',
-  getYourReq: Url + baseRequestApi + '/yourRequest',
+  getYourReq: Url + baseRequestApi + '/getyourrequest',
   fetchProgramManagerRequest: Url + baseRequestApi + '/prgmanagerRequst/',
   //old request api
 
@@ -156,6 +156,9 @@ export const environment = {
   fetchHeadOfAccByIndent: Url + baseRequestApi + '/gethoaccdetailsforindent',
 
   generatePurchaseOrder: Url + baseRequestApi + '/generate/purchaseorder/',
+
+  fetchRequestByIndentCode:
+    Url + baseRequestApi + '/getrequestbyindentcode/',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

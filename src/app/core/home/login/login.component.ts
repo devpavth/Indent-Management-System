@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit {
         }
 
         this.Router.navigate(['home/dashboard']);
-        
+
         // sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
         // this.Spinner = false;
       },
@@ -137,15 +137,5 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  arrayBufferToBase64(buffer: Uint8Array): string {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-
-    return btoa(binary);
-  }
+  
 }

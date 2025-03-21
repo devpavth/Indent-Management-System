@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { debounceTime, Observable, Subject } from 'rxjs';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RequestService {
+  private searchSubject = new Subject<string>();
+
   constructor(private readonly http: HttpClient) {}
   postRequestIndent(req: any) {
     return this.http.post(environment.postRequestIndent, req);
   }
-  getYourReq(data: any) {
-    return this.http.get(environment.getYourReq);
+  getUserReq(selectedDate: string | undefined) {
+    return this.http.get(environment.getYourReq + `?startDate=${selectedDate}`);
   }
   viewReq(data: any): Observable<any> {
     return this.http.get(environment.viewYourReq + data);
@@ -336,15 +338,29 @@ export class RequestService {
     );
   }
 
-  fetchHeadOfAccByIndent(indentId: string){
+  fetchHeadOfAccByIndent(indentId: string) {
     return this.http.get(
       environment.fetchHeadOfAccByIndent + `?requestNo=${indentId}`,
     );
   }
 
-  generatePurchaseOrderPDF(sno: number, headOfAccId: number){
+  generatePurchaseOrderPDF(sno: number, headOfAccId: number) {
     return this.http.get(
       environment.generatePurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
     );
+  }
+
+  fetchRequestByIndentCode(indentCode: string): Observable<Request> {
+    return this.http.get<Request>(
+      environment.fetchRequestByIndentCode + indentCode,
+    );
+  }
+
+  getDebouncedSearchObservable(): Observable<string> {
+    return this.searchSubject.pipe(debounceTime(400));
+  }
+
+  triggerSearch(indentCode: string){
+    this.searchSubject.next(indentCode);
   }
 }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
+import { ToastService } from '../../service/toast/toast.service';
+import { Request } from '../../../models/request/request.model';
 
 @Component({
   selector: 'app-admin-approvel',
@@ -14,14 +16,38 @@ export class AdminApprovelComponent implements OnInit {
   reqId: any;
   showAdmin: number = 0;
   _yourReq: any;
-  branch = sessionStorage.getItem('branchId');
+  branch = sessionStorage.getItem('branchCode');
 
   currentDate: string | undefined;
   maxDate: string | undefined;
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
 
+  showSearchInfo: boolean = false;
+  isSkeletonLoader: boolean = true;
+
+  requestList: Request | undefined;
+
+  toastService = inject(ToastService);
+
   ngOnInit() {
+    this.ReqService.getDebouncedSearchObservable().subscribe((indentCode) => {
+      this.ReqService.fetchRequestByIndentCode(indentCode).subscribe(
+        (res: any) => {
+          console.log('fetching indent request in user request:', res);
+          this.requestList = res;
+           this.viewRequest(this.requestList?.sno);
+        },
+        (error) => {
+          console.log('error while fetching indent details:', error);
+
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
     this.fetchRequestList();
   }
   constructor(private ReqService: RequestService) {
@@ -42,12 +68,16 @@ export class AdminApprovelComponent implements OnInit {
           this._yourReq = res;
           console.log('fetching admin request processing list:', res);
           this.noRequest = false;
+
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching admin request processing list:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -69,12 +99,14 @@ export class AdminApprovelComponent implements OnInit {
           this._yourReq = res;
           console.log('fetching admin request accepted list:', res);
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching admin request accepted list:',
             error,
           );
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -96,12 +128,15 @@ export class AdminApprovelComponent implements OnInit {
           this._yourReq = res;
           console.log('fetching admin request rejected list:', res);
           this.noRequest = false;
+          this.isSkeletonLoader = false;
         },
         (error) => {
           console.log(
             'error while fetching admin request rejected list:',
             error,
           );
+
+          this.isSkeletonLoader = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -112,6 +147,31 @@ export class AdminApprovelComponent implements OnInit {
       );
     }
   }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    if (inputValue.trim() === '') {
+      this.showSearchInfo = true;
+    }
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchReqByIndentCode(event: Event) {
+    const enteredIndentCode = (event.target as HTMLInputElement).value;
+
+    if (!enteredIndentCode) {
+      return;
+    }
+
+    this.ReqService.triggerSearch(enteredIndentCode);
+  }
+
   viewRequest(data: any) {
     this.isViewReq = true;
     console.log(data);

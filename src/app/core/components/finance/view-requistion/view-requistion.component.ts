@@ -79,6 +79,8 @@ export class ViewRequistionComponent implements OnInit {
   isRejectPop: boolean = false;
   isWarningPopup: boolean = false;
 
+  companyLogo = sessionStorage.getItem('companyLogo');
+
   approvelAmt: number | undefined;
   commendArray: { key: string; value: string }[] = [];
   funderId!: number;
@@ -143,6 +145,14 @@ export class ViewRequistionComponent implements OnInit {
       const authStatusCode = this._requestDetails()?.financeAuthData?.authStatusCode;
       console.log("Finance Auth Status:", authStatusCode);
       console.log("Finance Auth Status:", typeof authStatusCode);
+
+      if(authStatusCode === 102){
+        this.isViewAction = true;
+      }
+
+      if(authStatusCode === 300){
+        this.isViewAction = false;
+      }
 
       if(authStatusCode === 202){
         this.isViewAction = false;
