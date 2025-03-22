@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { ToastService } from '../../service/toast/toast.service';
+import { Specialrolesign } from '../../../models/specialrolesign/specialrolesign';
 
 @Component({
   selector: 'app-view-request',
@@ -27,6 +28,13 @@ export class ViewRequestComponent implements OnInit {
   isViewProgramManagerApproval: boolean = false;
   isViewBranchApproval: boolean = false;
   isViewFinanceApproval: boolean = false;
+  isViewProcurementApproval: boolean = false;
+  finalApprovalIsProcess: boolean = false;
+  finalApprovalIsAccept: boolean = false;
+  finalApprovalAtleastAccept: boolean = false;
+  pendingOrProcessFinalState: string = '';
+
+  authoritiesList: Specialrolesign[] =[];
 
   constructor(private readonly requstService: RequestService) {}
   ngOnInit(): void {
@@ -42,6 +50,10 @@ export class ViewRequestComponent implements OnInit {
       console.log('fetching details:', res);
       this._requestDetails = res;
 
+      this.authoritiesList = this._requestDetails.authoritiesSigns;
+
+      console.log("authoritiesList:", this.authoritiesList);
+
       if (this._requestDetails.progarmMgrAuthData.authStatusCode === 202) {
         this.isViewProgramManagerApproval = true;
       }
@@ -51,6 +63,23 @@ export class ViewRequestComponent implements OnInit {
       if (this._requestDetails.financeAuthData.authStatusCode === 202) {
         this.isViewFinanceApproval = true;
       }
+
+      if(this._requestDetails.prctAuthData.authStatusCode === 202){
+        this.isViewProcurementApproval = true;
+      }
+       this.pendingOrProcessFinalState = this.authoritiesList === null ? 'Action Pending' : 'Processing'
+
+      this.finalApprovalIsProcess = this.authoritiesList.some(
+        (req) => req.status === 102 
+      )
+
+      this.finalApprovalIsAccept = this.authoritiesList.every(
+        (req) => req.status === 202
+      );
+
+      this.finalApprovalAtleastAccept = this.authoritiesList.some(
+        (req) => req.status === 202 || req.status === 102
+      )
 
       console.log(this._requestDetails.branchAuthorize);
     });

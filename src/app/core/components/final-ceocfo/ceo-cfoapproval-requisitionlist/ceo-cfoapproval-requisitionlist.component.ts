@@ -139,11 +139,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
           (res: any) => {
             console.log('fetching completed special roles request:', res);
             this.specialRolesProcessList = res;
-            // let list: any[] = res;
-            // console.log("listing completed:", list);
-            // list = list.filter((l) => l.requestStatus == 102);
-            // console.log("filtering completed request:", list);
-            // this.userRequest = res;
+            
             this.noRequest = false;
             this.isSkeletonLoader = false;
           },
@@ -163,56 +159,8 @@ export class CeoCfoapprovalRequisitionlistComponent {
           },
         );
     }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == false &&
-      this.isHold == true &&
-      this.isRejected == false
-    ) {
-      this.isViewSelectedDate = false;
-      this.req.fetchPrctReqList(418).subscribe(
-        (res: any) => {
-          console.log('fetching procurement request on hold list:', res);
-          // this.userRequest = res;
-        },
-        (error) => {
-          console.log(
-            'error while fetching on hold procurement request:',
-            error,
-          );
-          if (error.status == 204) {
-            // this.userRequest = undefined;
-          } else if (error.status === 404) {
-            // this.userRequest = undefined;
-          }
-        },
-      );
-    }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == false &&
-      this.isHold == false &&
-      this.isRejected == true
-    ) {
-      this.isViewSelectedDate = true;
-      // this.req.fetchPrctReqList(406, this.currentDate).subscribe(
-      //   (res: any) => {
-      //     console.log('fetching procurement request rejected list:', res);
-      //     this.userRequest = res;
-      //   },
-      //   (error) => {
-      //     console.log(
-      //       'error while fetching rejected procurement request:',
-      //       error,
-      //     );
-      //     if (error.status == 204) {
-      //       this.userRequest = undefined;
-      //     } else if (error.status === 404) {
-      //       this.userRequest = undefined;
-      //     }
-      //   },
-      // );
-    }
+    
+    
   }
 
   handleFocus(event: Event) {
