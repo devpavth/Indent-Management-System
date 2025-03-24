@@ -39,6 +39,7 @@ import { UpdatelevelFordesignationComponent } from './Employee/updatelevel-forde
 import { CompanyDetailsComponent } from './Company/company-details/company-details.component';
 import { ViewCompanydetailsComponent } from './Company/view-companydetails/view-companydetails.component';
 import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-companylogo.component';
+import { PrefixComponent } from './prefix/prefix/prefix.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -77,6 +78,7 @@ import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-
     CompanyDetailsComponent,
     ViewCompanydetailsComponent,
     UploadCompanylogoComponent,
+    PrefixComponent,
   ],
   imports: [
     CommonModule,
@@ -85,5 +87,6 @@ import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-
     FormsModule,
     ReactiveFormsModule,
   ],
+  exports: [PrefixComponent]
 })
 export class AdminModule {}

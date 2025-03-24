@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment.development';
 import { debounceTime, Observable, Subject } from 'rxjs';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
+import { Prefix } from '../../../models/prefix/prefix.model';
 
 @Injectable({
   providedIn: 'root',
@@ -362,5 +363,13 @@ export class RequestService {
 
   triggerSearch(indentCode: string){
     this.searchSubject.next(indentCode);
+  }
+
+  fetchPOPrefixCode(POId: number): Observable<Prefix>{
+    return this.http.get<Prefix>(environment.fetchPOPrefixCode + POId);
+  }
+
+  fetchIndentPrefixCode(IndentId: number): Observable<Prefix>{
+    return this.http.get<Prefix>(environment.fetchIndentPrefixCode + IndentId);
   }
 }

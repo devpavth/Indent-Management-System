@@ -1,4 +1,12 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EmployeeServiceService } from '../../../service/Employee/employee-service.service';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
@@ -20,7 +28,7 @@ export class ViewEmployeeComponent implements OnInit {
     private readonly countryStateCity: SharedServiceService,
     private AdminService: AdminProductServiceService,
     private branchService: BranchService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
   ) {}
   @Output() closeEmployeePop = new EventEmitter<boolean>();
   @Input() EmployeeCode: any;
@@ -59,7 +67,7 @@ export class ViewEmployeeComponent implements OnInit {
     this.EmployeeService.getEmployeeDetails(this.EmployeeCode).subscribe(
       (res) => {
         this._employeeDetails = res;
-        console.log("fetching employee details:", res);
+        console.log('fetching employee details:', res);
 
         this.viewEmployeeForm = new FormGroup({
           employeeId: new FormControl(this._employeeDetails.employeeId),
@@ -126,9 +134,10 @@ export class ViewEmployeeComponent implements OnInit {
             Validators.required,
           ]),
 
-          empDesignation: new FormControl(this._employeeDetails.empDesignation, [
-            Validators.required,
-          ]),
+          empDesignation: new FormControl(
+            this._employeeDetails.empDesignation,
+            [Validators.required],
+          ),
 
           empFlag: new FormControl(this._employeeDetails.empFlag, [
             Validators.required,
@@ -153,7 +162,7 @@ export class ViewEmployeeComponent implements OnInit {
         // this.viewEmployeeForm.markAllAsTouched();
 
         console.log('Form Value', this.viewEmployeeForm.value);
-        console.log("empDesig value:", this.viewEmployeeForm.value.empDesig)
+        console.log('empDesig value:', this.viewEmployeeForm.value.empDesig);
 
         this.viewEmployeeForm
           .get('pin')
@@ -242,11 +251,11 @@ export class ViewEmployeeComponent implements OnInit {
           this.viewEmployeeForm.get(form)?.disable();
         });
 
-        this.viewEmployeeForm.get('levelId').valueChanges.subscribe(
-          (levelId: number) => {
-            if(levelId && levelId !== this._employeeDetails.levelId){ 
+        this.viewEmployeeForm
+          .get('levelId')
+          .valueChanges.subscribe((levelId: number) => {
+            if (levelId && levelId !== this._employeeDetails.levelId) {
               this.viewEmployeeForm.get('empDesig')?.reset('');
-
             }
 
             this.fetchDesignationFromLevel(levelId);
@@ -254,26 +263,25 @@ export class ViewEmployeeComponent implements OnInit {
               .get('empDesig')
               ?.setValidators([Validators.required]);
             this.viewEmployeeForm.get('empDesig').updateValueAndValidity();
-          }
-        )
+          });
 
-
-        this.viewEmployeeForm.get('branchId').valueChanges.subscribe(
-          (branchId: number) => {
-            if(branchId){
+        this.viewEmployeeForm
+          .get('branchId')
+          .valueChanges.subscribe((branchId: number) => {
+            if (branchId) {
               const selectedBranch = this._branch.find(
-                (branch: any) => branch.branchId === branchId)
+                (branch: any) => branch.branchId === branchId,
+              );
 
-              console.log("selectedBranch:", selectedBranch);
+              console.log('selectedBranch:', selectedBranch);
 
-              if(selectedBranch){
+              if (selectedBranch) {
                 this.viewEmployeeForm.patchValue({
-                  branchCode: selectedBranch.branchCode
-                })
+                  branchCode: selectedBranch.branchCode,
+                });
               }
             }
-          }
-        )
+          });
       },
     );
   }
@@ -291,7 +299,6 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   fetchDesignationFromLevel(levelId: number) {
-
     this.EmployeeService.fetchDesignationFromLevel(levelId).subscribe(
       (res) => {
         console.log('fetching designation list:', res);
@@ -308,7 +315,7 @@ export class ViewEmployeeComponent implements OnInit {
 
   fetchAllBranch() {
     this.branchService.getBranch().subscribe((res: any) => {
-      console.log("fetching branch List:", res);
+      console.log('fetching branch List:', res);
 
       this._branch = res;
     });
@@ -408,10 +415,9 @@ export class ViewEmployeeComponent implements OnInit {
     this.EmployeeService.updateEmployeeDetails(data).subscribe((res) => {
       console.log('successfully updated the employee details:', res);
 
-      if(res !== null){
+      if (res !== null) {
         this.showSuccess.emit(true);
       }
-      
     });
   }
 

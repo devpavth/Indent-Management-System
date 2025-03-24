@@ -7,6 +7,8 @@ import { LeftMenuComponent } from '../Layouts/left-menu/left-menu.component';
 import { HeaderComponent } from '../Layouts/header/header.component';
 import { SharedModule } from '../../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AdminModule } from "../components/admin/admin.module";
+
 @NgModule({
   declarations: [
     StartingPageComponent,
@@ -14,6 +16,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HeaderComponent,
     DashboardComponent,
   ],
-  imports: [CommonModule, HomeRoutingModule, SharedModule],
+  imports: [CommonModule, HomeRoutingModule, SharedModule, AdminModule],
 })
 export class HomeModule {}

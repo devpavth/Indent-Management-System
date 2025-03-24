@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
+import { AuthService } from '../../components/service/Auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-left-menu',
@@ -20,7 +22,13 @@ export class LeftMenuComponent {
   employee: boolean = false;
   company: boolean = false;
 
+  showPrefix: boolean = false;
+  isAuthorized: boolean = false;
+
   employeeService = inject(EmployeeServiceService);
+  authService = inject(AuthService);
+  route = inject(Router);
+
   user: any;
   userData: any;
   isLevelView: boolean = true;
@@ -54,6 +62,16 @@ export class LeftMenuComponent {
 
         // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
+
+      const user = this.authService.getUserRoles();
+      console.log('getting user roles:', user);
+      if (user.includes('ROLE_IT_ADMIN')) {
+        console.log('can authenticate..');
+        this.isAuthorized = true;
+      }else{
+        // this.route.navigate(['/home/unauth']);
+        this.isAuthorized = false;
+      }
     }
 
     // const roleString = sessionStorage.getItem('roles');
@@ -74,7 +92,7 @@ export class LeftMenuComponent {
     this.tAdmin = !this.tAdmin;
   }
 
-  toggleCompany(){
+  toggleCompany() {
     this.company = !this.company;
   }
 
@@ -90,5 +108,14 @@ export class LeftMenuComponent {
   }
   toggleBranch() {
     this.branch = !this.branch;
+  }
+
+  openPrefix() {
+    this.showPrefix = true;
+    console.log('clicking the prefix.');
+  }
+
+  closePrefix() {
+    this.showPrefix = false;
   }
 }

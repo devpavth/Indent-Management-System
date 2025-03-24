@@ -15,3 +15,24 @@
 	background-color: #9501ff;
 	
 } */
+
+
+.prefix-overlay {
+  position: fixed; 
+  top: 20;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: flex-end; 
+  z-index: 1000; 
+}
+
+
+.prefix-sidebar {
+  width: 100%; 
+  max-width: 1100px; 
+  height: 100vh;
+  position: relative; 
+}
