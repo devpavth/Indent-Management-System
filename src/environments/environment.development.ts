@@ -161,7 +161,9 @@ export const environment = {
     Url + baseRequestApi + '/getrequestbyindentcode/',
 
   fetchPOPrefixCode: Url + baseRequestApi + '/getcustomcode/',
-  fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
+  // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
+
+  updatePOPrefixCode: Url + baseRequestApi + '/updatecustomcode',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

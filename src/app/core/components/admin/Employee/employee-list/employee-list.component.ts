@@ -42,9 +42,10 @@ export class EmployeeListComponent implements OnInit {
   isSuccess: boolean = false;
   isDelete: boolean = false;
   isAuth: boolean = false;
-  Spinner: boolean = true;
+  // Spinner: boolean = true;
   isEmployeeList: boolean = false;
   pageNotFound: boolean = false;
+  isSkeletonLoader: boolean = true;
 
   constructor(
     private employeeService: EmployeeServiceService,
@@ -73,8 +74,9 @@ export class EmployeeListComponent implements OnInit {
     this.employeeService.getAllEmployeeDetails(data).subscribe(
       (res) => {
         // this.employeeList=res;
-        this.isEmployeeList = true;
-        this.Spinner = false;
+        // this.isEmployeeList = true;
+        // this.Spinner = false;
+        
         this.list = res;
         this.listLength = this.list.length;
 
@@ -85,11 +87,13 @@ export class EmployeeListComponent implements OnInit {
         this.totalpage += this.employeeList.length;
 
         console.log('fetching employee list:', res);
+        this.isSkeletonLoader = false;
       },
       (error) => {
         if (error.status == 403) {
-          console.log('hello');
-          this.Spinner = false;
+          console.log();
+          // this.Spinner = false;
+          this.isSkeletonLoader = false;
           this.isAuth = true;
         }
         if (error.status == 0) {

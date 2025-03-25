@@ -66,7 +66,7 @@ export class LeftMenuComponent {
       const user = this.authService.getUserRoles();
       console.log('getting user roles:', user);
       if (user.includes('ROLE_IT_ADMIN')) {
-        console.log('can authenticate..');
+        console.log('User is authorized.');
         this.isAuthorized = true;
       }else{
         // this.route.navigate(['/home/unauth']);

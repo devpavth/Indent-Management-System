@@ -18,7 +18,8 @@ export class ProductListComponent implements OnInit {
   productList: any[] | undefined;
   otherPrdLen: number = 0;
   productData: any;
-  Spinner: boolean = true;
+  // Spinner: boolean = true;'
+  isSkeletonLoader: boolean = true;
 
   offSet: number = 0;
   pageSize: number = 10;
@@ -162,7 +163,8 @@ export class ProductListComponent implements OnInit {
         this.otherProductList.filter((m) => m.prdStatus == 303).length || 0;
       console.log('this.otherPrdLen:', this.otherPrdLen);
 
-      this.Spinner = false;
+      // this.Spinner = false;
+      this.isSkeletonLoader = false;
       const totalItems = list.length;
 
       console.log('Active product:', this.activeProduct);

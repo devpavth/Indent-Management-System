@@ -32,6 +32,7 @@ import { QuoteSuccesspopupComponent } from './quote-successpopup/quote-successpo
 import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-acceptedpopup.component';
 import { UploadSignatureComponent } from './upload-signature/upload-signature.component';
 import { WarningQuotecompareMessageComponent } from './warning-quotecompare-message/warning-quotecompare-message.component';
+import { WarningPrefixComponent } from './warning-prefix/warning-prefix.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { WarningQuotecompareMessageComponent } from './warning-quotecompare-mess
     QuoteAcceptedpopupComponent,
     UploadSignatureComponent,
     WarningQuotecompareMessageComponent,
+    WarningPrefixComponent,
   ],
   imports: [
     CommonModule,
@@ -95,6 +97,7 @@ import { WarningQuotecompareMessageComponent } from './warning-quotecompare-mess
     WarningPopupComponent,
     WarningRoleassigningPopupComponent,
     UploadSignatureComponent,
+    WarningPrefixComponent
   ],
 })
 export class SharedModule {}

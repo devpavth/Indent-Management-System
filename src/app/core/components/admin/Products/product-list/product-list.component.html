@@ -1,9 +1,9 @@
-<div
+<!-- <div
   *ngIf="Spinner"
   class="absolute bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-purple-50 p-4 sm:ml-64"
 >
   <app-spinner></app-spinner>
-</div>
+</div> -->
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
     <div class="mx-auto">
@@ -83,7 +83,7 @@
           </div>
           <div
             class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
-          >
+            >
             
             <!-- <button
               type="button"
@@ -176,10 +176,10 @@
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-          >
+            >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-            >
+              >
               <tr>
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
@@ -218,11 +218,11 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!isSkeletonLoader">
               <tr
                 *ngFor="let p of productList; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
-              >
+                >
                 <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
                 <th
                   scope="row"
@@ -236,8 +236,7 @@
                 <td class="px-4 py-3" *ngIf="!isOtherProductView&& isActiveProductView">{{ p.prdbrndName }}</td>
                 <td class="px-4 py-3" *ngIf="isOtherProductView && !isActiveProductView">{{ p.prdDescription }}</td>
 
-                <!-- <td class="px-4 py-3"></td>
-                              <td class="px-4 py-3"></td> -->
+                
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
                     (click)="toggleView(true, 1, p)"
@@ -257,6 +256,19 @@
                     </svg>
                   </button>
                 </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="isSkeletonLoader">
+              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+                <td class="px-4 py-3"><div class="h-5 bg-gray-300 rounded-xl w-8"></div></td>
+                <td class="px-4 py-3"><div class="h-5 bg-gray-300 rounded-xl w-24"></div></td>
+                <td class="px-4 py-3"><div class="h-5 bg-gray-300 rounded-xl w-24"></div></td>
+                <td class="px-4 py-3" *ngIf="isActiveProductView && !isOtherProductView"><div class="h-5 bg-gray-300 rounded-xl w-24"></div></td>
+                <td class="px-4 py-3" *ngIf="isActiveProductView && !isOtherProductView"><div class="h-5 bg-gray-300 rounded-xl w-20"></div></td>
+                <td class="px-4 py-3" *ngIf="isActiveProductView && !isOtherProductView"><div class="h-5 bg-gray-300 rounded-xl w-20"></div></td>
+                <td class="px-4 py-3" *ngIf="isOtherProductView && !isActiveProductView"><div class="h-5 bg-gray-300 rounded-xl w-64"></div></td>
+                <td class="px-4 py-3"><div class="h-5 bg-gray-300 rounded-xl w-10"></div></td>
               </tr>
             </tbody>
           </table>

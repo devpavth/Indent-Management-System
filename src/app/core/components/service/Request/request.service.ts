@@ -369,7 +369,7 @@ export class RequestService {
     return this.http.get<Prefix>(environment.fetchPOPrefixCode + POId);
   }
 
-  fetchIndentPrefixCode(IndentId: number): Observable<Prefix>{
-    return this.http.get<Prefix>(environment.fetchIndentPrefixCode + IndentId);
+  updatePOPrefixCode(payload: any){
+    return this.http.put(environment.updatePOPrefixCode, payload);
   }
 }
