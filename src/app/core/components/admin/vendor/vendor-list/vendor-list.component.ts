@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { VendorService } from '../../../service/vendor/vendor.service';
+import { Vendor } from '../../../../models/vendor/vendor.type';
 
 @Component({
   selector: 'app-vendor-list',
@@ -7,9 +8,10 @@ import { VendorService } from '../../../service/vendor/vendor.service';
   styleUrl: './vendor-list.component.css',
 })
 export class VendorListComponent implements OnInit {
-  _vendor: any;
+  _vendor: Vendor[] = [];
   vendorData: any;
-  Spinner: boolean = true;
+  // Spinner: boolean = true;
+  isSkeletonLoader: boolean = true;
 
   isVendorList: Boolean = false;
   constructor(private vendorService: VendorService) {}
@@ -19,14 +21,16 @@ export class VendorListComponent implements OnInit {
 
   fetchallvendor() {
     this.vendorService.getAllVendor().subscribe(
-      (res) => {
+      (res: any) => {
         this._vendor = res;
-        this.Spinner = false;
+        // this.Spinner = false;
+        this.isSkeletonLoader = false;
         console.log(res);
       },
       (error) => {
         console.log(error);
-        this.Spinner = false;
+        // this.Spinner = false;
+        this.isSkeletonLoader = false;
         // if(error.status === 404){
         //   alert("No Vendor Data");
         // }

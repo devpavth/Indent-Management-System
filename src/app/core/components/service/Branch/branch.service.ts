@@ -97,4 +97,8 @@ export class BranchService {
       companyName: updatedCompanyName,
     });
   }
+
+  updateFinancialYear(){
+    return this.http.put(environment.updateFinancialYear, '');
+  }
 }

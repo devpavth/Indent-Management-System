@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
+import { Observable } from 'rxjs';
+import { Vendor } from '../../../models/vendor/vendor.type';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +13,8 @@ export class VendorService {
   addVendor(data: any) {
     return this.http.post(environment.addVendor, data);
   }
-  getAllVendor() {
-    return this.http.get(environment.getAllVendorList);
+  getAllVendor(): Observable<Vendor> {
+    return this.http.get<Vendor>(environment.getAllVendorList);
   }
   deleteVendor(id: any) {
     return this.http.post(environment.deleteVendor + id, '');

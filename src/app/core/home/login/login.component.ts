@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('companyName', this.companyDetails.companyName);
 
         if (this.companyDetails.companyLogo) {
-          console.log("Company Logo before storing:", this.companyDetails.companyLogo);
+          // console.log("Company Logo before storing:", this.companyDetails.companyLogo);
           sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
         }
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { RequestService } from '../../../service/Request/request.service';
 import { Prefix } from '../../../../models/prefix/prefix.model';
 import { ToastService } from '../../../service/toast/toast.service';
+import { BranchService } from '../../../service/Branch/branch.service';
 
 @Component({
   selector: 'app-prefix',
@@ -22,31 +23,32 @@ export class PrefixComponent {
   route = inject(Router);
   requestService = inject(RequestService);
   toastService = inject(ToastService);
+  branchService = inject(BranchService);
 
-  tabs: string[] = ['Indent Code', 'Purchase Order'];
+  tabs: string[] = ['Indent Code', 'Purchase Order', 'Product Transaction'];
 
   POPrefixData: Prefix | undefined;
   isWarningFYPrefixPO: boolean = false;
-  isWarningFYPrefixPOConfirmed: boolean = false;
   isPrefixChanged: boolean = false;
+  isRunYearEndProcessBtn: boolean = false;
   initialFirstCustomValue: string = '';
   initialBranchStatus!: boolean;
   initailDeptStatus!: boolean;
   initialLastCustomValue: string = '';
+  initialTransTypeStatus!: boolean;
 
   ngOnInit() {
     console.log('Opening Prefix Component');
-    
+
     this.onTabSelect(0);
   }
 
-  onTabSelect(index: number){
+  onTabSelect(index: number) {
     this.selectedTab = index;
 
     const POCode = index + 1;
 
     this.isPrefixChanged = false;
-    this.isWarningFYPrefixPOConfirmed = false;
 
     this.fetchPOMockPrefixCode(POCode);
   }
@@ -61,6 +63,17 @@ export class PrefixComponent {
         this.initialBranchStatus = this.POPrefixData.branch;
         this.initailDeptStatus = this.POPrefixData.dept;
         this.initialLastCustomValue = this.POPrefixData.lastCustomValue;
+        this.initialTransTypeStatus = this.POPrefixData.transactionType;
+
+        if(this.POPrefixData.fyChangedOn){
+          const fyChangedYear = new Date(this.POPrefixData.fyChangedOn).getFullYear();
+          const currentYear = new Date().getFullYear();
+
+          this.isRunYearEndProcessBtn = fyChangedYear === currentYear - 1;
+
+        }else{
+          this.isRunYearEndProcessBtn = false;
+        }
       },
       (error) => {
         console.log('error while fetching PO Mock Prefix Code', error);
@@ -68,36 +81,52 @@ export class PrefixComponent {
     );
   }
 
-  companyPrefixField(event: any){
+  companyPrefixField(event: any) {
     let inputValue = event.target.value.toUpperCase();
     let formattedValue = inputValue.replace(/[^A-Z-]/g, '');
 
-    if(!/^[A-Z]/.test(formattedValue)){
+    if (!/^[A-Z]/.test(formattedValue)) {
       formattedValue = formattedValue.replace(/[^A-Z]/g, '');
     }
 
-
     formattedValue = formattedValue.replace(/-/g, '').substring(0, 3);
 
-    if(inputValue.endsWith('-') && formattedValue.length > 0){
+    if (inputValue.endsWith('-') && formattedValue.length > 0) {
       formattedValue += '-';
     }
 
-    if(this.initialFirstCustomValue === formattedValue){
+    if (this.initialFirstCustomValue === formattedValue) {
       this.isPrefixChanged = false;
-    }else{
+    } else {
       this.isPrefixChanged = true;
     }
 
-
-    if(this.POPrefixData){
+    if (this.POPrefixData) {
       this.POPrefixData.firstCustomValue = formattedValue;
 
       // console.log("this.POPrefixData.firstCustomValue:", this.POPrefixData.firstCustomValue);
     }
 
     event.target.value = formattedValue;
+  }
 
+  toggleTransType(){
+    if(this.POPrefixData){
+      this.POPrefixData.transactionType = !this.POPrefixData.transactionType;
+
+      if(this.POPrefixData.transactionType){
+        this.toastService.showSuccess('Transaction Type Added Successfully');
+      }else{
+        this.toastService.showSuccess('Transaction Type Removed Successfully');
+      }
+
+      if(this.initialTransTypeStatus === this.POPrefixData.transactionType){
+        this.isPrefixChanged = false;
+      }else{
+        this.isPrefixChanged = true;
+      }
+
+    }
   }
 
   toggleBranch() {
@@ -110,13 +139,11 @@ export class PrefixComponent {
         this.toastService.showSuccess('Branch Removed Successfully');
       }
 
-      if(this.initialBranchStatus === this.POPrefixData.branch){
+      if (this.initialBranchStatus === this.POPrefixData.branch) {
         this.isPrefixChanged = false;
-      }else{
+      } else {
         this.isPrefixChanged = true;
       }
-
-      
     }
   }
 
@@ -130,54 +157,63 @@ export class PrefixComponent {
         this.toastService.showSuccess('Department Removed Successfully');
       }
 
-      if(this.initailDeptStatus === this.POPrefixData.dept){
+      if (this.initailDeptStatus === this.POPrefixData.dept) {
         this.isPrefixChanged = false;
-      }else{
+      } else {
         this.isPrefixChanged = true;
       }
-    
     }
   }
 
-  focusFYfield() {
-    if (!this.isWarningFYPrefixPOConfirmed) {
-      this.isWarningFYPrefixPO = true;
-    }
+  confirmFYRequest() {
+    this.isWarningFYPrefixPO = true;
   }
 
   confirmFYSwitch() {
     this.isWarningFYPrefixPO = false;
-    this.isWarningFYPrefixPOConfirmed = true;
+    
+    this.branchService.updateFinancialYear().subscribe(
+      (res: any) => {
+        console.log("successfully updated financial year:", res);
+
+        this.toastService.showSuccess(res.error);
+
+        this.onTabSelect(this.selectedTab);
+      },
+      (error) => {
+        console.log("error while updating financial year:", error);
+      }
+    )
   }
 
-  formatFYInput(event: any){
+  formatFYInput(event: any) {
     let inputValue = event.target.value.replace(/^FY|-|[^0-9]/g, '');
-    let formattedValue = inputValue.substring(0, 4);
+    let formattedValue = inputValue.substring(0, 6);
 
-    if(event.target.value.endsWith('-') && formattedValue.length === 4){
+    if (event.target.value.endsWith('-') && formattedValue.length === 6) {
       formattedValue += '-';
     }
 
-    if(this.initialLastCustomValue === formattedValue){
+    if (this.initialLastCustomValue === formattedValue) {
       this.isPrefixChanged = false;
-    }else{
+    } else {
       this.isPrefixChanged = true;
     }
 
-    if(this.POPrefixData){
+    if (this.POPrefixData) {
       this.POPrefixData.lastCustomValue = formattedValue;
-    } 
+    }
 
-    if(formattedValue.length === 4){
+    if (formattedValue.length === 6) {
       this.isPrefixChanged = true;
-    }else if(formattedValue.length < 4){
+    } else if (formattedValue.length < 6) {
       this.isPrefixChanged = false;
     }
 
-    event.target.value = formattedValue;  
+    event.target.value = formattedValue;
   }
 
-  indentLastField(event: any){
+  indentLastField(event: any) {
     let inputValue = event.target.value.toUpperCase();
 
     let formattedValue = inputValue.replace(/[^A-Z0-9-]/g, '');
@@ -193,54 +229,51 @@ export class PrefixComponent {
       }
     }
 
-
     if (formattedValue.startsWith('-')) {
       if (formattedValue.length > 1) {
-        
         formattedValue = '-';
       }
     } else {
-      
       formattedValue = formattedValue.replace(/-(?=.*[A-Z0-9])/, '');
     }
 
     formattedValue = formattedValue.substring(0, 5);
 
-    if(this.initialLastCustomValue === formattedValue){
+    if (this.initialLastCustomValue === formattedValue) {
       this.isPrefixChanged = false;
-    }else{
+    } else {
       this.isPrefixChanged = true;
     }
 
-    if(this.POPrefixData && this.POPrefixData.id === 1){
+    if (this.POPrefixData && this.POPrefixData.id === 1) {
       this.POPrefixData.lastCustomValue = formattedValue;
     }
 
     event.target.value = formattedValue;
- 
   }
 
-  confirmPOPrefixCode(){
+  confirmPOPrefixCode() {
     const payload = {
       id: this.POPrefixData?.id,
       firstCustomValue: this.POPrefixData?.firstCustomValue,
       branch: this.POPrefixData?.branch,
       dept: this.POPrefixData?.dept,
       lastCustomValue: this.POPrefixData?.lastCustomValue,
+      transactionType: this.POPrefixData?.transactionType
     };
 
-    console.log("payload:", payload);
+    console.log('payload:', payload);
 
     this.requestService.updatePOPrefixCode(payload).subscribe(
       (res: any) => {
-        console.log("successfully updated the PO Prefix code:", res);
+        console.log('successfully updated the PO Prefix code:', res);
 
-        this.toastService.showSuccess(res.errorMessege);
+        this.toastService.showSuccess(res.error);
       },
       (error) => {
-        console.log("error while updating PO Prefix Code", error);
-      }
-    )
+        console.log('error while updating PO Prefix Code', error);
+      },
+    );
   }
 
   closepop(closeIcon: boolean) {

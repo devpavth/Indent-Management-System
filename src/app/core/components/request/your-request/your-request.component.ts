@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { debounceTime, Subject } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
+import { AuthService } from '../../service/Auth/auth.service';
 
 @Component({
   selector: 'app-your-request',
@@ -28,10 +29,16 @@ export class YourRequestComponent implements OnInit {
 
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isAuthorizeEditIndentForm: boolean = false;
+  isAcceptedView: boolean = false;
+  selectedRequestId: number | undefined | null = null;
+
+  private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   toastService = inject(ToastService);
+  authService = inject(AuthService);
 
-  constructor(private readonly reqService: RequestService) {
+  constructor(private readonly reqService: RequestService, private elRef: ElementRef) {
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
     this.maxDate = today.toISOString().split('T')[0];
@@ -63,6 +70,13 @@ export class YourRequestComponent implements OnInit {
         },
       );
     });
+
+    const userRoles = this.authService.getUserRoles();
+    if (userRoles.includes('ROLE_INDENT_DETAILS_EDITOR')) {
+      this.isAuthorizeEditIndentForm = true;
+    } else {
+      this.isAuthorizeEditIndentForm = false;
+    }
 
     this.fetchYourRequest();
   }
@@ -97,64 +111,6 @@ export class YourRequestComponent implements OnInit {
         },
       );
     }
-
-    // if (
-    //   (this.isCreated == false,
-    //   this.isProcess == true &&
-    //     this.isCompleted == false &&
-    //     this.isRejected == false)
-    // ) {
-    //   let status = 102;
-    //   this.reqService.getYourReq(status).subscribe(
-    //     (res) => {
-    //       this._yourReq = res;
-    //       console.log(res);
-    //     },
-    //     (error) => {
-    //       if (error.status == 204) {
-    //         this._yourReq = undefined;
-    //       }
-    //     },
-    //   );
-    // }
-    // if (
-    //   (this.isCreated == false,
-    //   this.isProcess == false &&
-    //     this.isCompleted == true &&
-    //     this.isRejected == false)
-    // ) {
-    //   let status = 200;
-    //   this.reqService.getYourReq(status).subscribe(
-    //     (res) => {
-    //       this._yourReq = res;
-    //       console.log(res);
-    //     },
-    //     (error) => {
-    //       if (error.status == 204) {
-    //         this._yourReq = undefined;
-    //       }
-    //     },
-    //   );
-    // }
-    // if (
-    //   (this.isCreated == false,
-    //   this.isProcess == false &&
-    //     this.isCompleted == false &&
-    //     this.isRejected == true)
-    // ) {
-    //   let status = 406;
-    //   this.reqService.getYourReq(status).subscribe(
-    //     (res) => {
-    //       this._yourReq = res;
-    //       console.log(res);
-    //     },
-    //     (error) => {
-    //       if (error.status == 204) {
-    //         this._yourReq = undefined;
-    //       }
-    //     },
-    //   );
-    // }
   }
 
   fetchReqByIndentCode(event: Event) {
@@ -166,7 +122,7 @@ export class YourRequestComponent implements OnInit {
     this.reqService.triggerSearch(enteredIndentCode);
   }
 
-  handleFocus(event: Event){
+  handleFocus(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
     if (inputValue.trim() === '') {
@@ -189,6 +145,58 @@ export class YourRequestComponent implements OnInit {
     this.RequestID = data;
     console.log(data);
 
+    if(this.isAuthorizeEditIndentForm){
+      this.isAcceptedView = true;
+      this.selectedRequestId = data;
+    }else{
+      this.isAcceptedView = false;
+      this.selectedRequestId = null;
+      this.isViewReq = true;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event){
+    if(!this.selectedRequestId) return;
+
+    if(
+      !(event.target as HTMLElement).closest('.dropdown-container') &&
+      !(event.target as HTMLElement).closest('.dropdown-button')
+    ){
+      this.selectedRequestId = null;
+    }
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: Event){
+    if(!this.selectedRequestId) return;
+
+    const dropdown = this.elRef.nativeElement.querySelector(
+      '.dropdown-container',
+    );
+
+    if(dropdown && !dropdown.contains(event.target as Node)){
+      if(!this.closeDropdownTimeout){
+        this.closeDropdownTimeout = setTimeout(() => {
+          this.selectedRequestId = null;
+          this.closeDropdownTimeout = null;
+        }, 300);
+
+      }
+    } else{
+      if(this.closeDropdownTimeout){
+        clearTimeout(this.closeDropdownTimeout);
+        this.closeDropdownTimeout = null;
+      }
+    }
+
+  }
+
+  openViewRequest(sno: number) {
+    this.RequestID = sno;
+
     this.isViewReq = true;
   }
+
+  editIndentForm(sno: number) {}
 }

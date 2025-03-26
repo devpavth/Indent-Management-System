@@ -15,7 +15,7 @@ export class CompanyDetailsComponent {
   companyDetails: Company | undefined;
 
   isViewCompanyDetails: boolean = false;
-  Spinner: boolean = true;
+  isSkeletonLoader: boolean = true;
 
   ngOnInit() {
     this.fetchCompanyDetails();
@@ -26,10 +26,11 @@ export class CompanyDetailsComponent {
       (res) => {
         console.log('fetching company details:', res);
         this.companyDetails = res;
-        this.Spinner = false;
+        this.isSkeletonLoader = false;
       },
       (error) => {
         console.log('error while fetching company details:', error);
+        this.isSkeletonLoader = false;
       },
     );
   }

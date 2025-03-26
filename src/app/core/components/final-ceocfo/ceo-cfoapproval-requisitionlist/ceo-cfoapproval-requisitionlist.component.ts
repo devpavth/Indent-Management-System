@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
-import { Request as AppRequest} from '../../../models/request/request.model';
+import { Request as AppRequest } from '../../../models/request/request.model';
 import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
@@ -46,7 +46,11 @@ export class CeoCfoapprovalRequisitionlistComponent {
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
-          this.viewRequest(event as Event, this.requestList?.sno, this.requestList?.requestNo);
+          this.viewRequest(
+            event as Event,
+            this.requestList?.sno,
+            this.requestList?.requestNo,
+          );
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -139,7 +143,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
           (res: any) => {
             console.log('fetching completed special roles request:', res);
             this.specialRolesProcessList = res;
-            
+
             this.noRequest = false;
             this.isSkeletonLoader = false;
           },
@@ -159,8 +163,6 @@ export class CeoCfoapprovalRequisitionlistComponent {
           },
         );
     }
-    
-    
   }
 
   handleFocus(event: Event) {
@@ -246,7 +248,11 @@ export class CeoCfoapprovalRequisitionlistComponent {
       );
   }
 
-  viewRequest(event: Event, data: number | undefined, indentNO: string | undefined) {
+  viewRequest(
+    event: Event,
+    data: number | undefined,
+    indentNO: string | undefined,
+  ) {
     event.stopPropagation();
     console.log(data);
     this.reqId = data;

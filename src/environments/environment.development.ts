@@ -80,6 +80,10 @@ export const environment = {
   getActiveProg: Url + baseBranchApi + '/getactiveprg/',
   deleteDepartmentProgram: Url + baseBranchApi + '/deleteprg/',
 
+  fetchPOPrefixCode: Url + baseBranchApi + '/getcustomcode/',
+  updatePOPrefixCode: Url + baseBranchApi + '/updatecustomcode',
+  updateFinancialYear: Url + baseBranchApi + '/changefinacialyear',
+
   //departmentd
   addNewDepartment: Url + baseBranchApi + '/adddepartment',
   addNewProject: Url + baseBranchApi + '/addprogram',
@@ -157,13 +161,10 @@ export const environment = {
 
   generatePurchaseOrder: Url + baseRequestApi + '/generate/purchaseorder/',
 
-  fetchRequestByIndentCode:
-    Url + baseRequestApi + '/getrequestbyindentcode/',
+  fetchRequestByIndentCode: Url + baseRequestApi + '/getrequestbyindentcode/',
 
-  fetchPOPrefixCode: Url + baseRequestApi + '/getcustomcode/',
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 
-  updatePOPrefixCode: Url + baseRequestApi + '/updatecustomcode',
   // http://localhost:9010/requestindent/urgent/getbranch/sendotp
 
   //old request end

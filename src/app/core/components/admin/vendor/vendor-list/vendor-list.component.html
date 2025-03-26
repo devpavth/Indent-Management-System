@@ -1,9 +1,9 @@
-<div
+<!-- <div
   *ngIf="Spinner"
   class="absolute bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-purple-50 p-4 sm:ml-64"
 >
   <app-spinner></app-spinner>
-</div>
+</div> -->
 <div class="p-4 sm:ml-64">
   <section class="dark:bg-gray-900">
     <div class="mx-auto">
@@ -116,7 +116,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!isSkeletonLoader">
               <tr
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
                 *ngFor="let ven of _vendor"
@@ -151,6 +151,17 @@
                     </svg>
                   </button>
                 </td>
+              </tr>
+            </tbody>
+
+            <tbody *ngIf="isSkeletonLoader">
+              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-36"></div></td>
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-28"></div></td>
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-24"></div></td>
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-36"></div></td>
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-16"></div></td>
+                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-10"></div></td>
               </tr>
             </tbody>
           </table>
