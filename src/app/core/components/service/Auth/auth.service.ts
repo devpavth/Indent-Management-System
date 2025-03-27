@@ -21,7 +21,7 @@ export class AuthService {
     return this.http.post(environment.verifiedID, '', { params: userId });
   }
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('access_token');
   }
   isLoggedIn() {
     return this.getToken() !== null;

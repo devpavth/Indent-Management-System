@@ -1,0 +1,437 @@
+<div class="fixed top-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-purple-950 py-10 sm:ml-64">
+    <button class="fixed top-20 right-12" (click)="closeView.emit(false)">
+    <svg
+      class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+     >
+      <path
+        class=""
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18 17.94 6M18 18 6.06 6"
+      />
+    </svg>
+  </button>
+  <section class="scroll mt-8 h-screen overflow-auto">
+    <div class="mx-32">
+        <div class="rounded-xl bg-white shadow-lg mb-24">
+            <h1 class="text-xl text-center font-semibold text-purple-600 pt-5">Edit Indent Form</h1>
+
+            <div class="scroll-smooth">
+                <div class="px-4">
+                    <div class="my-4 rounded-lg border-purple-500/10 bg-white">
+                        <div class="flex justify-between rounded-t-lg bg-purple-600 px-4 py-4">
+                            <h1 class="font-medium text-white">Indent Header</h1>
+                        </div>
+
+                        <div class="bg-purple-50 py-8">
+                            <form [formGroup]="editRequestForm" class="flex">
+                                <section class="grid grid-cols-8 w-1/2 max-w-lg gap-2 mx-auto ml-4">
+                                    <div class="col-span-8">
+                                        <ul class="mb-4 grid md:grid-cols-2 w-full gap-6">
+                                            <li>
+                                                <input 
+                                                    type="radio"
+                                                    id="hosting-small"
+                                                    formControlName="priorityType"
+                                                    value="109"
+                                                    class="peer hidden"
+                                                    required
+                                                />
+                                                <label 
+                                                    for="hosting-small"
+                                                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                                                    >
+                                                    <div class="block">
+                                                        <div class="w-full text-lg font-semibold">Normal</div>
+                                                    </div>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input 
+                                                    type="radio"
+                                                    id="hosting-big"
+                                                    formControlName="priorityType"
+                                                    value="108"
+                                                    class="peer hidden"
+                                                />
+                                                <label
+                                                    for="hosting-big"
+                                                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                                                    >
+                                                    <div class="block">
+                                                        <div class="w-full text-lg font-semibold">Urgent</div>
+                                                    </div>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-span-4 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >Requisitioner
+                                        </label>
+                                        <input 
+                                            appFirstCapLetter
+                                            formControlName="requisitioner"
+                                            type="text"
+                                            class="input-form"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div class="col-span-4 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >Required by Date
+                                        </label>
+                                        <input 
+                                            formControlName="requiredDate"
+                                            type="date"
+                                            class="input-form"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div class="col-span-8 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >
+                                            Capex / Non-capex
+                                        </label>
+                                        <div class="flex justify-stretch gap-40">
+                                            <div class="flex items-center gap-2">
+                                                <input 
+                                                    formControlName="expenditureId"
+                                                    type="radio"
+                                                    value="51"
+                                                />
+                                                <span>Capex</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <input 
+                                                    formControlName="expenditureId"
+                                                    type="radio"
+                                                    value="50"
+                                                />
+                                                <span>Non-Capex</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-4 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >
+                                            Department
+                                        </label>
+                                        <select
+                                            (change)="fetchProgram(editRequestForm.get('deptId')?.value)"
+                                            formControlName="deptId"
+                                            class="select-option1 block w-full rounded-lg"
+                                            >
+                                            <option
+                                                disabled
+                                                selected
+                                                class="bg-purple-700 text-white"
+                                                >
+                                                Choose Department
+                                            </option>
+                                            <option
+                                                *ngFor="let dept of departmentList"
+                                                value="{{dept.departId}}">
+                                                {{dept.deptName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-span-4 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >
+                                            Project/Program
+                                        </label>
+                                        <select
+                                            formControlName="programId"
+                                            class="select-option1 block w-full rounded-lg"
+                                            >
+                                            <option 
+                                                disabled
+                                                selected
+                                                class="bg-purple-700 text-white"
+                                                >
+                                                Choose Project/Program
+                                            </option>
+                                            <option 
+                                                *ngFor="let program of programList"
+                                                value="{{program.programId}}">
+                                                {{program.proName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-span-8 mb-2">
+                                        <label
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >Camp
+                                        </label>
+                                        <input 
+                                            formControlName="campName"
+                                            type="text"
+                                            class="input-form"
+                                            required
+                                        />
+                                    </div>
+                                </section>
+                                <section class="grid grid-cols-8 w-1/2 mx-auto max-w-lg gap-2 ml-8 mr-4">
+                                    <div class="col-span-8 mb-2">
+                                        <label 
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >
+                                            Indent raised by Name & Designation
+                                        </label>
+                                        <div>
+                                            <p class="text-xl">
+                                                {{employeeDetails?.empFirstName}}
+                                                {{employeeDetails?.empLastName}}
+                                            </p>
+                                            <p class="text-sm text-gray-500">
+                                                {{employeeDetails?.empDesignation}}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-5 mb-2">
+                                        <label
+                                            for="Address"
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >Indent Creation Date
+                                        </label>
+
+                                        <div class="flex items-center gap-2">
+                                            <svg
+                                                class="h-5 w-5 text-gray-600"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                >
+                                                <path
+                                                    stroke="currentColor"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                                                />
+                                            </svg>
+                                            <p>{{date | date: 'medium'}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-8 mb-2">
+                                        <label
+                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                            >Remark If Any <span class="text-gray-400">(Optional)</span>
+                                        </label>
+
+                                        <textarea 
+                                            formControlName="notes"
+                                            class="input-form"
+                                            placeholder="Remark note"
+                                            >
+                                        </textarea>
+                                    </div>
+                                </section>
+                            </form>
+                            <div class="flex w-full justify-end">
+                                <button
+                                    *ngIf="!isEditHeader"
+                                    (click)="onSubmitHeader(editRequestForm.value)"
+                                    class="btn-primary col-span-8 mx-12 mb-4"
+                                    >
+                                    Add Header
+                                </button>
+                                <button
+                                    *ngIf="isEditHeader"
+                                    (click)="onEditHeader()"
+                                    class="btn-gray col-span-8 mx-12 mb-4"
+                                    >
+                                    Edit Header
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between border-t rounded-t-lg bg-purple-600 px-4 py-4">
+                            <h1 class="font-medium text-white">Indent Body</h1>
+                        </div>
+
+                        <form
+                            [formGroup]="indentProductForm"
+                            class="flex bg-purple-50"
+                            >
+                            <section class="mx-8 my-6 grid grid-cols-8 w-2/3">
+                                <div class="col-span-8 mb-5">
+                                    <button
+                                        class="rounded-md bg-gray-50 border border-purple-600 px-3 py-2 text-sm font-medium hover:bg-purple-600 hover:text-white"
+                                        (click)="toggleOtherProduct(true)"
+                                        >
+                                        Request New Product
+                                    </button>
+                                </div>
+
+                                <div class="relative col-span-8">
+                                    <label
+                                        for="Search Product"
+                                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                                        >Search Product
+                                    </label>
+                                    <input 
+                                        type="text"
+                                        formControlName="productId"
+                                        class="input-form" 
+                                    />
+
+                                    <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
+                                        No Products found.
+                                    </div>
+
+                                    <ul
+                                        *ngIf="storeProductData &&
+                                        storeProductData.length > 0"
+                                        class="absolute border-none z-10 w-full mt-1 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
+                                        >
+                                        <li
+                                            *ngFor="let product of storeProductData"
+                                            (click)="onSelectProduct(product)"
+                                            class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                                            >
+                                            {{product.prdcatgName}} - {{product.prdbrndName}} - {{product.prdmdlName}} - {{product.prdDescription}}
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div *ngIf="productData && !noResults && isProductSelected" class="col-span-full flex flex-col">
+                                    <div class="overflow-x-auto">
+                                        <div class="inline-block min-w-full pt-2.5 align-middle">
+                                            <div class="overflow-hidden rounded-lg border">
+                                                <table class="min-w-full divide-y divide-gray-200 bg-white">
+                                                    <tbody class="divide-y divide-gray-200" *ngFor="let prd of productData">
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                Product Code
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                                                >
+                                                                <span class="font-semibold">{{prd?.prdCode}}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                Head Of Account
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                                                >
+                                                                <span class="font-semibold">{{prd.headOfAccName}}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                Product Name
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                                                >
+                                                                    <span 
+                                                                        class="font-semibold">{{prd.prdmdlName}}
+                                                                    </span>
+                                                                    -
+                                                                    {{prd.prdbrndName}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                Description
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                                                >
+                                                                {{prd?.prdDescription}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                Purchased Price
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                                                >
+                                                                {{prd.prdPurchasedPrice}}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                                                >
+                                                                GST
+                                                            </td>
+                                                            <td
+                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                                                >
+                                                                {{prd.prdGstPct}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </section>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+</div>
+
+<section
+  *ngIf="toastService.isSuccessToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+</section>
+
+<div
+  *ngIf="isOtherProduct"
+  class="absolute top-0 flex h-full w-full items-center justify-center bg-black/50"
+>
+  <app-other-product (closeToggle)="toggleOtherProduct($event)"></app-other-product>
+</div>

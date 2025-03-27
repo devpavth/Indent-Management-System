@@ -22,6 +22,8 @@ export class TProductComponent implements OnInit {
 
   private employeeService = inject(EmployeeServiceService);
 
+  companyLogo = sessionStorage.getItem('companyLogo');
+
   constructor(private productService: ProductService) {}
 
   ngOnInit() {
@@ -68,7 +70,8 @@ export class TProductComponent implements OnInit {
 
   confirmIndentTransaction() {
     this.isViewTransaction = true;
-    this.confirmTransactionMsg = "Do you want to add an Transaction based on Indent";
+    this.confirmTransactionMsg =
+      'Do you want to add an Transaction based on Indent';
   }
 
   closePopUp(closeIcon: boolean) {

@@ -15,7 +15,7 @@ import { ToastService } from '../../service/toast/toast.service';
 @Component({
   selector: 'app-request-form',
   templateUrl: './request-form.component.html',
-  styleUrls: ['./request-form.component.css'], // Fixed typo from `styleUrl` to `styleUrls`
+  styleUrls: ['./request-form.component.css'],
 })
 export class RequestFormComponent implements OnInit {
   isHeader: boolean = true;

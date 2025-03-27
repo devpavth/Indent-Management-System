@@ -4,6 +4,8 @@ import { environment } from '../../../../../environments/environment.development
 import { Branch } from '../../../models/branch/branch.model';
 import { Observable } from 'rxjs';
 import { Company } from '../../../models/company/company.model';
+import { Prefix } from '../../../models/prefix/prefix.model';
+import { Department, Program } from '../../../models/department/department.model';
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +45,8 @@ export class BranchService {
   updateBranch(data: any) {
     return this.http.post(environment.updateBranch, data);
   }
-  getAllDepartments() {
-    return this.http.get(environment.getAlldepartment);
+  getAllDepartments(): Observable<Department[]> {
+    return this.http.get<Department[]>(environment.getAlldepartment);
   }
 
   getAllProj() {
@@ -67,8 +69,8 @@ export class BranchService {
   deleteDepartment(id: any) {
     return this.http.post(environment.deleteDepart + id, id);
   }
-  getActiveProgram(id: any) {
-    return this.http.get(environment.getActiveProg + id);
+  getActiveProgram(id: any): Observable<Department[]>{
+    return this.http.get<Department[]>(environment.getActiveProg + id);
   }
   updateProj(data: any) {
     return this.http.post(environment.updateProj + data.programId, data);
@@ -80,25 +82,36 @@ export class BranchService {
     return this.http.post(environment.updateDepart + id, data);
   }
 
-  deleteDepartmentProgram(departId: any, programId: any){
-    return this.http.post(`${environment.deleteDepartmentProgram}${departId}/${programId}`, '');
+  deleteDepartmentProgram(departId: any, programId: any) {
+    return this.http.post(
+      `${environment.deleteDepartmentProgram}${departId}/${programId}`,
+      '',
+    );
   }
 
-  fetchCompanyName(): Observable<Company>{
+  fetchCompanyName(): Observable<Company> {
     return this.http.get<Company>(environment.fetchCompany);
   }
 
-  uploadCompanyLogo(formData: any){
+  uploadCompanyLogo(formData: any) {
     return this.http.put(environment.uploadCompanyLogo, formData);
   }
 
-  updateCompanyName(updatedCompanyName: string){
+  updateCompanyName(updatedCompanyName: string) {
     return this.http.put(environment.updateCompanyName, {
       companyName: updatedCompanyName,
     });
   }
 
-  updateFinancialYear(){
+  fetchPOPrefixCode(POId: number): Observable<Prefix> {
+    return this.http.get<Prefix>(environment.fetchPOPrefixCode + POId);
+  }
+
+  updatePOPrefixCode(payload: any) {
+    return this.http.put(environment.updatePOPrefixCode, payload);
+  }
+
+  updateFinancialYear() {
     return this.http.put(environment.updateFinancialYear, '');
   }
 }

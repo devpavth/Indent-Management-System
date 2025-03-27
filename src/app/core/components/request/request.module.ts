@@ -12,6 +12,7 @@ import { ViewRequestComponent } from './view-request/view-request.component';
 import { OtherProductComponent } from './other-product/other-product.component';
 import { VerificationComponent } from './verification/verification.component';
 import { ProgramManagerApprovalComponent } from './program-manager-approval/program-manager-approval.component';
+import { EditIndentRequestComponent } from './edit-indent-request/edit-indent-request.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ProgramManagerApprovalComponent } from './program-manager-approval/prog
     OtherProductComponent,
     VerificationComponent,
     ProgramManagerApprovalComponent,
+    EditIndentRequestComponent,
   ],
   imports: [
     CommonModule,

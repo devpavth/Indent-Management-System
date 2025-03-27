@@ -497,3 +497,10 @@
 >
   <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>
+
+<div *ngIf="isViewEditIndentForm">
+  <app-edit-indent-request
+    (closeView)="closeView($event)"
+    [IndentID]="RequestID"
+  ></app-edit-indent-request>
+</div>

@@ -27,7 +27,7 @@
         <button
           *ngIf="!isHeader"
           (click)="isHeader = true; isProductAdd = false"
-        >
+          >
           <svg
             class="h-6 w-6 text-white"
             aria-hidden="true"
@@ -50,7 +50,7 @@
           *ngIf="isHeader"
           (click)="isHeader = false; isProductAdd = true"
           class=""
-        >
+          >
           <svg
             class="h-6 w-6 text-white"
             aria-hidden="true"
@@ -149,7 +149,7 @@
               <label
                 for="Address"
                 class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-              >
+                >
                 Capex / Non-capex
               </label>
               <div class="flex justify-stretch gap-40">
@@ -218,7 +218,7 @@
                   selected
                   class="bg-purple-700 text-white"
                 >
-                  Choose Project/Programme
+                  Choose Project/Program
                 </option>
                 <option *ngFor="let i of program" value="{{ i.programId }}">
                   {{ i.proName }}
@@ -240,7 +240,7 @@
           </section>
           <section
             class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
-          >
+            >
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
@@ -304,14 +304,14 @@
             *ngIf="!isEditHeader"
             (click)="onSubmitHeader(requestIndentHead.value)"
             class="btn-primary col-span-8 mx-12 mb-4"
-          >
+            >
             Add Header
           </button>
           <button
             *ngIf="isEditHeader"
             (click)="onEditHeader()"
             class="btn-gray col-span-8 mx-12 mb-4"
-          >
+            >
             Edit Header
           </button>
         </div>
@@ -398,7 +398,7 @@
                         </td>
                         <td
                           class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                        >
+                          >
                           <span class="font-semibold">{{
                             pro?.headOfAccName
                           }}</span>

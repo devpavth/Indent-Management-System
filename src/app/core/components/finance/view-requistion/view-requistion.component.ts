@@ -26,7 +26,7 @@ export class ViewRequistionComponent implements OnInit {
   @Output() closeView = new EventEmitter<boolean>();
 
   dataService = inject(RequestService);
-  toastService = inject(ToastService)
+  toastService = inject(ToastService);
 
   // _requestDetails: any = {};
   _requestDetails = signal<any>(null);
@@ -69,9 +69,9 @@ export class ViewRequistionComponent implements OnInit {
   isFunderSelected: boolean = false;
   noFunder: boolean = false;
   funderSearchList: any[] = [];
-  private originalFunderSearchList: any[] = []; 
+  private originalFunderSearchList: any[] = [];
   selectedFunderId: any;
-  isViewFundDetails: boolean= false;
+  isViewFundDetails: boolean = false;
   funderDetails: any[] = [];
   assignedFundId: any[] = [];
 
@@ -99,39 +99,38 @@ export class ViewRequistionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.form.get('funderId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        if(this.isFunderSelected){
-          return of([]);
-        }
-        this.noFunder = false;
-        if(!searchTerm || searchTerm.length < 3){
-          this.funderSearchList = [];
-          return of([]);
-        }
-        return this.donorService.funderList({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("Funder API Error:", error);
-              this.noFunder = true;
-            }
+    this.form
+      .get('funderId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          if (this.isFunderSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
-        console.log("fetching funder data from backend:", response);
+          }
+          this.noFunder = false;
+          if (!searchTerm || searchTerm.length < 3) {
+            this.funderSearchList = [];
+            return of([]);
+          }
+          return this.donorService.funderList({ searchTerm }).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('Funder API Error:', error);
+                this.noFunder = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
+        console.log('fetching funder data from backend:', response);
 
         this.funderSearchList = response;
         this.isFunderSelected = false;
-      }
-    )
+      });
 
-    console.log("this.reqId:", this.reqId);
+    console.log('this.reqId:', this.reqId);
 
     this.fetchDetails(this.reqId);
     this.fetchReason();
@@ -139,50 +138,52 @@ export class ViewRequistionComponent implements OnInit {
 
   fetchDetails(data: any) {
     this.requestService.viewReq(data).subscribe((res) => {
-      console.log("fetching data:", res);
+      console.log('fetching data:', res);
       this._requestDetails.set(res);
 
-      const authStatusCode = this._requestDetails()?.financeAuthData?.authStatusCode;
-      console.log("Finance Auth Status:", authStatusCode);
-      console.log("Finance Auth Status:", typeof authStatusCode);
+      const authStatusCode =
+        this._requestDetails()?.financeAuthData?.authStatusCode;
+      console.log('Finance Auth Status:', authStatusCode);
+      console.log('Finance Auth Status:', typeof authStatusCode);
 
-      if(authStatusCode === 102){
+      if (authStatusCode === 102) {
         this.isViewAction = true;
       }
 
-      if(authStatusCode === 300){
+      if (authStatusCode === 300) {
         this.isViewAction = false;
       }
 
-      if(authStatusCode === 202){
+      if (authStatusCode === 202) {
         this.isViewAction = false;
         this.assignedFunder = this._requestDetails()?.assignedDonors;
-        console.log("this.assignedFunder:", this.assignedFunder);
+        console.log('this.assignedFunder:', this.assignedFunder);
 
-        if(this.assignedFunder.length > 0){
-          console.log("this.assignedFunder:", this.assignedFunder);
-          console.log("Rendering Funder Table...");
+        if (this.assignedFunder.length > 0) {
+          console.log('this.assignedFunder:', this.assignedFunder);
+          console.log('Rendering Funder Table...');
           this.isAccept = true;
           this.isViewFunderTable = true;
           this.isViewFinRejIndent = false;
-          this.donorTotal = this.assignedFunder.reduce((total, donor) => total + donor.contribAmt, 0);
+          this.donorTotal = this.assignedFunder.reduce(
+            (total, donor) => total + donor.contribAmt,
+            0,
+          );
         }
       }
 
-      if(authStatusCode === 406){
+      if (authStatusCode === 406) {
         this.isViewAction = false;
         this.isAccept = true;
         this.isViewFinRejIndent = true;
       }
 
-      if(authStatusCode === 418){
+      if (authStatusCode === 418) {
         this.isViewAction = true;
         this.isViewAcceptRejectAction = true;
         // this.isAccept = true;
         this.isViewFinHoldIndent = true;
       }
-
-      
 
       // this._requestDetails.find((req))
       this.calculateDate();
@@ -232,30 +233,35 @@ export class ViewRequistionComponent implements OnInit {
   }
 
   selectDonor(donor: any): void {
-    console.log("after selecting donor from list", donor);
+    console.log('after selecting donor from list', donor);
     this.isFunderSelected = true;
     this.selectedDonorName = `${donor.funderName} `;
     this.form.controls['funderId'].setValue(this.selectedDonorName); // Update this line to set the name
     this.selectedFunderId = donor.funderId;
-    console.log("this.selectedFunderId:", this.selectedFunderId);
+    console.log('this.selectedFunderId:', this.selectedFunderId);
     this.isViewFundDetails = true;
 
     const funderExists = this.assignedFunder.some(
-      (funder: any) => funder.funderId === donor.funderId
+      (funder: any) => funder.funderId === donor.funderId,
     );
 
     if (funderExists) {
-      console.log("Funder already exists in assignedFunder, blocking search.");
+      console.log('Funder already exists in assignedFunder, blocking search.');
       this.isViewFundDetails = false;
 
-      this.toastService.showWarning(`${donor.funderName} already exists in Funder cart.`);
+      this.toastService.showWarning(
+        `${donor.funderName} already exists in Funder cart.`,
+      );
       return;
     }
 
     this.fetchFunderDetails();
     // this.onSelectedFunder(funderData);
-    if (!this.originalFunderSearchList || this.originalFunderSearchList.length === 0) {
-      this.originalFunderSearchList = [donor];  // Assign array with donor object
+    if (
+      !this.originalFunderSearchList ||
+      this.originalFunderSearchList.length === 0
+    ) {
+      this.originalFunderSearchList = [donor]; // Assign array with donor object
     } else {
       this.originalFunderSearchList.push(donor); // Add donor object to existing array
     }
@@ -265,16 +271,17 @@ export class ViewRequistionComponent implements OnInit {
     // this.showDropdown = false;
   }
 
-  fetchFunderDetails(){
+  fetchFunderDetails() {
     this.requestService.fetchFunderDetails(this.selectedFunderId).subscribe(
       (res: any) => {
-        console.log("fetching funder details:", res);
-        this.funderDetails =  res;
-        console.log("this.funderDetails:", this.funderDetails);
-      },(error) => {
-        console.log("error while fetching funder details:", error);
-      }
-    )
+        console.log('fetching funder details:', res);
+        this.funderDetails = res;
+        console.log('this.funderDetails:', this.funderDetails);
+      },
+      (error) => {
+        console.log('error while fetching funder details:', error);
+      },
+    );
   }
 
   hideDropdown(): void {
@@ -332,7 +339,6 @@ export class ViewRequistionComponent implements OnInit {
   //   console.log("funderData received in onSelectedFunder:", funderData);
   //   // console.log("funderId:", funderId);
 
-
   //   this.assignedFunder = Array.of(funderData[0]);
 
   //   console.log("this.assignedFunder after assignment:", this.assignedFunder);
@@ -388,7 +394,7 @@ export class ViewRequistionComponent implements OnInit {
   //       this.assignedDonors[existingDonorIndex] = funderData;
   //       console.log("this.assignedFunder in existingDonorIndex:", this.assignedFunder);
   //     } else {
-        
+
   //       console.log("Before pushing:", this.assignedFunder);
   //       this.assignedDonors.push(funderData);
   //     }
@@ -403,78 +409,83 @@ export class ViewRequistionComponent implements OnInit {
   // }
 
   onSelectedFunder(funderData: any) {
-    console.log("funderData received in onSelectedFunder:", funderData);
+    console.log('funderData received in onSelectedFunder:', funderData);
 
     if (!this.assignedFunder) {
-        this.assignedFunder = []; 
+      this.assignedFunder = [];
     }
 
-    const newFunder = { ...funderData[0] }; 
+    const newFunder = { ...funderData[0] };
 
-    console.log("newFunder:", newFunder);
+    console.log('newFunder:', newFunder);
 
-    const funderExists = this.assignedFunder.some((donor: any) => donor.funderId === newFunder.funderId);
+    const funderExists = this.assignedFunder.some(
+      (donor: any) => donor.funderId === newFunder.funderId,
+    );
 
     if (funderExists) {
-        console.log("Funder already exists in assignedFunder. Cannot add again.");
-        return; 
+      console.log('Funder already exists in assignedFunder. Cannot add again.');
+      return;
     }
 
-    console.log("Before adding new funder, assignedFunder:", this.assignedFunder);
+    console.log(
+      'Before adding new funder, assignedFunder:',
+      this.assignedFunder,
+    );
 
     // Check if funder already exists
     const existingDonorIndex = this.assignedFunder.findIndex(
-        (donor: any) => donor.funderId === newFunder.funderId
+      (donor: any) => donor.funderId === newFunder.funderId,
     );
 
-    console.log("existingDonorIndex:", existingDonorIndex);
+    console.log('existingDonorIndex:', existingDonorIndex);
 
     if (existingDonorIndex !== -1) {
-        console.log("Funder already exists, updating contribAmt...");
-        this.assignedFunder[existingDonorIndex].contribAmt += newFunder.contribAmt;
+      console.log('Funder already exists, updating contribAmt...');
+      this.assignedFunder[existingDonorIndex].contribAmt +=
+        newFunder.contribAmt;
     } else {
-        console.log("Adding new funder...");
-        this.assignedFunder.push(newFunder);
+      console.log('Adding new funder...');
+      this.assignedFunder.push(newFunder);
     }
 
-    console.log("this.assignedFunder after assignment:", this.assignedFunder);
+    console.log('this.assignedFunder after assignment:', this.assignedFunder);
 
     this.onSubmit(newFunder);
 
     this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
-    console.log("this.donorTotal:", this.donorTotal);
-}
+    console.log('this.donorTotal:', this.donorTotal);
+  }
 
-calculateDonorTotal(donors: any[]): number {
-    console.log("donors:", donors);
+  calculateDonorTotal(donors: any[]): number {
+    console.log('donors:', donors);
     return donors.reduce((total, donor) => total + donor.contribAmt, 0);
-}
+  }
 
-onSubmit(funderData: any): void {
-    console.log("Submitting:", funderData);
-    console.log("this.assignedFunder in onSubmit:", this.assignedFunder);
+  onSubmit(funderData: any): void {
+    console.log('Submitting:', funderData);
+    console.log('this.assignedFunder in onSubmit:', this.assignedFunder);
 
     this.assignedFundId = this.assignedFunder.map((item) => ({
       fundId: item.fundId,
-      contribAmt: item.contribAmt
-    })); 
-    console.log("this.assignedFundId:", this.assignedFundId);
+      contribAmt: item.contribAmt,
+    }));
+    console.log('this.assignedFundId:', this.assignedFundId);
 
     this.form.reset();
-}
-
+  }
 
   deleteDonor(data: any) {
-    console.log("Before deletion:", this.assignedFunder);
+    console.log('Before deletion:', this.assignedFunder);
 
     this.assignedFunder = this.assignedFunder.filter(
-      (item: any) => item.fundId !== data.fundId
-    )
+      (item: any) => item.fundId !== data.fundId,
+    );
 
-    console.log("After deletion:", this.assignedFunder);
+    console.log('After deletion:', this.assignedFunder);
 
-    console.log("data:", data);
-    
+    console.log('data:', data);
+
     // this.assignedFunder.splice(0, 1);
     this.donorTotal = this.calculateDonorTotal(this.assignedFunder);
   }
@@ -498,24 +509,24 @@ onSubmit(funderData: any): void {
   submiteDonorList() {
     let finalList = {
       // finApprAmount: this.donorTotal,
-      assignedDonors: this.assignedFunder
+      assignedDonors: this.assignedFunder,
       // assignedDonors: this.assignedDonors.map((fin) => ({
       //   funderId: fin.funderId,
       //   contribAmt: fin.donotedAmt,
       // })),
     };
 
-    console.log("finalList:", finalList);
+    console.log('finalList:', finalList);
     this.requestService.finDonorAssign(this.reqId, finalList).subscribe(
       (res: any) => {
-        console.log("successfully indent request accept by finance:", res);
+        console.log('successfully indent request accept by finance:', res);
         this.isApproved = true;
       },
       (error) => {
-        console.error("error while approving the financial:", error);
+        console.error('error while approving the financial:', error);
 
-        if(error.status === 208){
-           this.toastService.showWarning(error.error.text);
+        if (error.status === 208) {
+          this.toastService.showWarning(error.error.text);
         }
 
         // if (error.status) {
@@ -528,12 +539,12 @@ onSubmit(funderData: any): void {
   closepop(data: boolean) {
     this.isApproved = data;
     this.isRejectPop = data;
-    this.isWarningPopup = data
+    this.isWarningPopup = data;
     this.closeView.emit(false);
   }
 
-  close(data: boolean){
-    console.log('Close event received:', data); 
+  close(data: boolean) {
+    console.log('Close event received:', data);
     this.isViewFundDetails = !data;
   }
 
@@ -541,30 +552,31 @@ onSubmit(funderData: any): void {
     this.requestService.commands().subscribe((res) => {
       // this.commend = res;
       // console.log("this.commend:", this.commend);
-      this.commendArray = Object.entries(res).map(([key, value]) =>({
-        key,
-        value,
-      }))
-      .filter((item) => item.key !== '0');
-      console.log("this.commend:", this.commendArray);
+      this.commendArray = Object.entries(res)
+        .map(([key, value]) => ({
+          key,
+          value,
+        }))
+        .filter((item) => item.key !== '0');
+      console.log('this.commend:', this.commendArray);
     });
   }
   postReason(data: any) {
-    console.log("reason for holding or rejection:", data);
-    console.log("typeof reason for holding or rejection:", typeof data);
+    console.log('reason for holding or rejection:', data);
+    console.log('typeof reason for holding or rejection:', typeof data);
 
     const numericData = Number(data);
-    console.log("Converted numeric data:", numericData);
-    console.log("typeof Converted numeric data:", typeof numericData);
+    console.log('Converted numeric data:', numericData);
+    console.log('typeof Converted numeric data:', typeof numericData);
 
     if (this.isHolding == true && this.isReject == false) {
       this.requestService.commend(this.reqId, numericData, 1)?.subscribe(
         (res) => {
-          console.log("successfully hold the request:", res);
+          console.log('successfully hold the request:', res);
           this.isWarningPopup = true;
         },
         (error) => {
-          console.log("error while holding the request:", error);
+          console.log('error while holding the request:', error);
           if (error.status == 200) {
             alert('This Request is on Hold');
             this.closeView.emit(false);
@@ -575,12 +587,12 @@ onSubmit(funderData: any): void {
     if (this.isHolding == false && this.isReject == true) {
       this.requestService.commend(this.reqId, numericData, 2)?.subscribe(
         (res) => {
-          console.log("successfully rejected the request:", res);
+          console.log('successfully rejected the request:', res);
           this.isRejectPop = true;
         },
         (error) => {
-          console.log("error while rejecting the request:", error);
-          if(error.status === 208){
+          console.log('error while rejecting the request:', error);
+          if (error.status === 208) {
             this.toastService.showWarning(error.error.text);
           }
 
@@ -594,12 +606,12 @@ onSubmit(funderData: any): void {
   }
   calculateDate() {
     const check = new Date(this._requestDetails().indentHeaders.requiredDate);
-    console.log("check:", check);
-    console.log("check:", check.getTime());
+    console.log('check:', check);
+    console.log('check:', check.getTime());
     let date = check.getTime() / 1000;
-    console.log("getting date:", date);
+    console.log('getting date:', date);
 
     this.caldate = this.shared.calculateDateDifference(date);
-    console.log("final date:", this.caldate);
+    console.log('final date:', this.caldate);
   }
 }

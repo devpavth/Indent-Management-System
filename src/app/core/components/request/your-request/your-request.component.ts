@@ -32,6 +32,7 @@ export class YourRequestComponent implements OnInit {
   isAuthorizeEditIndentForm: boolean = false;
   isAcceptedView: boolean = false;
   selectedRequestId: number | undefined | null = null;
+  isViewEditIndentForm: boolean = false;
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -139,6 +140,7 @@ export class YourRequestComponent implements OnInit {
 
   closeView(data: any) {
     this.isViewReq = data;
+    this.isViewEditIndentForm = data;
   }
 
   viewRequest(data: any) {
@@ -198,5 +200,12 @@ export class YourRequestComponent implements OnInit {
     this.isViewReq = true;
   }
 
-  editIndentForm(sno: number) {}
+  editIndentForm(sno: number) {
+    this.RequestID = sno;
+
+    if(this.isAuthorizeEditIndentForm = true){
+      this.isViewEditIndentForm = true;
+    }
+    
+  }
 }

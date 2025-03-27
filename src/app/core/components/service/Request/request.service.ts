@@ -365,11 +365,5 @@ export class RequestService {
     this.searchSubject.next(indentCode);
   }
 
-  fetchPOPrefixCode(POId: number): Observable<Prefix>{
-    return this.http.get<Prefix>(environment.fetchPOPrefixCode + POId);
-  }
-
-  updatePOPrefixCode(payload: any){
-    return this.http.put(environment.updatePOPrefixCode, payload);
-  }
+  
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../components/service/Auth/auth.service';
 import { BranchService } from '../../components/service/Branch/branch.service';
 import { Company } from '../../models/company/company.model';
+import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
   window: any;
 
   branchService = inject(BranchService);
+  empService = inject(EmployeeServiceService);
 
   companyDetails: Company | undefined;
 
@@ -89,10 +91,10 @@ export class LoginComponent implements OnInit {
           console.log('this.userRole:', typeof this.userRole);
 
           sessionStorage.setItem('userId', this.userid);
-          sessionStorage.setItem('token', this.userData.token);
-          sessionStorage.setItem('roles', JSON.stringify(this.userRole));
+          sessionStorage.setItem('access_token', this.userData.access_token);
+          // sessionStorage.setItem('roles', JSON.stringify(this.userRole));
 
-          this.fetchCompanyDetails();
+          this.fetchProfile();
 
           // this.Router.navigate(['home/dashboard']);
 
@@ -109,6 +111,29 @@ export class LoginComponent implements OnInit {
         if (error.status === 0) {
           console.log('offline');
         }
+      },
+    );
+  }
+
+  fetchProfile(){
+    this.empService.fetchEmployeeProfileDetails().subscribe(
+      (res: any) => {
+        console.log('fetching profile details:', res);
+
+        if(res?.desigRoleMapping){
+          const roleNames = res?.desigRoleMapping.map((role: { roleName: string; }) => role.roleName);
+
+          sessionStorage.setItem('roles', JSON.stringify(roleNames));
+
+          console.log('Stored roles in sessionStorage:', roleNames);
+
+          this.fetchCompanyDetails();
+        }
+
+        
+      },
+      (error) => {
+        console.log('error while fetching profile details:', error);
       },
     );
   }

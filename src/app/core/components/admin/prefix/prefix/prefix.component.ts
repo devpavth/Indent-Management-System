@@ -54,7 +54,7 @@ export class PrefixComponent {
   }
 
   fetchPOMockPrefixCode(POCode: number) {
-    this.requestService.fetchPOPrefixCode(POCode).subscribe(
+    this.branchService.fetchPOPrefixCode(POCode).subscribe(
       (res: Prefix) => {
         console.log('fetching POMock Prefix Code:', res);
         this.POPrefixData = res;
@@ -264,7 +264,7 @@ export class PrefixComponent {
 
     console.log('payload:', payload);
 
-    this.requestService.updatePOPrefixCode(payload).subscribe(
+    this.branchService.updatePOPrefixCode(payload).subscribe(
       (res: any) => {
         console.log('successfully updated the PO Prefix code:', res);
 

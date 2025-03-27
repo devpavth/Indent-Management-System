@@ -30,6 +30,8 @@ const routes: Routes = [
             'ROLE_PROCUREMENT_MANAGER',
             'ROLE_CEO',
             'ROLE_HEAD_ADMIN',
+            'ROLE_PRD_INW_ALERT',
+            'ROLE_ADD_PRD_TRANS',
           ],
         },
       },
@@ -110,10 +112,7 @@ const routes: Routes = [
           ).then((m) => m.TransactionModule),
         canActivate: [authGuard],
         data: {
-          roles: [
-            'ROLE_PRD_INW_ALERT',
-            'ROLE_ADD_PRD_TRANS',
-          ],
+          roles: ['ROLE_PRD_INW_ALERT', 'ROLE_ADD_PRD_TRANS'],
         },
       },
     ],
