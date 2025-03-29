@@ -162,6 +162,7 @@ export const environment = {
   generatePurchaseOrder: Url + baseRequestApi + '/generate/purchaseorder/',
 
   fetchRequestByIndentCode: Url + baseRequestApi + '/getrequestbyindentcode/',
+  updateIndentRequestDetails: Url + baseRequestApi + '/updaterequestdetails/',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 

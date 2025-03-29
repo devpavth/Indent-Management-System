@@ -50,7 +50,6 @@ export class RequestFormComponent implements OnInit {
   totalSum: number = 0;
   taxSum: number = 0;
   subtotalSum: number = 0;
-  inwords: string = '';
 
   // deleteToastMsg: any;
   toastService = inject(ToastService);
@@ -496,7 +495,6 @@ export class RequestFormComponent implements OnInit {
       (sum, product) => sum + product.subtotal,
       0,
     );
-    this.inwords = this.shared.inWords(this.totalSum);
   }
 
   productReset() {

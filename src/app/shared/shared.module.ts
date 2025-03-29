@@ -6,9 +6,9 @@ import { SuccessToastComponent } from './success-toast/success-toast.component';
 import { DeleteToastComponent } from './delete-toast/delete-toast.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { DpPicPipe } from './pipe/dp-pic.pipe';
+import { DpPicPipe } from './pipes/dp-pic.pipe';
 import { ProfileComponent } from './Settings/profile/profile.component';
-import { SearchPipe } from './pipe/Search/search.pipe';
+import { SearchPipe } from './pipes/Search/search.pipe';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { FirstCapLetterDirective } from './Directives/first-cap-letter.directive';
 import { SuccessPopComponent } from './success-pop/success-pop.component';
@@ -33,6 +33,7 @@ import { QuoteAcceptedpopupComponent } from './quote-acceptedpopup/quote-accepte
 import { UploadSignatureComponent } from './upload-signature/upload-signature.component';
 import { WarningQuotecompareMessageComponent } from './warning-quotecompare-message/warning-quotecompare-message.component';
 import { WarningPrefixComponent } from './warning-prefix/warning-prefix.component';
+import { AmountInWordsPipe } from './pipes/amountInWords/amount-in-words.pipe';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { WarningPrefixComponent } from './warning-prefix/warning-prefix.componen
     UploadSignatureComponent,
     WarningQuotecompareMessageComponent,
     WarningPrefixComponent,
+    AmountInWordsPipe,
   ],
   imports: [
     CommonModule,
@@ -97,7 +99,8 @@ import { WarningPrefixComponent } from './warning-prefix/warning-prefix.componen
     WarningPopupComponent,
     WarningRoleassigningPopupComponent,
     UploadSignatureComponent,
-    WarningPrefixComponent
+    WarningPrefixComponent,
+    AmountInWordsPipe,
   ],
 })
 export class SharedModule {}

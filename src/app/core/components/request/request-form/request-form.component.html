@@ -427,7 +427,7 @@
                           Description
                         </td>
                         <td
-                          class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                          class="whitespace-nowrap text-wrap px-6 py-4 text-sm text-gray-800"
                         >
                           {{ pro?.prdDescription }}
                         </td>
@@ -700,7 +700,7 @@
               height="24"
               fill="none"
               viewBox="0 0 24 24"
-            >
+              >
               <path
                 stroke="currentColor"
                 stroke-linecap="round"
@@ -769,9 +769,9 @@
                     (click)="deleteProduct(i)"
                     id="apple-imac-27-dropdown-button"
                     data-dropdown-toggle="apple-imac-27-dropdown"
-                    class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-800 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
+                    class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
                     type="button"
-                  >
+                    >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -789,7 +789,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="space-y-6 rounded-b-lg border border-violet-300 p-4">
+          <div class="space-y-6 rounded-b-lg border-x border-b border-violet-300 p-4">
             <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
               Order summary
             </h4>
@@ -830,8 +830,8 @@
                   <h1
                     *ngIf="totalSum"
                     class="text-end text-xs font-semibold capitalize text-rose-700"
-                  >
-                    {{ inwords }}
+                    >
+                    {{ totalSum | amountInWords }}
                   </h1>
                 </dd>
               </dl>
@@ -1004,7 +1004,7 @@
     </div>
     <!-- final save -->
 
-    <div class="z-10 mx-auto mb-6 w-full" *ngIf="isEnableSave">
+    <div class="mx-auto mb-6 w-full" *ngIf="isEnableSave">
       <!-- Start coding here -->
       <div
         class="relative overflow-hidden bg-white shadow-md dark:bg-gray-800 sm:rounded-lg"

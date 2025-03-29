@@ -7,7 +7,7 @@ import { LeftMenuComponent } from '../Layouts/left-menu/left-menu.component';
 import { HeaderComponent } from '../Layouts/header/header.component';
 import { SharedModule } from '../../shared/shared.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AdminModule } from "../components/admin/admin.module";
+import { AdminModule } from '../components/admin/admin.module';
 
 @NgModule({
   declarations: [

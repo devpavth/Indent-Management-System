@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   empService = inject(EmployeeServiceService);
 
   companyDetails: Company | undefined;
+  loading: boolean = false;
 
   constructor(
     private Router: Router,
@@ -79,6 +80,9 @@ export class LoginComponent implements OnInit {
     console.log('login data', loginData);
 
     this.userData = loginData;
+
+    this.loading = true;
+
     this.auth.login(loginData).subscribe(
       (res) => {
         this.userData = res;
@@ -90,21 +94,37 @@ export class LoginComponent implements OnInit {
           console.log('this.userRole:', this.userRole);
           console.log('this.userRole:', typeof this.userRole);
 
-          sessionStorage.setItem('userId', this.userid);
-          sessionStorage.setItem('access_token', this.userData.access_token);
+          if(this.userData.access_token){
+            const expiresIn = this.userData.expires_in * 1000;
+
+            console.log("expiresIn:", expiresIn);
+
+            sessionStorage.setItem('userId', this.userid);
+            sessionStorage.setItem('access_token', this.userData.access_token);
+
+            setTimeout(() => {
+              console.log('Session expired, logging out...');
+              this.logout();
+            }, expiresIn);
+          }else{
+            console.log("token is expired else part.");
+          }
+
+          
           // sessionStorage.setItem('roles', JSON.stringify(this.userRole));
 
           this.fetchProfile();
 
           // this.Router.navigate(['home/dashboard']);
 
-          console.log(this.userData);
+          console.log("login credentials:", this.userData);
         } else {
           // alert('error');
           this.passwordVerified = 1;
         }
       },
       (error) => {
+        this.loading = false;
         if (error.status == 403) {
           this.passwordVerified = 1;
         }
@@ -151,6 +171,8 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
         }
 
+        this.loading = false;
+
         this.Router.navigate(['home/dashboard']);
 
         // sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
@@ -162,5 +184,12 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  logout(){
+    sessionStorage.clear();
+    sessionStorage.removeItem('userId');
+    sessionStorage.removeItem('access_token');
+    console.log('Session expired. Logging out...');
+    this.Router.navigate(['/login']);
+  }
   
 }

@@ -13,6 +13,7 @@ import { AuthService } from '../../service/Auth/auth.service';
 export class YourRequestComponent implements OnInit {
   _yourReq: any;
   RequestID: any;
+  indentNumber: string = '';
   isCreated: boolean = true;
   isProcess: boolean = false;
   isCompleted: boolean = false;
@@ -200,8 +201,9 @@ export class YourRequestComponent implements OnInit {
     this.isViewReq = true;
   }
 
-  editIndentForm(sno: number) {
+  editIndentForm(sno: number, indentNum: string) {
     this.RequestID = sno;
+    this.indentNumber = indentNum;
 
     if(this.isAuthorizeEditIndentForm = true){
       this.isViewEditIndentForm = true;

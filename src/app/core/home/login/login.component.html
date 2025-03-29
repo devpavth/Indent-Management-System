@@ -159,8 +159,12 @@
             [ngClass]="{ 'diabale-login ': loginForm.invalid }"
             type="submit"
             class="mb-2 me-2 w-full rounded-lg bg-purple-700 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:scale-105 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-          >
-            Login
+            >
+            <span *ngIf="!loading">Login</span>
+            <span *ngIf="loading" class="flex items-center justify-center gap-2">
+              <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Logging in...</span>
+            </span>
           </button>
         </div>
       </form>
