@@ -361,9 +361,11 @@ export class RequestService {
     return this.searchSubject.pipe(debounceTime(400));
   }
 
-  triggerSearch(indentCode: string){
+  triggerSearch(indentCode: string) {
     this.searchSubject.next(indentCode);
   }
 
-  
+  updateIndentRequestDetails(indentID: number, indentData: any){
+    return this.http.put(environment.updateIndentRequestDetails + indentID, indentData);
+  }
 }

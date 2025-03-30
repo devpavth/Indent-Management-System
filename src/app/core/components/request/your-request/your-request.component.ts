@@ -35,7 +35,6 @@ export class YourRequestComponent implements OnInit {
   selectedRequestId: number | undefined | null = null;
   isViewEditIndentForm: boolean = false;
 
-  private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
   toastService = inject(ToastService);
   authService = inject(AuthService);
@@ -58,7 +57,17 @@ export class YourRequestComponent implements OnInit {
 
           if (branchCode === this.requestList?.branchCode) {
             // this.showSearchInfo = false;
+            
+            this.isAuthorizeEditIndentForm = false;
             this.viewRequest(this.requestList?.sno);
+
+            const userRoles = this.authService.getUserRoles();
+            if (userRoles.includes('ROLE_INDENT_DETAILS_EDITOR')) {
+              this.isAuthorizeEditIndentForm = true;
+            } else {
+              this.isAuthorizeEditIndentForm = false;
+            }
+
           } else {
             this.toastService.showError("You can't view other branch indent");
           }
@@ -158,42 +167,6 @@ export class YourRequestComponent implements OnInit {
     }
   }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event){
-    if(!this.selectedRequestId) return;
-
-    if(
-      !(event.target as HTMLElement).closest('.dropdown-container') &&
-      !(event.target as HTMLElement).closest('.dropdown-button')
-    ){
-      this.selectedRequestId = null;
-    }
-  }
-
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: Event){
-    if(!this.selectedRequestId) return;
-
-    const dropdown = this.elRef.nativeElement.querySelector(
-      '.dropdown-container',
-    );
-
-    if(dropdown && !dropdown.contains(event.target as Node)){
-      if(!this.closeDropdownTimeout){
-        this.closeDropdownTimeout = setTimeout(() => {
-          this.selectedRequestId = null;
-          this.closeDropdownTimeout = null;
-        }, 300);
-
-      }
-    } else{
-      if(this.closeDropdownTimeout){
-        clearTimeout(this.closeDropdownTimeout);
-        this.closeDropdownTimeout = null;
-      }
-    }
-
-  }
 
   openViewRequest(sno: number) {
     this.RequestID = sno;

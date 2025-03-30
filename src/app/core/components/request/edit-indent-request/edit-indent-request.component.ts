@@ -11,6 +11,7 @@ import { HttpParams } from '@angular/common/http';
 import { ProductService } from '../../service/Product/product.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { RequestService } from '../../service/Request/request.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-indent-request',
@@ -31,6 +32,7 @@ export class EditIndentRequestComponent {
   productService = inject(ProductService);
   sharedService = inject(SharedServiceService);
   requestService = inject(RequestService);
+  route = inject(Router);
 
   employeeDetails: Employeedetails | undefined;
   departmentList: Department[] = [];
@@ -47,15 +49,14 @@ export class EditIndentRequestComponent {
   totalSum: number = 0;
   taxSum: number = 0;
   subtotalSum: number = 0;
+  isEditIndentPrdIndex: number | null = null;
 
   storeProductData: Product[] = [];
   productData: Product[] = [];
 
   productList: any[] = [];
   _requestIndentDetails: any;
-
-  date: Date = new Date();
-  private intervalId: ReturnType<typeof setInterval> | null = null;
+  headerData: any;
 
   constructor(private fb: FormBuilder) {
     this.editRequestForm = this.fb.group({
@@ -86,9 +87,6 @@ export class EditIndentRequestComponent {
   }
 
   ngOnInit() {
-    this.intervalId = setInterval(() => {
-      this.date = new Date();
-    }, 1000);
 
     this.indentProductForm
       .get('productId')
@@ -140,16 +138,11 @@ export class EditIndentRequestComponent {
     this.onChanges();
   }
 
-  ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
 
-  fetchIndentRequestDetails(indentID: number){
+  fetchIndentRequestDetails(indentID: number) {
     this.requestService.viewReq(indentID).subscribe(
       (res) => {
-        console.log("fetching indent request details:", res);
+        console.log('fetching indent request details:', res);
         this._requestIndentDetails = res;
 
         this.editRequestForm.patchValue({
@@ -158,14 +151,31 @@ export class EditIndentRequestComponent {
           requisitioner: this._requestIndentDetails.indentHeaders.requisitioner,
           totalPrice: this._requestIndentDetails.indentHeaders.totalPrice,
           notes: this._requestIndentDetails.indentHeaders.notes,
+          expenditureId: String(
+            this._requestIndentDetails.indentHeaders.expenditureId,
+          ),
+          deptId: this._requestIndentDetails.indentBranch?.deptId,
+          programId: this._requestIndentDetails.indentHeaders?.programId,
+          priorityType: String(
+            this._requestIndentDetails.indentHeaders.priorityType,
+          ),
         });
 
-        this.productList = this._requestIndentDetails.productDetails;
-        const qtyList = this.productList.map(prd => prd.qty);
-        const unitPriceList = this.productList.map(prd => prd.unitPrice);
-        const gstpercentageList = this.productList.map(prd => prd.prdGstPct);
+        if (this._requestIndentDetails.indentBranch.deptId) {
+          this.fetchProgram(this._requestIndentDetails.indentBranch.deptId);
+        }
 
-        console.log("qty:", qtyList);
+        this.headerData = this.editRequestForm.value;
+
+        console.log(this._requestIndentDetails.indentHeaders?.programId);
+        console.log(this._requestIndentDetails.indentHeaders.priorityType);
+
+        this.productList = this._requestIndentDetails.productDetails;
+        const qtyList = this.productList.map((prd) => prd.qty);
+        const unitPriceList = this.productList.map((prd) => prd.unitPrice);
+        const gstpercentageList = this.productList.map((prd) => prd.prdGstPct);
+
+        console.log('qty:', qtyList);
 
         const gstResults = qtyList.map((qty, index) => {
           return this.sharedService.gstCalculation(
@@ -173,26 +183,24 @@ export class EditIndentRequestComponent {
             unitPriceList[index],
             gstpercentageList[index],
           );
-        })
+        });
 
-        console.log("gstResults:", gstResults);
-        this.productList = this.productList.map(
-          (prd, index) => ({
-            ...prd,
-            subtotal: prd.qty * prd.unitPrice,
-            tax: gstResults[index].gstAmt,
-            total: gstResults[index].itemPrice
-          })
-        )
+        console.log('gstResults:', gstResults);
+        this.productList = this.productList.map((prd, index) => ({
+          ...prd,
+          subtotal: prd.qty * prd.unitPrice,
+          tax: gstResults[index].gstAmt,
+          total: gstResults[index].itemPrice,
+        }));
 
-        console.log("existing productList:", this.productList);
+        console.log('existing productList:', this.productList);
 
         this.calculateSums();
       },
       (error) => {
-        console.log("error while fetching indent details:", error);
-      }
-    )
+        console.log('error while fetching indent details:', error);
+      },
+    );
   }
 
   fetchEmployeeDetails() {
@@ -239,6 +247,8 @@ export class EditIndentRequestComponent {
     this.editRequestForm.disable();
 
     this.toastService.showSuccess('Header Added Successfully');
+
+    this.headerData = headerData;
   }
 
   onEditHeader() {
@@ -317,6 +327,8 @@ export class EditIndentRequestComponent {
         tax: this.tax,
         total: this.total,
         productId: this.productData[0].productId,
+        id: 0,
+        status: 200,
       };
 
       this.productList.push(list);
@@ -327,11 +339,114 @@ export class EditIndentRequestComponent {
     this.calculateSums();
   }
 
-  deleteProduct(index: number) {
-    this.productList.splice(index, 1);
+  liveGstCalculation(){
+    const qtyList = this.productList.map((prd) => prd.qty);
+    const unitPriceList = this.productList.map((prd) => prd.unitPrice);
+    const gstpercentageList = this.productList.map((prd) => prd.prdGstPct);
+
+    console.log('qty:', qtyList);
+
+    const gstResults = qtyList.map((qty, index) => {
+      return this.sharedService.gstCalculation(
+        qty,
+        unitPriceList[index],
+        gstpercentageList[index],
+      );
+    });
+
+    console.log('gstResults:', gstResults);
+    this.productList = this.productList.map((prd, index) => ({
+      ...prd,
+      subtotal: prd.qty * prd.unitPrice,
+      tax: gstResults[index].gstAmt,
+      total: gstResults[index].itemPrice,
+    }));
+  }
+
+  liveCalulationForDeletion(){
+    const activeProducts = this.productList.filter((prd) => prd.status !== 404);
+
+    const qtyList = activeProducts.map((prd) => prd.qty);
+    const unitPriceList = activeProducts.map((prd) => prd.unitPrice);
+    const gstpercentageList = activeProducts.map((prd) => prd.prdGstPct);
+
+    console.log('qty:', qtyList);
+
+    const gstResults = qtyList.map((qty, index) => {
+      return this.sharedService.gstCalculation(
+        qty,
+        unitPriceList[index],
+        gstpercentageList[index],
+      );
+    });
+
+    console.log('gstResults:', gstResults);
+
+    // Update only active products
+    this.productList = this.productList.map((prd, index) => {
+      if (prd.status === 404) return prd; // Keep deleted products unchanged
+
+      return {
+        ...prd,
+        subtotal: prd.qty * prd.unitPrice,
+        tax: gstResults[index]?.gstAmt ?? 0,
+        total: gstResults[index]?.itemPrice ?? 0,
+      };
+    });
+  }
+
+  editUnitPrice(){
+
+    this.liveGstCalculation();
+    
+    this.calculateSums();
+  }
+
+  editQty(){
+    this.liveGstCalculation();
+    this.calculateSums();
+  }
+
+  editIndentProduct(index: number, product: any) {
+    this.isEditIndentPrdIndex = index;
+
+    this.indentProductForm.patchValue({
+      unitPrice: product?.unitPrice,
+      qty: product.qty,
+      status: 301,
+    });
+
+    this.productList[index] = {
+      ...product,
+      status: 301,
+    };
+
+    console.log('productList in edit product:', this.productList);
+    console.log('after edit indentProductForm:', this.indentProductForm.value);
+  }
+
+  deleteProduct(index: number, product: any) {
+    // this.productList.splice(index, 1);
+
+    console.log("productList before deletion:", this.productList);
 
     this.toastService.showSuccess('Item Deleted');
 
+    this.productList[index] = {
+      ...product,
+      status: 404,
+    };
+
+    //  this.productList.splice(index, 1);
+
+    console.log("productList after deletion:", this.productList);
+
+    console.log(
+      'after delete indentProductForm:',
+      this.indentProductForm.value,
+    );
+    
+    this.liveCalulationForDeletion();
     this.calculateSums();
   }
 
@@ -350,6 +465,31 @@ export class EditIndentRequestComponent {
       (sum, product) => sum + product.subtotal,
       0,
     );
+  }
 
+  updateIndentDetails() {
+    let indent = {
+      ...this.headerData,
+      totalPrice: this.totalSum.toFixed(2),
+      productDetails: this.productList,
+    };
+
+    console.log('update indent data:', indent);
+
+    this.requestService
+      .updateIndentRequestDetails(this.IndentID, indent)
+      .subscribe(
+        (res) => {
+          console.log('successfully updated the indent details:', res);
+
+          this.toastService.showSuccess('Indent Updated Successfully.');
+          setTimeout(() => {
+            this.route.navigate(['/home/userRequest']);
+          }, 3000);
+        },
+        (error) => {
+          console.log('error while updating the indent details:', error);
+        },
+      );
   }
 }

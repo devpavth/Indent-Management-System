@@ -38,7 +38,7 @@ export class RequestFormComponent implements OnInit {
   programList: any;
   headofacc: any;
   date: Date = new Date();
-  private intervalId: any;
+  private intervalId: ReturnType<typeof setInterval> | null = null;
 
   funder: any;
   vendor: any | undefined;
@@ -248,6 +248,12 @@ export class RequestFormComponent implements OnInit {
     // if(this.productForm.get('productForm')?.value > 5000){
     //   this.isVendorView = false;
     // }
+  }
+
+  ngOnDestroy(): void{
+    if(this.intervalId){
+      clearInterval(this.intervalId);
+    }
   }
 
   onChanges(): void {

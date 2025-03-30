@@ -334,7 +334,7 @@ export class ViewEmployeeComponent implements OnInit {
   }
 
   closeEmployeeView() {
-    this.isStyle = true;
+    // this.isStyle = true;
     this.closeEmployeePop.emit(false);
   }
 
