@@ -76,7 +76,7 @@ export class EditIndentRequestComponent {
       headOfAccId: [],
       qty: [0],
       unitPrice: [0],
-      gstpercentage: [],
+      prdGstPct: [],
       prdmdlName: [],
       prdbrndName: [],
       headOfAccName: [],
@@ -87,7 +87,6 @@ export class EditIndentRequestComponent {
   }
 
   ngOnInit() {
-
     this.indentProductForm
       .get('productId')
       ?.valueChanges.pipe(
@@ -137,7 +136,6 @@ export class EditIndentRequestComponent {
     this.fetchDepartmentList();
     this.onChanges();
   }
-
 
   fetchIndentRequestDetails(indentID: number) {
     this.requestService.viewReq(indentID).subscribe(
@@ -273,7 +271,7 @@ export class EditIndentRequestComponent {
       qty: 1,
       headOfAccId: product.headOfAccId,
       unitPrice: product.prdPurchasedPrice,
-      gstpercentage: product.prdGstPct,
+      prdGstPct: product.prdGstPct,
       prdmdlName: product.prdmdlName,
       prdbrndName: product.prdbrndName,
       headOfAccName: product.headOfAccName,
@@ -288,7 +286,7 @@ export class EditIndentRequestComponent {
     this.indentProductForm.valueChanges.subscribe((val) => {
       const unitPrice = parseFloat(val.unitPrice) || 0;
       const qty = parseInt(val.qty) || 0;
-      const gstpercentage = parseFloat(val.gstpercentage) || 0;
+      const gstpercentage = parseFloat(val.prdGstPct) || 0;
       let gst = this.sharedService.gstCalculation(
         qty,
         unitPrice,
@@ -320,6 +318,9 @@ export class EditIndentRequestComponent {
     if (existingIndex !== -1) {
       console.log('calling if condition in existingIndex');
       this.productList[existingIndex].qty += product.qty;
+      this.productList[existingIndex].subtotal += this.subtotal;
+      this.productList[existingIndex].tax += this.tax;
+      this.productList[existingIndex].total += this.total;
     } else {
       let list = {
         ...product,
@@ -339,7 +340,7 @@ export class EditIndentRequestComponent {
     this.calculateSums();
   }
 
-  liveGstCalculation(){
+  liveGstCalculation() {
     const qtyList = this.productList.map((prd) => prd.qty);
     const unitPriceList = this.productList.map((prd) => prd.unitPrice);
     const gstpercentageList = this.productList.map((prd) => prd.prdGstPct);
@@ -363,7 +364,7 @@ export class EditIndentRequestComponent {
     }));
   }
 
-  liveCalulationForDeletion(){
+  liveCalulationForDeletion() {
     const activeProducts = this.productList.filter((prd) => prd.status !== 404);
 
     const qtyList = activeProducts.map((prd) => prd.qty);
@@ -383,27 +384,38 @@ export class EditIndentRequestComponent {
     console.log('gstResults:', gstResults);
 
     // Update only active products
-    this.productList = this.productList.map((prd, index) => {
-      if (prd.status === 404) return prd; // Keep deleted products unchanged
+    let activeIndex = 0;
+    this.productList = this.productList.map((prd) => {
+      if (prd.status === 404) return prd; 
 
-      return {
+      const updatedProduct = {
         ...prd,
         subtotal: prd.qty * prd.unitPrice,
-        tax: gstResults[index]?.gstAmt ?? 0,
-        total: gstResults[index]?.itemPrice ?? 0,
+        tax: gstResults[activeIndex].gstAmt ?? 0,
+        total: gstResults[activeIndex].itemPrice ?? 0,
       };
+
+      activeIndex++;
+      console.log('updatedProduct:', updatedProduct);
+      return updatedProduct;
     });
+
+    console.log('Updated productList:', this.productList);
   }
 
-  editUnitPrice(){
+  editUnitPrice() {
+    this.liveCalulationForDeletion();
 
-    this.liveGstCalculation();
-    
     this.calculateSums();
   }
 
-  editQty(){
-    this.liveGstCalculation();
+  trackByProduct(index: number, product: any): number {
+    return product.id; 
+  }
+
+  editQty() {
+    this.liveCalulationForDeletion();
+
     this.calculateSums();
   }
 
@@ -428,7 +440,7 @@ export class EditIndentRequestComponent {
   deleteProduct(index: number, product: any) {
     // this.productList.splice(index, 1);
 
-    console.log("productList before deletion:", this.productList);
+    console.log('productList before deletion:', this.productList);
 
     this.toastService.showSuccess('Item Deleted');
 
@@ -439,32 +451,37 @@ export class EditIndentRequestComponent {
 
     //  this.productList.splice(index, 1);
 
-    console.log("productList after deletion:", this.productList);
+    console.log('productList after deletion:', this.productList);
 
     console.log(
       'after delete indentProductForm:',
       this.indentProductForm.value,
     );
-    
+
     this.liveCalulationForDeletion();
     this.calculateSums();
   }
 
   calculateSums() {
-    this.totalSum = this.productList.reduce(
+    const activeProducts = this.productList.filter((prd) => prd.status !== 404);
+
+    this.totalSum = activeProducts.reduce(
       (sum, product) => sum + product.total,
       0,
     );
 
-    this.taxSum = this.productList.reduce(
-      (sum, product) => sum + product.tax,
-      0,
-    );
+    this.taxSum = activeProducts.reduce((sum, product) => sum + product.tax, 0);
 
-    this.subtotalSum = this.productList.reduce(
+    this.subtotalSum = activeProducts.reduce(
       (sum, product) => sum + product.subtotal,
       0,
     );
+
+    console.log('Updated Totals:', {
+      totalSum: this.totalSum,
+      taxSum: this.taxSum,
+      subtotalSum: this.subtotalSum,
+    });
   }
 
   updateIndentDetails() {
