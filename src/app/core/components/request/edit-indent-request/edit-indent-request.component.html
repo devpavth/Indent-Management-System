@@ -1,5 +1,7 @@
-<div class="fixed top-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-purple-950 py-10 sm:ml-64">
-    <button class="fixed top-20 right-3" (click)="closeView.emit(false)">
+<div
+  class="fixed left-0 right-0 top-0 bg-gradient-to-t from-gray-900 to-purple-950 py-10 sm:ml-64"
+>
+  <button class="fixed right-3 top-20" (click)="closeView.emit(false)">
     <svg
       class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
       aria-hidden="true"
@@ -8,7 +10,7 @@
       height="24"
       fill="none"
       viewBox="0 0 24 24"
-     >
+    >
       <path
         class=""
         stroke="currentColor"
@@ -21,774 +23,844 @@
   </button>
   <section class="scroll mt-8 h-screen overflow-auto">
     <div class="mx-12">
-        <div class="rounded-xl bg-white shadow-lg mb-24">
-            <h1 class="text-xl text-center font-semibold text-purple-600 pt-5">Edit Indent Form</h1>
+      <div
+        *ngIf="loading"
+        class="absolute inset-0 mt-2 flex items-center justify-center bg-opacity-70"
+      >
+        <div
+          class="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
+        ></div>
+      </div>
+      <div class="mb-24 rounded-xl bg-white shadow-lg" *ngIf="!loading">
+        <h1 class="pt-5 text-center text-xl font-semibold text-purple-600">
+          Edit Indent - {{ _requestIndentDetails.indentHeaders?.requestNo }}
+        </h1>
 
-            <div class="scroll-smooth">
-                <div class="px-4">
-                    <div class="my-4 rounded-lg border-purple-500/10 bg-white">
-                        <div class="flex justify-between rounded-t-lg bg-purple-600 px-4 py-4">
-                            <h1 class="font-medium text-white">Indent Header</h1>
-                        </div>
+        <div class="scroll-smooth">
+          <div class="px-4">
+            <div class="my-4 rounded-lg border-purple-500/10 bg-white">
+              <div
+                class="flex justify-between rounded-t-lg bg-purple-600 px-4 py-4"
+              >
+                <h1 class="font-medium text-white">Indent Header</h1>
+              </div>
 
-                        <div class="bg-purple-50 py-8">
-                            <form [formGroup]="editRequestForm" class="flex">
-                                <section class="grid grid-cols-8 w-1/2 max-w-lg gap-2 mx-auto ml-4">
-                                    <div class="col-span-8">
-                                        <ul class="mb-4 grid md:grid-cols-2 w-full gap-6">
-                                            <li>
-                                                <input 
-                                                    type="radio"
-                                                    id="hosting-small"
-                                                    formControlName="priorityType"
-                                                    value="109"
-                                                    class="peer hidden"
-                                                    required
-                                                />
-                                                <label 
-                                                    for="hosting-small"
-                                                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
-                                                    >
-                                                    <div class="block">
-                                                        <div class="w-full text-lg font-semibold">Normal</div>
-                                                    </div>
-                                                </label>
-                                            </li>
-                                            <li>
-                                                <input 
-                                                    type="radio"
-                                                    id="hosting-big"
-                                                    formControlName="priorityType"
-                                                    value="108"
-                                                    class="peer hidden"
-                                                />
-                                                <label
-                                                    for="hosting-big"
-                                                    class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
-                                                    >
-                                                    <div class="block">
-                                                        <div class="w-full text-lg font-semibold">Urgent</div>
-                                                    </div>
-                                                </label>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="col-span-4 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >Requisitioner
-                                        </label>
-                                        <input 
-                                            appFirstCapLetter
-                                            formControlName="requisitioner"
-                                            type="text"
-                                            class="input-form"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div class="col-span-4 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >Required by Date
-                                        </label>
-                                        <input 
-                                            formControlName="requiredDate"
-                                            type="date"
-                                            class="input-form"
-                                            required
-                                        />
-                                    </div>
-
-                                    <div class="col-span-8 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >
-                                            Capex / Non-capex
-                                        </label>
-                                        <div class="flex justify-stretch gap-40">
-                                            <div class="flex items-center gap-2">
-                                                <input 
-                                                    formControlName="expenditureId"
-                                                    type="radio"
-                                                    value="51"
-                                                />
-                                                <span>Capex</span>
-                                            </div>
-                                            <div class="flex items-center gap-2">
-                                                <input 
-                                                    formControlName="expenditureId"
-                                                    type="radio"
-                                                    value="50"
-                                                />
-                                                <span>Non-Capex</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-span-4 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >
-                                            Department
-                                        </label>
-                                        <select
-                                            (change)="fetchProgram(editRequestForm.get('deptId')?.value)"
-                                            formControlName="deptId"
-                                            class="select-option1 block w-full rounded-lg"
-                                            >
-                                            <option
-                                                disabled
-                                                selected
-                                                class="bg-purple-700 text-white"
-                                                >
-                                                Choose Department
-                                            </option>
-                                            <option
-                                                *ngFor="let dept of departmentList"
-                                                value="{{dept.departId}}">
-                                                {{dept.deptName}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-span-4 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >
-                                            Project/Program
-                                        </label>
-                                        <select
-                                            formControlName="programId"
-                                            class="select-option1 block w-full rounded-lg"
-                                            >
-                                            <option 
-                                                disabled
-                                                selected
-                                                class="bg-purple-700 text-white"
-                                                >
-                                                Choose Project/Program
-                                            </option>
-                                            <option 
-                                                *ngFor="let program of programList"
-                                                value="{{program.programId}}">
-                                                {{program.proName}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-span-8 mb-2">
-                                        <label
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >Camp
-                                        </label>
-                                        <input 
-                                            formControlName="campName"
-                                            type="text"
-                                            class="input-form"
-                                            required
-                                        />
-                                    </div>
-                                </section>
-                                <section class="grid grid-cols-8 w-1/2 mx-auto max-w-lg gap-2 ml-8 mr-4">
-                                    <div class="col-span-8 mb-2">
-                                        <label 
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >
-                                            Indent raised by Name & Designation
-                                        </label>
-                                        <div>
-                                            <p class="text-xl">
-                                                {{employeeDetails?.empFirstName}}
-                                                {{employeeDetails?.empLastName}}
-                                            </p>
-                                            <p class="text-sm text-gray-500">
-                                                {{employeeDetails?.empDesignation}}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-span-5 mb-2">
-                                        <label
-                                            for="Address"
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >Indent Created Date
-                                        </label>
-
-                                        <div class="flex items-center gap-2">
-                                            <svg
-                                                class="h-5 w-5 text-gray-600"
-                                                aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="24"
-                                                height="24"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                >
-                                                <path
-                                                    stroke="currentColor"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
-                                                />
-                                            </svg>
-                                            <p>{{_requestIndentDetails.createdEmpData.createdOn | date: 'MMM-dd-yyyy, HH:mm a'}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-span-8 mb-2">
-                                        <label
-                                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                            >Remark If Any <span class="text-gray-400">(Optional)</span>
-                                        </label>
-
-                                        <textarea 
-                                            formControlName="notes"
-                                            class="input-form"
-                                            placeholder="Remark note"
-                                            >
-                                        </textarea>
-                                    </div>
-                                </section>
-                            </form>
-                            <div class="flex w-full justify-end">
-                                <button
-                                    *ngIf="isEditHeader"
-                                    (click)="onSubmitHeader(editRequestForm.value)"
-                                    class="btn-primary col-span-8 mx-12 mb-4"
-                                    >
-                                    Add Header
-                                </button>
-                                <button
-                                    *ngIf="!isEditHeader"
-                                    (click)="onEditHeader()"
-                                    class="btn-primary col-span-8 mx-12 mb-4"
-                                    >
-                                    Edit Header
-                                </button>
+              <div class="bg-purple-50 py-8">
+                <form [formGroup]="editRequestForm" class="flex">
+                  <section
+                    class="mx-auto ml-4 grid w-1/2 max-w-lg grid-cols-8 gap-2"
+                  >
+                    <div class="col-span-8">
+                      <ul class="mb-4 grid w-full gap-6 md:grid-cols-2">
+                        <li>
+                          <input
+                            type="radio"
+                            id="hosting-small"
+                            formControlName="priorityType"
+                            value="109"
+                            class="peer hidden"
+                            required
+                          />
+                          <label
+                            for="hosting-small"
+                            class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                          >
+                            <div class="block">
+                              <div class="w-full text-lg font-semibold">
+                                Normal
+                              </div>
                             </div>
-                        </div>
+                          </label>
+                        </li>
+                        <li>
+                          <input
+                            type="radio"
+                            id="hosting-big"
+                            formControlName="priorityType"
+                            value="108"
+                            class="peer hidden"
+                          />
+                          <label
+                            for="hosting-big"
+                            class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                          >
+                            <div class="block">
+                              <div class="w-full text-lg font-semibold">
+                                Urgent
+                              </div>
+                            </div>
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
 
-                        <div class="flex justify-between border-t rounded-t-lg bg-purple-600 px-4 py-4">
-                            <h1 class="font-medium text-white">Indent Body</h1>
-                        </div>
+                    <div class="col-span-4 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        >Requisitioner
+                      </label>
+                      <input
+                        appFirstCapLetter
+                        formControlName="requisitioner"
+                        type="text"
+                        class="input-form"
+                        required
+                      />
+                    </div>
 
-                        <form
-                            [formGroup]="indentProductForm"
-                            class="flex bg-purple-50 pb-8"
+                    <div class="col-span-4 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        >Required by Date
+                      </label>
+                      <input
+                        formControlName="requiredDate"
+                        type="date"
+                        class="input-form"
+                        required
+                      />
+                    </div>
+
+                    <div class="col-span-8 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        Capex / Non-capex
+                      </label>
+                      <div class="flex justify-stretch gap-40">
+                        <div class="flex items-center gap-2">
+                          <input
+                            formControlName="expenditureId"
+                            type="radio"
+                            value="51"
+                          />
+                          <span>Capex</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <input
+                            formControlName="expenditureId"
+                            type="radio"
+                            value="52"
+                          />
+                          <span>Non-Capex</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-span-4 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        Department
+                      </label>
+                      <select
+                        (change)="
+                          fetchProgram(editRequestForm.get('deptId')?.value)
+                        "
+                        formControlName="deptId"
+                        class="select-option1 block w-full rounded-lg"
+                      >
+                        <option
+                          disabled
+                          selected
+                          class="bg-purple-700 text-white"
+                        >
+                          Choose Department
+                        </option>
+                        <option
+                          *ngFor="let dept of departmentList"
+                          value="{{ dept.departId }}"
+                        >
+                          {{ dept.deptName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-span-4 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        Project/Program
+                      </label>
+                      <select
+                        formControlName="programId"
+                        class="select-option1 block w-full rounded-lg"
+                      >
+                        <option
+                          disabled
+                          selected
+                          class="bg-purple-700 text-white"
+                        >
+                          Choose Project/Program
+                        </option>
+                        <option
+                          *ngFor="let program of programList"
+                          value="{{ program.programId }}"
+                        >
+                          {{ program.proName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-span-8 mb-2">
+                      <label
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        >Camp
+                      </label>
+                      <input
+                        formControlName="campName"
+                        type="text"
+                        class="input-form"
+                        required
+                      />
+                    </div>
+                  </section>
+                  <section
+                    class="mx-auto ml-8 mr-4 grid w-1/2 max-w-lg grid-cols-8 gap-2"
+                  >
+                    <div class="col-span-8 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      >
+                        Indent raised by Name & Designation
+                      </label>
+                      <div>
+                        <p class="text-xl">
+                          {{ employeeDetails?.empFirstName }}
+                          {{ employeeDetails?.empLastName }}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          {{ employeeDetails?.empDesignation }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="col-span-5 mb-2">
+                      <label
+                        for="Address"
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        >Indent Created Date
+                      </label>
+
+                      <div class="flex items-center gap-2">
+                        <svg
+                          class="h-5 w-5 text-gray-600"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                          />
+                        </svg>
+                        <p>
+                          {{
+                            _requestIndentDetails.createdEmpData.createdOn
+                              | date: "MMM-dd-yyyy, HH:mm a"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="col-span-8 mb-2">
+                      <label
+                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        >Remark If Any
+                        <span class="text-gray-400">(Optional)</span>
+                      </label>
+
+                      <textarea
+                        formControlName="notes"
+                        class="input-form"
+                        placeholder="Remark note"
+                      >
+                      </textarea>
+                    </div>
+                  </section>
+                </form>
+                <div class="flex w-full justify-end">
+                  <button
+                    *ngIf="isEditHeader"
+                    (click)="onSubmitHeader(editRequestForm.value)"
+                    class="btn-primary col-span-8 mx-12 mb-4"
+                  >
+                    Add Header
+                  </button>
+                  <button
+                    *ngIf="!isEditHeader"
+                    (click)="onEditHeader()"
+                    class="btn-primary col-span-8 mx-12 mb-4"
+                  >
+                    Edit Header
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="flex justify-between rounded-t-lg border-t bg-purple-600 px-4 py-4"
+              >
+                <h1 class="font-medium text-white">Indent Body</h1>
+              </div>
+
+              <form
+                [formGroup]="indentProductForm"
+                class="flex bg-purple-50 pb-8"
+              >
+                <section class="mx-8 grid w-2/3 grid-cols-8 gap-3 py-6">
+                  <div class="col-span-8 mb-3">
+                    <button
+                      class="rounded-md border border-purple-600 bg-gray-50 px-3 py-2 text-sm font-medium hover:bg-purple-600 hover:text-white"
+                      (click)="toggleOtherProduct(true)"
+                    >
+                      Request New Product
+                    </button>
+                  </div>
+
+                  <div class="relative col-span-8 mb-3">
+                    <label
+                      for="Search Product"
+                      class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      >Search Product
+                    </label>
+                    <input
+                      type="text"
+                      formControlName="productId"
+                      class="input-form"
+                    />
+
+                    <div
+                      *ngIf="noResults"
+                      class="absolute mt-1 text-sm text-red-600"
+                    >
+                      No Products found.
+                    </div>
+
+                    <ul
+                      *ngIf="storeProductData && storeProductData.length > 0"
+                      class="absolute z-10 mt-1 w-full rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    >
+                      <li
+                        *ngFor="let product of storeProductData"
+                        (click)="onSelectProduct(product)"
+                        class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                      >
+                        {{ product.prdcatgName }} - {{ product.prdbrndName }} -
+                        {{ product.prdmdlName }} - {{ product.prdDescription }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div
+                    *ngIf="productData && !noResults && isProductSelected"
+                    class="col-span-full flex flex-col"
+                  >
+                    <div>
+                      <div class="inline-block min-w-full pt-2.5 align-middle">
+                        <div class="overflow-hidden rounded-lg border">
+                          <table
+                            class="min-w-full divide-y divide-gray-200 bg-white"
+                          >
+                            <tbody
+                              class="divide-y divide-gray-200"
+                              *ngFor="let prd of productData"
                             >
-                            <section class="mx-8 py-6 grid grid-cols-8 w-2/3 gap-3">
-                                <div class="col-span-8 mb-3">
-                                    <button
-                                        class="rounded-md bg-gray-50 border border-purple-600 px-3 py-2 text-sm font-medium hover:bg-purple-600 hover:text-white"
-                                        (click)="toggleOtherProduct(true)"
-                                        >
-                                        Request New Product
-                                    </button>
-                                </div>
-
-                                <div class="relative col-span-8 mb-3">
-                                    <label
-                                        for="Search Product"
-                                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                        >Search Product
-                                    </label>
-                                    <input 
-                                        type="text"
-                                        formControlName="productId"
-                                        class="input-form" 
-                                    />
-
-                                    <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
-                                        No Products found.
-                                    </div>
-
-                                    <ul
-                                        *ngIf="storeProductData &&
-                                        storeProductData.length > 0"
-                                        class="absolute border-none z-10 w-full mt-1 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
-                                        >
-                                        <li
-                                            *ngFor="let product of storeProductData"
-                                            (click)="onSelectProduct(product)"
-                                            class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                                            >
-                                            {{product.prdcatgName}} - {{product.prdbrndName}} - {{product.prdmdlName}} - {{product.prdDescription}}
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div *ngIf="productData && !noResults && isProductSelected" class="col-span-full flex flex-col">
-                                    <div>
-                                        <div class="inline-block min-w-full pt-2.5 align-middle">
-                                            <div class="overflow-hidden rounded-lg border">
-                                                <table class="min-w-full divide-y divide-gray-200 bg-white">
-                                                    <tbody class="divide-y divide-gray-200" *ngFor="let prd of productData">
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                Product Code
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                                                                >
-                                                                <span class="font-semibold">{{prd?.prdCode}}</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                Head Of Account
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                                                                >
-                                                                <span class="font-semibold">{{prd.headOfAccName}}</span>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                Product Name
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
-                                                                >
-                                                                    <span 
-                                                                        class="font-semibold">{{prd.prdmdlName}}
-                                                                    </span>
-                                                                    -
-                                                                    {{prd.prdbrndName}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                Description
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap text-wrap px-6 py-4 text-sm text-gray-800"
-                                                                >
-                                                                {{prd?.prdDescription}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                Purchased Price
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
-                                                                >
-                                                                {{prd.prdPurchasedPrice}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
-                                                                >
-                                                                GST
-                                                            </td>
-                                                            <td
-                                                                class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
-                                                                >
-                                                                {{prd.prdGstPct}}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-
-                                <div class="col-span-3">
-                                    <label
-                                         for="Address"
-                                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                        >
-                                        Unit Price
-                                    </label>
-                                    <input 
-                                        formControlName="unitPrice"
-                                        type="number"
-                                        class="input-rose"
-                                        required
-                                    />
-                                </div>
-
-                                <div class="col-span-3">
-                                    <label 
-                                        for="Address"
-                                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                        >
-                                        Quantity
-                                    </label>
-                                    <input 
-                                        appOnlyNumber
-                                        type="number"
-                                        formControlName="qty"
-                                        class="input-rose"
-                                        required
-                                    />
-                                </div>
-
-                                <div class="col-span-2">
-                                    <label 
-                                        for="Address"
-                                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                                        >
-                                        GST %
-                                    </label>
-                                    <input 
-                                        type="number"
-                                        formControlName="prdGstPct"
-                                        class="input-rose"
-                                        required
-                                        readonly
-                                    />
-                                </div>
-                            </section>
-
-                            <div
-                                class="mt-6 mr-4 h-1/2 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
                                 >
-                                <h1 class="text-lg text-center font-semibold">Product Summary</h1>
-                                <div class="flow-root">
-                                    <div class="divide-y divide-[#6818a5]">
-                                        <dl class="flex items-center justify-between py-3">
-                                            <dt
-                                                class="text-base font-normal text-gray-500 dark:text-gray-400"
-                                                >
-                                                Unit Price
-                                            </dt>
-                                            <dd
-                                                class="text-base font-medium text-gray-900 dark:text-white"
-                                                >
-                                                {{indentProductForm.get('unitPrice')?.value | currency: 'INR'}}
-                                            </dd>
-                                        </dl>
+                                  Product Code
+                                </td>
+                                <td
+                                  class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                >
+                                  <span class="font-semibold">{{
+                                    prd?.prdCode
+                                  }}</span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                >
+                                  Head Of Account
+                                </td>
+                                <td
+                                  class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
+                                >
+                                  <span class="font-semibold">{{
+                                    prd.headOfAccName
+                                  }}</span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                >
+                                  Product Name
+                                </td>
+                                <td
+                                  class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                >
+                                  <span class="font-semibold"
+                                    >{{ prd.prdmdlName }}
+                                  </span>
+                                  -
+                                  {{ prd.prdbrndName }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                >
+                                  Description
+                                </td>
+                                <td
+                                  class="whitespace-nowrap text-wrap px-6 py-4 text-sm text-gray-800"
+                                >
+                                  {{ prd?.prdDescription }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                >
+                                  Purchased Price
+                                </td>
+                                <td
+                                  class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                >
+                                  {{ prd.prdPurchasedPrice }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-600"
+                                >
+                                  GST
+                                </td>
+                                <td
+                                  class="whitespace-nowrap px-6 py-4 text-sm text-gray-800"
+                                >
+                                  {{ prd.prdGstPct }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                                        <dl
-                                            class="flex items-center justify-between py-3"
-                                            >
-                                            <dt
-                                                class="text-base font-normal text-gray-500 dark:text-gray-400"
-                                                >
-                                                Quantity
-                                            </dt>
-                                            <dd
-                                                class="text-base font-medium text-gray-900 dark:text-white"
-                                                >
-                                                {{indentProductForm.get('qty')?.value}}
-                                            </dd>
-                                        </dl>
+                  <div class="col-span-3">
+                    <label
+                      for="Address"
+                      class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                    >
+                      Unit Price
+                    </label>
+                    <input
+                      formControlName="unitPrice"
+                      type="number"
+                      class="input-rose"
+                      required
+                    />
+                  </div>
 
-                                        <dl
-                                            class="flex items-center justify-between py-3"
-                                            >
-                                            <dt
-                                                class="text-base font-normal text-gray-500 dark:text-gray-400"
-                                                >
-                                                Subtotal
-                                            </dt>
-                                            <dd
-                                               class="text-base font-medium text-gray-900 dark:text-white" 
-                                                >
-                                                {{subtotal | currency: 'INR'}}
-                                            </dd>
-                                        </dl>
+                  <div class="col-span-3">
+                    <label
+                      for="Address"
+                      class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                    >
+                      Quantity
+                    </label>
+                    <input
+                      appOnlyNumber
+                      type="number"
+                      formControlName="qty"
+                      class="input-rose"
+                      required
+                    />
+                  </div>
 
-                                        <dl
-                                            class="flex items-center justify-between py-3"
-                                            >
-                                            <dt
-                                                class="text-base font-normal text-gray-500 dark:text-gray-400"
-                                                >
-                                                Tax
-                                            </dt>
-                                            <dd
-                                                class="text-base font-medium text-gray-900 dark:text-white"
-                                                >
-                                                {{tax | currency: 'INR'}}
-                                            </dd>
-                                        </dl>
+                  <div class="col-span-2">
+                    <label
+                      for="Address"
+                      class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                    >
+                      GST %
+                    </label>
+                    <input
+                      type="number"
+                      formControlName="prdGstPct"
+                      class="input-rose"
+                      required
+                      readonly
+                    />
+                  </div>
+                </section>
 
-                                        <dl
-                                            class="flex items-center justify-between py-3"
-                                            >
-                                            <dt
-                                                class="text-base font-normal text-gray-500 dark:text-gray-400"
-                                                >
-                                                Total
-                                            </dt>
-                                            <dd
-                                                class="text-base font-medium text-gray-900 dark:text-white"
-                                                >
-                                                {{total | currency: 'INR'}}
-                                            </dd>
-                                        </dl>
-                                    </div>
-                                    <div>
-                                        <button
-                                            [disabled]="indentProductForm.invalid"
-                                            (click)="addToCartProduct(indentProductForm.value)"
-                                            type="submit"
-                                            [ngClass]="{
-                                                'bg-gray-400': indentProductForm.invalid,
-                                                'hover:bg-gray-400': indentProductForm.invalid
-                                            }"
-                                            class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
-                                            >
-                                            Add Product
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                <div
+                  class="mr-4 mt-6 h-1/2 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
+                >
+                  <h1 class="text-center text-lg font-semibold">
+                    Product Summary
+                  </h1>
+                  <div class="flow-root">
+                    <div class="divide-y divide-[#6818a5]">
+                      <dl class="flex items-center justify-between py-3">
+                        <dt
+                          class="text-base font-normal text-gray-500 dark:text-gray-400"
+                        >
+                          Unit Price
+                        </dt>
+                        <dd
+                          class="text-base font-medium text-gray-900 dark:text-white"
+                        >
+                          {{
+                            indentProductForm.get("unitPrice")?.value
+                              | currency: "INR"
+                          }}
+                        </dd>
+                      </dl>
 
-                        <section *ngIf="productList.length > 0">
-                            <div class="border-t border-violet-300 bg-violet-50 p-4">
-                                <div class="flex gap-2">
-                                    <svg
-                                        class="h-6 w-6 text-violet-600"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        >
-                                        <circle cx="5" cy="6" r="1.5"></circle>
-                                        <circle cx="5" cy="12" r="1.5"></circle>
-                                        <circle cx="5" cy="18" r="1.5"></circle>
-                                        <line x1="9" y1="6" x2="19" y2="6"></line>
-                                        <line x1="9" y1="12" x2="19" y2="12"></line>
-                                        <line x1="9" y1="18" x2="19" y2="18"></line>
-                                    </svg>
+                      <dl class="flex items-center justify-between py-3">
+                        <dt
+                          class="text-base font-normal text-gray-500 dark:text-gray-400"
+                        >
+                          Quantity
+                        </dt>
+                        <dd
+                          class="text-base font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ indentProductForm.get("qty")?.value }}
+                        </dd>
+                      </dl>
 
-                                    <h5 class="mb-4 text-lg -mt-[1px] font-semibold text-violet-600">Product List</h5>
-                                </div>
+                      <dl class="flex items-center justify-between py-3">
+                        <dt
+                          class="text-base font-normal text-gray-500 dark:text-gray-400"
+                        >
+                          Subtotal
+                        </dt>
+                        <dd
+                          class="text-base font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ subtotal | currency: "INR" }}
+                        </dd>
+                      </dl>
 
-                                <table class="w-full rounded-lg text-left text-sm text-gray-500">
-                                    <thead class="bg-violet-600 text-xs uppercase text-gray-50">
-                                        <tr>
-                                            <!-- <th
+                      <dl class="flex items-center justify-between py-3">
+                        <dt
+                          class="text-base font-normal text-gray-500 dark:text-gray-400"
+                        >
+                          Tax
+                        </dt>
+                        <dd
+                          class="text-base font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ tax | currency: "INR" }}
+                        </dd>
+                      </dl>
+
+                      <dl class="flex items-center justify-between py-3">
+                        <dt
+                          class="text-base font-normal text-gray-500 dark:text-gray-400"
+                        >
+                          Total
+                        </dt>
+                        <dd
+                          class="text-base font-medium text-gray-900 dark:text-white"
+                        >
+                          {{ total | currency: "INR" }}
+                        </dd>
+                      </dl>
+                    </div>
+                    <div>
+                      <button
+                        [disabled]="indentProductForm.invalid"
+                        (click)="addToCartProduct(indentProductForm.value)"
+                        type="submit"
+                        [ngClass]="{
+                          'bg-gray-400': indentProductForm.invalid,
+                          'hover:bg-gray-400': indentProductForm.invalid
+                        }"
+                        class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
+                      >
+                        Add Product
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              <section *ngIf="productList.length > 0">
+                <div class="border-t border-violet-300 bg-violet-50 p-4">
+                  <div class="flex gap-2">
+                    <svg
+                      class="h-6 w-6 text-violet-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="5" cy="6" r="1.5"></circle>
+                      <circle cx="5" cy="12" r="1.5"></circle>
+                      <circle cx="5" cy="18" r="1.5"></circle>
+                      <line x1="9" y1="6" x2="19" y2="6"></line>
+                      <line x1="9" y1="12" x2="19" y2="12"></line>
+                      <line x1="9" y1="18" x2="19" y2="18"></line>
+                    </svg>
+
+                    <h5
+                      class="-mt-[1px] mb-4 text-lg font-semibold text-violet-600"
+                    >
+                      Product List
+                    </h5>
+                  </div>
+
+                  <table
+                    class="w-full rounded-lg text-left text-sm text-gray-500"
+                  >
+                    <thead class="bg-violet-600 text-xs uppercase text-gray-50">
+                      <tr>
+                        <!-- <th
                                                 scope="col"
                                                 class="rounded-tl-lg border-violet-500 px-4 py-3"
                                                 >
                                                 S.NO
                                             </th> -->
-                                            <th
-                                                scope="col"
-                                                class="rounded-tl-lg border-violet-500 px-4 py-3"
-                                                >
-                                                Product Name
-                                            </th>
-                                            <th scope="col" class="px-4 py-3">Category</th>
-                                            <th scope="col" class="px-4 py-3">Unit Price</th>
-                                            <th scope="col" class="px-4 py-3">Quantity</th>
-                                            <th scope="col" class="px-4 py-3">Tax</th>
-                                            <th scope="col" class="px-4 py-3">Total</th>
-                                            <th
-                                                scope="col"
-                                                class="rounded-tr-lg border-purple-500 px-2 py-3"
-                                                >
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="rounded-tr-lg border-purple-500 px-2 py-3"
-                                                >
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <ng-container
-                                            *ngFor="let prd of productList; let i = index; trackBy: trackByProduct"
-                                            >
-
-                                        
-                                        <tr
-                                            class="border-x border-b border-violet-300"
-                                            
-                                            *ngIf="prd.status !== 404"
-                                            >
-                                            <!-- <td class="px-4 py-3 font-semibold">{{ i + 1 }}</td> -->
-                                            <th
-                                                scope="row"
-                                                class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
-                                                >
-                                                
-                                                    <p>{{prd.prdmdlName}} - {{ prd?.prdbrndName }} </p>
-                                                    <p class="text-wrap">Head Of Account - {{prd.headOfAccName}}</p>
-                                                    <span
-                                                        class="h-20 text-wrap text-xs font-normal text-gray-500"
-                                                        >
-                                                        {{prd.prdDescription}}
-                                                    </span>
-                                            </th>
-                                            <td class="px-4 py-3 max-w-[140px] whitespace-normal break-words font-semibold">{{ prd?.prdcatgName }}</td>
-                                            <td 
-                                                *ngIf="isEditIndentPrdIndex !== i"
-                                                class="px-4 py-3 font-semibold">
-                                                {{ prd?.unitPrice | currency: 'INR' }}
-                                            </td>
-                                            <td 
-                                                *ngIf="isEditIndentPrdIndex === i"
-                                                class="px-4 py-3"
-                                                >
-                                                <input 
-                                                    type="number"
-                                                    class="rounded-lg w-28"
-                                                    [(ngModel)]="prd.unitPrice"
-                                                    (input)="editUnitPrice()"
-                                                />
-                                            </td>
-                                            <td 
-                                                *ngIf="isEditIndentPrdIndex !== i"
-                                                class="px-4 py-3 font-semibold text-center">
-                                                {{prd.qty}}
-                                            </td>
-                                            <td *ngIf="isEditIndentPrdIndex === i"
-                                                class="px-4 py-3"
-                                                >
-                                                <input 
-                                                    type="number"
-                                                    class="rounded-lg w-16 text-center"
-                                                    [(ngModel)]="prd.qty"
-                                                    (input)="editQty()"
-                                                />
-                                            </td>
-                                            <td class="px-4 py-3 font-semibold">
-                                                {{prd.tax | currency: 'INR'}}
-                                            </td>
-                                            <td class="px-4 py-3 font-semibold">{{prd.total | currency: 'INR'}}</td>
-                                            <td class="px-2 py-3">
-                                                <button
-                                                    (click)="editIndentProduct(i, prd)"                                            
-                                                    >
-                                                    <svg
-                                                    class="h-6 w-6 text-blue-600"
-                                                    aria-hidden="true"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    width="24"
-                                                    height="24"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    >
-                                                    <path
-                                                        stroke="currentColor"
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-                                                    />
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                            <td class="px-2 py-3">
-                                                <button
-                                                    (click)="deleteProduct(i, prd)"
-                                                    type="submit"
-                                                    class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
-                                                    >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                    </svg>
-
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                                <div class="space-y-4 p-4 rounded-b-lg border-x border-b border-violet-300">
-                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Order summary
-                                    </h4>
-
-                                    <div class="space-y-2">
-                                        <div class="space-y-2">
-                                            <dl class="flex items-center justify-between gap-2">
-                                                <dt class="text-gray-500 dark:text-gray-400">
-                                                    Original price
-                                                </dt>
-                                                <dd
-                                                    class="text-base font-medium text-gray-900 dark:text-white"
-                                                    >
-                                                    {{subtotalSum | currency: 'INR'}}
-                                                </dd>
-                                            </dl>
-
-                                            <dl class="flex items-center justify-between gap-2">
-                                                <dt
-                                                    class="text-gray-500 dark:text-gray-400"
-                                                    >
-                                                    Tax
-                                                </dt>
-                                                <dd
-                                                    class="text-base font-medium text-gray-900 dark:text-white"
-                                                    >
-                                                    {{taxSum | currency: 'INR'}}
-                                                </dd>
-                                            </dl>
-                                        </div>
-
-                                        <dl
-                                            class="flex items-center justify-between gap-4 border-t border-rose-300 pt-2 dark:border-gray-700"
-                                            >
-                                            <dt
-                                                class="text-lg font-bold text-gray-900 dark:text-white"
-                                                >
-                                                Total
-                                            </dt>
-                                            <dd
-                                                class="text-end text-lg font-bold text-gray-900 dark:text-white"
-                                                >
-                                                {{ totalSum | currency: 'INR'}} /-
-                                                <h1
-                                                    *ngIf="totalSum"
-                                                    class="text-end text-xs font-semibold capitalize text-rose-700"
-                                                    >
-                                                    {{ totalSum | amountInWords }}
-                                                </h1>
-                                            </dd>
-                                        </dl>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <div class="flex-row items-center justify-end space-y-3 p-4 sm:flex sm:space-x-4 sm:space-y-0">
-                        <button
-                            type="submit"
-                            [disabled]="!headerData"
-                            (click)="updateIndentDetails()"
-                            class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        <th
+                          scope="col"
+                          class="rounded-tl-lg border-violet-500 px-4 py-3"
+                        >
+                          Product Name
+                        </th>
+                        <th scope="col" class="px-4 py-3">Category</th>
+                        <th scope="col" class="px-4 py-3">Unit Price</th>
+                        <th scope="col" class="px-4 py-3">Quantity</th>
+                        <th scope="col" class="px-4 py-3">Tax</th>
+                        <th scope="col" class="px-4 py-3">Total</th>
+                        <th
+                          scope="col"
+                          class="rounded-tr-lg border-purple-500 px-2 py-3"
+                        >
+                          <span class="sr-only">Actions</span>
+                        </th>
+                        <th
+                          scope="col"
+                          class="rounded-tr-lg border-purple-500 px-2 py-3"
+                        >
+                          <span class="sr-only">Actions</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="
+                          let prd of productList;
+                          let i = index;
+                          trackBy: trackByProduct
+                        "
+                      >
+                        <tr
+                          class="border-x border-b border-violet-300"
+                          *ngIf="prd.status !== 404"
+                        >
+                          <!-- <td class="px-4 py-3 font-semibold">{{ i + 1 }}</td> -->
+                          <th
+                            scope="row"
+                            class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
+                          >
+                            <p>{{ prd.prdmdlName }} - {{ prd?.prdbrndName }}</p>
+                            <p class="text-wrap">
+                              Head Of Account - {{ prd.headOfAccName }}
+                            </p>
+                            <span
+                              class="h-20 text-wrap text-xs font-normal text-gray-500"
                             >
-                            Save
-                        </button>
+                              {{ prd.prdDescription }}
+                            </span>
+                          </th>
+                          <td
+                            class="max-w-[140px] whitespace-normal break-words px-4 py-3 font-semibold"
+                          >
+                            {{ prd?.prdcatgName }}
+                          </td>
+                          <td
+                            *ngIf="isEditIndentPrdIndex !== i"
+                            class="px-4 py-3 font-semibold"
+                          >
+                            {{ prd?.unitPrice | currency: "INR" }}
+                          </td>
+                          <td
+                            *ngIf="isEditIndentPrdIndex === i"
+                            class="px-4 py-3"
+                          >
+                            <input
+                              type="number"
+                              class="w-28 rounded-lg"
+                              [(ngModel)]="prd.unitPrice"
+                              (input)="editUnitPrice()"
+                            />
+                          </td>
+                          <td
+                            *ngIf="isEditIndentPrdIndex !== i"
+                            class="px-4 py-3 text-center font-semibold"
+                          >
+                            {{ prd.qty }}
+                          </td>
+                          <td
+                            *ngIf="isEditIndentPrdIndex === i"
+                            class="px-4 py-3"
+                          >
+                            <input
+                              type="number"
+                              class="w-16 rounded-lg text-center"
+                              [(ngModel)]="prd.qty"
+                              (input)="editQty()"
+                            />
+                          </td>
+                          <td class="px-4 py-3 font-semibold">
+                            {{ prd.tax | currency: "INR" }}
+                          </td>
+                          <td class="px-4 py-3 font-semibold">
+                            {{ prd.total | currency: "INR" }}
+                          </td>
+                          <td class="px-2 py-3">
+                            <button (click)="editIndentProduct(i, prd)">
+                              <svg
+                                class="h-6 w-6 text-blue-600"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  stroke="currentColor"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                                />
+                              </svg>
+                            </button>
+                          </td>
+                          <td class="px-2 py-3">
+                            <button
+                              (click)="toggledelete(1, true, i, prd)"
+                              type="submit"
+                              class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="size-6"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                  <div
+                    class="space-y-4 rounded-b-lg border-x border-b border-violet-300 p-4"
+                  >
+                    <h4
+                      class="text-lg font-semibold text-gray-900 dark:text-white"
+                    >
+                      Order summary
+                    </h4>
+
+                    <div class="space-y-2">
+                      <div class="space-y-2">
+                        <dl class="flex items-center justify-between gap-2">
+                          <dt class="text-gray-500 dark:text-gray-400">
+                            Taxable Price
+                          </dt>
+                          <dd
+                            class="text-base font-medium text-gray-900 dark:text-white"
+                          >
+                            {{ subtotalSum | currency: "INR" }}
+                          </dd>
+                        </dl>
+
+                        <dl class="flex items-center justify-between gap-2">
+                          <dt class="text-gray-500 dark:text-gray-400">Tax</dt>
+                          <dd
+                            class="text-base font-medium text-gray-900 dark:text-white"
+                          >
+                            {{ taxSum | currency: "INR" }}
+                          </dd>
+                        </dl>
+                      </div>
+
+                      <dl
+                        class="flex items-center justify-between gap-4 border-t border-rose-300 pt-2 dark:border-gray-700"
+                      >
+                        <dt
+                          class="text-lg font-bold text-gray-900 dark:text-white"
+                        >
+                          Total
+                        </dt>
+                        <dd
+                          class="text-end text-lg font-bold text-gray-900 dark:text-white"
+                        >
+                          {{ totalSum | currency: "INR" }} /-
+                          <h1
+                            *ngIf="totalSum"
+                            class="text-end text-xs font-semibold capitalize text-rose-700"
+                          >
+                            {{ totalSum | amountInWords }}
+                          </h1>
+                        </dd>
+                      </dl>
                     </div>
+                  </div>
                 </div>
+              </section>
             </div>
+
+            <div
+              class="flex-row items-center justify-end space-y-3 p-4 sm:flex sm:space-x-4 sm:space-y-0"
+            >
+              <button
+                type="submit"
+                [disabled]="!headerData"
+                (click)="updateIndentDetails()"
+                class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Save
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
   </section>
 </div>
@@ -797,12 +869,26 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 
 <div
   *ngIf="isOtherProduct"
   class="absolute top-0 flex h-full w-full items-center justify-center bg-black/50"
 >
-  <app-other-product (closeToggle)="toggleOtherProduct($event)"></app-other-product>
+  <app-other-product
+    (closeToggle)="toggleOtherProduct($event)"
+  ></app-other-product>
 </div>
+
+<section *ngIf="isDelete">
+  <app-delete
+    [deleteData]="deleteProductItem"
+    (close)="toggledelete(0, $event, 0, {})"
+    (deleteProduct)="
+      deleteProduct(deleteProductItem.index, deleteProductItem.product)
+    "
+  ></app-delete>
+</section>

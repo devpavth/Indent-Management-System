@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { Employeedetails } from '../../../models/employee/employeedetails.model';
 import { BranchService } from '../../service/Branch/branch.service';
-import { Department, Program } from '../../../models/department/department.model';
+import {
+  Department,
+  Program,
+} from '../../../models/department/department.model';
 import { ToastService } from '../../service/toast/toast.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { Product } from '../../../models/product/product.model';
@@ -20,7 +23,6 @@ import { Router } from '@angular/router';
 })
 export class EditIndentRequestComponent {
   @Input() IndentID!: number;
-  @Input() indentNumber!: string;
   @Output() closeView = new EventEmitter<boolean>();
 
   editRequestForm: FormGroup;
@@ -42,6 +44,8 @@ export class EditIndentRequestComponent {
   isOtherProduct: boolean = false;
   isProductSelected: boolean = false;
   noResults: boolean = false;
+  isDelete: boolean = false;
+  loading: boolean = true;
 
   subtotal: number = 0;
   tax: number = 0;
@@ -57,6 +61,12 @@ export class EditIndentRequestComponent {
   productList: any[] = [];
   _requestIndentDetails: any;
   headerData: any;
+  deleteProductItem: { title: string; action: number, index: number, product: {} } = {
+    title: '',
+    action: 0,
+    index: 0,
+    product: {}
+  };
 
   constructor(private fb: FormBuilder) {
     this.editRequestForm = this.fb.group({
@@ -143,6 +153,8 @@ export class EditIndentRequestComponent {
         console.log('fetching indent request details:', res);
         this._requestIndentDetails = res;
 
+        this.loading = false;
+
         this.editRequestForm.patchValue({
           campName: this._requestIndentDetails.indentHeaders.campName,
           requiredDate: this._requestIndentDetails.indentHeaders.requiredDate,
@@ -169,27 +181,7 @@ export class EditIndentRequestComponent {
         console.log(this._requestIndentDetails.indentHeaders.priorityType);
 
         this.productList = this._requestIndentDetails.productDetails;
-        const qtyList = this.productList.map((prd) => prd.qty);
-        const unitPriceList = this.productList.map((prd) => prd.unitPrice);
-        const gstpercentageList = this.productList.map((prd) => prd.prdGstPct);
-
-        console.log('qty:', qtyList);
-
-        const gstResults = qtyList.map((qty, index) => {
-          return this.sharedService.gstCalculation(
-            qty,
-            unitPriceList[index],
-            gstpercentageList[index],
-          );
-        });
-
-        console.log('gstResults:', gstResults);
-        this.productList = this.productList.map((prd, index) => ({
-          ...prd,
-          subtotal: prd.qty * prd.unitPrice,
-          tax: gstResults[index].gstAmt,
-          total: gstResults[index].itemPrice,
-        }));
+        this.liveCalulationForDeletion();
 
         console.log('existing productList:', this.productList);
 
@@ -197,6 +189,7 @@ export class EditIndentRequestComponent {
       },
       (error) => {
         console.log('error while fetching indent details:', error);
+        this.loading = false;
       },
     );
   }
@@ -340,30 +333,6 @@ export class EditIndentRequestComponent {
     this.calculateSums();
   }
 
-  liveGstCalculation() {
-    const qtyList = this.productList.map((prd) => prd.qty);
-    const unitPriceList = this.productList.map((prd) => prd.unitPrice);
-    const gstpercentageList = this.productList.map((prd) => prd.prdGstPct);
-
-    console.log('qty:', qtyList);
-
-    const gstResults = qtyList.map((qty, index) => {
-      return this.sharedService.gstCalculation(
-        qty,
-        unitPriceList[index],
-        gstpercentageList[index],
-      );
-    });
-
-    console.log('gstResults:', gstResults);
-    this.productList = this.productList.map((prd, index) => ({
-      ...prd,
-      subtotal: prd.qty * prd.unitPrice,
-      tax: gstResults[index].gstAmt,
-      total: gstResults[index].itemPrice,
-    }));
-  }
-
   liveCalulationForDeletion() {
     const activeProducts = this.productList.filter((prd) => prd.status !== 404);
 
@@ -383,10 +352,9 @@ export class EditIndentRequestComponent {
 
     console.log('gstResults:', gstResults);
 
-    // Update only active products
     let activeIndex = 0;
     this.productList = this.productList.map((prd) => {
-      if (prd.status === 404) return prd; 
+      if (prd.status === 404) return prd;
 
       const updatedProduct = {
         ...prd,
@@ -403,15 +371,16 @@ export class EditIndentRequestComponent {
     console.log('Updated productList:', this.productList);
   }
 
+  trackByProduct(index: number, product: any): number {
+    return product.id;
+  }
+
   editUnitPrice() {
     this.liveCalulationForDeletion();
 
     this.calculateSums();
   }
 
-  trackByProduct(index: number, product: any): number {
-    return product.id; 
-  }
 
   editQty() {
     this.liveCalulationForDeletion();
@@ -437,6 +406,25 @@ export class EditIndentRequestComponent {
     console.log('after edit indentProductForm:', this.indentProductForm.value);
   }
 
+  toggledelete(check: number, isView: boolean, index: number, product: any) {
+    this.isDelete = isView;
+    if (check === 1) {
+      console.log('if condition');
+      this.deleteProductItem = {
+        title: 'Product',
+        action: 6,
+        index: index,
+        product: product
+      };
+
+      console.log('deleteProductItem:', this.deleteProductItem);
+    } else {
+      console.log('else condition');
+      this.isDelete = isView;
+    }
+  }
+
+
   deleteProduct(index: number, product: any) {
     // this.productList.splice(index, 1);
 
@@ -448,8 +436,6 @@ export class EditIndentRequestComponent {
       ...product,
       status: 404,
     };
-
-    //  this.productList.splice(index, 1);
 
     console.log('productList after deletion:', this.productList);
 
@@ -496,10 +482,10 @@ export class EditIndentRequestComponent {
     this.requestService
       .updateIndentRequestDetails(this.IndentID, indent)
       .subscribe(
-        (res) => {
+        (res: any) => {
           console.log('successfully updated the indent details:', res);
 
-          this.toastService.showSuccess('Indent Updated Successfully.');
+          this.toastService.showSuccess(res.errorMessege);
           setTimeout(() => {
             this.route.navigate(['/home/userRequest']);
           }, 3000);

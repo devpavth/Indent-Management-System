@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
       },
       (error) => {
         this.loading = false;
-        if (error.status == 403) {
+        if (error.status == 401) {
           this.passwordVerified = 1;
         }
         if (error.status === 0) {

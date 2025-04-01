@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { Request } from '../../../models/request/request.model';
 import { ToastService } from '../../service/toast/toast.service';
+import { AuthService } from '../../service/Auth/auth.service';
 
 @Component({
   selector: 'app-branch-approvel',
@@ -20,14 +21,21 @@ export class BranchApprovelComponent implements OnInit {
   _yourReq: any;
   currentDate: string | undefined;
   maxDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isAuthorizeEditIndentForm: boolean = false;
+  isAcceptedView: boolean = false;
+  isViewEditIndentForm: boolean = false;
 
   requestList: Request | undefined;
 
+  selectedRequestId: number | undefined | null = null;
+
   toastService = inject(ToastService);
+  authService = inject(AuthService);
 
   constructor(private rService: RequestService) {
     const today = new Date();
@@ -42,7 +50,11 @@ export class BranchApprovelComponent implements OnInit {
           this.requestList = res;
 
           if (this.branch === this.requestList?.branchCode) {
+            this.isAuthorizeEditIndentForm = false;
             this.viewRequest(this.requestList.sno);
+
+            this.isAuthorizeEditIndentForm =
+              this.authService.isAuthenticateEditIndentRole();
           } else {
             this.toastService.showError("You can't view other branch indent");
           }
@@ -56,6 +68,9 @@ export class BranchApprovelComponent implements OnInit {
         },
       );
     });
+
+    this.isAuthorizeEditIndentForm =
+      this.authService.isAuthenticateEditIndentRole();
 
     this.fetchRequestList();
   }
@@ -174,24 +189,47 @@ export class BranchApprovelComponent implements OnInit {
     this.showSearchInfo = inputValue.trim() === '';
   }
 
-  fetchReqByIndentCode(event: Event){
+  fetchReqByIndentCode(event: Event) {
     const enteredIndentCode = (event.target as HTMLInputElement).value;
 
-    if(!enteredIndentCode){
+    if (!enteredIndentCode) {
       return;
     }
 
     this.rService.triggerSearch(enteredIndentCode);
   }
 
-  viewRequest(data: any) {
-    this.isViewReq = true;
+  viewRequest(data: number) {
     console.log(data);
     this.reqId = data;
     this.showBranch = 2;
+
+    if (this.isAuthorizeEditIndentForm && this.isProcess) {
+      this.isAcceptedView = true;
+      this.selectedRequestId = data;
+    } else {
+      this.isAcceptedView = false;
+      this.selectedRequestId = null;
+      this.isViewReq = true;
+    }
   }
+
+  openViewRequest(sno: number) {
+    this.reqId = sno;
+    this.isViewReq = true;
+  }
+
+  editIndentForm(sno: number) {
+    this.reqId = sno;
+
+    if(this.isAuthorizeEditIndentForm){
+      this.isViewEditIndentForm = true;
+    }
+  }
+
   closeView(data: boolean) {
     this.isViewReq = data;
+    this.isViewEditIndentForm = data;
     this.fetchRequestList();
   }
 }

@@ -429,7 +429,7 @@
                       </li>
                       <li>
                         <button
-                          (click)="editIndentForm(req.sno, req.requestNo)" 
+                          (click)="editIndentForm(req.sno)" 
                           class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
                            Edit Indent
                         </button>
@@ -505,7 +505,6 @@
 <div *ngIf="isViewEditIndentForm">
   <app-edit-indent-request
     (closeView)="closeView($event)"
-    [indentNumber]="indentNumber"
     [IndentID]="RequestID"
   ></app-edit-indent-request>
 </div>

@@ -367,7 +367,7 @@
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
                     (click)="viewRequest(req.sno)"
-                    class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                    class="dropdown-button inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
                     <svg
@@ -382,6 +382,32 @@
                       />
                     </svg>
                   </button>
+
+                  <div
+                    *ngIf="isAcceptedView && selectedRequestId === req.sno"
+                    class="dropdown-container absolute overflow-hidden right-0 -mt-12 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    appClickoutsideDropdown
+                    (clickOutside)="selectedRequestId = null"
+                    >
+                    <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
+                      <li>
+                        <button
+                          (click)="openViewRequest(req.sno)"
+                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600"
+                          >
+                          View Request
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          (click)="editIndentForm(req.sno)"
+                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600"
+                          >
+                          Edit Indent
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -417,3 +443,10 @@
 >
   <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>
+
+<div *ngIf="isViewEditIndentForm">
+  <app-edit-indent-request
+    (closeView)="closeView($event)"
+    [IndentID]="reqId"
+  ></app-edit-indent-request>
+</div>

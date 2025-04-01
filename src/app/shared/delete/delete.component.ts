@@ -12,6 +12,7 @@ import { BranchService } from '../../core/components/service/Branch/branch.servi
 export class DeleteComponent {
   @Input() deleteData: any;
   @Output() close = new EventEmitter<boolean>();
+  @Output() deleteProduct = new EventEmitter<boolean>();
 
   isToast: boolean = false;
   successToastMsg: string = '';
@@ -107,6 +108,11 @@ export class DeleteComponent {
           }
         },
       );
+    }
+
+    if(this.deleteData.action === 6){
+      this.deleteProduct.emit(this.deleteData);
+      this.close.emit(false);
     }
   }
 }

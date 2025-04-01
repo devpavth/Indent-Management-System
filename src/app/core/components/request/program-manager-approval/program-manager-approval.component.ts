@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { debounceTime, Subject } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
+import { AuthService } from '../../service/Auth/auth.service';
 
 @Component({
   selector: 'app-program-manager-approval',
@@ -22,17 +23,23 @@ export class ProgramManagerApprovalComponent {
 
   selectedDate: string | undefined;
   maxDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isAuthorizeEditIndentForm: boolean = false;
+  isAcceptedView: boolean = false;
+  isViewEditIndentForm: boolean = false;
 
   requestList: Request | undefined;
+
+  selectedRequestId: number | undefined | null = null;
 
   searchSubject = new Subject<string>();
 
   toastService = inject(ToastService);
-
+  authService = inject(AuthService);
 
   constructor(private rService: RequestService) {
     const today = new Date();
@@ -41,28 +48,34 @@ export class ProgramManagerApprovalComponent {
   }
 
   ngOnInit() {
-    this.rService.getDebouncedSearchObservable()
-    .subscribe(indentCode => {
+    this.rService.getDebouncedSearchObservable().subscribe((indentCode) => {
       this.rService.fetchRequestByIndentCode(indentCode).subscribe(
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
 
           if (this.branch === this.requestList?.branchCode) {
+            this.isAuthorizeEditIndentForm = false;
             this.viewRequest(this.requestList.sno);
+
+            this.isAuthorizeEditIndentForm =
+              this.authService.isAuthenticateEditIndentRole();
           } else {
             this.toastService.showError("You can't view other branch indent");
           }
         },
         (error) => {
-        console.log('error while fetching indent details:', error);
+          console.log('error while fetching indent details:', error);
 
-        if(error.error.status === 204){
-          this.toastService.showError(error.error.errorMessege);
-        }
-      }
-      )
-    })
+          if (error.error.status === 204) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+    });
+
+    this.isAuthorizeEditIndentForm =
+      this.authService.isAuthenticateEditIndentRole();
 
     this.fetchRequestList();
   }
@@ -178,24 +191,47 @@ export class ProgramManagerApprovalComponent {
     this.showSearchInfo = inputValue.trim() === '';
   }
 
-  fetchReqByIndentCode(event: Event){
+  fetchReqByIndentCode(event: Event) {
     const enteredIndentCode = (event.target as HTMLInputElement).value;
 
-    if(!enteredIndentCode){
+    if (!enteredIndentCode) {
       return;
     }
 
     this.rService.triggerSearch(enteredIndentCode);
   }
 
-  viewRequest(data: any) {
-    this.isViewReq = true;
+  viewRequest(data: number) {
     console.log('viewing the request data:', data);
     this.reqId = data;
     this.showManager = 1;
+
+    if (this.isAuthorizeEditIndentForm && this.isProcess) {
+      this.isAcceptedView = true;
+      this.selectedRequestId = data;
+    } else {
+      this.isAcceptedView = false;
+      this.selectedRequestId = null;
+      this.isViewReq = true;
+    }
   }
+
+  openViewRequest(sno: number) {
+    this.reqId = sno;
+    this.isViewReq = true;
+  }
+
+  editIndentForm(sno: Number) {
+    this.reqId = sno;
+
+    if (this.isAuthorizeEditIndentForm) {
+      this.isViewEditIndentForm = true;
+    }
+  }
+
   closeView(data: boolean) {
     this.isViewReq = data;
+    this.isViewEditIndentForm = data;
     this.fetchRequestList();
   }
 }

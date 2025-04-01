@@ -27,9 +27,14 @@ export class AuthService {
     return this.getToken() !== null;
   }
 
-  getUserRoles(): string[]{
+  getUserRoles(): string[] {
     const storedRoles = sessionStorage.getItem('roles');
     console.log('storedRoles:', storedRoles);
     return storedRoles ? JSON.parse(storedRoles) : [];
+  }
+
+  isAuthenticateEditIndentRole(): boolean {
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_INDENT_DETAILS_EDITOR');
   }
 }

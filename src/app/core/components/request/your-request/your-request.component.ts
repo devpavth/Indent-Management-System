@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { debounceTime, Subject } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
@@ -13,7 +19,6 @@ import { AuthService } from '../../service/Auth/auth.service';
 export class YourRequestComponent implements OnInit {
   _yourReq: any;
   RequestID: any;
-  indentNumber: string = '';
   isCreated: boolean = true;
   isProcess: boolean = false;
   isCompleted: boolean = false;
@@ -35,11 +40,13 @@ export class YourRequestComponent implements OnInit {
   selectedRequestId: number | undefined | null = null;
   isViewEditIndentForm: boolean = false;
 
-
   toastService = inject(ToastService);
   authService = inject(AuthService);
 
-  constructor(private readonly reqService: RequestService, private elRef: ElementRef) {
+  constructor(
+    private readonly reqService: RequestService,
+    private elRef: ElementRef,
+  ) {
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
     this.maxDate = today.toISOString().split('T')[0];
@@ -57,17 +64,12 @@ export class YourRequestComponent implements OnInit {
 
           if (branchCode === this.requestList?.branchCode) {
             // this.showSearchInfo = false;
-            
+
             this.isAuthorizeEditIndentForm = false;
             this.viewRequest(this.requestList?.sno);
 
-            const userRoles = this.authService.getUserRoles();
-            if (userRoles.includes('ROLE_INDENT_DETAILS_EDITOR')) {
-              this.isAuthorizeEditIndentForm = true;
-            } else {
-              this.isAuthorizeEditIndentForm = false;
-            }
-
+            this.isAuthorizeEditIndentForm =
+              this.authService.isAuthenticateEditIndentRole();
           } else {
             this.toastService.showError("You can't view other branch indent");
           }
@@ -82,12 +84,8 @@ export class YourRequestComponent implements OnInit {
       );
     });
 
-    const userRoles = this.authService.getUserRoles();
-    if (userRoles.includes('ROLE_INDENT_DETAILS_EDITOR')) {
-      this.isAuthorizeEditIndentForm = true;
-    } else {
-      this.isAuthorizeEditIndentForm = false;
-    }
+    this.isAuthorizeEditIndentForm =
+      this.authService.isAuthenticateEditIndentRole();
 
     this.fetchYourRequest();
   }
@@ -157,16 +155,15 @@ export class YourRequestComponent implements OnInit {
     this.RequestID = data;
     console.log(data);
 
-    if(this.isAuthorizeEditIndentForm){
+    if (this.isAuthorizeEditIndentForm && this.isCreated) {
       this.isAcceptedView = true;
       this.selectedRequestId = data;
-    }else{
+    } else {
       this.isAcceptedView = false;
       this.selectedRequestId = null;
       this.isViewReq = true;
     }
   }
-
 
   openViewRequest(sno: number) {
     this.RequestID = sno;
@@ -174,13 +171,11 @@ export class YourRequestComponent implements OnInit {
     this.isViewReq = true;
   }
 
-  editIndentForm(sno: number, indentNum: string) {
+  editIndentForm(sno: number) {
     this.RequestID = sno;
-    this.indentNumber = indentNum;
 
-    if(this.isAuthorizeEditIndentForm = true){
+    if (this.isAuthorizeEditIndentForm = true) {
       this.isViewEditIndentForm = true;
     }
-    
   }
 }

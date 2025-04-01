@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
+import { AuthService } from '../../service/Auth/auth.service';
 
 @Component({
   selector: 'app-admin-approvel',
@@ -20,15 +21,21 @@ export class AdminApprovelComponent implements OnInit {
 
   currentDate: string | undefined;
   maxDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
-
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isAuthorizeEditIndentForm: boolean = false;
+  isAcceptedView: boolean = false;
+  isViewEditIndentForm: boolean = false;
 
   requestList: Request | undefined;
 
+  selectedRequestId: number | null = null;
+
   toastService = inject(ToastService);
+  authService = inject(AuthService);
 
   ngOnInit() {
     this.ReqService.getDebouncedSearchObservable().subscribe((indentCode) => {
@@ -36,7 +43,12 @@ export class AdminApprovelComponent implements OnInit {
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
-           this.viewRequest(this.requestList?.sno);
+
+          this.isAuthorizeEditIndentForm = false;
+          this.viewRequest(this.requestList?.sno);
+
+          this.isAuthorizeEditIndentForm =
+            this.authService.isAuthenticateEditIndentRole();
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -47,6 +59,9 @@ export class AdminApprovelComponent implements OnInit {
         },
       );
     });
+
+    this.isAuthorizeEditIndentForm =
+      this.authService.isAuthenticateEditIndentRole();
 
     this.fetchRequestList();
   }
@@ -173,14 +188,36 @@ export class AdminApprovelComponent implements OnInit {
   }
 
   viewRequest(data: any) {
-    this.isViewReq = true;
     console.log(data);
     this.reqId = data;
     this.showAdmin = 3;
+
+    if (this.isAuthorizeEditIndentForm && this.isProcess) {
+      this.isAcceptedView = true;
+      this.selectedRequestId = data;
+    } else {
+      this.isAcceptedView = false;
+      this.selectedRequestId = null;
+      this.isViewReq = true;
+    }
+  }
+
+  openViewRequest(sno: number) {
+    this.reqId = sno;
+    this.isViewReq = true;
+  }
+
+  editIdentForm(sno: number){
+    this.reqId = sno;
+
+    if(this.isAuthorizeEditIndentForm){
+      this.isViewEditIndentForm = true;
+    }
   }
 
   closeView(data: any) {
     this.isViewReq = data;
+    this.isViewEditIndentForm = data;
     this.fetchRequestList();
   }
 }
