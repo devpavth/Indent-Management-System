@@ -650,11 +650,14 @@
                         >
                           Product Name
                         </th>
-                        <th scope="col" class="px-4 py-3">Category</th>
                         <th scope="col" class="px-4 py-3">Unit Price</th>
-                        <th scope="col" class="px-4 py-3">Quantity</th>
+                        <th scope="col" class="px-4 py-3">Qty</th>
+                        <th scope="col" class="px-4 py-3">Taxable Price</th>
                         <th scope="col" class="px-4 py-3">Tax</th>
-                        <th scope="col" class="px-4 py-3">Total</th>
+                        <th scope="col" class="px-4 py-3">
+                            Total
+                            <p class="text-[8px]">(incl Tax)</p>
+                        </th>
                         <th
                           scope="col"
                           class="rounded-tr-lg border-purple-500 px-2 py-3"
@@ -686,24 +689,21 @@
                             scope="row"
                             class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
                           >
-                            <p>{{ prd.prdmdlName }} - {{ prd?.prdbrndName }}</p>
+                            <p>{{ prd.prdmdlName }} - {{ prd?.prdbrndName }} - {{ prd?.prdcatgName }}</p>
                             <p class="text-wrap">
                               Head Of Account - {{ prd.headOfAccName }}
                             </p>
-                            <span
-                              class="h-20 text-wrap text-xs font-normal text-gray-500"
-                            >
+                            <p
+                              class="text-wrap text-justify text-xs font-normal text-gray-500"
+                             >
                               {{ prd.prdDescription }}
-                            </span>
+                            </p>
                           </th>
-                          <td
-                            class="max-w-[140px] whitespace-normal break-words px-4 py-3 font-semibold"
-                          >
-                            {{ prd?.prdcatgName }}
-                          </td>
+                          
                           <td
                             *ngIf="isEditIndentPrdIndex !== i"
                             class="px-4 py-3 font-semibold"
+                            (click)="editIndentProduct(i, prd)"
                           >
                             {{ prd?.unitPrice | currency: "INR" }}
                           </td>
@@ -715,12 +715,14 @@
                               type="number"
                               class="w-28 rounded-lg"
                               [(ngModel)]="prd.unitPrice"
-                              (input)="editUnitPrice()"
+                              (input)="editUnitPrice(i, prd, $event)"
+                              (blur)="resetEditIndentIndex()"
                             />
                           </td>
                           <td
                             *ngIf="isEditIndentPrdIndex !== i"
                             class="px-4 py-3 text-center font-semibold"
+                            (click)="editIndentProduct(i, prd)"
                           >
                             {{ prd.qty }}
                           </td>
@@ -732,11 +734,18 @@
                               type="number"
                               class="w-16 rounded-lg text-center"
                               [(ngModel)]="prd.qty"
-                              (input)="editQty()"
+                              (input)="editQty(i, prd, $event)"
+                              (blur)="resetEditIndentIndex()"
                             />
+                          </td>
+                          <td
+                            class="max-w-[140px] whitespace-normal break-words px-4 py-3 font-semibold"
+                          >
+                            {{ prd.subtotal | currency: "INR" }}
                           </td>
                           <td class="px-4 py-3 font-semibold">
                             {{ prd.tax | currency: "INR" }}
+                            <p class="text-center text-xs">({{ prd.prdGstPct }})%</p>
                           </td>
                           <td class="px-4 py-3 font-semibold">
                             {{ prd.total | currency: "INR" }}

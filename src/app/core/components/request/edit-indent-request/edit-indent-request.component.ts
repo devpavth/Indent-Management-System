@@ -54,6 +54,8 @@ export class EditIndentRequestComponent {
   taxSum: number = 0;
   subtotalSum: number = 0;
   isEditIndentPrdIndex: number | null = null;
+  originalUnitPrice: number = 0;
+  originalQty: number = 0;
 
   storeProductData: Product[] = [];
   productData: Product[] = [];
@@ -61,11 +63,16 @@ export class EditIndentRequestComponent {
   productList: any[] = [];
   _requestIndentDetails: any;
   headerData: any;
-  deleteProductItem: { title: string; action: number, index: number, product: {} } = {
+  deleteProductItem: {
+    title: string;
+    action: number;
+    index: number;
+    product: {};
+  } = {
     title: '',
     action: 0,
     index: 0,
-    product: {}
+    product: {},
   };
 
   constructor(private fb: FormBuilder) {
@@ -181,6 +188,17 @@ export class EditIndentRequestComponent {
         console.log(this._requestIndentDetails.indentHeaders.priorityType);
 
         this.productList = this._requestIndentDetails.productDetails;
+        const unitPriceList = this.productList.map((prd) => prd.unitPrice);
+        const qtyList = this.productList.map((prd) => prd.qty);
+
+        unitPriceList.map((price, index) => {
+          this.originalUnitPrice = price;
+          this.originalQty = qtyList[index];
+          
+          console.log("originalQty:", this.originalQty);
+          console.log('originalPrice:', this.originalUnitPrice);
+        })
+
         this.liveCalulationForDeletion();
 
         console.log('existing productList:', this.productList);
@@ -342,7 +360,7 @@ export class EditIndentRequestComponent {
 
     console.log('qty:', qtyList);
 
-    const gstResults = qtyList.map((qty, index) => {
+    const gstResults = qtyList.map((qty, index) => {    
       return this.sharedService.gstCalculation(
         qty,
         unitPriceList[index],
@@ -375,14 +393,47 @@ export class EditIndentRequestComponent {
     return product.id;
   }
 
-  editUnitPrice() {
+  editUnitPrice(index: number, product: any, event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const inputValue = Number(inputElement.value);
+
+    console.log("inputvalue", inputValue);
+    console.log("existing price:", this.productList[index].unitPrice);
+    console.log("check index id:", this.productList[index].id);
+
+    if(inputValue === this.originalUnitPrice || this.productList[index].id === 0){
+      this.productList[index].status = 200;
+    }else{
+      this.productList[index].status = 301;
+    }
+
+    this.indentProductForm.patchValue({
+      unitPrice: product?.unitPrice,
+      qty: product.qty,
+      status: 301,
+    });
+
     this.liveCalulationForDeletion();
 
     this.calculateSums();
   }
 
+  editQty(index: number, product: any, event: Event) {
+    const inputElemet = event.target as HTMLInputElement;
+    const inputValue = Number(inputElemet.value);
 
-  editQty() {
+    if(inputValue === this.originalQty || this.productList[index].id === 0){
+      this.productList[index].status = 200;
+    }else{
+      this.productList[index].status = 301;
+    }
+
+    this.indentProductForm.patchValue({
+      unitPrice: product?.unitPrice,
+      qty: product.qty,
+      status: 301,
+    });
+
     this.liveCalulationForDeletion();
 
     this.calculateSums();
@@ -391,19 +442,15 @@ export class EditIndentRequestComponent {
   editIndentProduct(index: number, product: any) {
     this.isEditIndentPrdIndex = index;
 
-    this.indentProductForm.patchValue({
-      unitPrice: product?.unitPrice,
-      qty: product.qty,
-      status: 301,
-    });
-
-    this.productList[index] = {
-      ...product,
-      status: 301,
-    };
+    console.log("originalPrice:", this.originalUnitPrice);
+    console.log('originalQty:', this.originalQty);
 
     console.log('productList in edit product:', this.productList);
     console.log('after edit indentProductForm:', this.indentProductForm.value);
+  }
+
+  resetEditIndentIndex(): void{
+    this.isEditIndentPrdIndex = null;
   }
 
   toggledelete(check: number, isView: boolean, index: number, product: any) {
@@ -414,7 +461,7 @@ export class EditIndentRequestComponent {
         title: 'Product',
         action: 6,
         index: index,
-        product: product
+        product: product,
       };
 
       console.log('deleteProductItem:', this.deleteProductItem);
@@ -423,7 +470,6 @@ export class EditIndentRequestComponent {
       this.isDelete = isView;
     }
   }
-
 
   deleteProduct(index: number, product: any) {
     // this.productList.splice(index, 1);
@@ -436,6 +482,15 @@ export class EditIndentRequestComponent {
       ...product,
       status: 404,
     };
+
+    console.log('current product status in productList:', this.productList[index].status);
+
+    if (
+      this.productList[index].id === 0 &&
+      this.productList[index].status === 404
+    ) {
+      this.productList = this.productList.filter((prd) => prd.status !== 404);
+    }
 
     console.log('productList after deletion:', this.productList);
 
