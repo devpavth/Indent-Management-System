@@ -141,10 +141,19 @@ export class ViewProductComponent implements OnInit {
     });
   }
   fetchBrandList(catId: any) {
+    console.log('catId for brand:', catId);
     this.productService.brandList(catId).subscribe((res) => {
       this.brandList = res;
       console.log('fetching brand details for selected product group:', res);
     });
+  }
+
+  addedBrand(id: number) {
+    this.fetchBrandList(id);
+  }
+
+  addedCategory(id: number){
+    this.fetchCatList(id);
   }
 
   toggledelete(check: any, isView: boolean) {
@@ -184,7 +193,7 @@ export class ViewProductComponent implements OnInit {
         .subscribe(
           (res: any) => {
             console.log('successfully updated the active product:', res);
-            this.loading = false; 
+            this.loading = false;
 
             this.isToast = true;
             this.deleteToastMsg = res.error;

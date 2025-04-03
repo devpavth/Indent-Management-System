@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
 import { RequestService } from '../../../service/Request/request.service';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-adding',
@@ -10,7 +11,14 @@ import { RequestService } from '../../../service/Request/request.service';
 })
 export class AddingComponent implements OnInit {
   @Output() close = new EventEmitter<boolean>();
+  @Output() addedBrand = new EventEmitter<number>();
+  @Output() addedCategory = new EventEmitter<number>();
   @Input() addData: any;
+
+  toastService = inject(ToastService);
+
+  selectedGroup: number = 0;
+  selectedCategory: number = 0;
 
   groupList: any;
   catList: any;
@@ -85,12 +93,18 @@ export class AddingComponent implements OnInit {
     console.log(data);
 
     this.productService.addGroup(data).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
+        this.toastService.showSuccess(res.error);
+        setTimeout(() => {
+          this.close.emit(false);
+        }, 3000);
       },
       (error) => {
+        console.log(error);
+        this.toastService.showError(error.error);
         if (error.status == 200) {
-          this.close.emit(false);
+          // this.close.emit(false);
         }
       },
     );
@@ -99,10 +113,19 @@ export class AddingComponent implements OnInit {
     console.log(data);
 
     this.productService.addCat(data).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
+        this.toastService.showSuccess(res.error);
+        setTimeout(() => {
+          this.close.emit(false);
+          this.selectedGroup = this.CatForm.get('grpId')?.value;
+          console.log('selectedGroup:', this.selectedGroup);
+          this.addedCategory.emit(Number(this.selectedGroup));
+        }, 3000);
       },
       (error) => {
+        console.log(error);
+        this.toastService.showError(error.error);
         if (error.status == 200) {
           this.close.emit(false);
         }
@@ -111,10 +134,19 @@ export class AddingComponent implements OnInit {
   }
   onSubmitBrand(data: any) {
     this.productService.addBrand(data).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
+        this.toastService.showSuccess(res.error);
+        setTimeout(() => {
+          this.close.emit(false);
+          this.selectedCategory = this.BrandForm.get('catId')?.value;
+          console.log("selectedCat:", this.selectedCategory);
+          this.addedBrand.emit(Number(this.selectedCategory));
+        }, 3000);
       },
       (error) => {
+        console.log(error);
+        this.toastService.showError(error.error);
         if (error.status == 200) {
           this.close.emit(false);
         }

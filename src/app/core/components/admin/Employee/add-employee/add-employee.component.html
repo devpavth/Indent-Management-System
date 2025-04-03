@@ -246,20 +246,21 @@
                     addEmployeeForm.get('empGender')?.invalid &&
                     addEmployeeForm.get('empGender')?.touched
                 }"
-              >
-                <option null selected disabled>Choose Gender</option>
+                >
+                <option value="" null selected disabled>Choose Gender</option>
                 <option *ngFor="let gender of _gender">{{ gender }}</option>
               </select>
+              <small
+                *ngIf="
+                  addEmployeeForm?.get('empGender')?.invalid &&
+                  addEmployeeForm?.get('empGender')?.touched
+                "
+                class="text-danger text-red-600"
+                >
+                Select Gender!
+              </small>
             </div>
-            <small
-              *ngIf="
-                addEmployeeForm?.get('empGender')?.invalid &&
-                addEmployeeForm?.get('empGender')?.touched
-              "
-              class="text-danger text-red-600"
-            >
-              Select Gender!
-            </small>
+            
           </div>
           <div class="mb-2">
             <label

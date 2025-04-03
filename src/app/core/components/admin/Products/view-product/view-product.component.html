@@ -1,6 +1,8 @@
 <section class="absolute left-0 right-0 z-20">
   <app-adding
     (close)="closeAdding($event)"
+    (addedBrand)="addedBrand($event)"
+    (addedCategory)="addedCategory($event)"
     [addData]="addingData"
     *ngIf="isCloseAdding"
   ></app-adding>
@@ -390,6 +392,7 @@
               [disabled]="productData.prdStatus === 200"
               class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               placeholder="Write product description here"
+              [maxlength]="500"
               appFirstCapLetter
               [ngClass]="{
                 'pointer-events-none': productData.prdStatus === 200,

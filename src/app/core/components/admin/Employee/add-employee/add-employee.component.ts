@@ -146,7 +146,7 @@ export class AddEmployeeComponent implements OnInit {
       Validators.minLength(10),
       Validators.maxLength(10),
     ]),
-    empGender: new FormControl('Male', [Validators.required]),
+    empGender: new FormControl('', [Validators.required]),
     empEmail: new FormControl(
       '',
       Validators.pattern(

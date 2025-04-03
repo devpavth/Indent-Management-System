@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-add-list',
@@ -18,6 +19,7 @@ export class AddListComponent implements OnInit {
   activeLink: any;
 
   route = inject(Router);
+  toastService =  inject(ToastService);
 
   isDeleteToast: boolean = false;
   errorToastMsg: string = '';
@@ -110,8 +112,13 @@ export class AddListComponent implements OnInit {
   onSubmitProj() {
     console.log(this.project);
     this.branchService.addNewProj({ proName: this.project }).subscribe(
-      (res) => {
+      (res: any) => {
         console.log('successfully added program:', res);
+        this.toastService.showSuccess(res.error);
+
+        setTimeout(() => {
+          this.route.navigate(['/home/viewList/2']);
+        }, 3000);
       },
       (error) => {
         console.log('error while adding program:', error);
