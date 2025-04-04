@@ -61,8 +61,6 @@ export class AmountInWordsPipe implements PipeTransform {
     str += Number(n[3]) !== 0 ? (this.a[Number(n[3])] || this.b[Number(n[3][0])] + ' ' + this.a[Number(n[3][1])]) + ' thousand ' : '';
     str += Number(n[4]) !== 0 ? (this.a[Number(n[4])] || this.b[Number(n[4][0])] + ' ' + this.a[Number(n[4][1])]) + ' hundred ' : '';
 
-    if(str !== '') str += 'and ';
-
     str +=
       Number(n[5]) !== 0
         ? (this.a[Number(n[5])] ||

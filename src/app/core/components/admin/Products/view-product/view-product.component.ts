@@ -54,7 +54,7 @@ export class ViewProductComponent implements OnInit {
     { id: 11, name: 'Tin', term: 'Tin' },
     { id: 12, name: 'Sheet', term: 'Sheet' },
     { id: 13, name: 'Ream', term: 'Ream' },
-    { id: 14, name: 'No', term: 'Number' },
+    { id: 14, name: 'Nos', term: 'Number' },
     { id: 15, name: 'Meter', term: 'Meter' },
     { id: 200, name: 'Box', term: 'Box' },
   ];
@@ -152,8 +152,12 @@ export class ViewProductComponent implements OnInit {
     this.fetchBrandList(id);
   }
 
-  addedCategory(id: number){
+  addedCategory(id: number) {
     this.fetchCatList(id);
+  }
+
+  addedGroup(){
+    this.fetchGroupList();
   }
 
   toggledelete(check: any, isView: boolean) {
@@ -170,7 +174,6 @@ export class ViewProductComponent implements OnInit {
       console.log('this.deleteProduct.deletedId:', this.deleteProduct.deleteId);
     } else if (check == 0) {
       this.isDelete = isView;
-      this.closeProduct.emit(false);
     }
   }
 

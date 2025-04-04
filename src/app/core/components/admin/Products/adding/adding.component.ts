@@ -13,6 +13,7 @@ export class AddingComponent implements OnInit {
   @Output() close = new EventEmitter<boolean>();
   @Output() addedBrand = new EventEmitter<number>();
   @Output() addedCategory = new EventEmitter<number>();
+  @Output() addedGroup = new EventEmitter<void>();
   @Input() addData: any;
 
   toastService = inject(ToastService);
@@ -89,6 +90,11 @@ export class AddingComponent implements OnInit {
     });
   }
 
+  isProductGroupsValid(): boolean{
+    const productGroups = this.GroupForm.get('productGroups') as FormArray;
+    return productGroups.controls.every((group) => group.get('prdgrpName')?.value?.trim())
+  }
+
   submitGroup(data: any) {
     console.log(data);
 
@@ -96,6 +102,7 @@ export class AddingComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.toastService.showSuccess(res.error);
+        this.addedGroup.emit();
         setTimeout(() => {
           this.close.emit(false);
         }, 3000);
@@ -116,11 +123,13 @@ export class AddingComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.toastService.showSuccess(res.error);
+
+        this.selectedGroup = this.CatForm.get('grpId')?.value;
+        console.log('selectedGroup:', this.selectedGroup);
+        this.addedCategory.emit(Number(this.selectedGroup));
+
         setTimeout(() => {
           this.close.emit(false);
-          this.selectedGroup = this.CatForm.get('grpId')?.value;
-          console.log('selectedGroup:', this.selectedGroup);
-          this.addedCategory.emit(Number(this.selectedGroup));
         }, 3000);
       },
       (error) => {
@@ -137,11 +146,13 @@ export class AddingComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.toastService.showSuccess(res.error);
+
+        this.selectedCategory = this.BrandForm.get('catId')?.value;
+        console.log('selectedCat:', this.selectedCategory);
+        this.addedBrand.emit(Number(this.selectedCategory));
+
         setTimeout(() => {
           this.close.emit(false);
-          this.selectedCategory = this.BrandForm.get('catId')?.value;
-          console.log("selectedCat:", this.selectedCategory);
-          this.addedBrand.emit(Number(this.selectedCategory));
         }, 3000);
       },
       (error) => {

@@ -38,6 +38,7 @@ export class RequestFormComponent implements OnInit {
   programList: any;
   headofacc: any;
   date: Date = new Date();
+  currentDate: string | undefined;
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
   funder: any;
@@ -132,6 +133,8 @@ export class RequestFormComponent implements OnInit {
       gstpercentage: [],
       status: [200],
     });
+
+    this.currentDate = this.date.toISOString().split('T')[0];
   }
 
   ngOnInit() {
@@ -672,6 +675,18 @@ export class RequestFormComponent implements OnInit {
     this.productData = [product];
 
     console.log("productData:", this.productData);
+
+    const duplicateProducts = this.productList.find(
+      (prd) => prd.productId === product.productId
+    )
+
+    if(duplicateProducts){
+      this.toastService.showError('Product Already Exists in the Cart');
+      this.isProductSelected = false;
+      this.productData = [];
+      this.storeProductData = [];
+      return;
+    }
 
     this.productForm.patchValue({
       // productId: product.productId,

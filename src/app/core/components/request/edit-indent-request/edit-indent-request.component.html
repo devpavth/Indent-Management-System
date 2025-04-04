@@ -63,7 +63,7 @@
                           />
                           <label
                             for="hosting-small"
-                            class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                            class="inline-flex w-full pointer-events-none items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
                           >
                             <div class="block">
                               <div class="w-full text-lg font-semibold">
@@ -79,10 +79,12 @@
                             formControlName="priorityType"
                             value="108"
                             class="peer hidden"
+                            readonly
+                            required
                           />
                           <label
                             for="hosting-big"
-                            class="inline-flex w-full cursor-pointer items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
+                            class="inline-flex w-full pointer-events-none items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 peer-checked:border-blue-600 peer-checked:text-blue-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:peer-checked:text-blue-500"
                           >
                             <div class="block">
                               <div class="w-full text-lg font-semibold">
@@ -95,13 +97,20 @@
                     </div>
 
                     <div class="col-span-4 mb-2">
-                      <label
-                        for="Address"
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                        >Requisitioner
-                      </label>
+                        <label
+                            for="Address"
+                            class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
+                            >Requisitioner 
+                            <!-- <span class="text-red-500 flex mt-[1px]">
+                                <img src="../../../../../assets/Img/required.svg"
+                                    class="h-3.5 w-3.5" 
+                                    alt="required">
+                            </span> -->
+                        </label> 
+                      
                       <input
                         appFirstCapLetter
+                        appRequiredField
                         formControlName="requisitioner"
                         type="text"
                         class="input-form"
@@ -112,13 +121,15 @@
                     <div class="col-span-4 mb-2">
                       <label
                         for="Address"
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
                         >Required by Date
                       </label>
                       <input
+                        appRequiredField
                         formControlName="requiredDate"
                         type="date"
                         class="input-form"
+                        [min]="currentDate"
                         required
                       />
                     </div>
@@ -126,16 +137,18 @@
                     <div class="col-span-8 mb-2">
                       <label
                         for="Address"
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
                       >
                         Capex / Non-capex
                       </label>
                       <div class="flex justify-stretch gap-40">
                         <div class="flex items-center gap-2">
                           <input
+                            appRequiredField
                             formControlName="expenditureId"
                             type="radio"
                             value="51"
+                            required
                           />
                           <span>Capex</span>
                         </div>
@@ -144,6 +157,7 @@
                             formControlName="expenditureId"
                             type="radio"
                             value="52"
+                            required
                           />
                           <span>Non-Capex</span>
                         </div>
@@ -152,7 +166,7 @@
                     <div class="col-span-4 mb-2">
                       <label
                         for="Address"
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
                       >
                         Department
                       </label>
@@ -162,6 +176,8 @@
                         "
                         formControlName="deptId"
                         class="select-option1 block w-full rounded-lg"
+                        appRequiredField
+                        required
                       >
                         <option
                           disabled
@@ -181,13 +197,15 @@
                     <div class="col-span-4 mb-2">
                       <label
                         for="Address"
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
                       >
                         Project/Program
                       </label>
                       <select
                         formControlName="programId"
                         class="select-option1 block w-full rounded-lg"
+                        appRequiredField
+                        required
                       >
                         <option
                           disabled
@@ -206,13 +224,14 @@
                     </div>
                     <div class="col-span-8 mb-2">
                       <label
-                        class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                        class="mb-2 text-sm font-semibold text-gray-900 dark:text-white flex"
                         >Camp
                       </label>
                       <input
                         formControlName="campName"
                         type="text"
                         class="input-form"
+                        appRequiredField
                         required
                       />
                     </div>
@@ -363,7 +382,7 @@
                   <div
                     *ngIf="productData && !noResults && isProductSelected"
                     class="col-span-full flex flex-col"
-                  >
+                    >
                     <div>
                       <div class="inline-block min-w-full pt-2.5 align-middle">
                         <div class="overflow-hidden rounded-lg border">
@@ -687,9 +706,9 @@
                           <!-- <td class="px-4 py-3 font-semibold">{{ i + 1 }}</td> -->
                           <th
                             scope="row"
-                            class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
+                            class="whitespace-nowrap text-wrap px-4 py-3 font-semibold text-rose-900"
                           >
-                            <p>{{ prd.prdmdlName }} - {{ prd?.prdbrndName }} - {{ prd?.prdcatgName }}</p>
+                            <p class="text-wrap max-w-[380px] break-words">{{ prd.prdmdlName }} - {{ prd?.prdbrndName }} - {{ prd?.prdcatgName }}</p>
                             <p class="text-wrap">
                               Head Of Account - {{ prd.headOfAccName }}
                             </p>
@@ -716,7 +735,7 @@
                               class="w-28 rounded-lg"
                               [(ngModel)]="prd.unitPrice"
                               (input)="editUnitPrice(i, prd, $event)"
-                              (blur)="resetEditIndentIndex()"
+                              (blur)="resetEditIndentIndex(i, $event)"
                             />
                           </td>
                           <td
@@ -735,7 +754,7 @@
                               class="w-16 rounded-lg text-center"
                               [(ngModel)]="prd.qty"
                               (input)="editQty(i, prd, $event)"
-                              (blur)="resetEditIndentIndex()"
+                              (blur)="resetEditIndentIndex(i, $event)"
                             />
                           </td>
                           <td
@@ -860,10 +879,13 @@
             >
               <button
                 type="submit"
-                [disabled]="!headerData"
+                [disabled]="!isEnableSaveBtn"
+                [ngClass]="{
+                    'bg-gray-400 hover:bg-gray-400': !isEnableSaveBtn
+                }"
                 (click)="updateIndentDetails()"
                 class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
+                >
                 Save
               </button>
             </div>
@@ -881,6 +903,13 @@
   <app-success-toast
     [message]="toastService.successToastMsg"
   ></app-success-toast>
+</section>
+
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>
 
 <div

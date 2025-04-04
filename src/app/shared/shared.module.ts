@@ -35,6 +35,7 @@ import { WarningQuotecompareMessageComponent } from './warning-quotecompare-mess
 import { WarningPrefixComponent } from './warning-prefix/warning-prefix.component';
 import { AmountInWordsPipe } from './pipes/amountInWords/amount-in-words.pipe';
 import { ClickoutsideDropdownDirective } from './Directives/clickoutsideDropdown/clickoutside-dropdown.directive';
+import { RequiredFieldDirective } from './Directives/requiredField/required-field.directive';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ClickoutsideDropdownDirective } from './Directives/clickoutsideDropdown
     WarningPrefixComponent,
     AmountInWordsPipe,
     ClickoutsideDropdownDirective,
+    RequiredFieldDirective,
   ],
   imports: [
     CommonModule,
@@ -103,7 +105,8 @@ import { ClickoutsideDropdownDirective } from './Directives/clickoutsideDropdown
     UploadSignatureComponent,
     WarningPrefixComponent,
     AmountInWordsPipe,
-    ClickoutsideDropdownDirective
+    ClickoutsideDropdownDirective,
+    RequiredFieldDirective
   ],
 })
 export class SharedModule {}

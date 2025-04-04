@@ -17,7 +17,7 @@
       <button
         (click)="this.closeToggle.emit(false)"
         type="button"
-        class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+        class="ml-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-500 hover:bg-red-600 hover:text-white dark:hover:bg-gray-600 dark:hover:text-white"
         data-modal-toggle="updateProductModal"
       >
         <svg
@@ -48,6 +48,7 @@
           rows="5"
           class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
           placeholder="Write a description..."
+          [maxlength]="500"
         ></textarea>
       </div>
       <div>
@@ -66,6 +67,10 @@
 
       <button
         (click)="onsubmit(otherProductForm.value)"
+        [disabled]="otherProductForm.invalid || !otherProductForm.get('prdDescription')?.value"
+        [ngClass]="{
+          'btn-disable hover:bg-gray-400': otherProductForm.invalid || !otherProductForm.get('prdDescription')?.value
+        }"
         type="submit"
         class="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
