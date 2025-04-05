@@ -44,8 +44,10 @@ export class AddingComponent implements OnInit {
 
     this.CatForm = this.fb.group({
       grpId: [],
-      prdcatgName: ['', [Validators.required,
-        Validators.pattern('^[a-zA-Z ]+$')]],
+      prdcatgName: [
+        '',
+        [Validators.required],
+      ],
       prdcatgStatus: [200],
     });
 
@@ -90,9 +92,25 @@ export class AddingComponent implements OnInit {
     });
   }
 
-  isProductGroupsValid(): boolean{
+  isProductGroupsValid(): boolean {
     const productGroups = this.GroupForm.get('productGroups') as FormArray;
-    return productGroups.controls.every((group) => group.get('prdgrpName')?.value?.trim())
+    return productGroups.controls.every((group) =>
+      group.get('prdgrpName')?.value?.trim(),
+    );
+  }
+
+  onCategoryInput(event: Event){
+    const inputElement = event.target as HTMLInputElement;
+    let cleanedValue = inputElement.value
+      .replace(/[^A-Za-z &]/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/^\s+/, '');
+
+    if(cleanedValue.startsWith('&')){
+      cleanedValue = '';
+    }
+
+    inputElement.value = cleanedValue;
   }
 
   submitGroup(data: any) {

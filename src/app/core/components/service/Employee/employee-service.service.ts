@@ -165,4 +165,9 @@ export class EmployeeServiceService {
   fetchEmployeeProfileDetails(){
     return this.http.get(environment.fetchEmployeeProfileDetails);
   }
+
+  logoutApp(){
+    console.log("checking logout api:", environment.logoutApp);
+    return this.http.post(environment.logoutApp, '');
+  }
 }

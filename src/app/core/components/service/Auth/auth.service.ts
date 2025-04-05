@@ -37,4 +37,24 @@ export class AuthService {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_INDENT_DETAILS_EDITOR');
   }
+
+  isAuthenticateUser(): boolean{
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_USER');
+  }
+
+  isAuthenticateProgramManager(): boolean{
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_PROGRAM_AUTH');
+  }
+
+  isAuthenticateBranchManager(): boolean{
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_BRANCH_AUTH');
+  }
+
+  isAuthenticateAdmin(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_ADMIN_AUTH');
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { ProductService } from '../../../service/Product/product.service';
 import { AdminProductServiceService } from '../../admin-services/admin-product-service.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
@@ -35,6 +36,8 @@ export class ViewProductComponent implements OnInit {
 
   isDeleteToast: boolean = false;
   errorToastMsg: any;
+
+  router = inject(Router);
 
   groupList: any;
   catList: any;
@@ -170,7 +173,7 @@ export class ViewProductComponent implements OnInit {
       };
       console.log('this.deleteProduct:', this.deleteProduct);
 
-      this.productDeleted.emit(this.deleteProduct.deleteId);
+      this.productDeleted.emit(this.deleteProduct.deleteId);    
       console.log('this.deleteProduct.deletedId:', this.deleteProduct.deleteId);
     } else if (check == 0) {
       this.isDelete = isView;

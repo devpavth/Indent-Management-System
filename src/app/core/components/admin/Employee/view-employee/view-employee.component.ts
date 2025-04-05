@@ -75,7 +75,6 @@ export class ViewEmployeeComponent implements OnInit {
 
           empFirstName: new FormControl(this._employeeDetails.empFirstName, [
             Validators.required,
-            Validators.pattern('[a-zA-Z]+'),
           ]),
           empLastName: new FormControl(this._employeeDetails.empLastName, [
             Validators.required,
@@ -284,6 +283,28 @@ export class ViewEmployeeComponent implements OnInit {
           });
       },
     );
+  }
+
+  onNameInput(event: Event){
+    const inputElement = event.target as HTMLInputElement;
+    let cleanedValue = inputElement.value
+      .replace(/[^A-Za-z ]/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/^\s+/, '');
+
+    inputElement.value = cleanedValue;
+
+    const namePattern = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+
+    if (
+      cleanedValue === '' ||
+      namePattern.test(cleanedValue) ||
+      /[A-Za-z] $/.test(cleanedValue)
+    ) {
+      this.viewEmployeeForm.get('empFirstName')?.setValue(cleanedValue, {
+        emitEvent: false,
+      });
+    }
   }
 
   fetchLevelForDesignation() {

@@ -203,7 +203,13 @@ export class ProductListComponent implements OnInit {
         'pageSize:',
         this.pageSize,
       );
-    });
+    }),
+    (error: any) => {
+      console.log(error);
+      if(error.error.status === 404){
+        this.isSkeletonLoader = false;
+      }
+    }
   }
 
   onProductDeleted(productId: number) {

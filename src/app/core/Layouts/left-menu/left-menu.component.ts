@@ -24,6 +24,10 @@ export class LeftMenuComponent {
 
   showPrefix: boolean = false;
   isAuthorized: boolean = false;
+  isAuthenticateUser: boolean = false;
+  isAuthenticatePgrmManager: boolean = false;
+  isAuthenticateBranchManager: boolean = false;
+  isAuthenticateAdmin: boolean = false;
 
   employeeService = inject(EmployeeServiceService);
   authService = inject(AuthService);
@@ -73,6 +77,11 @@ export class LeftMenuComponent {
         this.isAuthorized = false;
       }
     }
+
+    this.isAuthenticatePgrmManager = this.authService.isAuthenticateProgramManager();
+    this.isAuthenticateBranchManager = this.authService.isAuthenticateBranchManager();
+    this.isAuthenticateAdmin = this.authService.isAuthenticateAdmin();
+    this.isAuthenticateUser = this.authService.isAuthenticateUser();
 
     // const roleString = sessionStorage.getItem('roles');
     // const roles: string[] = roleString ? JSON.parse(roleString) : [];

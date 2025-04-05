@@ -95,12 +95,13 @@ export class LoginComponent implements OnInit {
           console.log('this.userRole:', typeof this.userRole);
 
           if(this.userData.access_token){
-            const expiresIn = this.userData.expires_in * 1000;
+            const expiresIn = this.userData.refresh_expires_in * 1000;
 
             console.log("expiresIn:", expiresIn);
 
             sessionStorage.setItem('userId', this.userid);
             sessionStorage.setItem('access_token', this.userData.access_token);
+            sessionStorage.setItem('refresh_token', this.userData.refresh_token);
 
             setTimeout(() => {
               console.log('Session expired, logging out...');

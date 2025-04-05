@@ -62,6 +62,7 @@
                 type="text"
                 formControlName="empFirstName"
                 class="input-form"
+                (input)="onNameInput($event)"
                 [ngClass]="{
                   error:
                     viewEmployeeForm.get('empFirstName')?.invalid &&

@@ -477,7 +477,7 @@ export class RequestFormComponent implements OnInit {
 
     this.productData = '';
     this.calculateSums();
-    // this.productForm.reset();
+    this.productForm.reset();
     // this.productReset();
   }
 
@@ -632,7 +632,6 @@ export class RequestFormComponent implements OnInit {
       ...this.headerData,
       totalPrice: this.totalSum,
       productDetails: this.productList,
-      assgndVendors: this.vendorList,
       // assignedDonors: this.funderList,
     };
     console.log("indent data:", indent);
@@ -699,6 +698,7 @@ export class RequestFormComponent implements OnInit {
       gstpercentage: product.prdGstPct,
       headOfAccId: product.headOfAccId,
       headOfAccName: product.headOfAccName,
+      status: 200,
     });
 
     this.storeProductData = [];

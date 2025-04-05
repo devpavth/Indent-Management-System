@@ -67,7 +67,8 @@ export class ViewRequestComponent implements OnInit {
       if(this._requestDetails.prctAuthData.authStatusCode === 202){
         this.isViewProcurementApproval = true;
       }
-       this.pendingOrProcessFinalState = this.authoritiesList === null ? 'Action Pending' : 'Processing'
+       this.pendingOrProcessFinalState = this.authoritiesList === null 
+        && this._requestDetails.indentHeaders.totalPrice > 5000 ? 'Action Pending' : 'Action Not Required'
 
       this.finalApprovalIsProcess = this.authoritiesList.some(
         (req) => req.status === 102 

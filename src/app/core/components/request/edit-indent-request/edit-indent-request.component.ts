@@ -601,6 +601,7 @@ export class EditIndentRequestComponent {
           this.toastService.showSuccess(res.errorMessege);
           setTimeout(() => {
             this.closeView.emit(false);
+            this.route.navigate([]);
           }, 3000);
         },
         (error) => {

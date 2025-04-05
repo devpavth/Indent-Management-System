@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FunderService } from '../../core/components/service/Funder/funder.service';
 import { ProductService } from '../../core/components/service/Product/product.service';
 import { VendorService } from '../../core/components/service/vendor/vendor.service';
 import { BranchService } from '../../core/components/service/Branch/branch.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete',
@@ -16,6 +17,8 @@ export class DeleteComponent {
 
   isToast: boolean = false;
   successToastMsg: string = '';
+
+  route = inject(Router);
 
   constructor(
     private funderService: FunderService,
@@ -49,6 +52,7 @@ export class DeleteComponent {
         (error) => {
           console.log('error while deleting product data:', error);
           if (error.status == 200) {
+            this.route.navigate(['/home/productList']);
             this.close.emit(false);
           }
         },

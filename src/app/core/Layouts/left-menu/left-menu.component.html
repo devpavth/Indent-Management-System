@@ -111,24 +111,24 @@
         >
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/request"
+              [routerLinkActive]="isAuthenticateUser? 'side-menu-active' : ''"
+              [routerLink]="isAuthenticateUser ? '/home/request' : '/home/unauth'"
               class="left-submenu group"
               >Indent Form</a
             >
           </li>
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/userRequest"
+              [routerLinkActive]="isAuthenticateUser ? 'side-menu-active': ''"
+              [routerLink]="isAuthenticateUser ? '/home/userRequest' : '/home/unauth'"
               class="left-submenu group"
               >User Request List</a
             >
           </li>
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/managerApproval"
+              [routerLinkActive]="isAuthenticatePgrmManager ? 'side-menu-active' : ''"
+              [routerLink]="isAuthenticatePgrmManager ? '/home/managerApproval' : '/home/unauth'"
               class="left-submenu group"
             >
               Program Manager Approval
@@ -136,16 +136,16 @@
           </li>
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/branchApprovel"
+              [routerLinkActive]="isAuthenticateBranchManager ? 'side-menu-active' : ''"
+              [routerLink]="isAuthenticateBranchManager ? '/home/branchApprovel' : '/home/unauth'"
               class="left-submenu group"
               >Branch Approval</a
             >
           </li>
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/adminApprovel"
+              [routerLinkActive]="isAuthenticateAdmin ? 'side-menu-active' : ''"
+              [routerLink]="isAuthenticateAdmin ? '/home/adminApprovel' : '/home/unauth'"
               class="left-submenu group"
               >Admin Approval</a
             >

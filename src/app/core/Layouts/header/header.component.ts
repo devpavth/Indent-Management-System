@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 import { SharedServiceService } from '../../components/service/shared-service/shared-service.service';
 import { BranchService } from '../../components/service/Branch/branch.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +41,7 @@ export class HeaderComponent implements OnInit {
   randomColor: string | undefined;
 
   branchService = inject(BranchService);
+  route = inject(Router);
 
   constructor(
     private readonly userDetailService: EmployeeServiceService,
@@ -99,6 +101,16 @@ export class HeaderComponent implements OnInit {
   }
 
   signOut() {
-    sessionStorage.clear();
+    this.userDetailService.logoutApp().subscribe(
+      (res) => {
+        console.log("successfully logout:", res); 
+        sessionStorage.clear();
+        this.route.navigate(['/login']);
+      },
+      (error) => {
+        console.log("error while logout:", error);
+      }
+    )
+    
   }
 }

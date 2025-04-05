@@ -61,6 +61,12 @@
               >
                 Name Should not be Empty!
               </small>
+              <small
+                *ngIf="addEmployeeForm.get('empFirstName')?.errors?.['minlength']"
+                class="text-red-600"
+                >  
+                Name Should be atleast 3 Characters         
+              </small>
             </div>
 
             <div>
@@ -703,7 +709,7 @@
             <button
               type="button"
               (click)="this.addEmployeeForm.reset()"
-              class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
+              class="px-4 py-2 transition-all duration-300 rounded-lg bg-transparent hover:bg-gray-300 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
             >
               Cancel
             </button>

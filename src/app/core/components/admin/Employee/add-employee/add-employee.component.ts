@@ -14,7 +14,10 @@ import { BranchService } from '../../../service/Branch/branch.service';
 import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { Router } from '@angular/router';
-import { DesignationRoleMapping, LevelMapping } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
+import {
+  DesignationRoleMapping,
+  LevelMapping,
+} from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 import { Pincode } from '../../../../models/pincode/pincode.model';
 
 // If all conditions met, return no error
@@ -139,7 +142,10 @@ export class AddEmployeeComponent implements OnInit {
     createdBy: new FormControl(this.empId),
     createdTime: new FormControl(this.date),
     empStatus: new FormControl(200),
-    empFirstName: new FormControl('', [Validators.required]),
+    empFirstName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
     empLastName: new FormControl('', [Validators.required]),
     empPhone: new FormControl('', [
       Validators.required,
@@ -181,13 +187,20 @@ export class AddEmployeeComponent implements OnInit {
   //number disable
   onNameInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    inputElement.value = inputElement.value.replace(
+    let value = inputElement.value;
+
+    if(value.startsWith(' ')){
+      value = value.trimStart();
+    }
+
+    value = value.replace(
       /[^a-zA-Z\s@]|(\s{2,})/g,
       function (match, p1) {
         return p1 ? ' ' : '';
       },
     );
-    // Allow only letters and '@'
+
+    inputElement.value = value;
   }
   //letter disable
   onPhoneNumberInput(event: Event) {
@@ -237,16 +250,16 @@ export class AddEmployeeComponent implements OnInit {
     return null;
   }
 
-  fetchLevelForDesignation(){
+  fetchLevelForDesignation() {
     this.empService.fetchLevelForDesignation().subscribe(
       (res) => {
-        console.log("fetching level list:", res);
+        console.log('fetching level list:', res);
         this.levelForDesignation = res;
       },
       (error) => {
-        console.log("error while fetching level:", error);
-      }
-    )
+        console.log('error while fetching level:', error);
+      },
+    );
   }
 
   addEmployee(employeeData: any) {
@@ -266,8 +279,8 @@ export class AddEmployeeComponent implements OnInit {
         // this.addEmployeeForm.reset();
       },
       (error) => {
-        console.log("error while creating employee:", error);
-        this.Spinner = false
+        console.log('error while creating employee:', error);
+        this.Spinner = false;
 
         if (error.status == 200) {
           console.log('200 status for creating employee:', error);
@@ -323,23 +336,23 @@ export class AddEmployeeComponent implements OnInit {
     );
   }
 
-  fetchDesignationFromLevel(event: Event){
+  fetchDesignationFromLevel(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const levelId = Number(selectElement.value);
 
-    console.log("levelId:", levelId);
+    console.log('levelId:', levelId);
 
     this.empService.fetchDesignationFromLevel(levelId).subscribe(
       (res: LevelMapping) => {
-        console.log("fetching designation from level:", res);
+        console.log('fetching designation from level:', res);
         this.levelList = res;
         this.designationList = this.levelList.designationTables;
-        console.log("this.designationList:", this.designationList);
+        console.log('this.designationList:', this.designationList);
       },
       (error) => {
         console.log('error while fetching designation from level:', error);
-      }
-    )
+      },
+    );
   }
 
   fetchDesignation() {

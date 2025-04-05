@@ -191,6 +191,11 @@
   @apply font-semibold text-purple-700;
 }
 
+
+/* input[type="text"]{
+  @apply block w-full rounded-lg border border-purple-300  p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500;
+} */
+
 @layer utilities {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {

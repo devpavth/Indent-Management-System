@@ -39,6 +39,7 @@ export const environment = {
   postSignature: Url + bassEmployeeApi + '/add-signature',
   fetchUploadedSignature: Url + bassEmployeeApi + '/get-signature',
   fetchEmployeeProfileDetails: Url + bassEmployeeApi + '/get-profiledata',
+  logoutApp: Url + bassEmployeeApi + '/logout',
   //Product Api
   addGroup: Url + baseProductApi + '/addgroup',
   groupList: Url + baseProductApi + '/getactivegroup',
