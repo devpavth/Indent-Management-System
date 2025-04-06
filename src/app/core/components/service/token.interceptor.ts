@@ -32,6 +32,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   // Apply the common token
   const token = sessionStorage.getItem('access_token');
+  // console.log("checking token:", token);
   const newClone = req.clone({
     setHeaders: {
       Authorization: `Bearer ${token}`,

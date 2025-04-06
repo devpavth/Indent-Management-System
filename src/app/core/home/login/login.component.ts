@@ -5,6 +5,7 @@ import { AuthService } from '../../components/service/Auth/auth.service';
 import { BranchService } from '../../components/service/Branch/branch.service';
 import { Company } from '../../models/company/company.model';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
+import { Subject, takeUntil, timer } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
   companyDetails: Company | undefined;
   loading: boolean = false;
 
+  private tokenRefreshInterval: ReturnType<typeof setInterval> | null = null;
+
   constructor(
     private Router: Router,
     private readonly auth: AuthService,
@@ -32,6 +35,7 @@ export class LoginComponent implements OnInit {
   }
   //login data name declare
   userData: any;
+  newToken: any;
   userid: any;
   branchid: any;
   userRole: string = '';
@@ -76,6 +80,7 @@ export class LoginComponent implements OnInit {
       },
     );
   }
+
   login(loginData: any) {
     console.log('login data', loginData);
 
@@ -86,7 +91,6 @@ export class LoginComponent implements OnInit {
     this.auth.login(loginData).subscribe(
       (res) => {
         this.userData = res;
-        // console.log(res);
 
         if (res != null) {
           this.userid = this.userData?.employeeId;
@@ -94,33 +98,31 @@ export class LoginComponent implements OnInit {
           console.log('this.userRole:', this.userRole);
           console.log('this.userRole:', typeof this.userRole);
 
-          if(this.userData.access_token){
-            const expiresIn = this.userData.refresh_expires_in * 1000;
+          if (this.userData.access_token) {
+            const expiresIn = this.userData.expires_in * 1000;
 
-            console.log("expiresIn:", expiresIn);
+            console.log('expiresIn:', expiresIn);
 
             sessionStorage.setItem('userId', this.userid);
             sessionStorage.setItem('access_token', this.userData.access_token);
-            sessionStorage.setItem('refresh_token', this.userData.refresh_token);
+            sessionStorage.setItem(
+              'refresh_token',
+              this.userData.refresh_token,
+            );
 
-            setTimeout(() => {
-              console.log('Session expired, logging out...');
-              this.logout();
-            }, expiresIn);
-          }else{
-            console.log("token is expired else part.");
+            this.startTokenRefreshCycle(expiresIn);
+          } else {
+            console.log('token is expired else part.');
           }
 
-          
           // sessionStorage.setItem('roles', JSON.stringify(this.userRole));
 
           this.fetchProfile();
 
           // this.Router.navigate(['home/dashboard']);
 
-          console.log("login credentials:", this.userData);
+          console.log('login credentials:', this.userData);
         } else {
-          // alert('error');
           this.passwordVerified = 1;
         }
       },
@@ -136,13 +138,29 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  fetchProfile(){
+  startTokenRefreshCycle(expiresIn: number) {
+    this.tokenRefreshInterval = setInterval(() => {
+      console.log('Session expired, logging out...');
+      this.fetchNewAccessToken();
+    }, expiresIn);
+  }
+
+  // ngOnDestroy(): void{
+  //   if(this.tokenRefreshInterval){
+  //     clearInterval(this.tokenRefreshInterval);
+  //   }
+  //   console.log('Token refresh interval cleared!');
+  // }
+
+  fetchProfile() {
     this.empService.fetchEmployeeProfileDetails().subscribe(
       (res: any) => {
         console.log('fetching profile details:', res);
 
-        if(res?.desigRoleMapping){
-          const roleNames = res?.desigRoleMapping.map((role: { roleName: string; }) => role.roleName);
+        if (res?.desigRoleMapping) {
+          const roleNames = res?.desigRoleMapping.map(
+            (role: { roleName: string }) => role.roleName,
+          );
 
           sessionStorage.setItem('roles', JSON.stringify(roleNames));
 
@@ -150,8 +168,6 @@ export class LoginComponent implements OnInit {
 
           this.fetchCompanyDetails();
         }
-
-        
       },
       (error) => {
         console.log('error while fetching profile details:', error);
@@ -164,20 +180,20 @@ export class LoginComponent implements OnInit {
       (res) => {
         console.log('fetching company details:', res);
         this.companyDetails = res;
-        
+
         sessionStorage.setItem('companyName', this.companyDetails.companyName);
 
         if (this.companyDetails.companyLogo) {
           // console.log("Company Logo before storing:", this.companyDetails.companyLogo);
-          sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
+          sessionStorage.setItem(
+            'companyLogo',
+            this.companyDetails.companyLogo,
+          );
         }
 
         this.loading = false;
 
         this.Router.navigate(['home/dashboard']);
-
-        // sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
-        // this.Spinner = false;
       },
       (error) => {
         console.log('error while fetching company details:', error);
@@ -185,12 +201,26 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  logout(){
+  fetchNewAccessToken() {
+    this.empService.fetchNewAccessToken().subscribe(
+      (res) => {
+        console.log('successfully fecthing new access token:', res);
+        this.newToken = res;
+        sessionStorage.setItem('access_token', this.newToken.access_token);
+        console.log(this.newToken.access_token);
+        sessionStorage.setItem('refresh_token', this.newToken.refresh_token);
+      },
+      (error) => {
+        console.log('error while fetching new access token:', error);
+      },
+    );
+  }
+
+  logout() {
     sessionStorage.clear();
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('access_token');
     console.log('Session expired. Logging out...');
     this.Router.navigate(['/login']);
   }
-  
 }

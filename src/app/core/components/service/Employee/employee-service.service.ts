@@ -167,7 +167,14 @@ export class EmployeeServiceService {
   }
 
   logoutApp(){
-    console.log("checking logout api:", environment.logoutApp);
+    // console.log("checking logout api:", environment.logoutApp);
     return this.http.post(environment.logoutApp, '');
+  }
+
+  fetchNewAccessToken(){
+    const refreshToken = sessionStorage.getItem('refresh_token');
+    return this.http.post(environment.fetchNewAccesToken, {
+      refresh_token: refreshToken,
+    });
   }
 }

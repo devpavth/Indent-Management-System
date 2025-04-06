@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { ToastService } from '../../service/toast/toast.service';
 import { Specialrolesign } from '../../../models/specialrolesign/specialrolesign';
@@ -34,7 +41,7 @@ export class ViewRequestComponent implements OnInit {
   finalApprovalAtleastAccept: boolean = false;
   pendingOrProcessFinalState: string = '';
 
-  authoritiesList: Specialrolesign[] =[];
+  authoritiesList: Specialrolesign[] = [];
 
   constructor(private readonly requstService: RequestService) {}
   ngOnInit(): void {
@@ -52,7 +59,7 @@ export class ViewRequestComponent implements OnInit {
 
       this.authoritiesList = this._requestDetails.authoritiesSigns;
 
-      console.log("authoritiesList:", this.authoritiesList);
+      console.log('authoritiesList:', this.authoritiesList);
 
       if (this._requestDetails.progarmMgrAuthData.authStatusCode === 202) {
         this.isViewProgramManagerApproval = true;
@@ -64,23 +71,26 @@ export class ViewRequestComponent implements OnInit {
         this.isViewFinanceApproval = true;
       }
 
-      if(this._requestDetails.prctAuthData.authStatusCode === 202){
+      if (this._requestDetails.prctAuthData.authStatusCode === 202) {
         this.isViewProcurementApproval = true;
       }
-       this.pendingOrProcessFinalState = this.authoritiesList === null 
-        && this._requestDetails.indentHeaders.totalPrice > 5000 ? 'Action Pending' : 'Action Not Required'
+      this.pendingOrProcessFinalState =
+        this.authoritiesList === null &&
+        this._requestDetails.indentHeaders.totalPrice > 5000
+          ? 'Action Pending'
+          : 'Action Not Required';
 
       this.finalApprovalIsProcess = this.authoritiesList.some(
-        (req) => req.status === 102 
-      )
+        (req) => req.status === 102,
+      );
 
       this.finalApprovalIsAccept = this.authoritiesList.every(
-        (req) => req.status === 202
+        (req) => req.status === 202,
       );
 
       this.finalApprovalAtleastAccept = this.authoritiesList.some(
-        (req) => req.status === 202 || req.status === 102
-      )
+        (req) => req.status === 202 || req.status === 102,
+      );
 
       console.log(this._requestDetails.branchAuthorize);
     });
@@ -99,7 +109,7 @@ export class ViewRequestComponent implements OnInit {
             this.isRejected = false;
 
             this.toastService.showWarning(error.error.text);
-  
+
             setTimeout(() => {
               this.closeView.emit(false);
             }, 3000);
@@ -218,7 +228,7 @@ export class ViewRequestComponent implements OnInit {
           this.toastService.showWarning(error.error.text);
 
           setTimeout(() => {
-              this.closeView.emit(false);
+            this.closeView.emit(false);
           }, 3000);
 
           if (error.status === 202) {
@@ -247,7 +257,7 @@ export class ViewRequestComponent implements OnInit {
           setTimeout(() => {
             this.closeView.emit(false);
           }, 3000);
-          
+
           if (error.status === 202) {
             this.isRejected = false;
             this.isRejectPop = true;

@@ -62,10 +62,12 @@
                 Name Should not be Empty!
               </small>
               <small
-                *ngIf="addEmployeeForm.get('empFirstName')?.errors?.['minlength']"
+                *ngIf="
+                  addEmployeeForm.get('empFirstName')?.errors?.['minlength']
+                "
                 class="text-red-600"
-                >  
-                Name Should be atleast 3 Characters         
+              >
+                Name Should be atleast 3 Characters
               </small>
             </div>
 
@@ -126,8 +128,9 @@
                 </div>
                 <input
                   type="email"
-                  #email                  
+                  #email
                   formControlName="empEmail"
+                  (input)="onEmailInput($event)"
                   class="icon-input"
                   autocomplete="email"
                   placeholder="name@company.com"
@@ -181,7 +184,6 @@
                   #phone
                   class="icon-input"
                   autocomplete="phone"
-                  
                   (input)="onPhoneNumberInput($event)"
                   formControlName="empPhone"
                   placeholder="123-456-970"
@@ -252,7 +254,7 @@
                     addEmployeeForm.get('empGender')?.invalid &&
                     addEmployeeForm.get('empGender')?.touched
                 }"
-                >
+              >
                 <option value="" null selected disabled>Choose Gender</option>
                 <option *ngFor="let gender of _gender">{{ gender }}</option>
               </select>
@@ -262,11 +264,10 @@
                   addEmployeeForm?.get('empGender')?.touched
                 "
                 class="text-danger text-red-600"
-                >
+              >
                 Select Gender!
               </small>
             </div>
-            
           </div>
           <div class="mb-2">
             <label
@@ -285,32 +286,50 @@
               placeholder="Flat, House no., Building, Company, Apartment"
               minlength="20"
               maxlength="150"
+              (input)="onAddressInput($event, 'addressLine1', 150)"
               required
             />
 
             <div
               *ngIf="
                 (addEmployeeForm.controls['addressLine1'].invalid &&
-                addEmployeeForm.controls['addressLine1'].touched) ||
+                  addEmployeeForm.controls['addressLine1'].touched) ||
                 addEmployeeForm.controls['addressLine1'].dirty
               "
-            >
-              <small
-              *ngIf="
-                addEmployeeForm?.get('addressLine1')?.errors?.['required']
-              "
-                class="text-danger text-red-600"
-              > 
-                Address-1 is Required !
-              </small>
-              <small
-              *ngIf="
-                addEmployeeForm?.get('addressLine1')?.errors?.['minlength']
-              "
-                class="text-danger text-red-600"
-              > 
-                Address Should be atleast 20 characters!
-              </small>
+              class="flex justify-between item-start"
+              >
+              <div class="text-left">
+                <small
+                  *ngIf="
+                    addEmployeeForm?.get('addressLine1')?.errors?.['required']
+                  "
+                  class="text-red-600"
+                >
+                  Address-1 is Required !
+                </small>
+                <small
+                  *ngIf="
+                    addEmployeeForm?.get('addressLine1')?.errors?.['minlength']
+                  "
+                  class="text-red-600"
+                >
+                  Address Should be atleast 20 characters!
+                </small>
+                <small
+                  *ngIf="
+                    addEmployeeForm.get('addressLine1')?.errors?.['maxlength']
+                  "
+                  class="text-red-600"
+                  >
+                  Maximum Limit Exceeds
+                </small>
+              </div>
+              
+              <div class="text-right">
+                <small class="text-gray-500 text-sm">
+                  {{ addEmployeeForm.get('addressLine1')?.value?.length || 0 }} / 150
+                </small>
+              </div>
             </div>
           </div>
           <div class="mb-6">
@@ -322,32 +341,50 @@
               placeholder="Area, Street, Sector, Village"
               minlength="20"
               maxlength="100"
+              (input)="onAddressInput($event, 'addressLine2', 100)"
               required
             />
 
             <div
               *ngIf="
                 (addEmployeeForm.controls['addressLine2'].invalid &&
-                addEmployeeForm.controls['addressLine2'].touched) ||
+                  addEmployeeForm.controls['addressLine2'].touched) ||
                 addEmployeeForm.controls['addressLine2'].dirty
               "
-            >
-              <small
-                *ngIf="
-                addEmployeeForm?.get('addressLine2')?.errors?.['required']
-                "
-                class="text-danger text-red-600"
+                class="flex justify-between items-start"
               >
-                Address-2 is Required !  
-              </small>
-              <small
-                *ngIf="
-                addEmployeeForm?.get('addressLine2')?.errors?.['minlength']
-                "
-                class="text-danger text-red-600"
-              > 
-                Address Should be atleast 20 characters!
-              </small>
+              <div class="text-left">
+                <small
+                  *ngIf="
+                    addEmployeeForm?.get('addressLine2')?.errors?.['required']
+                  "
+                  class="text-red-600"
+                  >
+                  Address-2 is Required !
+                </small>
+                <small
+                  *ngIf="
+                    addEmployeeForm?.get('addressLine2')?.errors?.['minlength']
+                  "
+                  class="text-red-600"
+                >
+                  Address Should be atleast 20 characters!
+                </small>
+                <small
+                  *ngIf="
+                    addEmployeeForm.get('addressLine2')?.errors?.['maxlength']
+                  "
+                  class="text-red-600"
+                  >
+                  Maximum Limit Exceeds
+                </small>
+              </div>
+              <div class="text-right">
+                <small class="text-gray-500">
+                  {{ addEmployeeForm.get('addressLine2')?.value?.length || 0 }} / 100
+                </small>
+              </div>
+              
             </div>
           </div>
 
@@ -402,7 +439,10 @@
               >
                 >
                 <!-- <option null selected disabled>Choose Town/City</option> -->
-                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value}}">
+                <option
+                  *ngFor="let option of cityDropDownOptions"
+                  value="{{ option.value }}"
+                >
                   {{ option.label }}
                 </option>
               </select>
@@ -436,7 +476,7 @@
                 }"
                 readonly
               />
-                <!-- <option null selected disabled>Choose State</option>
+              <!-- <option null selected disabled>Choose State</option>
                 <option *ngFor="let state of _state" value="{{ state.sname }}">
                   {{ state.sname }}
                 </option> -->
@@ -450,7 +490,7 @@
                 State Should not be empty!
               </small>
             </div>
-            
+
             <div>
               <label
                 for="Country"
@@ -470,7 +510,7 @@
                 }"
                 readonly
               />
-                <!-- <option null selected disabled>Choose Country</option>
+              <!-- <option null selected disabled>Choose Country</option>
                 <option value="India">India</option> -->
               <small
                 *ngIf="
@@ -482,9 +522,6 @@
                 Country Should not be Empty!
               </small>
             </div>
-            
-
-            
           </div>
         </div>
         <div
@@ -594,8 +631,11 @@
                 <option null selected disabled class="bg-purple-800 text-white">
                   Choose Role
                 </option>
-                <option class="" *ngFor="let level of levelForDesignation" 
-                  [value]="level.levelId">
+                <option
+                  class=""
+                  *ngFor="let level of levelForDesignation"
+                  [value]="level.levelId"
+                >
                   {{ level.levelName }}
                 </option>
               </select>
@@ -709,7 +749,7 @@
             <button
               type="button"
               (click)="this.addEmployeeForm.reset()"
-              class="px-4 py-2 transition-all duration-300 rounded-lg bg-transparent hover:bg-gray-300 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
+              class="rounded-lg bg-transparent px-4 py-2 text-sm font-semibold leading-6 text-gray-900 transition-all duration-300 hover:bg-gray-300 dark:text-gray-200"
             >
               Cancel
             </button>
@@ -775,4 +815,3 @@
 >
   <app-spinner></app-spinner>
 </div>
-

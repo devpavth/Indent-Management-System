@@ -62,7 +62,7 @@
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
           (click)="toggleRequest()"
-        >
+          >
           <svg
             class="left-menusvg h-6 w-6"
             [ngClass]="{
@@ -163,7 +163,7 @@
           }"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
-          (click)="finance = !finance"
+          (click)="toggleFinance()"
         >
           <svg
             class="left-menusvg h-6 w-6"
@@ -249,7 +249,7 @@
           }"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
-          (click)="procurement = !procurement"
+          (click)="toggleProcurement()"
         >
           <svg
             class="left-menusvg h-6 w-6"
@@ -353,7 +353,7 @@
           class="left-menu group"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
-          (click)="poapproval = !poapproval"
+          (click)="toggleFinalApproval()"
           [ngClass]="{
             'left-menu': !isBlockRequest,
             'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
@@ -488,7 +488,7 @@
               >
 
               <svg
-                class="h-3 w-3"
+                class="h-3 w-3 mr-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -537,7 +537,7 @@
               >
 
               <svg
-                class="h-3 w-3"
+                class="h-3 w-3 mr-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -585,7 +585,7 @@
               >
 
               <svg
-                class="h-3 w-3"
+                class="h-3 w-3 mr-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -628,7 +628,7 @@
               >
 
               <svg
-                class="h-3 w-3"
+                class="h-3 w-3 mr-6"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -759,7 +759,7 @@
           class="left-menu group"
           aria-controls="dropdown-example"
           data-collapse-toggle="dropdown-example"
-          (click)="report = !report"
+          (click)="toggleReport()"
           [ngClass]="{
             'left-menu': !isBlockRequest,
             'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':

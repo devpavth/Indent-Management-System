@@ -1,18 +1,45 @@
 <div
   id="toast-warning"
-  class="animate__animated animate__fadeIn flex w-full max-w-sm items-center rounded-lg bg-white p-4 text-gray-500 shadow-lg ring-1 ring-yellow-400/50 dark:bg-gray-800 dark:text-gray-400"
+  class="animate__animated animate__fadeIn flex w-full max-w-sm items-start gap-4 rounded-lg bg-yellow-50 p-4 text-gray-500 shadow-lg ring-1 ring-yellow-400/50 dark:bg-gray-800 dark:text-gray-400"
   role="alert"
 >
-  <svg 
-    class="h-10 w-10 text-yellow-300 mr-2 ml-2"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 22 22" 
-    fill="currentColor" 
+  <div class="flex-shrink-0">
+    <svg
+      class="h-10 w-10 text-yellow-300"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 22 22"
+      fill="currentColor"
     >
-    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
-  </svg>
+      <path
+        fill-rule="evenodd"
+        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+        clip-rule="evenodd"
+      />
+    </svg>
+  </div>
+  
   <span class="sr-only">Check icon</span>
 
-  <div class="ml-2 font-semibold text-gray-800">{{message}}</div>
+  <div class="flex-1 font-semibold text-sm text-gray-800">{{ message }}</div>
+
+  <svg
+    (click)="closeToast()"
+    class="h-8 w-10 rounded-full cursor-pointer p-1 text-gray-600 transition-all duration-500 hover:text-gray-700 dark:text-white"
+    aria-hidden="true"
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <path
+      class=""
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M6 18 17.94 6M18 18 6.06 6"
+    />
+  </svg>
 </div>

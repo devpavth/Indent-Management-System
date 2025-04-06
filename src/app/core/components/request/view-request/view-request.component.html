@@ -1057,10 +1057,10 @@
                   (showID &&
                     this._requestDetails?.progarmMgrAuthData.authStatusCode ===
                       102) ||
-                  this._requestDetails?.branchAuthData.authStatusCode === 102 ||
-                  this._requestDetails?.adminAuthData.authStatusCode === 102
+                  (showID && this._requestDetails?.branchAuthData.authStatusCode === 102) ||
+                  (showID && this._requestDetails?.adminAuthData.authStatusCode === 102)
                 "
-                class="mt-8 flex gap-3"
+                class="mt-8 flex gap-3" 
                 >
                 <div>
                   <button

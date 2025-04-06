@@ -156,7 +156,7 @@ export class AddEmployeeComponent implements OnInit {
     empEmail: new FormControl(
       '',
       Validators.pattern(
-        /^[a-zA-Z0-9._%+-]+@[a-z]+.([a-z]{2})+(?:\.(com|in|edu|net)){1}$/,
+        /^[a-z0-9._%+-]+@[a-z]+.([a-z]{2})+(?:\.(com|in|edu|net)){1}$/,
       ),
     ),
     empDateofBirth: new FormControl('', [
@@ -189,19 +189,26 @@ export class AddEmployeeComponent implements OnInit {
     const inputElement = event.target as HTMLInputElement;
     let value = inputElement.value;
 
-    if(value.startsWith(' ')){
+    if (value.startsWith(' ')) {
       value = value.trimStart();
     }
 
-    value = value.replace(
-      /[^a-zA-Z\s@]|(\s{2,})/g,
-      function (match, p1) {
-        return p1 ? ' ' : '';
-      },
-    );
+    value = value.replace(/[^a-zA-Z\s@]|(\s{2,})/g, function (match, p1) {
+      return p1 ? ' ' : '';
+    });
 
     inputElement.value = value;
   }
+
+  onEmailInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    inputElement.value = inputElement.value.toLowerCase();
+
+    this.addEmployeeForm.get('empEmail')?.setValue(inputElement.value, {
+      emitEvent: false,
+    });
+  }
+
   //letter disable
   onPhoneNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
@@ -211,6 +218,24 @@ export class AddEmployeeComponent implements OnInit {
       inputElement.value = inputElement.value.slice(0, 9);
     }
   }
+
+  onAddressInput(event: Event, controlName: string, maxLength: number) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    if (value.length >= maxLength) {
+      const trimmed = value.slice(0, maxLength);
+      input.value = trimmed;
+
+      this.addEmployeeForm.get(controlName)?.setValue(trimmed, {
+        emitEvent: false,
+      });
+
+      this.addEmployeeForm.get(controlName)?.setErrors({ maxlength: true });
+    } 
+  }
+
+
   onPinNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     inputElement.value = inputElement.value.replace(/[^0-9]/g, ''); // Allow only digits (0-9)

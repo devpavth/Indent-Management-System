@@ -72,14 +72,16 @@ export class LeftMenuComponent {
       if (user.includes('ROLE_IT_ADMIN')) {
         console.log('User is authorized.');
         this.isAuthorized = true;
-      }else{
+      } else {
         // this.route.navigate(['/home/unauth']);
         this.isAuthorized = false;
       }
     }
 
-    this.isAuthenticatePgrmManager = this.authService.isAuthenticateProgramManager();
-    this.isAuthenticateBranchManager = this.authService.isAuthenticateBranchManager();
+    this.isAuthenticatePgrmManager =
+      this.authService.isAuthenticateProgramManager();
+    this.isAuthenticateBranchManager =
+      this.authService.isAuthenticateBranchManager();
     this.isAuthenticateAdmin = this.authService.isAuthenticateAdmin();
     this.isAuthenticateUser = this.authService.isAuthenticateUser();
 
@@ -96,27 +98,121 @@ export class LeftMenuComponent {
 
   toggleRequest() {
     this.tRequest = !this.tRequest;
+    if (this.tRequest) {
+      this.tAdmin = false;
+      this.transaction = false;
+      this.finance = false;
+      this.procurement = false;
+      this.poapproval = false;
+      this.report = false;
+    }
   }
+
+  toggleFinance() {
+    this.finance = !this.finance;
+    if (this.finance) {
+      this.tRequest = false;
+      this.tAdmin = false;
+      this.transaction = false;
+      this.procurement = false;
+      this.poapproval = false;
+      this.report = false;
+    }
+  }
+
+  toggleProcurement() {
+    this.procurement = !this.procurement;
+    if (this.procurement) {
+      this.tRequest = false;
+      this.tAdmin = false;
+      this.transaction = false;
+      this.finance = false;
+      this.poapproval = false;
+      this.report = false;
+    }
+  }
+
+  toggleFinalApproval() {
+    this.poapproval = !this.poapproval;
+    if (this.poapproval) {
+      this.tRequest = false;
+      this.tAdmin = false;
+      this.transaction = false;
+      this.finance = false;
+      this.procurement = false;
+      this.report = false;
+    }
+  }
+
   toggleAdmin() {
     this.tAdmin = !this.tAdmin;
+    if (this.tAdmin) {
+      this.tRequest = false;
+      this.transaction = false;
+      this.finance = false;
+      this.procurement = false;
+      this.poapproval = false;
+      this.report = false;
+    }
   }
 
   toggleCompany() {
     this.company = !this.company;
+    if (this.company) {
+      this.employee = false;
+      this.product = false;
+      this.branch = false;
+    }
   }
 
   toggleEmployee() {
     this.employee = !this.employee;
+    if(this.employee){
+      this.company = false;
+      this.product = false;
+      this.branch = false;
+    }
+  }
+
+  toggleProduct() {
+    this.product = !this.product;
+    if(this.product){
+      this.employee = false;
+      this.company = false;
+      this.branch = false;
+    }
+  }
+  toggleBranch() {
+    this.branch = !this.branch;
+    if(this.branch){
+      this.product = false;
+      this.employee = false;
+      this.company = false;
+    }
   }
 
   toggleTransaction() {
     this.transaction = !this.transaction;
+    if (this.transaction) {
+      this.tAdmin = false;
+      this.tRequest = false;
+      this.procurement = false;
+      this.poapproval = false;
+      this.report = false;
+      this.finance = false;
+    }
   }
-  toggleProduct() {
-    this.product = !this.product;
-  }
-  toggleBranch() {
-    this.branch = !this.branch;
+
+  toggleReport() {
+    this.report = !this.report;
+    if (this.report) {
+      this.tAdmin = false;
+      this.tRequest = false;
+      this.procurement = false;
+      this.poapproval = false;
+      this.transaction = false;
+      this.finance = false;
+    }
   }
 
   openPrefix() {

@@ -109,6 +109,8 @@ export class HeaderComponent implements OnInit {
       },
       (error) => {
         console.log("error while logout:", error);
+        sessionStorage.clear();
+        this.route.navigate(['/login']);
       }
     )
     
