@@ -21,6 +21,7 @@ export class YourRequestComponent implements OnInit {
   RequestID: any;
   isCreated: boolean = true;
   isProcess: boolean = false;
+  isOnHold: boolean = false;
   isCompleted: boolean = false;
   isRejected: boolean = false;
 
@@ -35,6 +36,7 @@ export class YourRequestComponent implements OnInit {
 
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isViewNewRequestBtn: boolean = false;
   isAuthorizeEditIndentForm: boolean = false;
   isAcceptedView: boolean = false;
   selectedRequestId: number | undefined | null = null;
@@ -92,13 +94,15 @@ export class YourRequestComponent implements OnInit {
   // 102 p,200 c,406 rej
   fetchYourRequest() {
     if (
-      (this.isCreated == true,
-      this.isProcess == false &&
-        this.isCompleted == false &&
-        this.isRejected == false)
+      (this.isCreated &&
+        !this.isProcess &&
+        !this.isOnHold &&
+        !this.isCompleted &&
+        !this.isRejected)
     ) {
       let status = 201;
-      this.reqService.getUserReq(this.selectedDate).subscribe(
+      this.isViewSelectedDate = false;
+      this.reqService.getUserReq(status).subscribe(
         (res) => {
           this._yourReq = res;
           console.log('fetching user request list:', res);
@@ -116,9 +120,132 @@ export class YourRequestComponent implements OnInit {
             this._yourReq = undefined;
             this.noRequest = true;
             this.isSkeletonLoader = false;
+            this.isViewNewRequestBtn = true;
           }
         },
       );
+    }
+    if(
+      !this.isCreated &&
+      this.isProcess && 
+      !this.isOnHold && 
+      !this.isCompleted &&
+      !this.isRejected
+    ){
+      let status = 102;
+      this.isViewSelectedDate = false;
+      this.reqService.getUserReq(status).subscribe(
+        (res) => {
+          console.log('fetching processing user request list:', res);
+          this._yourReq = res;
+
+          this.noRequest = false;
+          this.isSkeletonLoader = false;
+        },
+        (error) => {
+          console.log(
+            'error while fetching processing user request list:',
+            error,
+          );
+          this.isSkeletonLoader = false;
+
+          if(error.status === 404){
+            this._yourReq = undefined;
+            this.noRequest = true;
+            this.isSkeletonLoader = false;
+            this.isViewNewRequestBtn = false;
+          }
+        }
+      )
+    }
+    if(
+      !this.isCreated &&
+      !this.isProcess &&
+      this.isOnHold &&
+      !this.isCompleted &&
+      !this.isRejected
+    ){
+      let status = 418;
+      this.isViewSelectedDate = false;
+      this.reqService.getUserReq(status).subscribe(
+        (res) => {
+          console.log("fetching onhold user request list:", res);
+          this._yourReq = res;
+
+          this.isSkeletonLoader = false;
+          this.noRequest = false;
+        },
+        (error) => {
+          console.log("error while fetching onhold user request list:", error);
+
+          if(error.status === 404){
+            this._yourReq = undefined;
+            this.noRequest = true;
+            this.isSkeletonLoader = false;
+            this.isViewNewRequestBtn = false;
+          }
+        }
+      )
+    }
+    if(
+      !this.isCreated &&
+      !this.isProcess &&
+      !this.isOnHold &&
+      this.isCompleted &&
+      !this.isRejected
+    ){
+      let status = 100;
+      this.isViewSelectedDate = true;
+      this.reqService.getUserReq(status, this.selectedDate).subscribe(
+        (res) => {
+          console.log("fetching accepted user request list:", res);
+          this._yourReq = res;
+
+          this.isSkeletonLoader = false;
+          this.noRequest = false;
+        },
+        (error) => {
+          console.log("error while fetching accepted user request list:", error);
+          this.isSkeletonLoader = false;
+
+          if(error.status === 404){
+            this._yourReq = undefined;
+            this.noRequest = true;
+            this.isSkeletonLoader = false;
+            this.isViewNewRequestBtn = false;
+          }
+        }
+      )
+    }
+    if(
+      !this.isCreated &&
+      !this.isProcess &&
+      !this.isOnHold &&
+      !this.isCompleted &&
+      this.isRejected
+    ){
+      let status  = 406;
+      this.isViewSelectedDate = true;
+      this.reqService.getUserReq(status, this.selectedDate).subscribe(
+        (res) => {
+          console.log("fetching rejected user request list:", res);
+          this._yourReq = res;
+
+          this.isSkeletonLoader = false;
+          this.noRequest = false;
+        },
+        (error) => {
+          console.log("error while fetching rejected user request list:", error);
+          this.isSkeletonLoader = false;
+
+          if(error.status === 404){
+            this._yourReq = undefined;
+            this.noRequest = true;
+            this.isSkeletonLoader = false;
+            this.isViewNewRequestBtn = false;
+          }
+        }
+      )
     }
   }
 

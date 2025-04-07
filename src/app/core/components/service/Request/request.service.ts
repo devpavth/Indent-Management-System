@@ -15,8 +15,15 @@ export class RequestService {
   postRequestIndent(req: any) {
     return this.http.post(environment.postRequestIndent, req);
   }
-  getUserReq(selectedDate: string | undefined) {
-    return this.http.get(environment.getYourReq + `?startDate=${selectedDate}`);
+  getUserReq(status: number, selectedDate?: string | undefined) {
+    let url = `${environment.getYourReq}/${status}`
+
+    if(selectedDate){
+      url += `?startDate=${selectedDate}`;
+    }
+
+    console.log("user request api:", url);
+    return this.http.get(url);
   }
   viewReq(data: any): Observable<any> {
     return this.http.get(environment.viewYourReq + data);
@@ -365,7 +372,10 @@ export class RequestService {
     this.searchSubject.next(indentCode);
   }
 
-  updateIndentRequestDetails(indentID: number, indentData: any){
-    return this.http.put(environment.updateIndentRequestDetails + indentID, indentData);
+  updateIndentRequestDetails(indentID: number, indentData: any) {
+    return this.http.put(
+      environment.updateIndentRequestDetails + indentID,
+      indentData,
+    );
   }
 }

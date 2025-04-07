@@ -116,28 +116,14 @@
               (click)="
                 isCreated = true;
                 isProcess = false;
+                isOnHold = false;
                 isCompleted = false;
                 isRejected = false;
                 this.fetchYourRequest()
               "
               class="group flex items-center justify-center gap-1"
               >
-              <!-- <svg
-                [ngClass]="{ activeSubMenu: isCreated }"
-                class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.008-3.018a1.502 1.502 0 0 1 2.522 1.159v.024a1.44 1.44 0 0 1-1.493 1.418 1 1 0 0 0-1.037.999V14a1 1 0 1 0 2 0v-.539a3.44 3.44 0 0 0 2.529-3.256 3.502 3.502 0 0 0-7-.255 1 1 0 0 0 2 .076c.014-.398.187-.774.48-1.044Zm.982 7.026a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2h-.01Z"
-                  clip-rule="evenodd"
-                />
-              </svg> -->
+            
 
               <svg 
                 [ngClass]="{ activeSubMenu: isCreated }"
@@ -164,10 +150,11 @@
                 Created
               </h1>
             </button>
-            <!-- <button
+            <button
               (click)="
                 isCreated = false;
                 isProcess = true;
+                isOnHold = false;
                 isCompleted = false;
                 isRejected = false;
                 this.fetchYourRequest()
@@ -197,11 +184,47 @@
               >
                 Processing
               </h1>
-            </button> -->
-            <!-- <button
+            </button>
+            <button
               (click)="
                 isCreated = false;
                 isProcess = false;
+                isCompleted = false;
+                isOnHold = true;
+                isRejected = false;
+                fetchYourRequest()
+              "
+              class="group flex items-center justify-center gap-1"
+            >
+              <svg
+                [ngClass]="{ activeSubMenu: isOnHold }"
+                class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Zm-1 7a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+
+              <h1
+                [ngClass]="{ activeSubMenu: isOnHold }"
+                class="subMenu an group"
+              >
+                On Hold
+              </h1>
+            </button>
+            <button
+              (click)="
+                isCreated = false;
+                isProcess = false;
+                isOnHold = false;
                 isCompleted = true;
                 isRejected = false;
                 this.fetchYourRequest()
@@ -230,11 +253,12 @@
               >
                 Completed
               </h1>
-            </button> -->
-            <!-- <button
+            </button>
+            <button
               (click)="
                 isCreated = false;
                 isProcess = false;
+                isOnHold = false;
                 isCompleted = false;
                 isRejected = true;
                 this.fetchYourRequest()
@@ -263,7 +287,7 @@
               >
                 Rejected
               </h1>
-            </button> -->
+            </button>
           </div>
         </div>
 
@@ -457,12 +481,19 @@
         <ng-container *ngIf="noRequest">
           <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
             <div class="text-center">
-              <div class="-mt-20 mb-10">
-                  <img src="../../../../../assets/Img/9264882.svg" class="w-28 mx-auto" alt="No data available"/>
+              <div [ngClass]="{
+                '-mt-20 mb-10': isViewNewRequestBtn
+              }">
+                  <img src="../../../../../assets/Img/9264882.svg" class="w-28 mx-auto"
+                      [ngClass]="{
+                        'w-52': !isViewNewRequestBtn
+                      }"
+                      alt="No data available"/>
                   <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Request Available</p>
               </div>
                
               <button
+                  *ngIf="isViewNewRequestBtn"
                   type="button"
                   routerLink="/home/request"
                   class="flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"

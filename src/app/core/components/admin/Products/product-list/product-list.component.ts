@@ -1,6 +1,21 @@
-import { Component, ElementRef, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ProductService } from '../../../service/Product/product.service';
-import { catchError, debounceTime, distinctUntilChanged, fromEvent, of, Subject, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  fromEvent,
+  of,
+  Subject,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { Product } from '../../../../models/product/product.model';
 
@@ -98,7 +113,7 @@ export class ProductListComponent implements OnInit {
     this.searchText = '';
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.storeProductList = [];
     this.noResults = false;
@@ -204,12 +219,12 @@ export class ProductListComponent implements OnInit {
         this.pageSize,
       );
     }),
-    (error: any) => {
-      console.log(error);
-      if(error.error.status === 404){
-        this.isSkeletonLoader = false;
-      }
-    }
+      (error: any) => {
+        console.log(error);
+        if (error.error.status === 404) {
+          this.isSkeletonLoader = false;
+        }
+      };
   }
 
   onProductDeleted(productId: number) {

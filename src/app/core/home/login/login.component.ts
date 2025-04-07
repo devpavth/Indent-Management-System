@@ -99,9 +99,11 @@ export class LoginComponent implements OnInit {
           console.log('this.userRole:', typeof this.userRole);
 
           if (this.userData.access_token) {
-            const expiresIn = this.userData.expires_in * 1000;
+            const accessExpiresIn = this.userData.expires_in * 1000;
+            const refreshExpiresIn = this.userData.refresh_expires_in * 1000;
 
-            console.log('expiresIn:', expiresIn);
+            console.log('expiresIn:', accessExpiresIn);
+            console.log('refreshExpiresIn:', refreshExpiresIn);
 
             sessionStorage.setItem('userId', this.userid);
             sessionStorage.setItem('access_token', this.userData.access_token);
@@ -110,7 +112,7 @@ export class LoginComponent implements OnInit {
               this.userData.refresh_token,
             );
 
-            this.startTokenRefreshCycle(expiresIn);
+            this.startTokenRefreshCycle(accessExpiresIn, refreshExpiresIn);
           } else {
             console.log('token is expired else part.');
           }
@@ -138,11 +140,21 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  startTokenRefreshCycle(expiresIn: number) {
-    this.tokenRefreshInterval = setInterval(() => {
-      console.log('Session expired, logging out...');
+  startTokenRefreshCycle(accessExpiresIn: number, refreshExpiresIn: number) {
+    console.log('expiresIn in startTokenRefreshCycle:', accessExpiresIn);
+
+    // if(this.tokenRefreshInterval){
+    //   clearInterval(this.tokenRefreshInterval);
+    // }
+
+    setInterval(() => {
+      console.log('Access Session expired, logging out...');
       this.fetchNewAccessToken();
-    }, expiresIn);
+      this.tokenRefreshInterval = setInterval(() => {
+        console.log('Session expired, logging out...');
+        this.fetchNewAccessToken();
+      }, refreshExpiresIn - accessExpiresIn);
+    }, accessExpiresIn);
   }
 
   // ngOnDestroy(): void{
@@ -209,6 +221,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('access_token', this.newToken.access_token);
         console.log(this.newToken.access_token);
         sessionStorage.setItem('refresh_token', this.newToken.refresh_token);
+        console.log("new refresh token:", this.newToken.refresh_token);
       },
       (error) => {
         console.log('error while fetching new access token:', error);

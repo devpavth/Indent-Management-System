@@ -63,7 +63,7 @@ export class AddEmployeeComponent implements OnInit {
             return of([]);
           }
           this.noPincode = false;
-          if (!pincode?.trim()) {
+          if (!pincode?.trim() || pincode.length > 6) {
             this.pincodeList = [];
             return of([]);
           }
@@ -212,11 +212,16 @@ export class AddEmployeeComponent implements OnInit {
   //letter disable
   onPhoneNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+    let digitsOnly = inputElement.value.replace(/[^0-9]/g, '');
 
-    if (inputElement.value.length > 10) {
-      inputElement.value = inputElement.value.slice(0, 9);
+    if (digitsOnly.length > 10) {
+      digitsOnly = digitsOnly.slice(0, 10);
     }
+
+    inputElement.value = digitsOnly;
+    this.addEmployeeForm.get('empPhone')?.setValue(digitsOnly, {
+      emitEvent: false
+    });
   }
 
   onAddressInput(event: Event, controlName: string, maxLength: number) {
@@ -232,18 +237,21 @@ export class AddEmployeeComponent implements OnInit {
       });
 
       this.addEmployeeForm.get(controlName)?.setErrors({ maxlength: true });
-    } 
+    }
   }
-
 
   onPinNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
-    inputElement.value = inputElement.value.replace(/[^0-9]/g, ''); // Allow only digits (0-9)
+    let value = inputElement.value.replace(/[^0-9]/g, '');
 
-    // Ensure only 6 digits are allowed
-    if (inputElement.value.length > 6) {
-      inputElement.value = inputElement.value.slice(0, 5); // Keep only the first 6 digits
+    if (value.length > 6) {
+      value = value.slice(0, 6);
     }
+
+    inputElement.value = value;
+    this.addEmployeeForm.get('pin')?.setValue(value, {
+      emitEvent: false
+    })
   }
 
   //date validation
