@@ -14,7 +14,7 @@
                 height="24"
                 fill="none"
                 viewBox="0 0 24 24"
-                >
+              >
                 <path
                   class=""
                   stroke="currentColor"
@@ -27,7 +27,7 @@
             </button>
           </div>
           <div class="mb-6 flex gap-4">
-            <div class="flex flex-col w-[800px]">
+            <div class="flex w-[800px] flex-col">
               <label
                 for="first_name"
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
@@ -48,10 +48,11 @@
                 type="button"
                 [disabled]="!department || !assProjListIds"
                 [ngClass]="{
-                  'bg-gray-400 hover:bg-gray-400': !department || !assProjListIds
+                  'bg-gray-400 hover:bg-gray-400':
+                    !department || !assProjListIds
                 }"
-                class="flex items-center justify-center text-nowrap w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 active:translate-y-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-                >
+                class="flex w-full items-center justify-center text-nowrap rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-300 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 active:translate-y-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+              >
                 <svg
                   class="mr-2 h-4 w-4"
                   fill="currentColor"
@@ -61,7 +62,7 @@
                   height="24"
                   fill="none"
                   viewBox="0 0 24 24"
-                  >
+                >
                   <path
                     stroke="currentColor"
                     stroke-linecap="round"
@@ -176,7 +177,6 @@
               </tr>
             </tbody>
           </table>
-          
         </div>
       </div>
     </div>
@@ -251,5 +251,7 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>

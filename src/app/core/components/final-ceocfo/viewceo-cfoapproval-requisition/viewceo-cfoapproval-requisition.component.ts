@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
@@ -81,7 +88,9 @@ export class ViewceoCfoapprovalRequisitionComponent {
         if (this.authoritiesList === null) {
           this.isViewAcceptBtn = false;
 
-          this.toastService.showError(`Quote Comparison Not Done For ${this.indentNumber} Indent`);
+          this.toastService.showError(
+            `Quote Comparison Not Done For ${this.indentNumber} Indent`,
+          );
           this.isFullScreenError = true;
 
           setTimeout(() => {
@@ -89,10 +98,10 @@ export class ViewceoCfoapprovalRequisitionComponent {
           }, 3000);
         }
 
-    
         this.isViewAcceptBtn = this.authoritiesList.some(
-          (req) => req.specialRoleId === this.specialRoleId && req.status === 102
-        )
+          (req) =>
+            req.specialRoleId === this.specialRoleId && req.status === 102,
+        );
 
         // if(this.authoritiesList.map(
         //   (req) => req.status === 102
