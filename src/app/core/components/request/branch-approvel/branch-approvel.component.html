@@ -50,10 +50,10 @@
                   placeholder="Search"
                 />
 
-                <p 
+                <p
                   *ngIf="showSearchInfo"
                   class="absolute left-0 top-full mt-1 text-xs text-red-500 dark:text-gray-400"
-                  >
+                >
                   Please Enter the Indent Code and Press Enter.
                 </p>
               </div>
@@ -149,21 +149,19 @@
               "
               class="group flex items-center justify-center gap-1"
             >
-              <svg
+              <svg 
                 [ngClass]="{ activeSubMenu: isProcess }"
                 class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
                 aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Zm-1 7a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
-                  clip-rule="evenodd"
-                />
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                >
+                <path 
+                  fill-rule="evenodd" 
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
               </svg>
 
               <h1
@@ -329,7 +327,7 @@
               <tr
                 class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
                 *ngFor="let req of _yourReq"
-                >
+              >
                 <th
                   scope="row"
                   #reqID
@@ -363,13 +361,13 @@
                     >{{ req.totalPrice | currency: "INR" }}</span
                   >
                 </td>
-                
+
                 <td class="flex items-center justify-end px-4 py-3">
                   <button
                     (click)="viewRequest(req.sno)"
                     class="dropdown-button inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
-                    >
+                  >
                     <svg
                       class="h-5 w-5"
                       aria-hidden="true"
@@ -385,26 +383,26 @@
 
                   <div
                     *ngIf="isAcceptedView && selectedRequestId === req.sno"
-                    class="dropdown-container absolute overflow-hidden right-0 -mt-12 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    class="dropdown-container absolute right-0 -mt-12 w-56 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
                     appClickoutsideDropdown
                     (clickOutside)="selectedRequestId = null"
-                    >
+                  >
                     <ul
-                      class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200"
-                      >
+                      class="py-1 text-sm font-medium text-gray-700 dark:text-gray-200"
+                    >
                       <li>
                         <button
                           (click)="openViewRequest(req.sno)"
-                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600"
-                          >
+                          class="block w-56 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        >
                           View Request
                         </button>
                       </li>
                       <li>
                         <button
                           (click)="editIndentForm(req.sno)"
-                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600"
-                          >
+                          class="block w-56 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        >
                           Edit Indent
                         </button>
                       </li>
@@ -415,14 +413,31 @@
             </tbody>
 
             <tbody *ngIf="isSkeletonLoader">
-              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-20"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-32"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-28"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-24"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-16"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-20"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-10"></div></td>
+              <tr
+                *ngFor="let _ of [1, 2, 3, 4, 5]"
+                class="animate-pulse border-b"
+              >
+                <td class="px-4 py-3">
+                  <div class="h-4 w-20 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-32 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-28 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-24 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-16 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-20 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-10 rounded-lg bg-gray-300"></div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -488,10 +503,18 @@
           </ul>
         </nav> -->
         <ng-container *ngIf="noRequest">
-          <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
+          <div
+            class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
+          >
             <div class="text-center">
-              <img src="../../../../../assets/Img/9264882.svg" class="w-52 mx-auto" alt="No data available"/>
-              <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Request Available</p>
+              <img
+                src="../../../../../assets/Img/9264882.svg"
+                class="mx-auto w-52"
+                alt="No data available"
+              />
+              <p class="mt-4 font-medium text-gray-800 dark:text-gray-700">
+                No Request Available
+              </p>
             </div>
           </div>
         </ng-container>

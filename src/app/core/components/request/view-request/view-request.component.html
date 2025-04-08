@@ -8,7 +8,9 @@
   *ngIf="toastService.isWarningToast"
   class="fixed left-6 right-2 top-20 z-50 flex w-full items-center justify-center"
 >
-  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
+  <app-warning-toast
+    [message]="toastService.warningToastMsg"
+  ></app-warning-toast>
 </section>
 <section
   class="scroll fixed left-0 right-0 h-screen overflow-y-auto bg-black bg-opacity-50"
@@ -16,7 +18,9 @@
   <div class="flex">
     <div class="w-1/2"></div>
     <div class="animate-slide-in-right w-3/4 bg-white pb-32">
-      <div class="sticky top-0 z-50 flex items-center justify-between bg-purple-50">
+      <div
+        class="sticky top-0 z-50 flex items-center justify-between bg-purple-50"
+      >
         <div class="m-4">
           <button (click)="this.closeView.emit(false)">
             <svg
@@ -800,8 +804,7 @@
                   <div class="relative w-full">
                     <svg
                       *ngIf="
-                        _requestDetails?.prctAuthData.authStatusCode ==
-                        202
+                        _requestDetails?.prctAuthData.authStatusCode == 202
                       "
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -822,8 +825,7 @@
                     ></div>
                     <svg
                       *ngIf="
-                        _requestDetails?.prctAuthData.authStatusCode ==
-                        102
+                        _requestDetails?.prctAuthData.authStatusCode == 102
                       "
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
@@ -842,8 +844,7 @@
                     </svg>
                     <svg
                       *ngIf="
-                        _requestDetails?.prctAuthData.authStatusCode ==
-                        406
+                        _requestDetails?.prctAuthData.authStatusCode == 406
                       "
                       class="absolute -top-0.5 z-10 -ml-3.5 h-7 w-7 text-red-600"
                       aria-hidden="true"
@@ -852,7 +853,7 @@
                       height="24"
                       fill="currentColor"
                       viewBox="0 0 24 24"
-                      >
+                    >
                       <path
                         fill-rule="evenodd"
                         d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
@@ -864,14 +865,11 @@
                       <h4
                         [ngClass]="{
                           psts:
-                            _requestDetails?.prctAuthData
-                              .authStatusCode == 102,
+                            _requestDetails?.prctAuthData.authStatusCode == 102,
                           ssts:
-                            _requestDetails?.prctAuthData
-                              .authStatusCode == 202,
+                            _requestDetails?.prctAuthData.authStatusCode == 202,
                           rsts:
-                            _requestDetails?.prctAuthData
-                              .authStatusCode == 406
+                            _requestDetails?.prctAuthData.authStatusCode == 406
                         }"
                         class="font-bold text-gray-500"
                       >
@@ -884,12 +882,8 @@
                         <p class="mt-2 max-w-screen-sm text-sm text-gray-500">
                           Approved By
                           <span class="font-medium text-black"
-                            >{{
-                              _requestDetails?.prctAuthData.empFirstName
-                            }}
-                            {{
-                              _requestDetails?.prctAuthData.empLastName
-                            }}
+                            >{{ _requestDetails?.prctAuthData.empFirstName }}
+                            {{ _requestDetails?.prctAuthData.empLastName }}
                           </span>
                           from
                           <span class="font-medium text-black">
@@ -908,8 +902,7 @@
                       <p
                         *ngIf="
                           _requestDetails?.indentHeaders.comments &&
-                          _requestDetails?.prctAuthData.authStatusCode ==
-                            406
+                          _requestDetails?.prctAuthData.authStatusCode == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
@@ -926,12 +919,9 @@
                     </div>
                   </div>
 
-
                   <div class="relative w-full">
                     <svg
-                      *ngIf="
-                        finalApprovalIsAccept
-                      "
+                      *ngIf="finalApprovalIsAccept"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
@@ -943,11 +933,9 @@
                         clip-rule="evenodd"
                       />
                     </svg>
-                    
+
                     <svg
-                      *ngIf="
-                        finalApprovalIsProcess
-                      "
+                      *ngIf="finalApprovalIsProcess"
                       aria-hidden="true"
                       class="absolute -top-0.5 z-10 -ml-3.5 inline h-6 w-6 animate-spin bg-white fill-blue-600 text-gray-200 dark:text-gray-600"
                       viewBox="0 0 100 101"
@@ -963,58 +951,70 @@
                         fill="currentFill"
                       />
                     </svg>
-                    
 
                     <div class="ml-6">
                       <h4
                         [ngClass]="{
-                          psts:
-                            finalApprovalIsProcess,
+                          psts: finalApprovalIsProcess,
                           ssts:
-                            _requestDetails?.prctAuthData
-                              .authStatusCode == 202,
+                            _requestDetails?.prctAuthData.authStatusCode == 202
                         }"
                         class="font-bold text-gray-500"
                       >
                         Final Approval
                       </h4>
-                      <p class="mt-2 max-w-screen-sm text-sm text-gray-500" *ngIf="authoritiesList === null || finalApprovalIsProcess && !finalApprovalAtleastAccept">
-                        {{pendingOrProcessFinalState}} 
+                      <p
+                        class="mt-2 max-w-screen-sm text-sm text-gray-500"
+                        *ngIf="
+                          authoritiesList === null ||
+                          (finalApprovalIsProcess &&
+                            !finalApprovalAtleastAccept)
+                        "
+                      >
+                        {{ pendingOrProcessFinalState }}
                       </p>
                       <div *ngIf="finalApprovalAtleastAccept">
                         <div *ngFor="let auth of authoritiesList">
-                          <p class="mt-2 max-w-screen-sm text-sm text-gray-500" *ngIf="!finalApprovalIsProcess">
+                          <p
+                            class="mt-2 max-w-screen-sm text-sm text-gray-500"
+                            *ngIf="!finalApprovalIsProcess"
+                          >
                             Approved By
                             <span class="font-medium text-black"
                               >{{
-                                auth.roleName.replace('ROLE_', '').replace('_', ' ')
-                              }}                          
-                            </span>         
+                                auth.roleName
+                                  .replace("ROLE_", "")
+                                  .replace("_", " ")
+                              }}
+                            </span>
                           </p>
-                          <p class="mt-2 max-w-screen-sm text-sm text-gray-500" *ngIf="finalApprovalIsProcess">
-                            {{auth.status === 102 ? 'Processing' : "Approved"}} By
+                          <p
+                            class="mt-2 max-w-screen-sm text-sm text-gray-500"
+                            *ngIf="finalApprovalIsProcess"
+                          >
+                            {{
+                              auth.status === 102 ? "Processing" : "Approved"
+                            }}
+                            By
                             <span class="font-medium text-black"
                               >{{
-                                auth.roleName.replace('ROLE_', '').replace('_', ' ')
-                              }}                          
-                            </span>         
+                                auth.roleName
+                                  .replace("ROLE_", "")
+                                  .replace("_", " ")
+                              }}
+                            </span>
                           </p>
                           <span
                             class="mt-1 block text-sm font-semibold text-gray-500"
-                            >{{
-                              auth.signAddedOn
-                                | date: "medium"
-                            }}</span
+                            >{{ auth.signAddedOn | date: "medium" }}</span
                           >
                         </div>
-                        
                       </div>
 
                       <p
                         *ngIf="
                           _requestDetails?.indentHeaders.comments &&
-                          _requestDetails?.prctAuthData.authStatusCode ==
-                            406
+                          _requestDetails?.prctAuthData.authStatusCode == 406
                         "
                         class="mt-2 max-w-screen-sm text-sm font-medium text-red-600"
                       >
@@ -1031,7 +1031,10 @@
                     </div>
                   </div>
 
-                  <div class="relative w-full" *ngIf="_requestDetails.indentHeaders?.requestStatus === 100">
+                  <div
+                    class="relative w-full"
+                    *ngIf="_requestDetails.indentHeaders?.requestStatus === 100"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -1057,11 +1060,14 @@
                   (showID &&
                     this._requestDetails?.progarmMgrAuthData.authStatusCode ===
                       102) ||
-                  (showID && this._requestDetails?.branchAuthData.authStatusCode === 102) ||
-                  (showID && this._requestDetails?.adminAuthData.authStatusCode === 102)
+                  (showID &&
+                    this._requestDetails?.branchAuthData.authStatusCode ===
+                      102) ||
+                  (showID &&
+                    this._requestDetails?.adminAuthData.authStatusCode === 102)
                 "
-                class="mt-8 flex gap-3" 
-                >
+                class="mt-8 flex gap-3"
+              >
                 <div>
                   <button
                     type="submit"

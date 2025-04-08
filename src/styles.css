@@ -184,6 +184,10 @@
   @apply me-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300;
 }
 
+.hold{
+    @apply bg-orange-100 text-orange-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300
+}
+
 .subMenu {
   @apply font-semibold text-gray-400 hover:text-purple-700;
 }

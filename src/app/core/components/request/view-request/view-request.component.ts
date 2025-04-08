@@ -76,7 +76,8 @@ export class ViewRequestComponent implements OnInit {
       }
       this.pendingOrProcessFinalState =
         this.authoritiesList === null &&
-        this._requestDetails.indentHeaders.totalPrice > 5000
+        this._requestDetails.indentHeaders.totalPrice > 5000 && 
+        this._requestDetails.indentHeaders.requestStatus !== 406
           ? 'Action Pending'
           : 'Action Not Required';
 
@@ -108,7 +109,7 @@ export class ViewRequestComponent implements OnInit {
             console.log('error in approving program manager:', error);
             this.isRejected = false;
 
-            this.toastService.showWarning(error.error.text);
+            this.toastService.showWarning(error.error.errorMessege);
 
             setTimeout(() => {
               this.closeView.emit(false);
