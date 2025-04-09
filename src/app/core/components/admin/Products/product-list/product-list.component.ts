@@ -226,10 +226,22 @@ export class ProductListComponent implements OnInit {
         console.log(error);
         this.isSkeletonLoader = false;
 
-        if(error.status === 404){
-          this.isSkeletonLoader = false;
-          this.noProduct = true;
+        this.activeProduct = productType;
+
+        if(productType === 'other'){
+          this.isOtherProductView = true;
+          this.isActiveProductView = false;
+
+          this.productList = [];
+        }else{
+          this.isOtherProductView = false;
+          this.isActiveProductView = true;
+
+          this.productList = [];
         }
+
+        this.noProduct = true;
+        this.listLength = 0;
 
         // if (error.error.status === 404) {
         //   this.isSkeletonLoader = false;
