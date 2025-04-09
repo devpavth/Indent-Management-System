@@ -231,7 +231,7 @@ export class ProductListComponent implements OnInit {
           this.noProduct = true;
         }
 
-        if(error.status === 204){
+        if(error.error.status === 204){
           this.noProduct = true; 
         }
       }
