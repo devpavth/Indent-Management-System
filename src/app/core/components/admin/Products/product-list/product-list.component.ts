@@ -221,8 +221,8 @@ export class ProductListComponent implements OnInit {
         'pageSize:',
         this.pageSize,
       );
-    }),
-      (error: any) => {
+    },
+    (error: any) => {
         console.log(error);
         this.isSkeletonLoader = false;
 
@@ -234,7 +234,9 @@ export class ProductListComponent implements OnInit {
         if(error.status === 204){
           this.noProduct = true; 
         }
-      };
+      }
+    )
+      
   }
 
   onProductDeleted(productId: number) {
