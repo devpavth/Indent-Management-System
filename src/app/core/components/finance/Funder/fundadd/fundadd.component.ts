@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { FunderService } from '../../../service/Funder/funder.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { ToastService } from '../../../service/toast/toast.service';
 
 @Component({
   selector: 'app-fundadd',
@@ -17,13 +18,11 @@ export class FundaddComponent implements OnInit {
 
   addFund: FormGroup;
 
+  toastService = inject(ToastService);
+
   assignBranchList: any;
-  isToast: boolean = false;
-  deleteToastMsg: any;
-  isDeleteToast: boolean = false;
-  errorToastMsg: any;
   isSuccess: boolean = false;
-  successData: { show: number; text: string; } | undefined;
+  successData: { show: number; text: string } | undefined;
 
   constructor(
     private branchService: BranchService,
@@ -43,38 +42,7 @@ export class FundaddComponent implements OnInit {
     console.log(this.funderId);
     this.addFund.get('fundIn')?.disable();
   }
-  // fetchBranchList() {
-  //   this.funderService.assignedBranch(this.funderId).subscribe((res: any) => {
-  //     this.assignBranchList = res;
-  //     console.log("assigning branch:", res);
-  //   });
-
-  //   this.branchService.getBranch().subscribe((res: any) => {
-  //     console.log("fetching branch:", res);
-  //     this.branchList = res;
-  //     this.branchList.unshift({branchId: 0, branchName: 'Common Fund'});
-  //     console.log("after adding one more branch:", this.branchList);
-
-  //     console.log("assignBranchList:", this.assignBranchList);
-
-  //     if (!this.assignBranchList || this.assignBranchList.length === 0) {
-  //       console.log('assignBranchList is empty. No filtering will be applied.');
-  //     }
-
-  //     this.branchList = this.branchList?.filter(
-  //       (branch: any) => {
-  //         const isAssigned = this.assignBranchList?.some(
-  //           (assignedBranch: any) => {
-  //             return assignedBranch.branchId === branch.branchId
-  //           }
-  //         )
-  //         console.log(`Branch: ${branch.branchName}, Assigned: ${isAssigned}`);
-  //         return !isAssigned;
-  //       }
-  //     )
-  //     console.log("after filtering branch:", this.branchList);
-  //   });
-  // }
+  
 
   fetchBranchList() {
     forkJoin({
@@ -112,20 +80,15 @@ export class FundaddComponent implements OnInit {
     this.funderService.assignFundertoBranch(data, this.funderId).subscribe(
       (res: any) => {
         console.log('assigning funder response:', res);
-        this.isToast = true;
-        this.deleteToastMsg = res.errorMessege;
-        setTimeout(() => {
-          this.isToast = false;
-          this.fetchBranchList();
-          this.close.emit(false);
-        }, 3000);
+
+        this.toastService.showSuccess(res.errorMessege);
+        this.fetchBranchList();
       },
       (error) => {
         console.log('error in branch:', error);
-        this.isDeleteToast = true;
-        this.errorToastMsg = error.error.errorMessege;
+
+        this.toastService.showError(error.error.errorMessege);
         setTimeout(() => {
-          this.isDeleteToast = false;
           this.close.emit(false);
         }, 3000);
         this.funderBranchlist();
@@ -157,24 +120,18 @@ export class FundaddComponent implements OnInit {
         console.log('adding fund amount:', res);
         this.isSuccess = true;
         this.successData = { show: 7, text: res.errorMessege };
-        // this.isToast = true;
-        // this.deleteToastMsg = res.errorMessege;
-        // setTimeout(() => {
-        //   this.isToast = false;
-        //   this.close.emit(false);
-        // }, 3000);
+        
       },
       (error) => {
         console.log('error while adding fund amount:', error);
 
-        // alert(error.error.text);
         this.funderBranchlist();
         this.addFund.reset();
       },
     );
   }
 
-  closeSuccess(closeIcon: boolean){
+  closeSuccess(closeIcon: boolean) {
     this.isSuccess = closeIcon;
     this.close.emit(false);
   }

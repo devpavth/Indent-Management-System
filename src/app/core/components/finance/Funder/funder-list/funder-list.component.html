@@ -4,17 +4,19 @@
       <div
         class="relative overflow-hidden bg-white shadow-md shadow-purple-300 dark:bg-gray-800 sm:rounded-lg"
       >
-      <h3 class="font-semibold mt-4 ml-4 text-purple-700 text-lg">Funder List</h3>
+        <h3 class="ml-4 mt-4 text-lg font-semibold text-purple-700">
+          Funder List
+        </h3>
         <div
           class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
         >
           <div class="w-full md:w-1/2">
             <div class="flex items-center">
               <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative w-full mb-2">
+              <div class="relative mb-2 w-full">
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                  >
+                >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -39,7 +41,7 @@
                 <div
                   *ngIf="noFunder"
                   class="absolute mt-1 text-sm text-red-600"
-                  >
+                >
                   <!-- absolute mt-12 text-sm text-red-600 -->
                   No results found.
                 </div>

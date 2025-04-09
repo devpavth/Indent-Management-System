@@ -80,7 +80,7 @@ export class AddNewdesignationComponent {
     this.close.emit(true);
   }
 
-  closeNewLevel(closeIcon: boolean){
+  closeNewLevel(closeIcon: boolean) {
     this.isViewAddNewLevel = !closeIcon;
   }
 }

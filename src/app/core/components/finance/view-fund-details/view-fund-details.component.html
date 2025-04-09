@@ -5,9 +5,11 @@
     <!-- Modal content -->
     <div
       class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
-      >
+    >
       <div class="mr-4 mt-6">
-        <h1 class="text-xl font-semibold text-purple-800">{{donarName}} Fund Details</h1>
+        <h1 class="text-xl font-semibold text-purple-800">
+          {{ donarName }} Fund Details
+        </h1>
       </div>
       <button
         (click)="closePopUp()"
@@ -42,11 +44,9 @@
                     class="bg-purple-500 text-xs uppercase text-gray-50 dark:bg-gray-700 dark:text-gray-400"
                   >
                     <tr>
-                        <th class="px-3 py-3">Choose One Branch</th>
+                      <th class="px-3 py-3">Choose One Branch</th>
                       <th scope="col" class="px-6 py-3">Branch</th>
-                      <th scope="col" class="px-6 py-3">
-                        Funder Amount
-                      </th>
+                      <th scope="col" class="px-6 py-3">Funder Amount</th>
                       <!-- <th scope="col" class="px-6 py-3">Qty</th> -->
                       <!-- <th scope="col" class="px-6 py-3">GST %</th>
                       <th scope="col" class="px-6 py-3">
@@ -63,23 +63,22 @@
                   </thead>
                   <tbody>
                     <tr
-                        *ngFor="let fun of funder"
+                      *ngFor="let fun of funder"
                       class="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
-                    >   
-                        <td class="px-3 py-4">
-                            <input type="checkbox"
-                                (change)="toggleCheckBox(fun.fundId)" 
-                                [checked]="selectedFunderId === fun.fundId"
-                                (click)="checkAmt(fun.fundInHand, $event)"
-                                
-                                />
-                        </td>
+                    >
+                      <td class="px-3 py-4">
+                        <input
+                          type="checkbox"
+                          (change)="toggleCheckBox(fun.fundId)"
+                          [checked]="selectedFunderId === fun.fundId"
+                          (click)="checkAmt(fun.fundInHand, $event)"
+                        />
+                      </td>
                       <td
                         class="px-6 py-4 font-semibold text-gray-900 dark:text-white"
                       >
                         <p class="font-bold text-black">
-                          {{fun.branchName
-                          }}
+                          {{ fun.branchName }}
                         </p>
                         <!-- <p class="text-gray-800"></p> -->
                         <!-- <p class="w-48 text-xs text-gray-400">
@@ -87,27 +86,35 @@
                         </p> -->
                       </td>
                       <td class="px-6 py-4 dark:text-white">
-                        <div *ngIf="selectedFunderId === fun.fundId; else viewMode">
-                            <input type="number"
-                                [(ngModel)]="fun.enteredAmount"
-                                (ngModelChange)="validateAmount(fun)"
-                                [ngClass]="{
-                                    'border-none focus:ring-red-500': fun.isInvalid,
-                                    'border-gray-300 focus:ring-primary-400': !fun.isInvalid
-                                }"
-                                class="focus:ring focus:outline-none border rounded px-2 py-1 w-full"
-                            />
-                            <span *ngIf="fun.enteredAmount > fun.fundInHand"
-                                class="text-red-500 text-sm"> 
-                                {{ fun?.fundInHand }}
-                            </span>
-                            <p *ngIf="fun.enteredAmount <= fun.fundInHand"
-                                class="mt-1 -mb-2 text-sm font-medium text-gray-600">
-                                {{ fun?.fundInHand }}
-                            </p>
+                        <div
+                          *ngIf="selectedFunderId === fun.fundId; else viewMode"
+                        >
+                          <input
+                            type="number"
+                            [(ngModel)]="fun.enteredAmount"
+                            (ngModelChange)="validateAmount(fun)"
+                            [ngClass]="{
+                              'border-none focus:ring-red-500': fun.isInvalid,
+                              'focus:ring-primary-400 border-gray-300':
+                                !fun.isInvalid
+                            }"
+                            class="w-full rounded border px-2 py-1 focus:outline-none focus:ring"
+                          />
+                          <span
+                            *ngIf="fun.enteredAmount > fun.fundInHand"
+                            class="text-sm text-red-500"
+                          >
+                            {{ fun?.fundInHand }}
+                          </span>
+                          <p
+                            *ngIf="fun.enteredAmount <= fun.fundInHand"
+                            class="-mb-2 mt-1 text-sm font-medium text-gray-600"
+                          >
+                            {{ fun?.fundInHand }}
+                          </p>
                         </div>
                         <ng-template #viewMode>
-                            {{ fun?.fundInHand }}
+                          {{ fun?.fundInHand }}
                         </ng-template>
                       </td>
                       <!-- <td class="px-6 py-4 dark:text-white">
@@ -155,18 +162,19 @@
       </div>
       <div class="mt-8 flex justify-end gap-3">
         <div>
-            <button
-              type="submit"
-              (click)="submit(selectedFunderId)"
-              [disabled]="isAmtValid() || !isCheckBoxSelected()"
-              [ngClass]="{ 'opacity-50 cursor-no-drop': isAmtValid() || !isCheckBoxSelected()}"
-              class="w-full cursor-pointer rounded-lg border border-purple-600 bg-purple-500 px-5 py-3 text-center text-sm font-medium text-white hover:bg-purple-600 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 sm:rounded-none sm:rounded-e-lg sm:rounded-s-lg"
-            >
-              Save
-            </button>
-          </div>
+          <button
+            type="submit"
+            (click)="submit(selectedFunderId)"
+            [disabled]="isAmtValid() || !isCheckBoxSelected()"
+            [ngClass]="{
+              'cursor-no-drop opacity-50': isAmtValid() || !isCheckBoxSelected()
+            }"
+            class="w-full cursor-pointer rounded-lg border border-purple-600 bg-purple-500 px-5 py-3 text-center text-sm font-medium text-white hover:bg-purple-600 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 sm:rounded-none sm:rounded-e-lg sm:rounded-s-lg"
+          >
+            Save
+          </button>
+        </div>
       </div>
-      
     </div>
   </div>
 </div>
@@ -177,8 +185,12 @@
   <app-warning-toast [message]="warningToastMsg"></app-warning-toast>
 </section>
 
-<section *ngIf="isViewReasonBranch" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isViewReasonBranch"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-view-fundbranchreason
-      [checkedFund]="checkedFunder"
-     (close)="closeReason($event)"></app-view-fundbranchreason>
+    [checkedFund]="checkedFunder"
+    (close)="closeReason($event)"
+  ></app-view-fundbranchreason>
 </section>

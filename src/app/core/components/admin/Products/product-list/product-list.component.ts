@@ -35,6 +35,7 @@ export class ProductListComponent implements OnInit {
   productData: any;
   // Spinner: boolean = true;'
   isSkeletonLoader: boolean = true;
+  noProduct: boolean = false;
 
   offSet: number = 0;
   pageSize: number = 10;
@@ -209,6 +210,8 @@ export class ProductListComponent implements OnInit {
         }
       }
 
+      this.noProduct = false;
+
       console.log('Current product list:', this.productList);
       console.log(
         'listLength:',
@@ -221,8 +224,15 @@ export class ProductListComponent implements OnInit {
     }),
       (error: any) => {
         console.log(error);
+        this.isSkeletonLoader = false;
+
         if (error.error.status === 404) {
           this.isSkeletonLoader = false;
+          this.noProduct = true;
+        }
+
+        if(error.status === 204){
+          this.noProduct = true; 
         }
       };
   }

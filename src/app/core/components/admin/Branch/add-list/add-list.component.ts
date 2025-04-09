@@ -48,8 +48,7 @@ export class AddListComponent implements OnInit {
     this.assProjList.push({ programId: project, programStatus: 200 });
     this.assProjListIds = this.assProjList.map((item) => item.programId);
     console.log('this.assProjList:', this.assProjList);
-    // this.isToast = true;
-    // this.successToastMsg = 'Program Added Successfully';
+
     this.toastService.showSuccess('Program Added Successfully');
     setTimeout(() => {
       this.isToast = false;
@@ -58,8 +57,7 @@ export class AddListComponent implements OnInit {
 
   showSuccessToast() {
     if (!this.assProjListIds && this.department) {
-      // this.isToast = true;
-      // this.successToastMsg = `Please assign atleast one program to ${this.department} department`;
+ 
       this.toastService.showSuccess(
         `Please assign atleast one program to ${this.department} department`,
       );
@@ -95,8 +93,7 @@ export class AddListComponent implements OnInit {
     this.branchService.addNewDepart(departList).subscribe(
       (res: any) => {
         console.log('adding department name:', res);
-        // this.isToast = true;
-        // this.successToastMsg = res.error;
+
         this.toastService.showSuccess(res.error);
         setTimeout(() => {
           this.isToast = false;

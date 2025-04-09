@@ -187,10 +187,10 @@
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-          >
+            >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-            >
+              >
               <tr>
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
@@ -246,8 +246,7 @@
                 >
                   Description
                 </th>
-                <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                              <th scope="col" class="px-4 py-3">Price</th> -->
+                
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
@@ -358,6 +357,23 @@
             </tbody>
           </table>
         </div>
+
+        <ng-container *ngIf="noProduct">
+          <div
+            class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
+            >
+            <div class="text-center">
+              <img
+                src="../../../../../assets/Img/9264882.svg"
+                class="mx-auto w-52"
+                alt="No data available"
+              />
+              <p class="mt-4 font-medium text-gray-800 dark:text-gray-700">
+                No Product Available
+              </p>
+            </div>
+          </div>
+        </ng-container>
         <nav
           class="flex flex-col items-start justify-between space-y-3 p-4 md:flex-row md:items-center md:space-y-0"
           aria-label="Table navigation"
@@ -416,7 +432,7 @@
               </li>
 
               <li>
-                <!-- [disabled]="currentPage * itemsPerPage >= productList.length" -->
+
                 <button
                   (click)="onPageChange(offSet + 1)"
                   [disabled]="activeProductList.length < 10"

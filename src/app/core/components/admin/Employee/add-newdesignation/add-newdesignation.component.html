@@ -5,9 +5,11 @@
     <!-- Modal content -->
     <div
       class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
-      >
+    >
       <div class="mr-4 mt-6">
-        <h1 class="text-xl font-semibold text-purple-600">Add New Designation</h1>
+        <h1 class="text-xl font-semibold text-purple-600">
+          Add New Designation
+        </h1>
       </div>
       <button
         (click)="closePopUp()"
@@ -32,12 +34,12 @@
       </button>
       <div class="flex flex-col">
         <div class="flex items-center justify-start gap-2">
-            <label
-                class="text-left font-semibold mt-4 mb-2 text-purple-600 text-base"
-                >
-                Select Level
-            </label>
-            <!-- <div class="mt-2 flex cursor-pointer items-center gap-1">
+          <label
+            class="mb-2 mt-4 text-left text-base font-semibold text-purple-600"
+          >
+            Select Level
+          </label>
+          <!-- <div class="mt-2 flex cursor-pointer items-center gap-1">
                 <svg
                     class="h-3 w-3 text-purple-700 dark:text-white"
                     aria-hidden="true"
@@ -61,42 +63,35 @@
                 </a>
             </div> -->
         </div>
-        
-        <select
-            (change)="selectedLevelName($event)"
-            class="rounded-lg"
-            >
-            <option value="" disabled>Choose Level</option>
-            <option 
-                *ngFor="let level of levelForDesignation"
-                [value]="level.levelId">
-                {{level.levelName}}
-            </option>
+
+        <select (change)="selectedLevelName($event)" class="rounded-lg">
+          <option value="" selected disabled>Choose Level</option>
+          <option
+            *ngFor="let level of levelForDesignation"
+            [value]="level.levelId"
+          >
+            {{ level.levelName }}
+          </option>
         </select>
 
         <label
-            class="text-left text-purple-600 mt-4 mb-2 font-semibold text-base"
-            >
-            Designation
+          class="mb-2 mt-4 text-left text-base font-semibold text-purple-600"
+        >
+          Designation
         </label>
-        <input 
-            type="text"
-            class="rounded-lg"
-            [(ngModel)]="empDesignation"
-        />
+        <input type="text" class="rounded-lg" [(ngModel)]="empDesignation" />
       </div>
       <div class="mt-8 flex justify-end gap-3">
         <div>
-            <button
-              type="submit"
-              (click)="postNewDesignation(empDesignation)"
-              class="w-full cursor-pointer rounded-lg border border-purple-600 bg-purple-500 px-5 py-3 text-center text-sm font-medium text-white hover:bg-purple-600 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 sm:rounded-none sm:rounded-e-lg sm:rounded-s-lg"
-            >
-              Save
-            </button>
-          </div>
+          <button
+            type="submit"
+            (click)="postNewDesignation(empDesignation)"
+            class="w-full cursor-pointer rounded-lg border border-purple-600 bg-purple-600 px-5 py-3 text-center text-sm font-medium text-white hover:bg-purple-700 focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800 sm:rounded-none sm:rounded-e-lg sm:rounded-s-lg"
+          >
+            Save
+          </button>
+        </div>
       </div>
-      
     </div>
   </div>
 </div>
@@ -112,8 +107,9 @@
 >
   <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>
-<section *ngIf="isViewAddNewLevel" class="absolute left-0 right-0 top-0 z-50 h-screen">
-  <app-add-newlevel
-    (close)="closeNewLevel($event)"
-      ></app-add-newlevel>
+<section
+  *ngIf="isViewAddNewLevel"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
+  <app-add-newlevel (close)="closeNewLevel($event)"></app-add-newlevel>
 </section>

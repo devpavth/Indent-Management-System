@@ -70,37 +70,61 @@
                   <h2 class="text-2xl font-semibold text-gray-800 md:text-3xl">
                     Request#
                   </h2>
-                  <span class="mt-1 block text-gray-500">{{
-                    _requestDetails?.indentHeaders.requestNo
-                  }}</span>
-
-                  <address class="mt-2 font-medium not-italic text-gray-800">
-                    {{ _requestDetails?.indentHeaders.requisitioner }}<br />
-                    <!-- {{_requestDetails?.empDept }}<br> -->
-                  </address>
+                  <div class="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
+                    <dl class="grid gap-x-3 sm:grid-cols-5">
+                      <dt
+                        class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                      >
+                        Indent ID:
+                      </dt>
+                      <dd
+                        class="col-span-2 text-gray-500 dark:text-neutral-500"
+                      >
+                        {{
+                          _requestDetails?.indentHeaders.requestNo
+                        }}
+                      </dd>
+                    </dl>
+                    <dl class="grid gap-x-3 sm:grid-cols-5">
+                      <dt
+                        class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                      >
+                        Requisitioner:
+                      </dt>
+                      <dd
+                        class="col-span-2 text-gray-500 dark:text-neutral-500"
+                      >
+                        {{ _requestDetails?.indentHeaders.requisitioner }}
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
                 <!-- Col -->
               </div>
               <div class="mt-8 grid gap-3 sm:grid-cols-2">
                 <div>
                   <h3
-                    class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
-                  >
-                    Created By :
-                  </h3>
-                  <h3
-                    class="text-lg font-semibold text-gray-800 dark:text-neutral-200"
-                  >
-                    {{ _requestDetails?.createdEmpData.empFirstName }}
-                    {{ _requestDetails?.createdEmpData.empLastName }}
+                    class="text-gray-500 dark:text-neutral-200 mb-1"
+                    >
+                    <span class="font-semibold text-gray-800">Created By</span> 
+                    <span class="ml-4 font-semibold text-gray-800">:</span>
+                    <span class="ml-1">{{ _requestDetails?.createdEmpData.empFirstName }}
+                    {{ _requestDetails?.createdEmpData.empLastName }}</span>
                   </h3>
 
                   <address
-                    class="mt-2 not-italic text-gray-500 dark:text-neutral-500"
+                    class="not-italic text-gray-500 dark:text-neutral-500 space-y-1"
                   >
-                    {{ _requestDetails?.empRole }}<br />
-                    {{ _requestDetails?.indentBranch.branchName }}<br />
-                    {{ _requestDetails?.indentBranch.deptName }}<br />
+                    <div class="mb-1">
+                      <span class="font-semibold text-gray-800">Branch</span> 
+                      <span class="ml-12 font-semibold text-gray-800">:</span>
+                      {{ _requestDetails?.indentBranch.branchName }}
+                    </div>
+                    <div>
+                      <span class="font-semibold text-gray-800">Department</span> 
+                      <span class="ml-1 font-semibold text-gray-800">:</span>
+                      {{ _requestDetails?.indentBranch.deptName }}
+                    </div>
                   </address>
                 </div>
                 <!-- Col -->
@@ -112,14 +136,14 @@
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
                       >
-                        Date:
+                        Created On:
                       </dt>
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
                       >
                         {{
-                          _requestDetails?.indentHeaders.requiredDate
-                            | date: "dd-MMM-yyyy"
+                          _requestDetails?.createdEmpData.createdOn
+                            | date: "dd-MMM-yyyy hh:mm a"
                         }}
                       </dd>
                     </dl>
@@ -127,14 +151,14 @@
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
                       >
-                        Time:
+                        Required Date:
                       </dt>
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
                       >
                         {{
                           _requestDetails?.indentHeaders.requiredDate
-                            | date: "shortTime"
+                            | date: "dd-MMM-yyyy"
                         }}
                       </dd>
                     </dl>
@@ -149,35 +173,35 @@
                   <div class="inline-block min-w-full p-1.5 align-middle">
                     <div class="overflow-hidden rounded-lg border">
                       <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
+                        <thead class="bg-purple-500 text-white font-semibold">
                           <tr>
                             <th
                               scope="col"
-                              class="px-6 py-3 text-start text-xs font-medium uppercase text-gray-500"
+                              class="px-6 py-3 text-start text-xs uppercase"
                             >
                               Product
                             </th>
                             <th
                               scope="col"
-                              class="px-6 py-3 text-start text-xs font-medium uppercase text-gray-500"
+                              class="px-6 py-3 text-start text-xs uppercase"
                             >
                               Unit Price
                             </th>
                             <th
                               scope="col"
-                              class="px-6 py-3 text-start text-xs font-medium uppercase text-gray-500"
+                              class="px-6 py-3 text-start text-xs uppercase"
                             >
-                              Quantity
+                              Qty
                             </th>
                             <th
                               scope="col"
-                              class="px-6 py-3 text-end text-xs font-medium uppercase text-gray-500"
+                              class="px-6 py-3 text-end text-xs uppercase"
                             >
                               GST %
                             </th>
                             <th
                               scope="col"
-                              class="px-6 py-3 text-end text-xs font-medium uppercase text-gray-500"
+                              class="px-6 py-3 text-end text-xs uppercase"
                             >
                               Item Price(Incl GST)
                             </th>
@@ -552,7 +576,9 @@
                   <div class="relative w-full">
                     <svg
                       *ngIf="
-                        _requestDetails?.adminAuthData.authStatusCode == 405
+                        _requestDetails?.adminAuthData.authStatusCode == 405 &&
+                        (_requestDetails?.indentHeaders.totalPrice > 5000 &&
+                        _requestDetails?.indentHeaders.totalPrice < 10000)
                       "
                       class="-top-0.1 absolute z-10 -ml-3 h-6 w-6 bg-white text-amber-500"
                       aria-hidden="true"
@@ -642,7 +668,11 @@
                             _requestDetails?.adminAuthData.authStatusCode ==
                             202,
                           nsts:
-                            _requestDetails?.adminAuthData.authStatusCode == 405
+                            _requestDetails?.adminAuthData.authStatusCode == 405 &&
+                            _requestDetails?.indentHeaders?.totalPrice > 5000 &&
+                            _requestDetails?.indentHeaders.totalPrice < 10000,
+                          dsts:
+                            _requestDetails?.indentHeaders.requestStatus === 406
                         }"
                         class="font-bold text-gray-500"
                       >

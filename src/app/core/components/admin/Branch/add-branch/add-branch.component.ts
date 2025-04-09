@@ -104,7 +104,6 @@ export class AddBranchComponent implements OnInit {
         }
         this.isPincodeSelected = false;
       });
-    this.fetchDeptList();
   }
 
   _state: any;
@@ -136,13 +135,6 @@ export class AddBranchComponent implements OnInit {
     });
   }
 
-  fetchDeptList() {
-    this.branchService.getAllDepartments().subscribe((res: any) => {
-      this._department = res;
-      console.log(res);
-      console.log(this._department);
-    });
-  }
 
   addDepartList(data: string) {
     this.isDepartment = true;

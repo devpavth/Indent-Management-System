@@ -23,7 +23,7 @@
                 type="button"
                 (click)="addNewDesignation()"
                 class="an flex items-center justify-center text-nowrap rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-                >
+              >
                 <svg
                   class="mr-2 h-4 w-4"
                   fill="currentColor"
@@ -128,7 +128,7 @@
           >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-            >
+              >
               <tr>
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
@@ -137,31 +137,6 @@
 
                     <button
                       (click)="sortByLevel()"
-                      class="an rounded-full hover:bg-gray-600 hover:text-white"
-                      >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="h-4 w-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  
-                </th>
-                <th scope="col" class="px-4 py-3">
-                  <div class="flex items-center justify-between">
-                    <span> Designation List </span>
-                    <!-- <span *ngIf="activeId == 2"> Project/Program List </span> -->
-                    <!-- <button
                       class="an rounded-full hover:bg-gray-600 hover:text-white"
                     >
                       <svg
@@ -178,30 +153,32 @@
                           d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
                         />
                       </svg>
-                    </button> -->
+                    </button>
+                  </div>
+                </th>
+                <th scope="col" class="px-4 py-3">
+                  <div class="flex items-center justify-between">
+                    <span> Designation List </span>
+
                   </div>
                 </th>
 
-                <!-- <th scope="col" class="px-4 py-3">Model</th>
-                <th scope="col" class="px-4 py-3">Group</th>
-                <th scope="col" class="px-4 py-3">Catagories</th>
-                <th scope="col" class="px-4 py-3">Brand</th> -->
-                <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                              <th scope="col" class="px-4 py-3">Price</th> -->
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!isSkeletonLoader">
               <tr
                 *ngFor="let desig of designationRoleList; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
               >
                 <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
-                <td 
-                  class="px-4 py-3 font-medium text-gray-900 dark:text-white">
-                  <span [ngClass]="getLevelByColor(desig.levelId)" class="px-2 py-1">
+                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                  <span
+                    [ngClass]="getLevelByColor(desig.levelId)"
+                    class="px-2 py-1"
+                  >
                     {{ desig.levelName }}
                   </span>
                 </td>
@@ -212,8 +189,6 @@
                   {{ desig.empDesignation }}
                 </th>
 
-                <!-- <td class="px-4 py-3"></td>
-                              <td class="px-4 py-3"></td> -->
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
@@ -268,9 +243,42 @@
                 </td>
               </tr>
             </tbody>
+
+            <tbody *ngIf="isSkeletonLoader">
+              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+                <td class="px-4 py-3">
+                  <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-24 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-40 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 
+        <ng-container *ngIf="noDesignation">
+          <div
+            class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
+            >
+            <div class="text-center">
+              <img
+                src="../../../../../assets/Img/9264882.svg"
+                class="mx-auto w-52"
+                alt="No data available"
+              />
+              <p class="mt-4 font-medium text-gray-800 dark:text-gray-700">
+                No Designation Available
+              </p>
+            </div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </section>
@@ -282,8 +290,11 @@
   (close)="toggledelete(0, false, '')"
 ></app-delete> -->
 
-<section *ngIf="isViewAddNewDesignation" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isViewAddNewDesignation"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-add-newdesignation
     (close)="closeNewDesignation($event)"
-      ></app-add-newdesignation>
+  ></app-add-newdesignation>
 </section>

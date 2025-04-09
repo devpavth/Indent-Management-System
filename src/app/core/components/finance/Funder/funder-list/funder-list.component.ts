@@ -9,7 +9,7 @@ import { catchError, debounceTime, of, Subject, switchMap } from 'rxjs';
 })
 export class FunderListComponent implements OnInit {
   @ViewChild('funderInput') funderInput!: ElementRef<HTMLInputElement>;
-  selectedFunderName: string = "";
+  selectedFunderName: string = '';
   isFunderList: Boolean = false;
   funderData: any;
 
@@ -27,52 +27,51 @@ export class FunderListComponent implements OnInit {
   constructor(private funderService: FunderService) {}
 
   ngOnInit() {
-    this.searchSubject.pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        if(this.isFunderSelected){
-          return of([]);
-        }
-        this.noFunder = false;
-        if(!searchTerm || searchTerm.length < 3){
-          this.funderSearchList = [];
-          return of([]);
-        }
-        return this.funderService.funderList({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("Funder API Error:", error);
-              this.noFunder = true;
-            }
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          if (this.isFunderSelected) {
             return of([]);
-          })
-        )
-      })
-    )
-    .subscribe(
-      (response: any) => {
-        console.log("fetching funder data from backend:", response);
+          }
+          this.noFunder = false;
+          if (!searchTerm || searchTerm.length < 3) {
+            this.funderSearchList = [];
+            return of([]);
+          }
+          return this.funderService.funderList({ searchTerm }).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('Funder API Error:', error);
+                this.noFunder = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: any) => {
+        console.log('fetching funder data from backend:', response);
 
-        if(response.length > 0){
+        if (response.length > 0) {
           this.selectedFunderName = response[0].funderName;
           this.setFunderInputValue();
         }
 
         this.funderList = response;
         this.isFunderSelected = false;
-      }
-    )
+      });
 
     // this.getAllFunderList();
   }
 
-  setFunderInputValue(){
-    if(this.funderInput){
+  setFunderInputValue() {
+    if (this.funderInput) {
       this.funderInput.nativeElement.value = this.selectedFunderName;
     }
   }
 
-  onSearchChange(event: Event){
+  onSearchChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const searchTerm = inputElement.value;
     this.searchSubject.next(searchTerm);
@@ -90,16 +89,16 @@ export class FunderListComponent implements OnInit {
   onPageChange(pageNumber: number): void {
     console.log('Current Offset:', this.offSet, 'New Offset:', pageNumber);
     // if (pageNumber >= 0 || pageNumber * this.pageSize < this.listLength) {
-    //   return; 
+    //   return;
     // }
 
     this.offSet = pageNumber;
-    console.log("this.offSet:", this.offSet);
+    console.log('this.offSet:', this.offSet);
     // this.getAllFunderList(this.offSet, this.pageSize);
   }
 
   get startPage(): number {
-    return (this.pageSize) * this.offSet + 1;
+    return this.pageSize * this.offSet + 1;
   }
   get endPage(): number {
     const calculatedEnd = (this.offSet + 1) * this.pageSize;

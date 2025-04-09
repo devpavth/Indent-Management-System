@@ -9,7 +9,7 @@
   class="fixed z-50 flex h-screen w-full items-center justify-center bg-black/50"
 >
   <!-- <app-otp></app-otp> -->
-   <app-confirm-branch-details></app-confirm-branch-details>
+  <app-confirm-branch-details></app-confirm-branch-details>
 </div>
 <div
   *ngIf="isOtherProduct"
@@ -27,7 +27,7 @@
         <button
           *ngIf="!isHeader"
           (click)="isHeader = true; isProductAdd = false"
-          >
+        >
           <svg
             class="h-6 w-6 text-white"
             aria-hidden="true"
@@ -50,7 +50,7 @@
           *ngIf="isHeader"
           (click)="isHeader = false; isProductAdd = true"
           class=""
-          >
+        >
           <svg
             class="h-6 w-6 text-white"
             aria-hidden="true"
@@ -82,7 +82,9 @@
                     id="hosting-small"
                     formControlName="priorityType"
                     value="109"
-                    (change)="need(this.requestIndentHead.get('priorityType')?.value)"
+                    (change)="
+                      need(this.requestIndentHead.get('priorityType')?.value)
+                    "
                     class="peer hidden"
                     required
                   />
@@ -102,7 +104,9 @@
                     formControlName="priorityType"
                     value="108"
                     class="peer hidden"
-                    (change)="need(this.requestIndentHead.get('priorityType')?.value)"
+                    (change)="
+                      need(this.requestIndentHead.get('priorityType')?.value)
+                    "
                   />
                   <label
                     for="hosting-big"
@@ -150,7 +154,7 @@
               <label
                 for="Address"
                 class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                >
+              >
                 Capex / Non-capex
               </label>
               <div class="flex justify-stretch gap-40">
@@ -241,12 +245,12 @@
           </section>
           <section
             class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
-            >
+          >
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
                 class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
-                >Indent raised by Name & Designation
+                >Indent Raise by & Designation
               </label>
               <div class="">
                 <p class="text-xl">
@@ -309,24 +313,26 @@
               'btn-disable': requestIndentHead.invalid
             }"
             class="btn-primary col-span-8 mx-12 mb-4"
-            >
+          >
             Add Header
           </button>
           <button
             *ngIf="isEditHeader"
             (click)="onEditHeader()"
             class="btn-primary col-span-8 mx-12 mb-4"
-            >
+          >
             Edit Header
           </button>
         </div>
       </div>
-      <div class="flex justify-between border-t rounded-t-lg bg-purple-600 px-4 py-4">
+      <div
+        class="flex justify-between rounded-t-lg border-t bg-purple-600 px-4 py-4"
+      >
         <h1 class="font-bold text-white">Indent Body</h1>
       </div>
       <form
         [formGroup]="productForm"
-        class="flex snap-center snap-normal bg-[#f5ebfa] rounded-b-lg py-4"
+        class="flex snap-center snap-normal rounded-b-lg bg-[#f5ebfa] py-4"
       >
         <section class="mx-8 my-12 grid w-2/3 grid-cols-8">
           <div class="col-span-8 m-4">
@@ -338,23 +344,28 @@
             </button>
           </div>
           <div class="col-span-8 m-4">
-            <input type="text" #serValue formControlName="productId" class="input-form" />
+            <input
+              type="text"
+              #serValue
+              formControlName="productId"
+              class="input-form"
+            />
 
             <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
               <small>No Products found.</small>
             </div>
             <ul
-              *ngIf="storeProductData &&
-              storeProductData.length > 0"
-              class="absolute border-none z-10 w-2/4 mt-1 bg-white rounded-lg border border-gray-300 shadow-lg dark:bg-gray-700 dark:border-gray-600"
+              *ngIf="storeProductData && storeProductData.length > 0"
+              class="absolute z-10 mt-1 w-2/4 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+            >
+              <li
+                *ngFor="let prod of storeProductData"
+                (click)="onSelectProduct(prod)"
+                class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
               >
-                <li
-                  *ngFor="let prod of storeProductData"
-                  (click)="onSelectProduct(prod)"
-                  class="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                  >
-                  {{prod.prdcatgName}} - {{prod.prdbrndName}} - {{prod.prdmdlName}} - {{prod.prdDescription}}
-                </li>
+                {{ prod.prdcatgName }} - {{ prod.prdbrndName }} -
+                {{ prod.prdmdlName }} - {{ prod.prdDescription }}
+              </li>
             </ul>
 
             <!-- <button
@@ -375,12 +386,18 @@
               >
             </div>
           </div> -->
-          <div *ngIf="productData && !noResults && isProductSelected" class="col-span-full flex flex-col">
+          <div
+            *ngIf="productData && !noResults && isProductSelected"
+            class="col-span-full flex flex-col"
+          >
             <div class="overflow-x-auto">
               <div class="inline-block min-w-full p-1.5 align-middle">
                 <div class="overflow-hidden rounded-lg border">
                   <table class="min-w-full divide-y divide-gray-200 bg-white">
-                    <tbody class="divide-y divide-gray-200" *ngFor="let pro of productData">
+                    <tbody
+                      class="divide-y divide-gray-200"
+                      *ngFor="let pro of productData"
+                    >
                       <tr>
                         <td
                           class="px-6 py-3 text-start text-xs font-semibold uppercase text-purple-800"
@@ -390,9 +407,7 @@
                         <td
                           class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
                         >
-                          <span class="font-semibold">{{
-                            pro?.prdCode
-                          }}</span>
+                          <span class="font-semibold">{{ pro?.prdCode }}</span>
                         </td>
                       </tr>
                       <tr>
@@ -403,7 +418,7 @@
                         </td>
                         <td
                           class="whitespace-nowrap px-6 py-4 text-sm text-gray-500"
-                          >
+                        >
                           <span class="font-semibold">{{
                             pro?.headOfAccName
                           }}</span>
@@ -616,7 +631,7 @@
         </section>
         <div
           class="m-4 h-1/2 w-1/2 space-y-6 rounded-lg border border-[#6818a5] p-6 lg:max-w-xs xl:max-w-md"
-          >
+        >
           <h1 class="text-xl font-semibold">Product Summary</h1>
           <div class="flow-root">
             <div class="-my-3 divide-y divide-[#6818a5]">
@@ -681,10 +696,8 @@
                 (click)="addProductToList(productForm.value)"
                 type="submit"
                 [ngClass]="{
-                  'bg-gray-400':
-                    productForm.invalid,
-                  'hover:bg-gray-400':
-                    productForm.invalid
+                  'bg-gray-400': productForm.invalid,
+                  'hover:bg-gray-400': productForm.invalid
                 }"
                 class="hover:bg-primary-800 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
               >
@@ -695,7 +708,9 @@
         </div>
       </form>
       <section *ngIf="productList.length > 0">
-        <div class="overflow-x-auto border-t border-violet-300 bg-violet-50 p-4">
+        <div
+          class="overflow-x-auto border-t border-violet-300 bg-violet-50 p-4"
+        >
           <div class="flex gap-2">
             <svg
               class="h-6 w-6 text-violet-600"
@@ -705,7 +720,7 @@
               height="24"
               fill="none"
               viewBox="0 0 24 24"
-              >
+            >
               <path
                 stroke="currentColor"
                 stroke-linecap="round"
@@ -752,7 +767,9 @@
                   class="whitespace-nowrap px-4 py-3 font-semibold text-rose-900"
                 >
                   {{ prd?.productModel }} - {{ prd?.productBrand }} <br />
-                  <span class="text-wrap">Head Of Account - {{ prd?.headOfAccName }} </span><br />
+                  <span class="text-wrap"
+                    >Head Of Account - {{ prd?.headOfAccName }} </span
+                  ><br />
                   <span
                     class="h-20 text-wrap text-xs font-normal text-gray-500"
                     >{{ prd?.productDesc }}</span
@@ -776,7 +793,7 @@
                     data-dropdown-toggle="apple-imac-27-dropdown"
                     class="inline-flex h-full items-center rounded-lg p-0.5 text-center text-sm font-medium text-red-500 hover:text-red-600 focus:outline-none dark:text-red-400 dark:hover:text-red-100"
                     type="button"
-                    >
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -794,7 +811,9 @@
               </tr>
             </tbody>
           </table>
-          <div class="space-y-6 rounded-b-lg border-x border-b border-violet-300 p-4">
+          <div
+            class="space-y-6 rounded-b-lg border-x border-b border-violet-300 p-4"
+          >
             <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
               Order summary
             </h4>
@@ -835,7 +854,7 @@
                   <h1
                     *ngIf="totalSum"
                     class="text-end text-xs font-semibold capitalize text-rose-700"
-                    >
+                  >
                     {{ totalSum | amountInWords }}
                   </h1>
                 </dd>
@@ -1010,38 +1029,38 @@
     <!-- final save -->
 
     <div *ngIf="isEnableSave">
-        <div
-          class="flex-row items-center justify-end space-y-1 -mt-1 mb-4 p-4 sm:flex sm:space-x-4 sm:space-y-0"
-          >
-          <!-- <div>
+      <div
+        class="-mt-1 mb-4 flex-row items-center justify-end space-y-1 p-4 sm:flex sm:space-x-4 sm:space-y-0"
+      >
+        <!-- <div>
             <h5 class="mr-3 font-semibold dark:text-white"></h5>
             <p class="text-gray-500 dark:text-gray-400">
               Manage all your existing users or add a new one
             </p>
           </div> -->
-          <button
-            (click)="onSubmitIndent()"
-            [disabled]="requestIndentHead.invalid"
-            [ngClass]="{
-              'btn-blue-disable hover:bg-gray-400': requestIndentHead.invalid
-            }"
-            type="button"
-            class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        <button
+          (click)="onSubmitIndent()"
+          [disabled]="requestIndentHead.invalid"
+          [ngClass]="{
+            'btn-blue-disable hover:bg-gray-400': requestIndentHead.invalid
+          }"
+          type="button"
+          class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="-ml-1 mr-2 h-3.5 w-3.5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="-ml-1 mr-2 h-3.5 w-3.5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
-              />
-            </svg>
-            Save
-          </button>
-        </div>
+            <path
+              d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
+            />
+          </svg>
+          Save
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -1049,7 +1068,9 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 
 <section

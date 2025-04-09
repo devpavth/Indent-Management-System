@@ -1,4 +1,10 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { RequestService } from '../../service/Request/request.service';
@@ -112,13 +118,12 @@ export class RequestFormComponent implements OnInit {
       expenditureId: [],
       requisitioner: [],
       notes: [],
-      
     });
 
     this.assignedVendor = this.fb.group({
       vendorId: [],
-      vdrAccId: []
-    })
+      vdrAccId: [],
+    });
 
     this.productForm = this.fb.group({
       headOfAccId: [''],
@@ -138,85 +143,98 @@ export class RequestFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("checking:",this.requestIndentHead.get('requestIndentHead')?.value);
+    console.log(
+      'checking:',
+      this.requestIndentHead.get('requestIndentHead')?.value,
+    );
     this.intervalId = setInterval(() => {
       this.date = new Date();
     }, 1000);
 
-    this.productForm.get('productId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        console.log(`Product Name Changed for Index:`, searchTerm);
-        if(this.isProductSelected){
-          this.isProductSelected = false;
-         // this.isVendorView = true;
-          return of([]);
-        }
-        this.noResults = false;
-        this.storeProductData = [];
-        if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
-          // this.isVendorView = true;
-          return of([]);
-        }
-
-        let httpParams = new HttpParams().set('searchTerm', searchTerm);
-        
-        return this.productService.fetchLiveProductDetails(httpParams).pipe(
-          catchError((error) => {
-            if (error.status === 404) {
-              console.log('error while fetching product data:', error);
-              this.noResults = true;
-            }
+    this.productForm
+      .get('productId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          console.log(`Product Name Changed for Index:`, searchTerm);
+          if (this.isProductSelected) {
+            this.isProductSelected = false;
+            // this.isVendorView = true;
             return of([]);
-          }),
-        );
-      })
-    ).subscribe(
-      (response: Product[]) => {
+          }
+          this.noResults = false;
+          this.storeProductData = [];
+          if (
+            !searchTerm?.trim() ||
+            !isNaN(searchTerm) ||
+            searchTerm.length < 3
+          ) {
+            // this.isVendorView = true;
+            return of([]);
+          }
+
+          let httpParams = new HttpParams().set('searchTerm', searchTerm);
+
+          return this.productService.fetchLiveProductDetails(httpParams).pipe(
+            catchError((error) => {
+              if (error.status === 404) {
+                console.log('error while fetching product data:', error);
+                this.noResults = true;
+              }
+              return of([]);
+            }),
+          );
+        }),
+      )
+      .subscribe((response: Product[]) => {
         this.storeProductData = response;
-        console.log("fetching product data from backend:", response);
+        console.log('fetching product data from backend:', response);
 
         this.isProductSelected = false;
-      }
-    )
+      });
 
-    this.assignedVendor.get('vendorId')?.valueChanges
-    .pipe(
-      debounceTime(300),
-      switchMap((searchTerm) => {
-        console.log(`vendor Name Changed for Index:`, searchTerm);
-        if(this.isVendorSelected){
-          this.isVendorSelected = false;
-          return of([]);
-        }
-        this.noVendor = false;
-        this.storeVendorList = [];
-        if(!searchTerm?.trim() || !isNaN(searchTerm) || searchTerm.length < 3){
-          return of([]);
-        }
-        return this.productService.fetchLiveVendorDetails({searchTerm}).pipe(
-          catchError((error) => {
-            if(error.status === 404){
-              console.log("error while fetching vendor data:", error);
-              this.noVendor = true;
-            }
+    this.assignedVendor
+      .get('vendorId')
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((searchTerm) => {
+          console.log(`vendor Name Changed for Index:`, searchTerm);
+          if (this.isVendorSelected) {
+            this.isVendorSelected = false;
             return of([]);
-          })
-        )
-      })
-    ).subscribe(
-      (response: any) => {
+          }
+          this.noVendor = false;
+          this.storeVendorList = [];
+          if (
+            !searchTerm?.trim() ||
+            !isNaN(searchTerm) ||
+            searchTerm.length < 3
+          ) {
+            return of([]);
+          }
+          return this.productService
+            .fetchLiveVendorDetails({ searchTerm })
+            .pipe(
+              catchError((error) => {
+                if (error.status === 404) {
+                  console.log('error while fetching vendor data:', error);
+                  this.noVendor = true;
+                }
+                return of([]);
+              }),
+            );
+        }),
+      )
+      .subscribe((response: any) => {
         this.storeVendorList = response;
-        console.log("fetching vendor data from backend:", response);
+        console.log('fetching vendor data from backend:', response);
 
         this.storeVendorList = this.storeVendorList.filter(
           (f) => f.branchId == this.employeeData?.branchId || f.branchId == 0,
         );
 
         this.isVendorSelected = false;
-      }
-    )
+      });
 
     this.user = sessionStorage.getItem('userId');
     if (this.user) {
@@ -224,8 +242,8 @@ export class RequestFormComponent implements OnInit {
         console.table(res);
         this.userData = res;
 
-        console.log("this.userData:", this.userData);
-        console.log("this.userData with empRole:", this.userData.empDesig);
+        console.log('this.userData:', this.userData);
+        console.log('this.userData with empRole:', this.userData.empDesig);
 
         // if(this.userData.empDesig === 10){
         //   console.log("checking..")
@@ -242,7 +260,7 @@ export class RequestFormComponent implements OnInit {
     this.onChanges();
     this.fetchDeptList();
 
-    console.log("this.total in ngOninit:", this.total);
+    console.log('this.total in ngOninit:', this.total);
 
     // if(this.storeTotal){
     //   this.isVendorView = true
@@ -253,8 +271,8 @@ export class RequestFormComponent implements OnInit {
     // }
   }
 
-  ngOnDestroy(): void{
-    if(this.intervalId){
+  ngOnDestroy(): void {
+    if (this.intervalId) {
       clearInterval(this.intervalId);
     }
   }
@@ -270,22 +288,21 @@ export class RequestFormComponent implements OnInit {
       this.tax = gst.gstAmt;
       this.total = gst.itemPrice;
 
-      if(this.total > 5000){
-        console.log("this.total:", this.total);
+      if (this.total > 5000) {
+        console.log('this.total:', this.total);
         this.isVendorView = false;
-      }else if(this.total <= 5000){
+      } else if (this.total <= 5000) {
         this.isVendorView = true;
       }
     });
   }
 
-    need(data: any) {
-    console.log("data:", data);
+  need(data: any) {
+    console.log('data:', data);
     if (data == 108) {
       this.isNeed = true;
     }
   }
-
 
   fetchUser() {
     this.empService
@@ -374,16 +391,18 @@ export class RequestFormComponent implements OnInit {
   }
 
   onSubmitHeader(data: any) {
-    console.log("header data:", data);
+    console.log('header data:', data);
     this.isEditHeader = true;
     Object.keys(this.requestIndentHead.controls).forEach((f) => {
-      if(f !== 'assgndVendors'){
+      if (f !== 'assgndVendors') {
         this.requestIndentHead.get(f)?.disable();
-      }else{
-        const assgndVendorsGroup = this.requestIndentHead.get('assgndVendors') as FormGroup;
-        Object.keys(assgndVendorsGroup.controls).forEach((nestedKey)=>{
+      } else {
+        const assgndVendorsGroup = this.requestIndentHead.get(
+          'assgndVendors',
+        ) as FormGroup;
+        Object.keys(assgndVendorsGroup.controls).forEach((nestedKey) => {
           assgndVendorsGroup.get(nestedKey)?.enable();
-        })
+        });
       }
     });
 
@@ -426,9 +445,9 @@ export class RequestFormComponent implements OnInit {
     /*  */
     // this.productForm.reset();
     /*  */
-    console.log("product:", product);
+    console.log('product:', product);
     //this.isVendorView = false;
-    
+
     this.toastService.showSuccess('Item Added');
     // this.deleteToastMsg = 'Item Added';
     // this.isTost = true;
@@ -440,7 +459,7 @@ export class RequestFormComponent implements OnInit {
       (p) => p.productId === product.productId,
     );
 
-    console.log("existingIndex:", existingIndex);
+    console.log('existingIndex:', existingIndex);
 
     if (existingIndex !== -1) {
       this.productList[existingIndex].qty += product.qty;
@@ -454,21 +473,21 @@ export class RequestFormComponent implements OnInit {
         tax: this.tax,
 
         total: this.total,
-        productId: this.productData[0].productId
+        productId: this.productData[0].productId,
       };
-      
+
       this.productList.push(list);
     }
-    
-    console.log("this.productList:", this.productList);
+
+    console.log('this.productList:', this.productList);
 
     this.storeTotal = this.productList[0]?.total;
 
-    console.log("this.storeTotal:", this.storeTotal);
+    console.log('this.storeTotal:', this.storeTotal);
 
-    var finalAmt = product.unitPrice
+    var finalAmt = product.unitPrice;
 
-    if(finalAmt > 5000){
+    if (finalAmt > 5000) {
       this.isVendorView = false;
     }
 
@@ -481,15 +500,14 @@ export class RequestFormComponent implements OnInit {
     // this.productReset();
   }
 
-    // checkVendorView(): boolean {
-    // // Calculate total from the product list
-    //   const total = this.productList.reduce((acc, product) => acc + product.total, 0);
-    //   console.log("Calculated total in checkVendorView:", total);
-    
-    //   // Return true if total <= 5000 (show vendor view), false otherwise
-    //   return total <= 5000;
-    // }
-  
+  // checkVendorView(): boolean {
+  // // Calculate total from the product list
+  //   const total = this.productList.reduce((acc, product) => acc + product.total, 0);
+  //   console.log("Calculated total in checkVendorView:", total);
+
+  //   // Return true if total <= 5000 (show vendor view), false otherwise
+  //   return total <= 5000;
+  // }
 
   calculateSums() {
     this.totalSum = this.productList.reduce(
@@ -523,7 +541,7 @@ export class RequestFormComponent implements OnInit {
     // this.isTost = true;
     // setTimeout(() => {
     //   this.isTost = false;
-    // }, 3000); 
+    // }, 3000);
     this.calculateSums();
   }
   deleteFunder(i: any) {
@@ -582,7 +600,7 @@ export class RequestFormComponent implements OnInit {
       vendorAcccountDetails,
     } = this.seletedVendor;
 
-    console.log("this.seletedVendor:", this.seletedVendor);
+    console.log('this.seletedVendor:', this.seletedVendor);
     const vd: any[] = vendorAcccountDetails;
 
     const vendor = {
@@ -593,12 +611,12 @@ export class RequestFormComponent implements OnInit {
       vdrContactPersonPhone,
       ...vendorAcccountDetails[0],
     };
-    console.log("in add vendor:", vendor);
+    console.log('in add vendor:', vendor);
     this.vendorList.push(vendor);
   }
 
-  onSelectedVendor(vendor: any){
-    console.log("after selecting the vendor:", vendor);
+  onSelectedVendor(vendor: any) {
+    console.log('after selecting the vendor:', vendor);
 
     this.isVendorSelected = true;
 
@@ -609,20 +627,20 @@ export class RequestFormComponent implements OnInit {
       vendorName: vendor.vendorName,
       vdrContactPersonName: vendor.vdrContactPersonName,
       vdrContactPersonPhone: vendor.vdrContactPersonPhone,
-      vdrCountry: vendor.vdrCountry
+      vdrCountry: vendor.vdrCountry,
     });
 
-    console.log("selected vendor list:", this.vendorList);
+    console.log('selected vendor list:', this.vendorList);
 
     this.assignedVendor.patchValue({
       // vendorId: vendor.vendorId,
-      vdrAccId: vendor.vendorAcccountDetails[0]?.vdrAccId     
-    })
+      vdrAccId: vendor.vendorAcccountDetails[0]?.vdrAccId,
+    });
 
     // this.vendorList = this.assignedVendor?.value;
-    console.log("selected vendor list after assignedVendor:", this.vendorList);
+    console.log('selected vendor list after assignedVendor:', this.vendorList);
 
-    console.log("this.vendor:", this.vendor);
+    console.log('this.vendor:', this.vendor);
 
     this.storeVendorList = [];
   }
@@ -634,11 +652,11 @@ export class RequestFormComponent implements OnInit {
       productDetails: this.productList,
       // assignedDonors: this.funderList,
     };
-    console.log("indent data:", indent);
+    console.log('indent data:', indent);
     this.requestService.postIndent(indent).subscribe(
       (res: any) => {
-        console.log("successfully created indent request:", res);
-        console.log("successfully created indent request:", res.errorMessege);
+        console.log('successfully created indent request:', res);
+        console.log('successfully created indent request:', res.errorMessege);
         this.productForm.reset();
         this.requestIndentHead.reset();
         this.assignedVendor.reset();
@@ -648,7 +666,7 @@ export class RequestFormComponent implements OnInit {
         this.successData = { show: 3, text: res.errorMessege };
       },
       (error) => {
-        console.log("error while creating indent request:",error);
+        console.log('error while creating indent request:', error);
 
         if (error.status == 200) {
           this.productForm.reset();
@@ -659,27 +677,30 @@ export class RequestFormComponent implements OnInit {
           console.log(error.error.text);
 
           this.successData = { show: 3, text: `${error.error.text}` };
-        } else if(error.status === 406){
-          console.log("error because product total is less than 500:", error);
-          console.log("error because product total is less than 500 checking:", error.error);
+        } else if (error.status === 406) {
+          console.log('error because product total is less than 500:', error);
+          console.log(
+            'error because product total is less than 500 checking:',
+            error.error,
+          );
           alert(error.error);
         }
       },
     );
   }
 
-  onSelectProduct(product: Product){
-    console.log("after selecting the product from the list", product);
+  onSelectProduct(product: Product) {
+    console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
     this.productData = [product];
 
-    console.log("productData:", this.productData);
+    console.log('productData:', this.productData);
 
     const duplicateProducts = this.productList.find(
-      (prd) => prd.productId === product.productId
-    )
+      (prd) => prd.productId === product.productId,
+    );
 
-    if(duplicateProducts){
+    if (duplicateProducts) {
       this.toastService.showError('Product Already Exists in the Cart');
       this.isProductSelected = false;
       this.productData = [];
@@ -704,15 +725,12 @@ export class RequestFormComponent implements OnInit {
     this.storeProductData = [];
   }
 
-  
-
   serchByCode(code: string) {
     console.log(code);
 
     this.productService.getProductByCode(code).subscribe((product: any) => {
       console.log(product);
       this.productData = product;
-      
     });
   }
   togglePop(data: boolean) {
@@ -729,9 +747,9 @@ export class RequestFormComponent implements OnInit {
     });
   }
   fetchProg(id: any) {
-    console.log("id:", id);
+    console.log('id:', id);
     this.branchService.getActiveProgram(id).subscribe((res: any) => {
-      console.log("getting program details:", res);
+      console.log('getting program details:', res);
       this.program = res.departProgram;
     });
   }

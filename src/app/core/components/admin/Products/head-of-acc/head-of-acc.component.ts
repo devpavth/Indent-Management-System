@@ -19,6 +19,9 @@ export class HeadOfAccComponent implements OnInit {
   successToastMsg: string = '';
   loading: boolean = false;
 
+  isSkeletonLoader: boolean = true;
+  noHeadOfAcc: boolean = false;
+
   headOfAccForm: FormGroup;
   constructor(
     private productService: ProductService,
@@ -37,10 +40,20 @@ export class HeadOfAccComponent implements OnInit {
     const endIndex = startIndex + this.itemsPerPage;
     this.productService.getHeadofAccList().subscribe((res: any) => {
       console.log(res);
+      this.isSkeletonLoader = false;
 
       this.headOfAccList = res;
       this.listLength = this.headOfAccList.length;
-    });
+      this.noHeadOfAcc = false;
+    },
+    (error) => {
+      console.log(error);
+      this.isSkeletonLoader = false;
+      if(error.status === 404){
+        this.noHeadOfAcc = true;
+      }
+    }
+  );
   }
 
   onPageChange(pageNumber: number): void {
@@ -73,11 +86,6 @@ export class HeadOfAccComponent implements OnInit {
       (error) => {
         console.log('error while adding headofacc', error);
         this.loading = false;
-
-        // if (error.status == 200) {
-        //   this.fetchHeadOfAcc();
-        //   this.headOfAccForm.reset();
-        // }
       },
     );
   }
