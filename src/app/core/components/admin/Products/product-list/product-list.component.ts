@@ -226,14 +226,19 @@ export class ProductListComponent implements OnInit {
         console.log(error);
         this.isSkeletonLoader = false;
 
-        if (error.error.status === 404) {
+        if(error.status === 404){
           this.isSkeletonLoader = false;
           this.noProduct = true;
         }
 
-        if(error.error.status === 204){
-          this.noProduct = true; 
-        }
+        // if (error.error.status === 404) {
+        //   this.isSkeletonLoader = false;
+        //   this.noProduct = true;
+        // }
+
+        // if(error.error.status === 204){
+        //   this.noProduct = true; 
+        // }
       }
     )
       
