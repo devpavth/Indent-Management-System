@@ -180,7 +180,6 @@ export class ProductListComponent implements OnInit {
       console.log('this.otherPrdLen:', this.otherPrdLen);
 
       // this.Spinner = false;
-      this.isSkeletonLoader = false;
       const totalItems = list.length;
 
       console.log('Active product:', this.activeProduct);
@@ -211,6 +210,7 @@ export class ProductListComponent implements OnInit {
       }
 
       this.noProduct = false;
+      this.isSkeletonLoader = false;
 
       console.log('Current product list:', this.productList);
       console.log(
