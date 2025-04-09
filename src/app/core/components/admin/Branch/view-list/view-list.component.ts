@@ -20,6 +20,10 @@ export class ViewListComponent {
   activeId: any;
   isDelete: boolean = false;
   isUpdate: boolean = false;
+  isSkeletonLoader: boolean = true;
+  noDepartment: boolean = false;
+  noProgram: boolean = false;
+
   deleteItem: { title: string; action: number; deleteId: any } = {
     title: '',
     action: 0,
@@ -46,17 +50,40 @@ export class ViewListComponent {
       this.branchService.getAllDepartments().subscribe((res: any) => {
         console.log(res);
         this.headOfAccList = res;
+        this.isSkeletonLoader = false;
+        this.noDepartment = false;
         // let list: any[] = res;
         // this.headOfAccList = list.slice(startIndex, endIndex);
         // this.listLength = this.headOfAccList.length;
-      });
+      },
+      (error) => {
+        console.log("error while fetching department list:", error);
+        this.isSkeletonLoader = false;
+
+        if(error.status === 404){
+          this.noDepartment = true;
+        }
+
+      }
+    );
     } else if (this.activeId == 2) {
       this.branchService.getAllProj().subscribe((res: any) => {
         console.log(res);
 
         this.headOfAccList = res;
+        this.isSkeletonLoader = false;
+        this.noProgram = false;
         this.listLength = this.headOfAccList.length;
-      });
+      },
+      (error) => {
+        console.log("error while fetching program list:", error);
+        this.isSkeletonLoader = false;
+
+        if(error.status === 404){
+          this.noProgram = true;
+        }
+      }
+    );
     }
   }
 

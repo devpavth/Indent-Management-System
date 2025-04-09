@@ -497,7 +497,9 @@
           >
             <span *ngIf="!loading">Submit</span>
             <span *ngIf="loading" class="flex items-center gap-2">
-              <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span
+                class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+              ></span>
               <span>Submitting...</span>
             </span>
           </button>

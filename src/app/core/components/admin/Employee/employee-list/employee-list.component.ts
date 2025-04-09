@@ -42,7 +42,7 @@ export class EmployeeListComponent implements OnInit {
   isSuccess: boolean = false;
   isDelete: boolean = false;
   isAuth: boolean = false;
-  // Spinner: boolean = true;
+
   isEmployeeList: boolean = false;
   pageNotFound: boolean = false;
   isSkeletonLoader: boolean = true;
@@ -75,8 +75,7 @@ export class EmployeeListComponent implements OnInit {
       (res) => {
         // this.employeeList=res;
         // this.isEmployeeList = true;
-        // this.Spinner = false;
-        
+
         this.list = res;
         this.listLength = this.list.length;
 
@@ -92,12 +91,8 @@ export class EmployeeListComponent implements OnInit {
       (error) => {
         if (error.status == 403) {
           console.log();
-          // this.Spinner = false;
           this.isSkeletonLoader = false;
           this.isAuth = true;
-        }
-        if (error.status == 0) {
-          this.pageNotFound = true;
         }
       },
     );
@@ -550,7 +545,7 @@ export class EmployeeListComponent implements OnInit {
           }
         },
         (error) => {
-          console.log("error while deleting employee data:", error);
+          console.log('error while deleting employee data:', error);
           if (error.status == 200) {
             this.fetchEmployeeList(this.userid);
             console.log('userid:', this.userid);

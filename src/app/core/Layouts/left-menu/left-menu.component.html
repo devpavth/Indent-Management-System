@@ -1,7 +1,4 @@
 <button
-  data-drawer-target="sidebar-multi-level-sidebar"
-  data-drawer-toggle="sidebar-multi-level-sidebar"
-  aria-controls="sidebar-multi-level-sidebar"
   type="button"
   class="ms-3 mt-2 inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden"
 >
@@ -59,8 +56,6 @@
               isBlockRequest
           }"
           class="left-menu group"
-          aria-controls="dropdown-example"
-          data-collapse-toggle="dropdown-example"
           (click)="toggleRequest()"
           >
           <svg
@@ -106,7 +101,6 @@
         </button>
         <ul
           *ngIf="tRequest && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
         >
           <li>
@@ -161,8 +155,6 @@
             'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
               isBlockRequest
           }"
-          aria-controls="dropdown-example"
-          data-collapse-toggle="dropdown-example"
           (click)="toggleFinance()"
         >
           <svg
@@ -208,7 +200,6 @@
         </button>
         <ul
           *ngIf="finance && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
         >
           <li>
@@ -247,8 +238,6 @@
             'flex w-full cursor-not-allowed items-center p-2 text-base text-gray-900 transition duration-500 dark:text-white dark:hover:bg-gray-700':
               isBlockRequest
           }"
-          aria-controls="dropdown-example"
-          data-collapse-toggle="dropdown-example"
           (click)="toggleProcurement()"
         >
           <svg
@@ -294,7 +283,6 @@
         </button>
         <ul
           *ngIf="procurement && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
         >
           <li>
@@ -351,8 +339,6 @@
         <button
           type="button"
           class="left-menu group"
-          aria-controls="dropdown-example"
-          data-collapse-toggle="dropdown-example"
           (click)="toggleFinalApproval()"
           [ngClass]="{
             'left-menu': !isBlockRequest,
@@ -403,7 +389,6 @@
         </button>
         <ul
           *ngIf="poapproval && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
         >
           
@@ -473,7 +458,6 @@
         </button>
         <ul
           *ngIf="tAdmin && isLevelView"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster space-y-2 py-2"
           >
           <li>
@@ -731,7 +715,6 @@
         </button>
         <ul
           *ngIf="transaction && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster space-y-2 py-2"
         >
           <li>
@@ -757,8 +740,6 @@
         <button
           type="button"
           class="left-menu group"
-          aria-controls="dropdown-example"
-          data-collapse-toggle="dropdown-example"
           (click)="toggleReport()"
           [ngClass]="{
             'left-menu': !isBlockRequest,
@@ -798,7 +779,6 @@
         </button>
         <ul
           *ngIf="report && !isBlockRequest"
-          id="dropdown-example"
           class="animate__animated animate__fadeIn animate__faster group space-y-2 py-2"
         >
           

@@ -243,14 +243,6 @@ export class ProductListComponent implements OnInit {
         this.noProduct = true;
         this.listLength = 0;
 
-        // if (error.error.status === 404) {
-        //   this.isSkeletonLoader = false;
-        //   this.noProduct = true;
-        // }
-
-        // if(error.error.status === 204){
-        //   this.noProduct = true; 
-        // }
       }
     )
       
