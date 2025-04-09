@@ -20,8 +20,6 @@ import {
 } from '../../../../models/designationRoleMapping/designation-role-mapping.model';
 import { Pincode } from '../../../../models/pincode/pincode.model';
 
-// If all conditions met, return no error
-
 @Component({
   selector: 'app-add-employee',
   templateUrl: './add-employee.component.html',
@@ -193,7 +191,7 @@ export class AddEmployeeComponent implements OnInit {
       value = value.trimStart();
     }
 
-    value = value.replace(/[^a-zA-Z\s@]|(\s{2,})/g, function (match, p1) {
+    value = value.replace(/[^a-zA-Z\s]|(\s{2,})/g, function (match, p1) {
       return p1 ? ' ' : '';
     });
 
@@ -209,7 +207,6 @@ export class AddEmployeeComponent implements OnInit {
     });
   }
 
-  //letter disable
   onPhoneNumberInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     let digitsOnly = inputElement.value.replace(/[^0-9]/g, '');

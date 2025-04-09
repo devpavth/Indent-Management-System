@@ -45,8 +45,31 @@
                 formControlName="branchName"
                 class="input-form"
                 placeholder="Branch Name"
+                [ngClass]="{
+                  error: 
+                    viewBranchForm.get('branchName')?.invalid &&
+                    viewBranchForm.get('branchName')?.touched
+                }"
                 required
               />
+              <div
+                *ngIf="(
+                  viewBranchForm.controls['branchName'].invalid &&
+                  viewBranchForm.controls['branchName'].touched ) || 
+                  viewBranchForm.controls['branchName'].dirty
+                "
+                >
+                  <small class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['branchName'].errors?.['required']"
+                    >
+                    Branch Name is required!
+                  </small>
+                  <small class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['branchName'].errors?.['minlength']"
+                    >
+                    Branch Name minimum length is required!
+                  </small>
+              </div>
             </div>
             <div>
               <label
@@ -59,8 +82,31 @@
                 formControlName="manager"
                 class="input-form"
                 placeholder="Manager Name"
+                [ngClass]="{
+                  error:
+                    viewBranchForm.get('manager')?.invalid &&
+                    viewBranchForm.get('manager')?.touched
+                }"
                 required
               />
+
+              <div
+                *ngIf="
+                  (viewBranchForm.controls['manager'].invalid &&
+                  viewBranchForm.controls['manager'].touched) ||
+                  viewBranchForm.controls['manager'].dirty"
+                >
+                  <small class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['manager'].errors?.['required']"
+                    >
+                    Branch Manager is required!
+                  </small>
+                  <small class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['manager'].errors?.['minlength']"
+                    >
+                    Branch Manager minimum length is required!
+                  </small>
+              </div>
             </div>
             <div>
               <label
@@ -91,9 +137,32 @@
                   class="icon-input"
                   formControlName="branchMobilenumber"
                   placeholder="123-456-970"
+                  [ngClass]="{
+                    error:
+                      viewBranchForm.get('branchMobilenumber')?.invalid &&
+                      viewBranchForm.get('branchMobilenumber')?.touched
+                  }"
                   required
-                />
+                />                
               </div>
+              <div
+                  *ngIf="
+                    (viewBranchForm.controls['branchMobilenumber']?.invalid && 
+                      viewBranchForm.controls['branchMobilenumber']?.touched) ||
+                    viewBranchForm.controls['branchMobilenumber']?.dirty
+                  "
+                  >
+                    <small  class="ml-2 text-red-600"
+                      *ngIf="viewBranchForm.controls['branchMobilenumber'].errors?.['required']"
+                      >
+                      Branch Mobile Number is Required!
+                    </small>
+                    <small class="ml-2 text-red-600"
+                      *ngIf="viewBranchForm.controls['branchMobilenumber'].errors?.['minlength']"
+                      >
+                      Branch Mobile Number must have 10 digits!
+                    </small>
+                </div>
             </div>
 
             <div>

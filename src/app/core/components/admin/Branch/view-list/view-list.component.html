@@ -91,7 +91,6 @@
               </form> -->
             </div>
           </div>
-          
         </div>
 
         <div class="overflow-x-auto" #test>
@@ -137,7 +136,7 @@
               <tr
                 *ngFor="let p of headOfAccList; let i = index"
                 class="border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
-                >
+              >
                 <td class="px-4 py-3">{{ getSerialNumber(i) }}</td>
                 <th
                   scope="row"
@@ -148,7 +147,8 @@
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
-                    (click)="update(p.departId ?? p.programId, true)"
+                    *ngIf="activeId === '1'"
+                    (click)="update(p.departId, true)"
                     class="group inline-flex items-center justify-center rounded-full bg-blue-50 p-1 text-center text-sm font-medium text-gray-500 hover:bg-blue-500 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
                   >
@@ -201,7 +201,10 @@
             </tbody>
 
             <tbody *ngIf="isSkeletonLoader">
-              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+              <tr
+                *ngFor="let _ of [1, 2, 3, 4, 5]"
+                class="animate-pulse border-b"
+              >
                 <td class="px-4 py-3">
                   <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
                 </td>
@@ -220,7 +223,7 @@
         <ng-container *ngIf="noDepartment || noProgram">
           <div
             class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
-            >
+          >
             <div class="text-center">
               <img
                 src="../../../../../assets/Img/9264882.svg"
@@ -228,7 +231,11 @@
                 alt="No data available"
               />
               <p class="mt-4 font-medium text-gray-800 dark:text-gray-700">
-                {{noDepartment ? 'No Department Available': 'No Program Available'}}
+                {{
+                  noDepartment
+                    ? "No Department Available"
+                    : "No Program Available"
+                }}
               </p>
             </div>
           </div>

@@ -36,6 +36,7 @@
               <input
                 type="text"
                 formControlName="branchName"
+                (input)="onNameInput($event)"
                 class="input-form"
                 placeholder="Branch Name"
                 [ngClass]="{
@@ -51,7 +52,7 @@
                     addBranchForm.controls['branchName'].touched) ||
                   addBranchForm.controls['branchName'].dirty
                 "
-              >
+                >
                 <small
                   class="text-danger ml-2 text-red-600"
                   *ngIf="
@@ -77,6 +78,7 @@
               <input
                 type="text"
                 formControlName="manager"
+                (input)="onManagerInput($event)"
                 class="input-form"
                 [ngClass]="{
                   error:
@@ -135,6 +137,7 @@
                   #phone
                   class="icon-input"
                   formControlName="branchMobilenumber"
+                  (input)="onPhoneNumberInput($event)"
                   placeholder="123-456-970"
                   required
                   [ngClass]="{
@@ -167,7 +170,7 @@
                       'minlength'
                     ]
                   "
-                  >Mobile Number is Not Valid !
+                  >Mobile Number must have 10 digits !
                 </small>
               </div>
             </div>
@@ -224,8 +227,9 @@
               class="input-form"
               formControlName="add1"
               placeholder="Flat, House no., Building, Company, Apartment"
-              minlength="20"
+              minlength="10"
               maxlength="150"
+              (input)="onAddressInput($event, 'add1', 150)"
               required
             />
             <div
@@ -234,22 +238,30 @@
                   addBranchForm.controls['add1'].touched) ||
                 addBranchForm.controls['add1'].dirty
               "
+              class="flex items-start justify-between"
             >
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add1'].errors?.['required']"
-                >Address-1 is Required !
-              </small>
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add1'].errors?.['minlength']"
-                >Address-1 min length required !
-              </small>
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add1'].errors?.['maxlength']"
-                >Address-1 length out of bound !
-              </small>
+              <div class="text-left">
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add1'].errors?.['required']"
+                  >Address-1 is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add1'].errors?.['minlength']"
+                  >Address-1 min length required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add1'].errors?.['maxlength']"
+                  >Address-1 length out of bound !
+                </small>
+              </div>
+              <div class="text-right">
+                <small class="text-sm text-gray-500">
+                  {{ addBranchForm.get('add1')?.value?.length || 0 }} / 150
+                </small>
+              </div>
             </div>
           </div>
           <div class="mb-6">
@@ -258,8 +270,9 @@
               formControlName="add2"
               class="input-form"
               placeholder="Area, Street, Sector, Village"
-              minlength="20"
+              minlength="10"
               maxlength="100"
+              (input)="onAddressInput($event, 'add2', 100)"
               required
             />
             <div
@@ -268,22 +281,32 @@
                   addBranchForm.controls['add2'].touched) ||
                 addBranchForm.controls['add2'].dirty
               "
-            >
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add2'].errors?.['required']"
-                >Address-2 is Required !
-              </small>
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add2'].errors?.['minlength']"
-                >Address-2 min length required !
-              </small>
-              <small
-                class="text-danger ml-2 text-red-600"
-                *ngIf="addBranchForm.controls['add2'].errors?.['maxlength']"
-                >Address-2 length out of bound !
-              </small>
+              class="flex items-start justify-between"
+              >
+              <div class="text-left">
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add2'].errors?.['required']"
+                  >Address-2 is Required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add2'].errors?.['minlength']"
+                  >Address-2 min length required !
+                </small>
+                <small
+                  class="text-danger ml-2 text-red-600"
+                  *ngIf="addBranchForm.controls['add2'].errors?.['maxlength']"
+                  >Address-2 length out of bound !
+                </small>
+              </div>
+
+              <div class="text-right">
+                  <small class="text-sm text-gray-500">
+                    {{ addBranchForm.get('add2')?.value?.length || 0 }} / 100
+                  </small>
+              </div>
+              
             </div>
           </div>
           <div class="mb-6 grid gap-6 md:grid-cols-2">

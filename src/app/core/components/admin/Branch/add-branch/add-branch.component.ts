@@ -18,14 +18,14 @@ export class AddBranchComponent implements OnInit {
     private readonly branchService: BranchService,
   ) {
     this.addBranchForm = this.fb.group({
-      branchName: [, [Validators.required, Validators.minLength(2)]],
+      branchName: [, [Validators.required, Validators.minLength(3)]],
       manager: [, [Validators.required, Validators.minLength(2)]],
       branchMobilenumber: [, [Validators.required, Validators.minLength(10)]],
       add1: [
         ,
         [
           Validators.required,
-          Validators.minLength(20),
+          Validators.minLength(10),
           Validators.maxLength(150),
         ],
       ],
@@ -33,7 +33,7 @@ export class AddBranchComponent implements OnInit {
         ,
         [
           Validators.required,
-          Validators.minLength(20),
+          Validators.minLength(10),
           Validators.maxLength(100),
         ],
       ],
@@ -121,6 +121,66 @@ export class AddBranchComponent implements OnInit {
 
   addBranchForm: FormGroup;
 
+  onNameInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    let value = inputElement.value;
+
+    if (value.startsWith(' ')) {
+      value = value.trimStart();
+    }
+
+    value = value.replace(/[^a-zA-Z\s]|(\s{2,})/g, (match, p1) =>
+      p1 ? ' ' : '',
+    );
+
+    inputElement.value = value;
+  }
+
+  onManagerInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    let value = inputElement.value;
+
+    if (value.startsWith(' ')) {
+      value = value.trimStart();
+    }
+
+    value = value.replace(/[^a-zA-Z0-9\s]|(\s{2,})/g, (match, p1) =>
+      p1 ? ' ' : '',
+    );
+
+    inputElement.value = value;
+  }
+
+  onPhoneNumberInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    let digitOnly = inputElement.value.replace(/[^0-9]/g, '');
+
+    if (digitOnly.length > 10) {
+      digitOnly = digitOnly.slice(0, 10);
+    }
+
+    inputElement.value = digitOnly;
+    this.addBranchForm.get('branchMobilenumber')?.setValue(digitOnly, {
+      emitEvent: false,
+    });
+  }
+
+  onAddressInput(event: Event, controlName: string, maxLength: number){
+    const input = event.target as HTMLInputElement;
+    let value = input.value;
+
+    if(value.length >= maxLength){
+      const trimmed = value.slice(0, maxLength);
+      input.value = trimmed;
+
+      this.addBranchForm.get(controlName)?.setValue(trimmed, {
+        emitEvent: false,
+      });
+
+      this.addBranchForm.get(controlName)?.setErrors({maxlength: true});
+    }
+  }
+
   fetchState(selectedValue: string) {
     console.log(selectedValue);
 
@@ -134,7 +194,6 @@ export class AddBranchComponent implements OnInit {
       this._city = res;
     });
   }
-
 
   addDepartList(data: string) {
     this.isDepartment = true;

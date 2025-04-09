@@ -1,49 +1,73 @@
 <div
   class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+>
+  <div
+    class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 md:h-auto"
   >
-  <div class="relative w-full max-w-md p-6 md:h-auto bg-white rounded-lg shadow-lg dark:bg-gray-800">
-      <button
-        (click)="onClose()"
-        type="button"
-        class="absolute right-4 top-4 text-gray-400 hover:text-gray-900 dark:hover:text-white"
-        >
-         <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fill-rule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-      </button>
+    <button
+      (click)="onClose()"
+      type="button"
+      class="absolute right-4 top-4 text-gray-400 hover:text-gray-900 dark:hover:text-white"
+    >
+      <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+    </button>
 
-      <h2 class="text-xl font-semibold text-purple-600 dark:text-white text-center mb-4">Upload Logo</h2>
+    <h2
+      class="mb-4 text-center text-xl font-semibold text-purple-600 dark:text-white"
+    >
+      Upload Logo
+    </h2>
 
-      <div class="flex flex-col items-center">
-        <label for="file-upload"
-          class="cursor-pointer flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 dark:border-gray-600 dark:bg-gray-700 relative overflow-hidden"
+    <div class="flex flex-col items-center">
+      <label
+        for="file-upload"
+        class="relative flex h-40 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+      >
+        <ng-container *ngIf="!previewUrl; else imagePreview">
+          <svg
+            class="mb-2 h-10 w-10 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
           >
-          <ng-container *ngIf="!previewUrl; else imagePreview">
-                <svg class="h-10 w-10 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0l4-4m-4 4l-4-4M4 16h16"></path>
-                </svg>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4v12m0 0l4-4m-4 4l-4-4M4 16h16"
+            ></path>
+          </svg>
 
-                <span class="text-gray-500 text-sm dark:text-gray-400">Click to Upload Logo</span>
-          </ng-container>
+          <span class="text-sm text-gray-500 dark:text-gray-400"
+            >Click to Upload Logo</span
+          >
+        </ng-container>
 
-          <ng-template #imagePreview>
-            <img 
-            [src]="previewUrl" 
-            class="absolute inset-0 w-full h-full object-cover rounded-lg"
+        <ng-template #imagePreview>
+          <img
+            [src]="previewUrl"
+            class="absolute inset-0 h-full w-full rounded-lg object-cover"
             alt="Company Logo Preview"
-            >
-          </ng-template>
-          
-        </label>
+          />
+        </ng-template>
+      </label>
 
-        <input id="file-upload" type="file" (change)="onFileSelected($event)" class="hidden" accept="image/*"/>
-      </div>
+      <input
+        id="file-upload"
+        type="file"
+        (change)="onFileSelected($event)"
+        class="hidden"
+        accept="image/*"
+      />
+    </div>
 
-      <!-- <div 
+    <!-- <div 
         *ngIf="previewUrl"
         class="mt-4 flex justify-center"
         >
@@ -54,16 +78,16 @@
         />
       </div> -->
 
-      <button
-        (click)="uploadLogo()"
-        [disabled]="!selectedFile"
-        [ngClass]="{
-          'bg-gray-400 hover:bg-gray-400': !selectedFile
-        }"
-        class="mt-6 w-full px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none"
-        >
-        Upload Logo
-      </button>
+    <button
+      (click)="uploadLogo()"
+      [disabled]="!selectedFile"
+      [ngClass]="{
+        'bg-gray-400 hover:bg-gray-400': !selectedFile
+      }"
+      class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
+    >
+      Upload Logo
+    </button>
   </div>
 </div>
 
@@ -71,7 +95,9 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 
 <section

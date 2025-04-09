@@ -327,9 +327,7 @@
 
               <div class="text-right">
                 <small class="text-sm text-gray-500">
-                  {{
-                    addEmployeeForm.get("addressLine1")?.value?.length || 0
-                  }}
+                  {{ addEmployeeForm.get("addressLine1")?.value?.length || 0 }}
                   / 150
                 </small>
               </div>
@@ -384,9 +382,7 @@
               </div>
               <div class="text-right">
                 <small class="text-gray-500">
-                  {{
-                    addEmployeeForm.get("addressLine2")?.value?.length || 0
-                  }}
+                  {{ addEmployeeForm.get("addressLine2")?.value?.length || 0 }}
                   / 100
                 </small>
               </div>
@@ -793,20 +789,6 @@
   class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
 >
   <app-success-pop-employee [message]="empPopUpMsg"></app-success-pop-employee>
-  <!-- <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-    
-      <div class="relative p-4 text-center bg-white rounded-lg animate__animated animate__bounceIn animate__faster shadow dark:bg-gray-800 sm:p-5">
-        
-          <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center justify-center mx-auto mb-3.5">
-              <svg aria-hidden="true" class="w-8 h-8 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-              <span class="sr-only">Success</span>
-          </div>
-          <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Successfully Employee Register.</p>
-          <button routerLink="/home/employeeList"  type="button" class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-900">
-              Continue
-          </button>
-      </div>
-  </div> -->
 </div>
 <section
   *ngIf="isToast"

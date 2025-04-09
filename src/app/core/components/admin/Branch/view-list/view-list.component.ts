@@ -47,43 +47,44 @@ export class ViewListComponent {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     if (this.activeId == 1) {
-      this.branchService.getAllDepartments().subscribe((res: any) => {
-        console.log(res);
-        this.headOfAccList = res;
-        this.isSkeletonLoader = false;
-        this.noDepartment = false;
-        // let list: any[] = res;
-        // this.headOfAccList = list.slice(startIndex, endIndex);
-        // this.listLength = this.headOfAccList.length;
-      },
-      (error) => {
-        console.log("error while fetching department list:", error);
-        this.isSkeletonLoader = false;
+      this.branchService.getAllDepartments().subscribe(
+        (res: any) => {
+          console.log(res);
+          this.headOfAccList = res;
+          this.isSkeletonLoader = false;
+          this.noDepartment = false;
+          // let list: any[] = res;
+          // this.headOfAccList = list.slice(startIndex, endIndex);
+          // this.listLength = this.headOfAccList.length;
+        },
+        (error) => {
+          console.log('error while fetching department list:', error);
+          this.isSkeletonLoader = false;
 
-        if(error.status === 404){
-          this.noDepartment = true;
-        }
-
-      }
-    );
+          if (error.status === 404) {
+            this.noDepartment = true;
+          }
+        },
+      );
     } else if (this.activeId == 2) {
-      this.branchService.getAllProj().subscribe((res: any) => {
-        console.log(res);
+      this.branchService.getAllProj().subscribe(
+        (res: any) => {
+          console.log(res);
 
-        this.headOfAccList = res;
-        this.isSkeletonLoader = false;
-        this.noProgram = false;
-        this.listLength = this.headOfAccList.length;
-      },
-      (error) => {
-        console.log("error while fetching program list:", error);
-        this.isSkeletonLoader = false;
+          this.headOfAccList = res;
+          this.isSkeletonLoader = false;
+          this.noProgram = false;
+          this.listLength = this.headOfAccList.length;
+        },
+        (error) => {
+          console.log('error while fetching program list:', error);
+          this.isSkeletonLoader = false;
 
-        if(error.status === 404){
-          this.noProgram = true;
-        }
-      }
-    );
+          if (error.status === 404) {
+            this.noProgram = true;
+          }
+        },
+      );
     }
   }
 

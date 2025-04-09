@@ -64,7 +64,10 @@ export class ViewCompanydetailsComponent {
         this.companyDetails = res;
 
         if (this.companyDetails.companyLogo) {
-          sessionStorage.setItem('companyLogo', this.companyDetails.companyLogo);
+          sessionStorage.setItem(
+            'companyLogo',
+            this.companyDetails.companyLogo,
+          );
         }
       },
       (error) => {

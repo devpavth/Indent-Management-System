@@ -89,7 +89,6 @@ export class UploadCompanylogoComponent {
     );
   }
 
-
   onClose() {
     this.close.emit(true);
   }

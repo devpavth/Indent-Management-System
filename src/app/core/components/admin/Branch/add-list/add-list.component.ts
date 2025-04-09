@@ -21,11 +21,6 @@ export class AddListComponent implements OnInit {
   route = inject(Router);
   toastService =  inject(ToastService);
 
-  isDeleteToast: boolean = false;
-  errorToastMsg: string = '';
-  isToast: boolean = false;
-  successToastMsg: string = '';
-
   constructor(
     private branchService: BranchService,
     private activeLinkId: ActivatedRoute,
@@ -50,9 +45,6 @@ export class AddListComponent implements OnInit {
     console.log('this.assProjList:', this.assProjList);
 
     this.toastService.showSuccess('Program Added Successfully');
-    setTimeout(() => {
-      this.isToast = false;
-    }, 3000);
   }
 
   showSuccessToast() {
@@ -61,9 +53,6 @@ export class AddListComponent implements OnInit {
       this.toastService.showSuccess(
         `Please assign atleast one program to ${this.department} department`,
       );
-      setTimeout(() => {
-        this.isToast = false;
-      }, 3000);
     }
   }
 
@@ -96,17 +85,13 @@ export class AddListComponent implements OnInit {
 
         this.toastService.showSuccess(res.error);
         setTimeout(() => {
-          this.isToast = false;
           this.route.navigate(['/home/viewList/1']);
         }, 3000);
       },
       (error) => {
         console.log('error adding department name:', error);
-        this.isDeleteToast = true;
-        this.errorToastMsg = error.error[0];
-        setTimeout(() => {
-          this.isDeleteToast = false;
-        }, 3000);
+
+        this.toastService.showError(error.error);
       },
     );
   }
@@ -124,6 +109,8 @@ export class AddListComponent implements OnInit {
       },
       (error) => {
         console.log('error while adding program:', error);
+
+        this.toastService.showError(error.error.error);
       },
     );
   }

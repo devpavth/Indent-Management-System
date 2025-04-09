@@ -8,13 +8,13 @@
           <div class="overflow-x-auto" #test>
             <table
               class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-                >
+            >
               <thead
                 class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
               >
                 <tr>
-                  <th scope="col" class="px-4 py-3">Logo</th>                           
-                  <th scope="col" class="px-4 py-3">Company Name</th>           
+                  <th scope="col" class="px-4 py-3">Logo</th>
+                  <th scope="col" class="px-4 py-3">Company Name</th>
                   <th scope="col" class="px-4 py-3">
                     <span class="sr-only">Actions</span>
                   </th>
@@ -22,34 +22,41 @@
               </thead>
               <tbody *ngIf="!isSkeletonLoader">
                 <tr
-                  class="border-b transition-all text-gray-800 font-medium text-base duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
-                    >      
+                  class="border-b text-base font-medium text-gray-800 transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
+                >
                   <td class="px-4 py-3">
                     <img
-                        *ngIf="companyDetails?.companyLogo; else defaultLogo" 
-                        [src]="'data:image/png;base64,' + companyDetails?.companyLogo" 
-                        alt="Company Logo"
-                        class="w-16 h-16 object-cover rounded-full shadow-md"
+                      *ngIf="companyDetails?.companyLogo; else defaultLogo"
+                      [src]="
+                        'data:image/png;base64,' + companyDetails?.companyLogo
+                      "
+                      alt="Company Logo"
+                      class="h-16 w-16 rounded-full object-cover shadow-md"
                     />
 
                     <ng-template #defaultLogo>
-                        <div
-                            class="w-16 h-16 flex items-center justify-center bg-gray-300 rounded-full shadow-md"
-                            >
-                            <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                height="24px" 
-                                viewBox="0 -960 960 960" width="24px" 
-                                fill="#1f1f1f"
-                                class="w-14 h-14 text-gray-600"
-                                >
-                                <path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/>
-                            </svg>
-                        </div>
+                      <div
+                        class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-300 shadow-md"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#1f1f1f"
+                          class="h-14 w-14 text-gray-600"
+                        >
+                          <path
+                            d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"
+                          />
+                        </svg>
+                      </div>
                     </ng-template>
                   </td>
-                  <td class="px-4 py-3 align-middle">{{companyDetails?.companyName }}</td>               
-                  <td class="px-4 py-3 align-middle text-right">
+                  <td class="px-4 py-3 align-middle">
+                    {{ companyDetails?.companyName }}
+                  </td>
+                  <td class="px-4 py-3 text-right align-middle">
                     <button
                       (click)="updateCompanyDetails()"
                       class="rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
@@ -73,9 +80,15 @@
 
               <tbody *ngIf="isSkeletonLoader">
                 <tr *ngFor="let _ of [1]" class="animate-pulse border-b">
-                  <td class="px-4 py-3"><div class="w-16 h-16 bg-gray-300 rounded-full"></div></td>
-                  <td class="px-4 py-3"><div class="h-4 w-96 bg-gray-300 rounded-lg"></div></td>
-                  <td class="px-4 py-3"><div class="h-4 w-8 bg-gray-300 rounded-lg"></div></td>
+                  <td class="px-4 py-3">
+                    <div class="h-16 w-16 rounded-full bg-gray-300"></div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="h-4 w-96 rounded-lg bg-gray-300"></div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -86,9 +99,12 @@
   </div>
 </section>
 
-<section *ngIf="isViewCompanyDetails" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isViewCompanyDetails"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-view-companydetails
     [companyDetails]="companyDetails"
-   (close)="closeCompanyModal($event)"
-   ></app-view-companydetails>
+    (close)="closeCompanyModal($event)"
+  ></app-view-companydetails>
 </section>
