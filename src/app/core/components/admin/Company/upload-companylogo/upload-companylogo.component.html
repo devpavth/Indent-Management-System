@@ -2,12 +2,12 @@
   class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
 >
   <div
-    class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 md:h-auto"
+    class="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 md:h-auto"
   >
     <button
       (click)="onClose()"
       type="button"
-      class="absolute right-4 top-4 text-gray-400 hover:text-gray-900 dark:hover:text-white"
+      class="absolute right-4 top-4 text-gray-800 hover:bg-gray-300 rounded-full p-2 bg-transparent dark:hover:text-white"
     >
       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -19,43 +19,44 @@
     </button>
 
     <h2
-      class="mb-4 text-center text-xl font-semibold text-purple-600 dark:text-white"
+      class="mb-4 text-left text-xl font-semibold text-purple-600 dark:text-white"
     >
-      Upload Logo
+      {{ showCropper ? 'Crop Logo' : 'Upload Logo' }}
     </h2>
 
-    <div class="flex flex-col items-center">
-      <label
-        for="file-upload"
-        class="relative flex h-40 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+    <div 
+      class="flex flex-col items-center"
+      (drop)="onFileDrop($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
       >
-        <ng-container *ngIf="!previewUrl; else imagePreview">
-          <svg
-            class="mb-2 h-10 w-10 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 4v12m0 0l4-4m-4 4l-4-4M4 16h16"
-            ></path>
+      <label
+        *ngIf="!showCropper && !croppedImage"
+        for="file-upload"
+        [class.border-blue-500]="isDragOver"
+        [class.bg-blue-50]="isDragOver"
+        class="relative flex h-40 mb-4 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+        >
+        <ng-container>
+          <svg 
+            class="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400" 
+            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 20 16"
+            >
+              <path 
+                stroke="currentColor" 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                stroke-width="2" 
+                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
           </svg>
 
           <span class="text-sm text-gray-500 dark:text-gray-400"
-            >Click to Upload Logo</span
+            >Click to Upload or Drag and Drop Logo</span
           >
         </ng-container>
 
-        <ng-template #imagePreview>
-          <img
-            [src]="previewUrl"
-            class="absolute inset-0 h-full w-full rounded-lg object-cover"
-            alt="Company Logo Preview"
-          />
-        </ng-template>
       </label>
 
       <input
@@ -65,29 +66,87 @@
         class="hidden"
         accept="image/*"
       />
+       
     </div>
 
-    <!-- <div 
-        *ngIf="previewUrl"
-        class="mt-4 flex justify-center"
-        >
-        <img 
-          [src]="previewUrl" 
-          alt="Signature Preview"
-          class="h-24 w-auto rounded-md border border-gray-300"
-        />
-      </div> -->
+    <ng-container *ngIf="showCropper">
+      <div class="flex items-center justify-center">
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="false"
+          format="png"
+          [transform]="transform"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+          class="crop"
+          >
+        </image-cropper>
+      </div>
+    </ng-container> 
 
-    <button
-      (click)="uploadLogo()"
-      [disabled]="!selectedFile"
-      [ngClass]="{
-        'bg-gray-400 hover:bg-gray-400': !selectedFile
-      }"
-      class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
-    >
-      Upload Logo
-    </button>
+    <div 
+      *ngIf="showCropper"
+      class="flex items-center justify-center gap-4 mt-8"
+      >
+      <button 
+        type="button"
+        (click)="decreaseZoom(zoomSlider)"
+        class="text-xl font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 px-4 py-0 rounded-md shadow"
+        >-</button>
+      <div class="relative w-72">
+        <div 
+          *ngIf="showTooltip"
+          class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs rounded px-2 py-1 shadow-md"
+          [style.left.px]="tooltipLeft"
+          >
+          {{scale}}
+
+          <div class="tooltip-arrow"></div>
+        </div>
+
+        <input 
+          #zoomSlider
+          type="range"
+          id="zoomSlider"
+          min="1"
+          max="3"
+          step="0.1"
+          [(ngModel)]="scale"
+          (input)="onZoomChange(zoomSlider)"
+          class="w-full bg-purple-600 appearance-none h-2 rounded outline-none"
+        />
+      </div>
+      
+      <button
+        type="button"
+        (click)="increaseZoom(zoomSlider)"
+        class="text-xl font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 px-4 py-0 rounded-md shadow"
+        >
+        +
+      </button>
+    </div>
+
+    <div class="flex justify-end gap-2" *ngIf="showCropper">
+      <button  
+        (click)="onClose()"  
+        class="mt-6 rounded-lg border border-gray-300 px-4 py-2 text-black hover:bg-gray-100 focus:outline-none"
+        >
+        Cancel
+      </button>
+      <button
+        (click)="uploadLogo()"
+        [disabled]="!croppedBlob"
+        [ngClass]="{
+          'bg-gray-400 hover:bg-gray-400': !croppedBlob
+        }"
+        class="mt-6 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
+        >
+        OK
+      </button>
+    </div>
+  
   </div>
 </div>
 

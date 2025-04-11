@@ -64,31 +64,34 @@
           <img
             *ngIf="companyLogo; else defaultLogo"
             class="animation-rotate h-10 w-auto scale-110 rounded-full"
-            [src]="'data:image/png;base64,'+ companyLogo"
+            [src]="'data:image/png;base64,' + companyLogo"
             alt="Logo"
           />
 
           <ng-template #defaultLogo>
-              <div
-                  class="w-10 h-10 flex items-center justify-center bg-gray-300 rounded-full shadow-md"
-                  >
-                  <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      height="24px" 
-                      viewBox="0 -960 960 960" width="24px" 
-                      fill="#1f1f1f"
-                      class="w-14 h-14 text-gray-600"
-                      >
-                      <path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/>
-                  </svg>
-              </div>
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 shadow-md"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="9333ea"
+                class="h-14 w-14 text-gray-600"
+              >
+                <path
+                  d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"
+                />
+              </svg>
+            </div>
           </ng-template>
           <div class="ml-4 flex-col justify-start gap-1">
             <!-- {{ userData?.empFirstName }} {{ userData?.empLastName }} -->
             <h1
               class="an text-xl font-semibold text-white hover:text-amber-200"
             >
-               {{companyName}}
+              {{ companyName }}
             </h1>
           </div>
         </a>
@@ -198,7 +201,7 @@
             class="animate__animated animate__fadeIn animate__faster absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             role="menu"
             tabindex="-1"
-            >
+          >
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <ul>
               <li>
@@ -236,7 +239,7 @@
               <li>
                 <a
                   (click)="signOut()"
-                  class="block px-4 py-2 cursor-pointer text-sm text-gray-700 transition-all duration-500 hover:bg-purple-200"
+                  class="block cursor-pointer px-4 py-2 text-sm text-gray-700 transition-all duration-500 hover:bg-purple-200"
                   role="menuitem"
                   tabindex="-1"
                   id="user-menu-item-2"

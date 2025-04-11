@@ -6,10 +6,22 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { NetworkErrorComponent } from './network-error/network-error.component';
 
 const routes: Routes = [
-  { path: 'profile', component: ProfileComponent },
-  { path: 'unauth', component: UnauthorizedComponent },
-  { path: '404', component: PageNotFoundComponent },
-  { path: 'networkerror', component: NetworkErrorComponent }
+  { 
+    path: 'profile', 
+    component: ProfileComponent,
+  },
+  { 
+    path: 'unauth', 
+    component: UnauthorizedComponent 
+  },
+  { 
+    path: '404', 
+    component: PageNotFoundComponent 
+  },
+  { 
+    path: 'networkerror', 
+    component: NetworkErrorComponent 
+  }
 ];
 
 @NgModule({

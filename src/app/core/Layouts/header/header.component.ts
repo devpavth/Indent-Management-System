@@ -17,27 +17,6 @@ export class HeaderComponent implements OnInit {
   companyName: string | null = '';
   companyLogo: string | null = '';
 
-  //User data
-  // FirstName :any
-  // LastName:string=''
-  // Id:string=''
-  // Phone:number=0
-  // Gender:	string=''
-  // Email:	string=''
-  // DateofBirth:any
-  // addressLine1:string=''
-  // addressLine2:string=''
-  // state:string=''
-  // city:string=''
-  // pin	:number=0
-  // country	:string=''
-  // empJoiningDate :any
-  // empRole	:string=''
-  // empBranch	:string=''
-  // empDepartment	:string=''
-  // empDesignation	:string=''
-  // empFlag:string=''
-
   randomColor: string | undefined;
 
   branchService = inject(BranchService);
@@ -72,7 +51,6 @@ export class HeaderComponent implements OnInit {
 
   }
 
-
   getRandomColor(): string {
     // Generate random RGB values
     const r = Math.floor(Math.random() * 256);
@@ -103,16 +81,15 @@ export class HeaderComponent implements OnInit {
   signOut() {
     this.userDetailService.logoutApp().subscribe(
       (res) => {
-        console.log("successfully logout:", res); 
+        console.log('successfully logout:', res);
         sessionStorage.clear();
         this.route.navigate(['/login']);
       },
       (error) => {
-        console.log("error while logout:", error);
+        console.log('error while logout:', error);
         sessionStorage.clear();
         this.route.navigate(['/login']);
-      }
-    )
-    
+      },
+    );
   }
 }

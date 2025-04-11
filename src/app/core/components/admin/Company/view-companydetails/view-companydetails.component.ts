@@ -17,6 +17,7 @@ export class ViewCompanydetailsComponent {
   updatedCompanyName: string = '';
 
   isViewUploadLogo: boolean = false;
+  isViewPreviewLogo: boolean = false;
 
   branchService = inject(BranchService);
   toastService = inject(ToastService);
@@ -31,6 +32,10 @@ export class ViewCompanydetailsComponent {
 
   isDisabled(): boolean {
     return this.initialCompanyName.trim() === this.updatedCompanyName.trim();
+  }
+
+  onPreview() {
+    this.isViewPreviewLogo = true;
   }
 
   uploadLogo() {
@@ -78,6 +83,10 @@ export class ViewCompanydetailsComponent {
 
   onClose() {
     this.close.emit(true);
+  }
+
+  closePreviewLogo(closeIcon: boolean){
+    this.isViewPreviewLogo = !closeIcon;
   }
 
   closeUploadCompanyLogo(closeIcon: boolean) {

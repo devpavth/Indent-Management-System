@@ -38,22 +38,22 @@ export class AuthService {
     return userRoles.includes('ROLE_INDENT_DETAILS_EDITOR');
   }
 
-  isAuthenticateUser(): boolean{
+  isAuthenticateUser(): boolean {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_USER');
   }
 
-  isAuthenticateProgramManager(): boolean{
+  isAuthenticateProgramManager(): boolean {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_PROGRAM_AUTH');
   }
 
-  isAuthenticateBranchManager(): boolean{
+  isAuthenticateBranchManager(): boolean {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_BRANCH_AUTH');
   }
 
-  isAuthenticateAdmin(){
+  isAuthenticateAdmin() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_ADMIN_AUTH');
   }

@@ -106,7 +106,8 @@ import { RequiredFieldDirective } from './Directives/requiredField/required-fiel
     WarningPrefixComponent,
     AmountInWordsPipe,
     ClickoutsideDropdownDirective,
-    RequiredFieldDirective
+    RequiredFieldDirective,
+    ProfileComponent
   ],
 })
 export class SharedModule {}

@@ -40,6 +40,8 @@ import { CompanyDetailsComponent } from './Company/company-details/company-detai
 import { ViewCompanydetailsComponent } from './Company/view-companydetails/view-companydetails.component';
 import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-companylogo.component';
 import { PrefixComponent } from './prefix/prefix/prefix.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { PreviewCompanylogoComponent } from './Company/preview-companylogo/preview-companylogo.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -79,6 +81,7 @@ import { PrefixComponent } from './prefix/prefix/prefix.component';
     ViewCompanydetailsComponent,
     UploadCompanylogoComponent,
     PrefixComponent,
+    PreviewCompanylogoComponent,
   ],
   imports: [
     CommonModule,
@@ -86,7 +89,8 @@ import { PrefixComponent } from './prefix/prefix/prefix.component';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    ImageCropperModule,
   ],
-  exports: [PrefixComponent]
+  exports: [PrefixComponent],
 })
 export class AdminModule {}
