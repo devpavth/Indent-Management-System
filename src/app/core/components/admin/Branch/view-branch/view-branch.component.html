@@ -43,6 +43,7 @@
               <input
                 type="text"
                 formControlName="branchName"
+                (input)="onNameInput($event)"
                 class="input-form"
                 placeholder="Branch Name"
                 [ngClass]="{
@@ -80,6 +81,7 @@
               <input
                 type="text"
                 formControlName="manager"
+                (input)="onManagerInput($event)"
                 class="input-form"
                 placeholder="Manager Name"
                 [ngClass]="{
@@ -136,6 +138,7 @@
                   #phone
                   class="icon-input"
                   formControlName="branchMobilenumber"
+                  (input)="onPhoneNumberInput($event)"
                   placeholder="123-456-970"
                   [ngClass]="{
                     error:
@@ -175,8 +178,34 @@
                 formControlName="gstNumber"
                 class="input-form"
                 placeholder="Gst"
+                [ngClass]="{
+                  error: 
+                    viewBranchForm.get('gstNumber')?.invalid &&
+                    viewBranchForm.get('gstNumber')?.touched
+                }"
                 required
               />
+
+              <div
+                *ngIf="
+                (viewBranchForm.controls['gstNumber'].invalid &&
+                viewBranchForm.controls['gstNumber'].touched
+                ) || 
+                viewBranchForm.controls['gstNumber'].dirty"
+                >
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['gstNumber'].errors?.['required']"
+                    >
+                    Branch gstNumber is required!
+                  </small>
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['gstNumber'].errors?.['pattern']"
+                    >
+                    GST Pattern is invalid !
+                  </small>
+              </div>
             </div>
           </div>
           <div class="mb-2">
@@ -190,8 +219,47 @@
               class="input-form"
               formControlName="add1"
               placeholder="Flat, House no., Building, Company, Apartment"
+              minlength="10"
+              maxlength="150"
+              (input)="onAddressInput($event, 'add1', 150)"
               required
             />
+            <div
+              *ngIf="
+              (viewBranchForm.controls['add1'].invalid &&
+                viewBranchForm.controls['add1'].touched
+              ) || 
+              viewBranchForm.controls['add1'].dirty"
+              class="flex items-start justify-between"
+              >
+                <div class="text-left">
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add1'].errors?.['required']"
+                    >
+                    Address-1 is Required !
+                  </small>
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add1'].errors?.['minlength']"
+                    >
+                    Address-1 min length required !
+                  </small>
+                  <small
+                   class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add1'].errors?.['maxlength']"
+                    >
+                    Address-1 length out of bound !
+                  </small>
+                </div>
+                <div class="text-right">
+                  <small
+                    class="text-sm text-gray-500"
+                    >
+                    {{viewBranchForm.get('add1')?.value?.length || 0 }} / 150
+                  </small>
+                </div>
+            </div>
           </div>
           <div class="mb-6">
             <input
@@ -199,8 +267,47 @@
               formControlName="add2"
               class="input-form"
               placeholder="Area, Street, Sector, Village"
+              minlength="10"
+              maxlength="100"
+              (input)="onAddressInput($event, 'add2', 100)"
               required
             />
+            <div
+              *ngIf="
+                (viewBranchForm.controls['add2'].invalid &&
+                  viewBranchForm.controls['add2'].touched
+                ) || 
+                viewBranchForm.controls['add2'].dirty"
+              class="flex items-start justify-between"
+             >
+                <div class="text-left">
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add2'].errors?.['required']"
+                    >
+                    Address-2 is Required !
+                  </small>
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add2'].errors?.['minlength']"
+                    >
+                    Address-2 min length required !
+                  </small>
+                  <small
+                    class="ml-2 text-red-600"
+                    *ngIf="viewBranchForm.controls['add2'].errors?.['maxlength']"
+                    >
+                    Address-2 length out of bound !
+                  </small>
+                </div>
+                <div 
+                  class="text-right"
+                  >
+                  <small>
+                    {{ viewBranchForm.get('add2')?.value.length || 0 }} / 100
+                  </small>
+                </div>
+            </div>
           </div>
           <div class="mb-6 grid gap-6 md:grid-cols-2">
             <div>
@@ -214,6 +321,8 @@
                 formControlName="pinCode"
                 class="input-form"
                 placeholder="000 000"
+                minlength="6"
+                maxlength="6"
                 required
               />
               <div
@@ -222,8 +331,25 @@
                   viewBranchForm.get('pinCode')?.value?.toString().length === 6
                 "
                 class="absolute mt-1 text-sm text-red-600"
-              >
+                >
                 <small>No Pincode found.</small>
+              </div>
+              <div
+                *ngIf="viewBranchForm.controls['pinCode'].invalid &&
+                  viewBranchForm.controls['pinCode'].touched"
+                >
+                <small
+                  class="ml-2 text-red-600"
+                  *ngIf="viewBranchForm.controls['pinCode']?.errors?.['required']"
+                  >
+                  Pincode is Required !
+                </small>
+                <small
+                  class="ml-2 text-red-600"
+                  *ngIf="viewBranchForm.controls['pinCode'].errors?.['minlength']"
+                  >
+                  Pincode must have 6 digits !
+                </small>
               </div>
             </div>
 
@@ -233,15 +359,29 @@
                 class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
                 >Town/City</label
               >
-              <select class="input-form" formControlName="city" required>
+              <select class="input-form" formControlName="city" 
+                [ngClass]="{
+                  error:
+                    viewBranchForm.get('city')?.invalid &&
+                    viewBranchForm.get('city')?.touched
+                }"
+                required>
                 <option null selected disabled>Choose Town/City</option>
                 <option
                   *ngFor="let option of cityDropDownOptions"
                   value="{{ option.value }}"
-                >
+                  >
                   {{ option.label }}
                 </option>
               </select>
+              <small
+                *ngIf="
+                viewBranchForm.controls['city'].invalid &&
+                viewBranchForm.controls['city'].touched"
+                class="ml-2 text-red-600"
+                >
+                City is Required !
+              </small>
             </div>
 
             <div>
@@ -255,13 +395,20 @@
                 #statevalue
                 formControlName="state"
                 (change)="fetchCity(statevalue.value)"
+                [ngClass]="{
+                  error: 
+                    viewBranchForm.get('state')?.invalid &&
+                    viewBranchForm.get('state')?.touched
+                }"
                 readonly
               />
-              <!-- <option null selected disabled>Choose State</option>
-                <option *ngFor="let state of _state" value="{{ state.sname }}">
-                  {{ state.sname }}
-                </option> -->
-              <!-- </select> -->
+              <small
+                *ngIf="viewBranchForm.controls['state'].invalid &&
+                  viewBranchForm.controls['state'].touched"
+                  class="ml-2 text-red-600"
+                >
+                State is Required!
+              </small>
             </div>
 
             <div>
@@ -275,11 +422,20 @@
                 #countryvalue
                 formControlName="country"
                 (change)="fetchState(countryvalue.value)"
+                [ngClass]="{
+                  error:
+                    viewBranchForm.get('country')?.invalid &&
+                    viewBranchForm.get('country')?.touched
+                }"
                 readonly
               />
-              <!-- <option null selected disabled>Choose Country</option>
-                <option value="India">India</option> -->
-              <!-- </select> -->
+              <small
+                *ngIf="viewBranchForm.controls['country'].invalid &&
+                  viewBranchForm.controls['country'].touched"
+                  class="ml-2 text-red-600"
+                >
+                Country is Required!
+              </small>
             </div>
           </div>
           <!-- <label

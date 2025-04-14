@@ -40,7 +40,7 @@ export class AddBranchComponent implements OnInit {
       country: [, [Validators.required, Validators.minLength(2)]],
       city: [, [Validators.required, Validators.minLength(2)]],
       state: [, [Validators.required, Validators.minLength(2)]],
-      pinCode: [, [Validators.required, Validators.minLength(2)]],
+      pinCode: [, [Validators.required, Validators.minLength(6)]],
       gstNumber: [
         ,
         [
@@ -68,7 +68,7 @@ export class AddBranchComponent implements OnInit {
           }
           return this.countryStateCity.fetchPincode(pincode).pipe(
             catchError((error) => {
-              if (error.status === 404) {
+              if (error.status === 'Error') {
                 console.log('Pincode API Error:', error);
                 this.noPincode = true;
               }
@@ -84,6 +84,22 @@ export class AddBranchComponent implements OnInit {
         this.pincodeList = postOfficeArray;
         console.log('reponse from pincode:', response);
         console.log('fetching pincode with live search:', this.pincodeList);
+
+        if(response?.[0]?.status === 'Error' &&
+          this.pincodeList.length === 0
+        ){
+          console.log('Pincode API Error:', response?.[0]?.status);
+          this.noPincode = true;
+
+          this.addBranchForm.patchValue(
+            {
+              city: '',
+              state: '',
+              country: '',
+            },
+            { emitEvent: false },
+          );
+        }
 
         if (this.pincodeList.length > 0) {
           const cityDropDownOptions = this.pincodeList.map((address) => ({

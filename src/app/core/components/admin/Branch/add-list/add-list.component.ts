@@ -19,7 +19,9 @@ export class AddListComponent implements OnInit {
   activeLink: any;
 
   route = inject(Router);
-  toastService =  inject(ToastService);
+  toastService = inject(ToastService);
+
+  isSkeletonLoader: boolean = true;
 
   constructor(
     private branchService: BranchService,
@@ -35,6 +37,7 @@ export class AddListComponent implements OnInit {
     this.branchService.getAllProj().subscribe((res: any) => {
       console.log(res);
       this.projectList = res;
+      this.isSkeletonLoader = false;
     });
   }
 
@@ -49,7 +52,6 @@ export class AddListComponent implements OnInit {
 
   showSuccessToast() {
     if (!this.assProjListIds && this.department) {
- 
       this.toastService.showSuccess(
         `Please assign atleast one program to ${this.department} department`,
       );

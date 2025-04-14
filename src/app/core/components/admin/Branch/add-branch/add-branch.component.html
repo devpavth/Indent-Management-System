@@ -321,8 +321,19 @@
                 formControlName="pinCode"
                 class="input-form"
                 placeholder="000 000"
+                minlength="6"
+                maxlength="6"
                 required
               />
+              <div
+                *ngIf="
+                  noPincode &&
+                  addBranchForm.get('pinCode')?.value?.toString().length === 6
+                "
+                class="absolute mt-1 text-sm text-red-600"
+                >
+                <small>No Pincode found.</small>
+              </div>
               <div
                 *ngIf="
                   addBranchForm.controls['pinCode'].invalid &&
@@ -339,7 +350,8 @@
                   *ngIf="
                     addBranchForm.controls['pinCode'].errors?.['minlength']
                   "
-                  >Pincode is min length required !
+                  >
+                  Pincode must have 6 digits !
                 </small>
               </div>
             </div>
