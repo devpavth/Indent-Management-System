@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, input, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  Input,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { Employeedetails } from '../../../models/employee/employeedetails.model';
@@ -200,10 +207,10 @@ export class EditIndentRequestComponent {
         unitPriceList.map((price, index) => {
           this.originalUnitPrice = price;
           this.originalQty = qtyList[index];
-          
-          console.log("originalQty:", this.originalQty);
+
+          console.log('originalQty:', this.originalQty);
           console.log('originalPrice:', this.originalUnitPrice);
-        })
+        });
 
         this.liveCalulationForDeletion();
 
@@ -264,6 +271,7 @@ export class EditIndentRequestComponent {
     this.toastService.showSuccess('Header Added Successfully');
 
     this.headerData = headerData;
+    this.isEnableSaveBtn = true;
   }
 
   onEditHeader() {
@@ -283,9 +291,10 @@ export class EditIndentRequestComponent {
     this.productData = [product];
 
     const duplicateProducts = this.productList.find(
-      (prd) => prd.productId === product.productId);
+      (prd) => prd.productId === product.productId,
+    );
 
-    if(duplicateProducts){
+    if (duplicateProducts) {
       this.toastService.showError('Product Already Exists in the Cart');
       this.isProductSelected = false;
       this.productData = [];
@@ -380,7 +389,7 @@ export class EditIndentRequestComponent {
 
     console.log('qty:', qtyList);
 
-    const gstResults = qtyList.map((qty, index) => {    
+    const gstResults = qtyList.map((qty, index) => {
       return this.sharedService.gstCalculation(
         qty,
         unitPriceList[index],
@@ -417,20 +426,23 @@ export class EditIndentRequestComponent {
     const inputElement = event.target as HTMLInputElement;
     const inputValue = Number(inputElement.value);
 
-    console.log("inputvalue", inputValue);
-    console.log("existing price:", this.productList[index].unitPrice);
-    console.log("check index id:", this.productList[index].id);
+    console.log('inputvalue', inputValue);
+    console.log('existing price:', this.productList[index].unitPrice);
+    console.log('check index id:', this.productList[index].id);
 
-    if(inputValue <= 0 || isNaN(inputValue)){
+    if (inputValue <= 0 || isNaN(inputValue)) {
       inputElement.value = '';
       this.isEnableSaveBtn = false;
       return;
     }
 
-    if(inputValue === this.originalUnitPrice || this.productList[index].id === 0){
+    if (
+      inputValue === this.originalUnitPrice ||
+      this.productList[index].id === 0
+    ) {
       this.productList[index].status = 200;
       this.isEnableSaveBtn = false;
-    }else{
+    } else {
       this.productList[index].status = 301;
       this.isEnableSaveBtn = true;
     }
@@ -450,7 +462,7 @@ export class EditIndentRequestComponent {
     const inputElemet = event.target as HTMLInputElement;
     const inputValue = Number(inputElemet.value);
 
-    console.log("inputValue:", inputValue);
+    console.log('inputValue:', inputValue);
 
     if (inputValue <= 0 || isNaN(inputValue)) {
       inputElemet.value = '';
@@ -458,12 +470,12 @@ export class EditIndentRequestComponent {
       return;
     }
 
-    console.log("inputValue after:", inputValue);
+    console.log('inputValue after:', inputValue);
 
-    if(inputValue === this.originalQty || this.productList[index].id === 0){
+    if (inputValue === this.originalQty || this.productList[index].id === 0) {
       this.productList[index].status = 200;
       this.isEnableSaveBtn = false;
-    }else{
+    } else {
       this.productList[index].status = 301;
       this.isEnableSaveBtn = true;
     }
@@ -480,24 +492,28 @@ export class EditIndentRequestComponent {
   }
 
   editIndentProduct(index: number, product: any) {
-    if(this.isEditIndentPrdIndex !== null){
+    if (this.isEditIndentPrdIndex !== null) {
       const activeProduct = this.productList[this.isEditIndentPrdIndex];
-      if(!activeProduct.qty || activeProduct.qty <= 0 || 
-        !activeProduct.unitPrice || activeProduct.unitPrice <= 0){
+      if (
+        !activeProduct.qty ||
+        activeProduct.qty <= 0 ||
+        !activeProduct.unitPrice ||
+        activeProduct.unitPrice <= 0
+      ) {
         return;
       }
     }
 
     this.isEditIndentPrdIndex = index;
 
-    console.log("originalPrice:", this.originalUnitPrice);
+    console.log('originalPrice:', this.originalUnitPrice);
     console.log('originalQty:', this.originalQty);
 
     console.log('productList in edit product:', this.productList);
     console.log('after edit indentProductForm:', this.indentProductForm.value);
   }
 
-  resetEditIndentIndex(index: number, event: Event): void{
+  resetEditIndentIndex(index: number, event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const inputValue = Number(inputElement.value);
 
@@ -506,7 +522,6 @@ export class EditIndentRequestComponent {
     } else {
       this.isEditIndentPrdIndex = null;
     }
-    
   }
 
   toggledelete(check: number, isView: boolean, index: number, product: any) {
@@ -541,7 +556,10 @@ export class EditIndentRequestComponent {
 
     this.isEnableSaveBtn = true;
 
-    console.log('current product status in productList:', this.productList[index].status);
+    console.log(
+      'current product status in productList:',
+      this.productList[index].status,
+    );
 
     if (
       this.productList[index].id === 0 &&

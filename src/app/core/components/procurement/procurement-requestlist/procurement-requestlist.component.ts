@@ -30,7 +30,11 @@ export class ProcurementRequestlistComponent {
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
-          this.viewRequest(event as Event , this.requestList?.sno, this.requestList?.requestNo);
+          this.viewRequest(
+            event as Event,
+            this.requestList?.sno,
+            this.requestList?.requestNo,
+          );
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -61,7 +65,6 @@ export class ProcurementRequestlistComponent {
   isAcceptedView: boolean = false;
   isViewQuoteCompare: boolean = false;
   isViewConsolidatedQuote: boolean = false;
-  isViewPurchaseOrder: boolean = false;
   userRequest: any;
   selectedRequestId: number | undefined;
   tooltipSno: number | null = null;
@@ -136,11 +139,13 @@ export class ProcurementRequestlistComponent {
         },
       );
     }
-    
-    
   }
 
-  viewRequest(event: Event, data: number | undefined, indentNO: string | undefined) {
+  viewRequest(
+    event: Event,
+    data: number | undefined,
+    indentNO: string | undefined,
+  ) {
     event.stopPropagation();
     console.log(data);
     this.reqId = data;
@@ -231,21 +236,6 @@ export class ProcurementRequestlistComponent {
     }
   }
 
-  openPurchaseOrderReport(sno: number) {
-    this.reqId = sno;
-    if (this.isCompleted === true) {
-      this.isViewPurchaseOrder = true;
-    }
-  }
-
-  showTooltipForFewSec(sno: number) {
-    this.tooltipSno = sno;
-
-    setTimeout(() => {
-      this.tooltipSno = null;
-    }, 3000);
-  }
-
   handleFocus(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
@@ -275,7 +265,6 @@ export class ProcurementRequestlistComponent {
     // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
     this.isViewConsolidatedQuote = data;
-    this.isViewPurchaseOrder = data;
     this.fetchRequestList();
   }
 }

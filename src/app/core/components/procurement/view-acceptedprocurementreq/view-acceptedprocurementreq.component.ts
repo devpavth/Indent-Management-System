@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
@@ -31,6 +40,9 @@ export class ViewAcceptedprocurementreqComponent {
     | undefined;
 
   isLoading: boolean = false;
+  isViewPurchaseOrder: boolean = false;
+
+  tooltipSno: number | null = null;
   pdfURL: SafeResourceUrl | null = null;
 
   ngOnInit() {
@@ -53,26 +65,6 @@ export class ViewAcceptedprocurementreqComponent {
         ];
 
         console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
-
-        this.uniqueProductHeadData.unshift({
-          headOfAccId: 0,
-          headOfAccName: 'All',
-          id: 0,
-          itemTotalPrice: 0,
-          prdCode: '',
-          prdDescription: '',
-          prdGstPct: 0,
-          prdHsnCode: 0,
-          prdStatus: 0,
-          prdUnit: 0,
-          prdbrndName: '',
-          prdcatgName: '',
-          prdgrpName: '',
-          prdmdlName: '',
-          productId: 0,
-          qty: 0,
-          unitPrice: 0,
-        });
 
         console.log(
           'this.uniqueProductHeadData after all:',
@@ -132,35 +124,27 @@ export class ViewAcceptedprocurementreqComponent {
           this.isLoading = false;
         },
       );
-    // this.requestService.fetchQuoteComparison(this.reqId, headOfAccId).subscribe(
-    //   (res: QuoteComparison) => {
-    //     console.log('fetching quote data based on headofaccid:', res);
-    //     this.indentQuoteComparison = res;
-    //     console.log(
-    //       'this.indentQuoteComparison:',
-    //       this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
-    //         (vendor) => vendor.assgndVendorData.vendorName,
-    //       ),
-    //     );
-    //     this.selectedVendorname =
-    //       this.indentQuoteComparison.qcHeadOfAcc[0].qcVendors.map(
-    //         (vendor) => vendor.assgndVendorData.vendorName,
-    //       );
-
-    //     this.leastQuotedVendorData = this.getLeastQuotedVendorData(headOfAccId);
-
-    //     console.log('leastQuotedVendorData:', this.leastQuotedVendorData);
-    //   },
-    //   (error) => {
-    //     console.log('error while fetching quote data:', error);
-    //   },
-    // );
 
     this.filterProductHeadData = this.productHeadData.filter(
       (pro: indentProductList) => pro.headOfAccId === headOfAccId,
     );
 
     console.log('this.filterProductHeadData:', this.filterProductHeadData);
+  }
+
+  viewPurchaseOrderReport() {
+    const indentStatus = this._requestDetails().indentHeaders.requestStatus;
+    if (indentStatus === 100) {
+      this.isViewPurchaseOrder = true;
+    }
+  }
+
+  showTooltipForFewSec(sno: number){
+    this.tooltipSno = sno;
+  }
+
+  refresh(closeIcon: boolean) {
+    this.isViewPurchaseOrder = closeIcon;
   }
 
   getAllQuotedPrices() {
