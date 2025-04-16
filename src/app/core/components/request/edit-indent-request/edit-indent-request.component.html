@@ -131,6 +131,7 @@
                         class="input-form"
                         [min]="currentDate"
                         required
+                        onkeydown="return false"
                       />
                     </div>
 
@@ -188,7 +189,7 @@
                         </option>
                         <option
                           *ngFor="let dept of departmentList"
-                          value="{{ dept.departId }}"
+                          [value]="dept.departId"
                         >
                           {{ dept.deptName }}
                         </option>
@@ -216,7 +217,7 @@
                         </option>
                         <option
                           *ngFor="let program of programList"
-                          value="{{ program.programId }}"
+                          [value]="program.programId"
                         >
                           {{ program.proName }}
                         </option>
@@ -310,6 +311,10 @@
                 <div class="flex w-full justify-end">
                   <button
                     *ngIf="isEditHeader"
+                    [disabled]="editRequestForm.invalid || !isEnableAddHeader"
+                    [ngClass]="{
+                      'btn-disable': editRequestForm.invalid || !isEnableAddHeader
+                    }"
                     (click)="onSubmitHeader(editRequestForm.value)"
                     class="btn-primary col-span-8 mx-12 mb-4"
                   >

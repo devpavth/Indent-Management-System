@@ -54,6 +54,7 @@ export class EditIndentRequestComponent {
   isDelete: boolean = false;
   loading: boolean = true;
   isEnableSaveBtn: boolean = false;
+  isEnableAddHeader: boolean = false;
 
   subtotal: number = 0;
   tax: number = 0;
@@ -88,12 +89,12 @@ export class EditIndentRequestComponent {
 
   constructor(private fb: FormBuilder) {
     this.editRequestForm = this.fb.group({
-      deptId: [Validators.required],
-      programId: [Validators.required],
+      deptId: [null, Validators.required],
+      programId: [null, Validators.required],
       campName: ['', Validators.required],
       priorityType: [Validators.required],
       requiredDate: ['', Validators.required],
-      expenditureId: [Validators.required],
+      expenditureId: [null, Validators.required],
       requisitioner: ['', Validators.required],
       totalPrice: [],
       notes: [''],
@@ -256,6 +257,15 @@ export class EditIndentRequestComponent {
       (res: any) => {
         console.log('fetching program details:', res);
         this.programList = res.departProgram;
+
+        if(this.programList.length > 0){
+          this.editRequestForm.get('programId')?.setValue(this.programList[0].programId);
+          this.isEnableAddHeader = true;
+        }
+
+        if(this.programList.length === 0){
+          this.isEnableAddHeader = false;
+        }
       },
       (error) => {
         console.log('error while fetching program details:', error);
@@ -271,7 +281,7 @@ export class EditIndentRequestComponent {
     this.toastService.showSuccess('Header Added Successfully');
 
     this.headerData = headerData;
-    this.isEnableSaveBtn = true;
+    // this.isEnableSaveBtn = true;
   }
 
   onEditHeader() {

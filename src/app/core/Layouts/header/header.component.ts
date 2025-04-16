@@ -48,7 +48,6 @@ export class HeaderComponent implements OnInit {
     console.log('this.companyName in header:', this.companyName);
 
     this.companyLogo = sessionStorage.getItem('companyLogo');
-
   }
 
   getRandomColor(): string {

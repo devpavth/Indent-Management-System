@@ -140,100 +140,104 @@ export class ProductListComponent implements OnInit {
         ? this.productService.getAllProduct(offSet, pageSize)
         : this.productService.fetchOtherProductDetails();
 
-    productServiceCall.subscribe((res: any) => {
-      console.log(`Fetching ${productType} product details:`, res);
+    productServiceCall.subscribe(
+      (res: any) => {
+        console.log(`Fetching ${productType} product details:`, res);
 
-      if (productType === 'active') {
-        this.activeProductList = res;
-        // this.productList = this.activeProductList;
-        this.isActiveProductView = true;
-        this.isOtherProductView = false;
+        if (productType === 'active') {
+          this.activeProductList = res;
+          // this.productList = this.activeProductList;
+          this.isActiveProductView = true;
+          this.isOtherProductView = false;
 
-        this.isShowPagination = true;
-      } else {
-        this.otherProductList = res;
-        // this.productList = this.otherProductList;
-        this.isOtherProductView = true;
-        this.isActiveProductView = false;
+          this.isShowPagination = true;
+        } else {
+          this.otherProductList = res;
+          // this.productList = this.otherProductList;
+          this.isOtherProductView = true;
+          this.isActiveProductView = false;
 
-        this.isShowPagination = false;
-      }
-
-      this.activeProduct = productType;
-
-      // this.list = res;
-      const currentList =
-        productType === 'active'
-          ? this.activeProductList
-          : this.otherProductList;
-
-      this.listLength = currentList.length;
-      console.log('this.listLength:', this.listLength);
-
-      // this.isActiveProductView = productType === 'active';
-      // this.isOtherProductView = productType === 'other';
-
-      let list: any[] = res;
-      console.log('list:', list);
-      this.otherPrdLen =
-        this.otherProductList.filter((m) => m.prdStatus == 303).length || 0;
-      console.log('this.otherPrdLen:', this.otherPrdLen);
-
-      // this.Spinner = false;
-      const totalItems = list.length;
-
-      console.log('Active product:', this.activeProduct);
-      // const startIndex = offSet * pageSize;
-      // const endIndex = Math.min(startIndex + pageSize, totalItems);
-      console.log('startIndex:', startIndex, 'endIndex:', endIndex);
-
-      const filteredList = list.filter((m) => m.prdStatus === 200);
-      console.log('Filtered active products:', filteredList);
-
-      console.log('totalItems:', totalItems);
-
-      switch (this.activeProduct) {
-        case 'active': {
-          console.log('this.activeProduct inside switch:', this.activeProduct);
-          this.productList = list;
-
-          console.log('list indise switch:', list);
-          console.log('product list:', this.productList);
-          break;
+          this.isShowPagination = false;
         }
-        case 'other': {
-          this.productList = list;
 
-          console.log('Hello');
-          break;
+        this.activeProduct = productType;
+
+        // this.list = res;
+        const currentList =
+          productType === 'active'
+            ? this.activeProductList
+            : this.otherProductList;
+
+        this.listLength = currentList.length;
+        console.log('this.listLength:', this.listLength);
+
+        // this.isActiveProductView = productType === 'active';
+        // this.isOtherProductView = productType === 'other';
+
+        let list: any[] = res;
+        console.log('list:', list);
+        this.otherPrdLen =
+          this.otherProductList.filter((m) => m.prdStatus == 303).length || 0;
+        console.log('this.otherPrdLen:', this.otherPrdLen);
+
+        // this.Spinner = false;
+        const totalItems = list.length;
+
+        console.log('Active product:', this.activeProduct);
+        // const startIndex = offSet * pageSize;
+        // const endIndex = Math.min(startIndex + pageSize, totalItems);
+        console.log('startIndex:', startIndex, 'endIndex:', endIndex);
+
+        const filteredList = list.filter((m) => m.prdStatus === 200);
+        console.log('Filtered active products:', filteredList);
+
+        console.log('totalItems:', totalItems);
+
+        switch (this.activeProduct) {
+          case 'active': {
+            console.log(
+              'this.activeProduct inside switch:',
+              this.activeProduct,
+            );
+            this.productList = list;
+
+            console.log('list indise switch:', list);
+            console.log('product list:', this.productList);
+            break;
+          }
+          case 'other': {
+            this.productList = list;
+
+            console.log('Hello');
+            break;
+          }
         }
-      }
 
-      this.noProduct = false;
-      this.isSkeletonLoader = false;
+        this.noProduct = false;
+        this.isSkeletonLoader = false;
 
-      console.log('Current product list:', this.productList);
-      console.log(
-        'listLength:',
-        this.listLength,
-        'offSet:',
-        this.offSet,
-        'pageSize:',
-        this.pageSize,
-      );
-    },
-    (error: any) => {
+        console.log('Current product list:', this.productList);
+        console.log(
+          'listLength:',
+          this.listLength,
+          'offSet:',
+          this.offSet,
+          'pageSize:',
+          this.pageSize,
+        );
+      },
+      (error: any) => {
         console.log(error);
         this.isSkeletonLoader = false;
 
         this.activeProduct = productType;
 
-        if(productType === 'other'){
+        if (productType === 'other') {
           this.isOtherProductView = true;
           this.isActiveProductView = false;
 
           this.productList = [];
-        }else{
+        } else {
           this.isOtherProductView = false;
           this.isActiveProductView = true;
 
@@ -242,10 +246,8 @@ export class ProductListComponent implements OnInit {
 
         this.noProduct = true;
         this.listLength = 0;
-
-      }
-    )
-      
+      },
+    );
   }
 
   onProductDeleted(productId: number) {
@@ -310,7 +312,15 @@ export class ProductListComponent implements OnInit {
     }
     if (check == 0) {
       this.isProductList = action;
-      this.fetchProductList(this.offSet, this.pageSize, 'active');
+
+      if(this.productData.prdStatus === 200){
+        // console.log("prdStatus:", this.productData.prdStatus);
+        this.fetchProductList(this.offSet, this.pageSize, 'active');
+      }else if(this.productData.prdStatus === 303){
+        // console.log('prdStatus:', this.productData.prdStatus);
+        this.fetchProductList(this.offSet, this.pageSize, 'other');
+      }
+      
     }
   }
 }

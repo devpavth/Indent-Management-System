@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -8,6 +15,7 @@ import {
 import { ProductService } from '../../../service/Product/product.service';
 import { AdminProductServiceService } from '../../admin-services/admin-product-service.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../service/toast/toast.service';
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
@@ -31,13 +39,8 @@ export class ViewProductComponent implements OnInit {
   isStockView: boolean = false;
   deleteProduct: any;
 
-  isToast: boolean = false;
-  deleteToastMsg: any;
-
-  isDeleteToast: boolean = false;
-  errorToastMsg: any;
-
   router = inject(Router);
+  toastService = inject(ToastService);
 
   groupList: any;
   catList: any;
@@ -159,7 +162,7 @@ export class ViewProductComponent implements OnInit {
     this.fetchCatList(id);
   }
 
-  addedGroup(){
+  addedGroup() {
     this.fetchGroupList();
   }
 
@@ -173,7 +176,7 @@ export class ViewProductComponent implements OnInit {
       };
       console.log('this.deleteProduct:', this.deleteProduct);
 
-      this.productDeleted.emit(this.deleteProduct.deleteId);    
+      this.productDeleted.emit(this.deleteProduct.deleteId);
       console.log('this.deleteProduct.deletedId:', this.deleteProduct.deleteId);
     } else if (check == 0) {
       this.isDelete = isView;
@@ -201,10 +204,8 @@ export class ViewProductComponent implements OnInit {
             console.log('successfully updated the active product:', res);
             this.loading = false;
 
-            this.isToast = true;
-            this.deleteToastMsg = res.error;
+            this.toastService.showSuccess(res.error);
             setTimeout(() => {
-              this.isToast = false;
               this.closeProduct.emit(false);
             }, 3000);
           },
@@ -222,11 +223,9 @@ export class ViewProductComponent implements OnInit {
             console.log('successfully updated the other product data:', res);
             this.loading = false;
             this.productUpdated.emit(this.productData.productId);
-            this.isToast = true;
-            this.deleteToastMsg = res.error;
 
+            this.toastService.showSuccess(res.error);
             setTimeout(() => {
-              this.isToast = false;
               this.closeProduct.emit(false);
             }, 3000);
           },
@@ -234,13 +233,20 @@ export class ViewProductComponent implements OnInit {
             console.log('error while updating the other product data:', error);
             this.loading = false;
             if (error.status === 500) {
-              this.isDeleteToast = true;
-              this.errorToastMsg = 'This product might be already updated';
+              this.toastService.showError(
+                'This product might be already updated',
+              );
 
               setTimeout(() => {
-                this.isDeleteToast = false;
                 this.closeProduct.emit(false);
               }, 3000);
+            }
+
+            if (error.status === 400) {
+              this.toastService.showError(error.error);
+              // error.error.forEach((errMsg: string) => {
+              //   this.toastService.showError(errMsg);
+              // });
             }
           },
         );

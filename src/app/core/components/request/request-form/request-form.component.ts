@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProductService } from '../../service/Product/product.service';
 import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
@@ -108,15 +108,15 @@ export class RequestFormComponent implements OnInit {
     private branchService: BranchService,
   ) {
     this.requestIndentHead = this.fb.group({
-      priorityType: [],
+      priorityType: [Validators.required],
       branchCode: [this.employeeData?.branchCode],
-      deptId: [''],
-      programId: [''],
-      campName: [],
+      deptId: [null, Validators.required],
+      programId: [null, Validators.required],
+      campName: ['', Validators.required],
 
-      requiredDate: [],
-      expenditureId: [],
-      requisitioner: [],
+      requiredDate: ['', Validators.required],
+      expenditureId: [null, Validators.required],
+      requisitioner: ['', Validators.required],
       notes: [],
     });
 
@@ -684,6 +684,10 @@ export class RequestFormComponent implements OnInit {
             error.error,
           );
           alert(error.error);
+        }
+
+        if(error.status === 400){
+          this.toastService.showError(error.error);
         }
       },
     );

@@ -29,7 +29,7 @@
               height="24"
               fill="none"
               viewBox="0 0 24 24"
-            >
+              >
               <path
                 class=""
                 stroke="currentColor"
@@ -393,8 +393,7 @@
               [disabled]="productData.prdStatus === 200"
               class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
               placeholder="Write product description here"
-              [maxlength]="500"
-              appFirstCapLetter
+              maxlength="480"
               [ngClass]="{
                 'pointer-events-none': productData.prdStatus === 200,
                 error:
@@ -403,15 +402,26 @@
               }"
               required
             ></textarea>
-            <small
-              *ngIf="
-                UpdateProductForm?.get('prdDescription')?.invalid &&
-                UpdateProductForm?.get('prdDescription')?.touched
-              "
-              class="text-danger text-red-600"
-            >
-              Description Required!
-            </small>
+            <div class="flex items-start justify-between"> 
+              <div class="text-left">                
+                <small
+                  *ngIf="
+                    UpdateProductForm?.get('prdDescription')?.invalid &&
+                    UpdateProductForm?.get('prdDescription')?.touched
+                  "
+                  class="text-danger text-red-600"
+                >
+                  Description Required!
+                </small>
+              </div>
+              <div class="text-right">  
+                <small
+                  class="text-sm text-gray-400"
+                  >
+                  {{ UpdateProductForm.get('prdDescription')?.value.length || 0 }} / 500
+                </small>
+              </div>
+            </div>
           </div>
           <div class="col-span-3">
             <label
@@ -521,7 +531,9 @@
 
               <span *ngIf="!loading">Save</span>
               <span *ngIf="loading" class="flex items-center gap-2">
-                <span class="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span
+                  class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+                ></span>
                 <span>Saving...</span>
               </span>
             </button>
@@ -531,7 +543,7 @@
             (click)="toggledelete(1, true)"
             type="submit"
             class="inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white transition-all duration-500 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-            >
+          >
             <svg
               class="mr-1 h-5 w-5 text-white"
               aria-hidden="true"
@@ -565,14 +577,14 @@
   ></app-delete>
 </section>
 <section
-  *ngIf="isToast"
+  *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="deleteToastMsg"></app-success-toast>
+  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
 </section>
 <section
-  *ngIf="isDeleteToast"
+  *ngIf="toastService.isErrorToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>

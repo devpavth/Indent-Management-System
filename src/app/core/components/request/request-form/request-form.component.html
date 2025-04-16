@@ -147,6 +147,7 @@
                 class="input-form"
                 [min]="currentDate"
                 required
+                onkeydown="return false"
               />
             </div>
 
@@ -239,6 +240,7 @@
                 formControlName="campName"
                 type="text"
                 class="input-form"
+                maxlength="50"
                 required
               />
             </div>
@@ -300,6 +302,7 @@
                 formControlName="notes"
                 class="input-form"
                 placeholder="Remark note"
+                maxlength="100"
               ></textarea>
             </div>
           </section>

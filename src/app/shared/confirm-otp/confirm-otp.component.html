@@ -2,13 +2,12 @@
   class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center overflow-y-auto overflow-x-hidden bg-black bg-opacity-50 backdrop-blur-sm"
 >
   <div class="relative h-full w-full max-w-md p-4 md:h-auto">
-    
     <div
       class="animate__animated animate__bounceIn animate__faster relative rounded-lg bg-white p-4 text-center shadow dark:bg-gray-800 sm:p-5"
-    >   
-    <button routerLink="/home/request">
+    >
+      <button routerLink="/home/request">
         <svg
-          class="absolute top-4 right-4 z-30 p-1 w-8 rounded-lg text-gray-600 hover:bg-red-600 hover:text-white transition-all duration-500 dark:text-white"
+          class="absolute right-4 top-4 z-30 w-8 rounded-lg p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -45,7 +44,7 @@
         <span class="sr-only">Success</span>
       </div>
       <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        Send an OTP to this number: {{number}}
+        Send an OTP to this number: {{ number }}
       </p>
       <button
         (click)="fetchConfirmationOtp()"
@@ -60,9 +59,9 @@
 
 <div
   *ngIf="isSendOtp"
-  class="fixed z-50 top-0 left-0 flex h-screen w-full items-center justify-center bg-black/50"
->   
-    <!-- <p>OTP is send</p> -->
+  class="fixed left-0 top-0 z-50 flex h-screen w-full items-center justify-center bg-black/50"
+>
+  <!-- <p>OTP is send</p> -->
   <app-otp></app-otp>
 </div>
 
@@ -73,4 +72,3 @@
     <p>Failed to send OTP</p>
   <app-otp></app-otp>
 </div> -->
-

@@ -4,30 +4,31 @@ import { RequestService } from '../../core/components/service/Request/request.se
 @Component({
   selector: 'app-confirm-branch-details',
   templateUrl: './confirm-branch-details.component.html',
-  styleUrl: './confirm-branch-details.component.css'
+  styleUrl: './confirm-branch-details.component.css',
 })
 export class ConfirmBranchDetailsComponent {
-
   branchDetails: any;
   isConfirm = false;
 
-  constructor(private requestService: RequestService,){
-  }
+  constructor(private requestService: RequestService) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.fetchBranchDetails();
   }
 
-  fetchBranchDetails(){
-    this.requestService.getBranchDetails().subscribe((res) =>{
-      this.branchDetails = Array.isArray(res) ? res : [res];
-      console.log("Response from branchDetailsApi:", res);
-    },(error)=>{
-      console.error("Error fetching branch details:", error);
-    })
+  fetchBranchDetails() {
+    this.requestService.getBranchDetails().subscribe(
+      (res) => {
+        this.branchDetails = Array.isArray(res) ? res : [res];
+        console.log('Response from branchDetailsApi:', res);
+      },
+      (error) => {
+        console.error('Error fetching branch details:', error);
+      },
+    );
   }
 
-  confirmBranchDetailsBtn(){
+  confirmBranchDetailsBtn() {
     // console.log("logging:", this.branchDetails[0].branchMobileNumber);
     this.isConfirm = true;
   }
