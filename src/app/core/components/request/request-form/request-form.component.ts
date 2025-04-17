@@ -81,7 +81,8 @@ export class RequestFormComponent implements OnInit {
   storeProductData: Product[] = [];
   isVendorView: boolean = true;
 
-  isEnableSave: boolean = true;
+  isEnableSave: boolean = false;
+  isEnableSaveBtn: boolean = false;
   storeTotal: number = 0;
 
   user: any;
@@ -407,13 +408,9 @@ export class RequestFormComponent implements OnInit {
     });
 
     this.toastService.showSuccess('Header Added Successfully');
-    // this.deleteToastMsg = 'Header Added Successfully';
-    // this.isTost = true;
-    // setTimeout(() => {
-    //   this.isTost = false;
-    // }, 3000);
     this.headerData = data;
     console.log(data);
+    this.isEnableSaveBtn = true;
   }
 
   onEditHeader() {
@@ -439,6 +436,19 @@ export class RequestFormComponent implements OnInit {
       headOfAccId: product.headOfAccId,
       headOfAccName: product.headOfAccName,
     });
+  }
+
+  allowOnlyDigits(event: KeyboardEvent){
+    const charCode = event.which ? event.which : event.keyCode;
+
+    if(charCode < 48 || charCode > 57){
+      event.preventDefault();
+    }
+
+    const input = event.target as HTMLInputElement;
+    if(input.value.length >= 9){
+      event.preventDefault();
+    }
   }
 
   addProductToList(product: any) {
@@ -494,6 +504,7 @@ export class RequestFormComponent implements OnInit {
     // this.isVendorView = this.checkVendorView();
     // console.log("Updated isVendorView:", this.isVendorView);
 
+    this.isEnableSave = true;
     this.productData = '';
     this.calculateSums();
     this.productForm.reset();

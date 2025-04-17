@@ -81,6 +81,16 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  onEnterKey(event: Event){
+    const keyboardEvent = event as KeyboardEvent;
+    const passwordControl = this.loginForm.get('empPassword');
+    if(!passwordControl || !passwordControl.value){
+      keyboardEvent.preventDefault();
+    }else if(this.loginForm.valid){
+      this.login(this.loginForm.value);
+    }
+  }
+
   login(loginData: any) {
     console.log('login data', loginData);
 
@@ -221,7 +231,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('access_token', this.newToken.access_token);
         console.log(this.newToken.access_token);
         sessionStorage.setItem('refresh_token', this.newToken.refresh_token);
-        console.log("new refresh token:", this.newToken.refresh_token);
+        console.log('new refresh token:', this.newToken.refresh_token);
       },
       (error) => {
         console.log('error while fetching new access token:', error);

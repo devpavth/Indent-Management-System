@@ -26,7 +26,7 @@
       <div
         *ngIf="loading"
         class="absolute inset-0 mt-2 flex items-center justify-center bg-opacity-70"
-      >
+        >
         <div
           class="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
         ></div>
@@ -353,13 +353,15 @@
                   <div class="relative col-span-8 mb-3">
                     <label
                       for="Search Product"
-                      class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                      class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
                       >Search Product
                     </label>
                     <input
                       type="text"
                       formControlName="productId"
                       class="input-form"
+                      appRequiredField
+                      required
                     />
 
                     <div
@@ -495,7 +497,9 @@
                     <input
                       formControlName="unitPrice"
                       type="number"
+                      maxlength="9"
                       class="input-rose"
+                      (keypress)="allowOnlyDigits($event)"
                       required
                     />
                   </div>

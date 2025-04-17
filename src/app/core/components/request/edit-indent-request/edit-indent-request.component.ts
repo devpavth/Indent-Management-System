@@ -258,12 +258,14 @@ export class EditIndentRequestComponent {
         console.log('fetching program details:', res);
         this.programList = res.departProgram;
 
-        if(this.programList.length > 0){
-          this.editRequestForm.get('programId')?.setValue(this.programList[0].programId);
+        if (this.programList.length > 0) {
+          this.editRequestForm
+            .get('programId')
+            ?.setValue(this.programList[0].programId);
           this.isEnableAddHeader = true;
         }
 
-        if(this.programList.length === 0){
+        if (this.programList.length === 0) {
           this.isEnableAddHeader = false;
         }
       },
@@ -327,6 +329,19 @@ export class EditIndentRequestComponent {
     });
 
     this.storeProductData = [];
+  }
+
+  allowOnlyDigits(event: KeyboardEvent){
+    const charCode = event.which ? event.which : event.keyCode;
+
+    if(charCode < 48 && charCode > 57){
+      event.preventDefault();
+    }
+
+    const input = event.target as HTMLInputElement;
+    if(input.value.length >= 9){
+      event.preventDefault();
+    }
   }
 
   onChanges() {

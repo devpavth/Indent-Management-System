@@ -1,24 +1,23 @@
-<div class="bg-white rounded-md shadow-md">
+<div class="rounded-md bg-white shadow-md">
   <h1 class="mb-4 pt-5 text-center text-xl font-bold text-purple-600">
     Quote Comparison Sheet
   </h1>
 
   <!-- <div class="flex flex-col items-start mt-4"> -->
-    <label class="ml-4 -mb-4 text-lg font-semibold text-purple-600"
-      >Indent Id:</label
-    >
-    <input
-      type="text"
-      class="m-4 rounded-lg pointer-events-none border-none text-start -mb-1 text-lg font-semibold focus:border-none"
-      [value]="requestData?.requestNo"
-      readonly
-    />
+  <label class="-mb-4 ml-4 text-lg font-semibold text-purple-600"
+    >Indent ID:</label
+  >
+  <input
+    type="text"
+    class="pointer-events-none m-4 -mb-1 rounded-lg border-none text-start text-lg font-semibold focus:border-none"
+    [value]="requestData?.requestNo"
+    readonly
+  />
   <!-- </div> -->
-  
 
   <div
-    class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"    
-    >
+    class="flex flex-row items-center space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0"
+  >
     <div class="w-full md:w-1/2">
       <form class="flex items-center" [formGroup]="comparisonQuoteForm">
         <label for="simple-search" class="sr-only">Search</label>
@@ -29,22 +28,25 @@
               let headIndex = index
             "
             [formGroupName]="headIndex"
-            >
-
+          >
             <div class="flex flex-col">
-              <label class="text-lg font-semibold mb-2 text-purple-600"
+              <label class="mb-2 text-lg font-semibold text-purple-600"
                 >Head of Account:</label
               >
               <select
-                class="w-96 rounded-lg border mb-2 border-gray-500"
+                class="mb-2 w-96 rounded-lg border border-gray-500"
                 (change)="selectedHeadOfAcc($event)"
                 formControlName="headOfAccId"
                 [value]="currentHeadOfAccId"
-              >
-                <option 
-                  value="" selected disabled
-                  class="bg-gray-400 text-white"
-                  >Choose Head of Account</option>
+                >
+                <option
+                  value=""
+                  selected
+                  disabled
+                  class="bg-gray-300 text-white"
+                >
+                  Choose Head of Account
+                </option>
                 <option
                   *ngFor="let head of uniqueProductHeadData"
                   [value]="head.headOfAccId"
@@ -53,17 +55,17 @@
                 </option>
               </select>
             </div>
-            <h3 class="mb-4 mt-2 text-lg font-semibold text-purple-600" *ngIf="pdfSrc.length !== 3">
+            <h3
+              class="mb-4 mt-2 text-lg font-semibold text-purple-600"
+              *ngIf="pdfSrc.length !== 3"
+            >
               Search Vendor to Upload the Quote
             </h3>
             <div formArrayName="qcVendors" *ngIf="pdfSrc.length !== 3">
-              <div
-                
-                class="flex flex-row gap-4"
-                >
+              <div class="flex flex-row gap-4">
                 <div
-                  class="pointer-events-none absolute mt-[140px] inset-y-0 left-0 flex items-center pl-3"
-                  >
+                  class="pointer-events-none absolute inset-y-0 left-0 mt-[140px] flex items-center pl-3"
+                >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -93,21 +95,30 @@
                   [ngClass]="{
                     'pointer-events-none': !isEnableSearch
                   }"
+                  [disabled]="!isEnableSearch"
+                  (keydown)="onVendorKeyDown($event)"
                   required=""
                 />
 
-                <div *ngIf="noVendor" class="absolute mt-12 text-sm text-red-600">
+                <div
+                  *ngIf="noVendor"
+                  class="absolute mt-12 text-sm text-red-600"
+                  >
                   <small>No vendor found.</small>
                 </div>
                 <ul
                   *ngIf="storeVendorList && storeVendorList.length > 0"
                   class="absolute z-10 mt-12 w-4/6 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
-                >
-                  <li
-                    *ngFor="let ven of storeVendorList"
-                    (click)="onSelectedVendor(ven, currentHeadIndex ?? 0)"
-                    class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
                   >
+                  <li
+                    *ngFor="let ven of storeVendorList; let i = index"
+                    (click)="onSelectedVendor(ven, currentHeadIndex ?? 0)"
+                    [ngClass]="{
+                      'bg-gray-100 dark:bg-gray-600': i === activeVendorIndex,
+                      'text-gray-700 dark:text-white': true
+                    }"
+                    class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
+                    >
                     {{ ven.vendorName }}
                   </li>
                   <li
@@ -121,50 +132,67 @@
                 <input
                   #fileInput
                   type="file"
-                  (change)="onFileSelected($event, headIndex, getQcVendorsArray(headIndex).controls[0].get('vendorId')?.value)"
+                  (change)="
+                    onFileSelected(
+                      $event,
+                      headIndex,
+                      getQcVendorsArray(headIndex).controls[0].get('vendorId')
+                        ?.value
+                    )
+                  "
                   accept="application/pdf"
                   multiple
                   class="hidden"
                 />
 
                 <!-- Save Button Triggers File Input Click -->
-                <button
-                  *ngIf="pdfSrc.length !== 3"
-                  type="button"
-                  (click)="fileInput.click()"
-                  [disabled]="!isEnableUploadBtn"
-                  [ngClass]="{
-                    'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
-                    'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
-                  }"
-                  class="!mt-2 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
-                >
-                  <svg
-                    class="h-5 w-5 text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
-                    />
-                    <path
-                      d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
-                    />
-                  </svg>
-                </button>
+                <div class="relative group inline-block">                
+                  <button
+                    *ngIf="pdfSrc.length !== 3"
+                    type="button"
+                    (click)="fileInput.click()"
+                    [disabled]="!isEnableUploadBtn"
+                    [ngClass]="{
+                      'bg-purple-300 hover:bg-purple-300': !isEnableUploadBtn,
+                      'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
+                    }"
+                    class="!mt-2 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
+                    >
+                    <svg
+                      class="h-5 w-5 text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
+                      />
+                      <path
+                        d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
+                      />
+                    </svg>
+                  </button>
+
+                  <div 
+                    *ngIf="isEnableUploadBtn"
+                    class="absolute left-1/2 bottom-full hidden -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-md group-hover:block"
+                    >
+                    Upload PDF
+                     <div
+                      class="absolute left-1/2 top-full -translate-x-1/2 w-0 h-0 border-l-8
+                        border-r-8 border-t-8 border-t-gray-800 border-l-transparent border-r-transparent"
+                      ></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        
       </form>
     </div>
-
-    
   </div>
 
   <!-- Upload Section -->
@@ -195,12 +223,12 @@
   <!-- PDF Display Section -->
   <div *ngIf="selectedVendorName.length > 0" class="flex">
     <div>
-      <section class="bg-white -mt-10" *ngIf="selectedVendorName.length > 0">
+      <section class="-mt-10 bg-white" *ngIf="selectedVendorName.length > 0">
         <div class="px-4 py-8">
           <h3 class="mb-2 text-lg font-semibold text-purple-700">
             Vendor Quote Assessment
           </h3>
-          <form action="#" class="grid grid-cols-3 gap-4 w-[1070px]">
+          <form action="#" class="grid w-[1070px] grid-cols-3 gap-4">
             <ng-container *ngFor="let ven of selectedVendorName; let i = index">
               <div class="col-span-1 rounded-lg border p-2 shadow-md">
                 <div class="mb-2 flex items-center justify-between">
@@ -233,7 +261,6 @@
                     </svg>
                   </button>
                 </div>
-               
               </div>
             </ng-container>
           </form>
@@ -257,73 +284,85 @@
                 "
                 [formGroupName]="i"
                 > -->
-                  <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
-                    <div
-                      class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
-                      *ngFor="let pdf of pdfSrc; let i = index"
-                      >
-                      <!-- PDF Preview -->
-                      <button
-                        (click)="deleteSlide(i)"
-                        class="absolute right-6 top-2 hidden items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 group-hover:flex"
-                      >
-                        <svg
-                          class="h-5 w-5 text-white"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </button>
+      <div class="mx-auto grid max-w-full grid-cols-3 gap-4 p-4">
+        <div
+          class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
+          *ngFor="let pdf of pdfSrc; let i = index"
+          >
+          <!-- PDF Preview -->
+          <button
+            (click)="deleteSlide(i)"
+            class="absolute right-6 top-2 hidden items-center justify-center rounded-full bg-red-600 p-2 text-white hover:bg-red-700 group-hover:flex"
+          >
+            <svg
+              class="h-5 w-5 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
 
-                      <iframe
-                        class="h-[150px] w-full border-b border-gray-300"
-                        [src]="pdf"
-                      ></iframe>
+          <iframe
+            class="h-[150px] w-full border-b border-gray-300"
+            [src]="pdf"
+          ></iframe>
 
-                      <!-- PDF Details -->
-                      <div class="bg-white p-4 text-black">
-                        <p class="m-0 font-bold">{{ selectedVendorName[i].name }}</p>
-                        <div class="mt-1 flex items-center gap-1">
-                          <img
-                            src="../../../assets/Img/pdf-icon.png"
-                            alt="PDF Icon"
-                            class="h-[30px] w-[32px]"
-                          />
-                          <input [value]="pdfFiles[i].name" readonly />
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-              <!-- </div>
+          <!-- PDF Details -->
+          <div class="bg-white p-4 text-black">
+            <p class="m-0 font-bold">{{ selectedVendorName[i].name }}</p>
+            <div class="mt-1 flex items-center gap-1">
+              <img
+                src="../../../assets/Img/pdf-icon.png"
+                alt="PDF Icon"
+                class="h-[30px] w-[32px]"
+              />
+              <div class="relative w-80 group/input">
+                <input 
+                  #pdfInput
+                  [value]="pdfFiles[i].name" 
+                  class="w-72 truncate px-2 py-1" 
+                  readonly
+                  (mouseenter)="checkOverflow(pdfInput, i)"
+                />
+                <div
+                  *ngIf="overflowDetected[i]"
+                  class="absolute left-0 top-full -mt-20 hidden w-max max-w-xs rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-lg group-hover/input:block"
+                  >
+                  {{ pdfFiles[i].name }}
+                </div>
+              </div>          
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div>
             </div>
           </div>
         </div>
       </form> -->
-      
-      
     </div>
-    
   </div>
 
   <div>
-    <h3 
+    <h3
       *ngIf="
         filterProductHeadData.length > 0 &&
         selectedVendorName.length > 2 &&
         pdfSrc.length > 2
       "
-      class="m-4 text-lg text-purple-600 font-semibold"
-      >Comparison Table</h3>
+      class="m-4 text-lg font-semibold text-purple-600"
+    >
+      Comparison Table
+    </h3>
   </div>
   <div
     class="-mt-6 flex flex-row items-center"
@@ -332,12 +371,12 @@
       selectedVendorName.length > 2 &&
       pdfSrc.length > 2
     "
-    >
-    <div class="w-[1120px] -m-1.5">
+  >
+    <div class="-m-1.5 w-[1120px]">
       <div class="inline-block max-w-full p-1.5 align-middle">
         <!-- <h1 class="bg-purple-600 text-white">testing</h1> -->
         <div class="m-4 overflow-hidden rounded-lg border">
-          <table class="table-fixed w-full divide-y divide-gray-200"> 
+          <table class="w-full table-fixed divide-y divide-gray-200">
             <thead
               class="dark:bg-white-700 dark:text-white-400 bg-purple-500 text-sm uppercase text-white"
             >
@@ -385,14 +424,15 @@
                     {{ product.prdbrndName }} | HoA -
                     {{ product.headOfAccName }}
                   </p>
-                  <p class="w-48 text-xs text-gray-400 text-justify">
+                  <p class="w-48 text-justify text-xs text-gray-400">
                     {{ product.prdDescription }}
                   </p>
                 </td>
 
-                <td class="px-5 py-4 text-center text-sm text-gray-800"
+                <td
+                  class="px-5 py-4 text-center text-sm text-gray-800"
                   *ngIf="isViewItemPerBox"
-                  >
+                >
                   <input
                     type="number"
                     class="w-24 rounded-lg"
@@ -442,7 +482,6 @@
         </div>
       </div>
     </div>
-   
   </div>
 
   <!-- Quote Section -->
@@ -488,25 +527,13 @@
       <div class="flex flex-col items-end justify-start">
         <button
           *ngIf="pdfSrc.length == 3"
+          [disabled]="comparisonQuoteForm.invalid || !leastPricedVendorId || !isAllVendorInputsFilled()"
+          [ngClass]="{
+            'bg-opacity-50 hover:bg-opacity-50': comparisonQuoteForm.invalid || !leastPricedVendorId || !isAllVendorInputsFilled()
+          }"
           (click)="uploadPdf(comparisonQuoteForm.value)"
           class="an -mb-2 mt-4 rounded-lg bg-purple-700 p-2 px-4 font-semibold text-white hover:bg-purple-900"
-        >
-          <!-- <svg
-            class="h-5 w-5 text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 24 24"
           >
-            <path
-              d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z"
-            />
-            <path
-              d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z"
-            />
-          </svg> -->
           Save
         </button>
       </div>
@@ -517,7 +544,9 @@
   *ngIf="toastService.isWarningToast"
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
+  <app-warning-toast
+    [message]="toastService.warningToastMsg"
+  ></app-warning-toast>
 </section>
 <section
   *ngIf="isSuccessToast"
@@ -537,17 +566,23 @@
     (close)="closeAmtPopup($event)"
   ></app-warning-quotecompare-message>
 </section>
-<section *ngIf="isQuoteUploaded" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isQuoteUploaded"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-quote-successpopup
     [quotedHeadOfAccName]="quotedHeadOfAccName"
-   (close)="clearQuotation()"
-   ></app-quote-successpopup>
+    (close)="clearQuotation()"
+  ></app-quote-successpopup>
 </section>
-<section *ngIf="isQuoteAccepted" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isQuoteAccepted"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-quote-acceptedpopup
     [quoteMsg]="quoteMsg"
-   (close)="clearQuotation()"
-   ></app-quote-acceptedpopup>
+    (close)="clearQuotation()"
+  ></app-quote-acceptedpopup>
 </section>
 <div
   *ngIf="Spinner"
@@ -555,3 +590,9 @@
 >
   <app-spinner></app-spinner>
 </div>
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-[70px] left-6 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
+</section>

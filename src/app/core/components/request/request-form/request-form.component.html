@@ -123,11 +123,12 @@
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
                 >Requisitioner
               </label>
               <input
                 appFirstCapLetter
+                appRequiredField
                 formControlName="requisitioner"
                 type="text"
                 class="input-form"
@@ -138,10 +139,11 @@
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
                 >Required by Date
               </label>
               <input
+                appRequiredField
                 formControlName="requiredDate"
                 type="date"
                 class="input-form"
@@ -154,13 +156,14 @@
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
               >
                 Capex / Non-capex
               </label>
               <div class="flex justify-stretch gap-40">
                 <div class="flex items-center gap-2">
                   <input
+                    appRequiredField
                     formControlName="expenditureId"
                     type="radio"
                     value="51"
@@ -180,7 +183,7 @@
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
               >
                 Department
               </label>
@@ -190,6 +193,8 @@
                 "
                 formControlName="deptId"
                 class="select-option1 block w-full rounded-lg"
+                appRequiredField
+                required
               >
                 <option
                   value=""
@@ -210,13 +215,15 @@
             <div class="col-span-4 mb-2">
               <label
                 for="Address"
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
               >
                 Project/Program
               </label>
               <select
                 formControlName="programId"
                 class="select-option1 block w-full rounded-lg"
+                appRequiredField
+                required
               >
                 <option
                   value=" "
@@ -233,7 +240,7 @@
             </div>
             <div class="col-span-8 mb-2">
               <label
-                class="mb-2 block text-sm font-semibold text-gray-900 dark:text-white"
+                class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
                 >Camp
               </label>
               <input
@@ -241,6 +248,7 @@
                 type="text"
                 class="input-form"
                 maxlength="50"
+                appRequiredField
                 required
               />
             </div>
@@ -347,11 +355,19 @@
             </button>
           </div>
           <div class="col-span-8 m-4">
+            <label 
+              for="Search Product"
+              class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white" 
+              >
+              Search Product
+            </label>
             <input
               type="text"
               #serValue
               formControlName="productId"
               class="input-form"
+              appRequiredField
+              required
             />
 
             <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
@@ -600,6 +616,8 @@
               formControlName="unitPrice"
               type="number"
               class="input-rose"
+              maxlength="9"
+              (keypress)="allowOnlyDigits($event)"
               required
             />
           </div>
@@ -1031,7 +1049,7 @@
     </div>
     <!-- final save -->
 
-    <div *ngIf="isEnableSave">
+    <div>
       <div
         class="-mt-1 mb-4 flex-row items-center justify-end space-y-1 p-4 sm:flex sm:space-x-4 sm:space-y-0"
       >
@@ -1043,9 +1061,9 @@
           </div> -->
         <button
           (click)="onSubmitIndent()"
-          [disabled]="requestIndentHead.invalid"
+          [disabled]="requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn"
           [ngClass]="{
-            'btn-blue-disable hover:bg-gray-400': requestIndentHead.invalid
+            'btn-blue-disable hover:bg-gray-400': requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn
           }"
           type="button"
           class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

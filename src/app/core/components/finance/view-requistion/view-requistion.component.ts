@@ -43,6 +43,7 @@ export class ViewRequistionComponent implements OnInit {
   isAccept: boolean = false;
   isHolding: boolean = false;
   isReject: boolean = false;
+  loading: boolean = true;
 
   reasonHead: string = '';
   commend: any;
@@ -77,7 +78,6 @@ export class ViewRequistionComponent implements OnInit {
 
   isApproved: boolean = false;
   isRejectPop: boolean = false;
-  isWarningPopup: boolean = false;
 
   companyLogo = sessionStorage.getItem('companyLogo');
 
@@ -140,6 +140,7 @@ export class ViewRequistionComponent implements OnInit {
     this.requestService.viewReq(data).subscribe((res) => {
       console.log('fetching data:', res);
       this._requestDetails.set(res);
+      this.loading = false;
 
       const authStatusCode =
         this._requestDetails()?.financeAuthData?.authStatusCode;
@@ -539,7 +540,6 @@ export class ViewRequistionComponent implements OnInit {
   closepop(data: boolean) {
     this.isApproved = data;
     this.isRejectPop = data;
-    this.isWarningPopup = data;
     this.closeView.emit(false);
   }
 
@@ -571,15 +571,17 @@ export class ViewRequistionComponent implements OnInit {
 
     if (this.isHolding == true && this.isReject == false) {
       this.requestService.commend(this.reqId, numericData, 1)?.subscribe(
-        (res) => {
+        (res: any) => {
           console.log('successfully hold the request:', res);
-          this.isWarningPopup = true;
+          this.toastService.showSuccess(res.errorMessege);
+          setTimeout(() => {
+            this.closeView.emit(false);
+          }, 3000);
         },
         (error) => {
           console.log('error while holding the request:', error);
           if (error.status == 200) {
-            alert('This Request is on Hold');
-            this.closeView.emit(false);
+            // alert('This Request is on Hold');          
           }
         },
       );

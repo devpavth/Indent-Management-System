@@ -217,7 +217,7 @@ export class AddEmployeeComponent implements OnInit {
 
     inputElement.value = digitsOnly;
     this.addEmployeeForm.get('empPhone')?.setValue(digitsOnly, {
-      emitEvent: false
+      emitEvent: false,
     });
   }
 
@@ -247,8 +247,8 @@ export class AddEmployeeComponent implements OnInit {
 
     inputElement.value = value;
     this.addEmployeeForm.get('pin')?.setValue(value, {
-      emitEvent: false
-    })
+      emitEvent: false,
+    });
   }
 
   //date validation

@@ -93,9 +93,11 @@
           <div class="relative mt-2">
             <!-- isPasswordHidden = !isPasswordHidden" -->
             <button
+              type="button"
               (click)="toggle()"
+              tabindex="-1"
               class="absolute inset-y-0 right-3 my-auto text-gray-50 active:text-gray-600"
-            >
+              >
               <div *ngIf="isPasswordHidden" class="">
                 <svg
                   class="h-6 w-6"
@@ -144,6 +146,7 @@
               #password
               formControlName="empPassword"
               autocomplete="current-password"
+              (keydown.enter)="onEnterKey($event)"
               class="w-full rounded-lg border bg-transparent py-2 pl-3 pr-12 tracking-widest text-gray-50 shadow-sm outline-none focus:border-blue-600"
             />
           </div>
@@ -157,9 +160,9 @@
             (click)="login(loginForm.value)"
             [disabled]="loginForm.invalid"
             [ngClass]="{ 'diabale-login ': loginForm.invalid }"
-            type="submit"
+            type="button"
             class="mb-2 me-2 w-full rounded-lg bg-purple-700 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:scale-105 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-          >
+            >
             <span *ngIf="!loading">Login</span>
             <span
               *ngIf="loading"

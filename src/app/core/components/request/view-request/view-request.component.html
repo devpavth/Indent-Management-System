@@ -135,15 +135,27 @@
                     <dl class="grid gap-x-3 sm:grid-cols-5">
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
-                      >
+                        >
                         Created On:
                       </dt>
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
-                      >
+                        >
                         {{
                           _requestDetails?.createdEmpData.createdOn
-                            | date: "dd-MMM-yyyy hh:mm a"
+                            | date: "dd-MMM-yyyy"
+                        }}
+                      </dd>
+                      <dt
+                        class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
+                        >
+
+                      </dt>
+                      <dd
+                        class="col-span-2 text-gray-500 dark:text-neutral-500"
+                        >
+                        {{ _requestDetails?.createdEmpData.createdOn 
+                            | date: "hh:mm a"
                         }}
                       </dd>
                     </dl>
