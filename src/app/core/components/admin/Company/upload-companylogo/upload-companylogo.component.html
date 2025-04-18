@@ -35,7 +35,7 @@
         for="file-upload"
         [class.border-blue-500]="isDragOver"
         [class.bg-blue-50]="isDragOver"
-        class="relative flex h-40 mb-4 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+        class="relative flex h-40 mb-4 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
         >
         <ng-container>
           <svg 
@@ -55,6 +55,11 @@
           <span class="text-sm text-gray-500 dark:text-gray-400"
             >Click to Upload or Drag and Drop Logo</span
           >
+          <span
+            class="text-xs text-gray-500 dark:text-gray-400 block"
+            >
+            Only PNG files (Max size: 1MB) are allowed
+          </span>
         </ng-container>
 
       </label>

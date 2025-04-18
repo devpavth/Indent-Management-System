@@ -17,6 +17,7 @@ import { BranchService } from '../../service/Branch/branch.service';
 import { HttpParams } from '@angular/common/http';
 import { Product } from '../../../models/product/product.model';
 import { ToastService } from '../../service/toast/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-request-form',
@@ -60,6 +61,7 @@ export class RequestFormComponent implements OnInit {
 
   // deleteToastMsg: any;
   toastService = inject(ToastService);
+  route = inject(Router);
 
   employeeData: any | undefined;
 
@@ -78,11 +80,14 @@ export class RequestFormComponent implements OnInit {
 
   isProductSelected: boolean = false;
   noResults: boolean = false;
+  suppressValueChanges: boolean = false;
   storeProductData: Product[] = [];
   isVendorView: boolean = true;
 
   isEnableSave: boolean = false;
   isEnableSaveBtn: boolean = false;
+  loader: boolean = false;
+
   storeTotal: number = 0;
 
   user: any;
@@ -136,7 +141,7 @@ export class RequestFormComponent implements OnInit {
       productModel: [],
       qty: [0],
       unitPrice: [0],
-      gstpercentage: [],
+      prdGstPct: [],
       status: [200],
     });
 
@@ -158,11 +163,12 @@ export class RequestFormComponent implements OnInit {
         debounceTime(300),
         switchMap((searchTerm) => {
           console.log(`Product Name Changed for Index:`, searchTerm);
-          if (this.isProductSelected) {
-            this.isProductSelected = false;
-            // this.isVendorView = true;
+          if (this.suppressValueChanges) {
+            this.suppressValueChanges = false;
             return of([]);
           }
+
+          this.isProductSelected = false;
           this.noResults = false;
           this.storeProductData = [];
           if (
@@ -191,7 +197,7 @@ export class RequestFormComponent implements OnInit {
         this.storeProductData = response;
         console.log('fetching product data from backend:', response);
 
-        this.isProductSelected = false;
+        // this.isProductSelected = false;
       });
 
     this.assignedVendor
@@ -282,7 +288,7 @@ export class RequestFormComponent implements OnInit {
     this.productForm.valueChanges.subscribe((val) => {
       const unitPrice = parseFloat(val.unitPrice) || 0;
       const qty = parseInt(val.qty) || 0;
-      const gstpercentage = parseFloat(val.gstpercentage) || 0;
+      const gstpercentage = parseFloat(val.prdGstPct) || 0;
       let gst = this.shared.gstCalculation(qty, unitPrice, gstpercentage);
 
       this.subtotal = unitPrice * qty;
@@ -432,21 +438,21 @@ export class RequestFormComponent implements OnInit {
       productCat: product.prdcatgName,
       productModel: product.prdmdlName,
       unitPrice: product.prdPurchasedPrice,
-      gstpercentage: product.prdGstPct,
+      prdGstPct: product.prdGstPct,
       headOfAccId: product.headOfAccId,
       headOfAccName: product.headOfAccName,
     });
   }
 
-  allowOnlyDigits(event: KeyboardEvent){
+  allowOnlyDigits(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
 
-    if(charCode < 48 || charCode > 57){
+    if (charCode < 48 || charCode > 57) {
       event.preventDefault();
     }
 
     const input = event.target as HTMLInputElement;
-    if(input.value.length >= 9){
+    if (input.value.length >= 9) {
       event.preventDefault();
     }
   }
@@ -664,6 +670,8 @@ export class RequestFormComponent implements OnInit {
       // assignedDonors: this.funderList,
     };
     console.log('indent data:', indent);
+    this.loader = true;
+
     this.requestService.postIndent(indent).subscribe(
       (res: any) => {
         console.log('successfully created indent request:', res);
@@ -673,11 +681,13 @@ export class RequestFormComponent implements OnInit {
         this.assignedVendor.reset();
         this.productList = [];
         this.vendorList = [];
-        this.togglePop(true);
+        this.isSuccessPop = true;
         this.successData = { show: 3, text: res.errorMessege };
+        this.loader = false;
       },
       (error) => {
         console.log('error while creating indent request:', error);
+        this.loader = false;
 
         if (error.status == 200) {
           this.productForm.reset();
@@ -697,7 +707,7 @@ export class RequestFormComponent implements OnInit {
           alert(error.error);
         }
 
-        if(error.status === 400){
+        if (error.status === 400) {
           this.toastService.showError(error.error);
         }
       },
@@ -707,9 +717,13 @@ export class RequestFormComponent implements OnInit {
   onSelectProduct(product: Product) {
     console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
+    this.suppressValueChanges = true;
     this.productData = [product];
 
     console.log('productData:', this.productData);
+
+    this.productForm.get('productId')?.setValue(product.prdcatgName),
+      { emitEvent: true };
 
     const duplicateProducts = this.productList.find(
       (prd) => prd.productId === product.productId,
@@ -717,6 +731,7 @@ export class RequestFormComponent implements OnInit {
 
     if (duplicateProducts) {
       this.toastService.showError('Product Already Exists in the Cart');
+      this.productForm.get('productId')?.setValue('');
       this.isProductSelected = false;
       this.productData = [];
       this.storeProductData = [];
@@ -731,13 +746,20 @@ export class RequestFormComponent implements OnInit {
       productCat: product.prdcatgName,
       productModel: product.prdmdlName,
       unitPrice: product.prdPurchasedPrice,
-      gstpercentage: product.prdGstPct,
+      prdGstPct: product.prdGstPct,
       headOfAccId: product.headOfAccId,
       headOfAccName: product.headOfAccName,
       status: 200,
     });
 
     this.storeProductData = [];
+  }
+
+  clearSearch(){
+    this.productForm.get('productId')?.setValue('');
+    this.storeProductData = [];
+    this.productForm.reset();
+    this.noResults = false;
   }
 
   serchByCode(code: string) {
@@ -750,6 +772,7 @@ export class RequestFormComponent implements OnInit {
   }
   togglePop(data: boolean) {
     this.isSuccessPop = data;
+    this.route.navigate(['/home/request']);
   }
   toggleProduct(data: boolean) {
     this.isOtherProduct = data;

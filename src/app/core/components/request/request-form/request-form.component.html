@@ -255,7 +255,7 @@
           </section>
           <section
             class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
-          >
+            >
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
@@ -355,21 +355,44 @@
             </button>
           </div>
           <div class="col-span-8 m-4">
-            <label 
+            <label
               for="Search Product"
-              class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white" 
-              >
+              class="mb-2 flex text-sm font-semibold text-gray-900 dark:text-white"
+            >
               Search Product
             </label>
-            <input
-              type="text"
-              #serValue
-              formControlName="productId"
-              class="input-form"
-              appRequiredField
-              required
-            />
+            <div class="relative">
+              <input
+                type="text"
+                #serValue
+                formControlName="productId"
+                class="input-form"
+                appRequiredField
+                required
+              />
 
+              <div
+                *ngIf="productForm.get('productId')?.value"
+                class="absolute inset-y-0 flex items-center right-2 cursor-pointer"
+                (click)="clearSearch()"
+                >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+            
             <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
               <small>No Products found.</small>
             </div>
@@ -408,7 +431,7 @@
           <div
             *ngIf="productData && !noResults && isProductSelected"
             class="col-span-full flex flex-col"
-          >
+            >
             <div class="overflow-x-auto">
               <div class="inline-block min-w-full p-1.5 align-middle">
                 <div class="overflow-hidden rounded-lg border">
@@ -643,7 +666,7 @@
             </label>
             <input
               readonly
-              formControlName="gstpercentage"
+              formControlName="prdGstPct"
               type="number"
               class="input-rose"
               required
@@ -1061,14 +1084,18 @@
           </div> -->
         <button
           (click)="onSubmitIndent()"
-          [disabled]="requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn"
+          [disabled]="
+            requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn || loader
+          "
           [ngClass]="{
-            'btn-blue-disable hover:bg-gray-400': requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn
+            'btn-blue-disable hover:bg-gray-400':
+              requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn
           }"
           type="button"
           class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
+          >
           <svg
+            *ngIf="!loader"
             xmlns="http://www.w3.org/2000/svg"
             class="-ml-1 mr-2 h-3.5 w-3.5"
             viewBox="0 0 20 20"
@@ -1079,7 +1106,11 @@
               d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
             />
           </svg>
-          Save
+          <span *ngIf="!loader">Save</span>
+          <span *ngIf="loader" class="flex items-center gap-2">
+            <span class="h-5 w-5 animate-spin border-2 border-white rounded-full border-t-transparent"></span>
+            <span>Saving...</span>
+          </span>
         </button>
       </div>
     </div>

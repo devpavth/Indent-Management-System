@@ -34,7 +34,7 @@ export class OtherProductComponent {
         console.log(error);
 
         if (error.status == 200) {
-          this.togglePop(true);
+          this.isSuccesPop = true;
           this.successData = { show: 6, text: `${error.error.text}` };
           this.otherProductForm.reset();
         }

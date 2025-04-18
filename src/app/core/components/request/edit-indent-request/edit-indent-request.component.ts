@@ -55,6 +55,8 @@ export class EditIndentRequestComponent {
   loading: boolean = true;
   isEnableSaveBtn: boolean = false;
   isEnableAddHeader: boolean = false;
+  loader: boolean = false;
+  suppressValueChanges: boolean = false;
 
   subtotal: number = 0;
   tax: number = 0;
@@ -124,11 +126,12 @@ export class EditIndentRequestComponent {
         debounceTime(300),
         switchMap((searchTerm) => {
           console.log(`Product Name Changed for Index:`, searchTerm);
-          if (this.isProductSelected) {
-            this.isProductSelected = false;
+          if (this.suppressValueChanges) {
+            this.suppressValueChanges = false;
 
             return of([]);
           }
+          this.isProductSelected = false;
           this.noResults = false;
           this.storeProductData = [];
           if (
@@ -156,8 +159,6 @@ export class EditIndentRequestComponent {
       .subscribe((response: Product[]) => {
         this.storeProductData = response;
         console.log('fetching product data from backend:', response);
-
-        this.isProductSelected = false;
       });
 
     this.editRequestForm.disable();
@@ -297,10 +298,23 @@ export class EditIndentRequestComponent {
     this.isOtherProduct = data;
   }
 
+  clearSearch(){
+    this.indentProductForm.get('productId')?.setValue('');
+    this.isProductSelected = false;
+    this.storeProductData = [];
+    this.indentProductForm.reset();
+    this.noResults = false;
+  }
+
   onSelectProduct(product: Product) {
     console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
+    this.suppressValueChanges = true;
     this.productData = [product];
+
+    this.indentProductForm.get('productId')?.setValue(product.prdcatgName, {
+      emitEvent: false
+    });
 
     const duplicateProducts = this.productList.find(
       (prd) => prd.productId === product.productId,
@@ -309,6 +323,7 @@ export class EditIndentRequestComponent {
     if (duplicateProducts) {
       this.toastService.showError('Product Already Exists in the Cart');
       this.isProductSelected = false;
+      this.indentProductForm.get('productId')?.setValue('');
       this.productData = [];
       this.storeProductData = [];
       return;
@@ -331,15 +346,15 @@ export class EditIndentRequestComponent {
     this.storeProductData = [];
   }
 
-  allowOnlyDigits(event: KeyboardEvent){
+  allowOnlyDigits(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
 
-    if(charCode < 48 && charCode > 57){
+    if (charCode < 48 && charCode > 57) {
       event.preventDefault();
     }
 
     const input = event.target as HTMLInputElement;
-    if(input.value.length >= 9){
+    if (input.value.length >= 9) {
       event.preventDefault();
     }
   }
@@ -368,6 +383,7 @@ export class EditIndentRequestComponent {
     this.toastService.showSuccess('Item Added');
 
     this.isEnableSaveBtn = true;
+    this.isProductSelected = false;
 
     const existingIndex = this.productList.findIndex(
       (p) => p.productId === product.productId,
@@ -634,6 +650,7 @@ export class EditIndentRequestComponent {
     };
 
     console.log('update indent data:', indent);
+    this.loader = true;
 
     this.requestService
       .updateIndentRequestDetails(this.IndentID, indent)
@@ -649,6 +666,7 @@ export class EditIndentRequestComponent {
         },
         (error) => {
           console.log('error while updating the indent details:', error);
+          this.loader = false;
         },
       );
   }

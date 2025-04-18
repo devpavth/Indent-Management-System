@@ -103,27 +103,33 @@
               </div>
               <div class="mt-8 grid gap-3 sm:grid-cols-2">
                 <div>
-                  <h3
-                    class="text-gray-500 dark:text-neutral-200 mb-1"
-                    >
-                    <span class="font-semibold text-gray-800">Created By</span> 
-                    <span class="ml-4 font-semibold text-gray-800">:</span>
-                    <span class="ml-1">{{ _requestDetails?.createdEmpData.empFirstName }}
-                    {{ _requestDetails?.createdEmpData.empLastName }}</span>
-                  </h3>
+                  <div class="flex gap-3 items-start text-gray-800 font-semibold dark:text-neutral-200">
+                    <span 
+                      class="w-[100px]"
+                      >Created By:
+                    </span>
+                    <span
+                      class="font-normal text-gray-500 dark:text-neutral-200"
+                      >
+                      {{ _requestDetails?.createdEmpData.empFirstName }}
+                      {{ _requestDetails?.createdEmpData.empLastName }}
+                    </span>
+                  </div>
 
                   <address
-                    class="not-italic text-gray-500 dark:text-neutral-500 space-y-1"
+                    class="mt-2 not-italic text-gray-500 dark:text-neutral-500 space-y-2"
                   >
-                    <div class="mb-1">
-                      <span class="font-semibold text-gray-800">Branch</span> 
-                      <span class="ml-12 font-semibold text-gray-800">:</span>
-                      {{ _requestDetails?.indentBranch.branchName }}
+                    <div class="flex gap-3 text-gray-800 font-semibold">
+                      <span class="w-[100px]">Branch:</span> 
+                      <span class="font-normal text-gray-500">
+                        {{ _requestDetails?.indentBranch.branchName }}
+                      </span>                 
                     </div>
-                    <div>
-                      <span class="font-semibold text-gray-800">Department</span> 
-                      <span class="ml-1 font-semibold text-gray-800">:</span>
-                      {{ _requestDetails?.indentBranch.deptName }}
+                    <div class="flex gap-3 text-gray-800 font-semibold">
+                      <span class="w-[100px]">Department:</span> 
+                      <span class="font-normal text-gray-500">
+                        {{ _requestDetails?.indentBranch.deptName }}
+                      </span>                   
                     </div>
                   </address>
                 </div>

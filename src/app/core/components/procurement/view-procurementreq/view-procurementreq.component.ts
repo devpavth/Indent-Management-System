@@ -43,6 +43,7 @@ export class ViewProcurementreqComponent {
   isAccept: boolean = false;
   isHolding: boolean = false;
   isReject: boolean = false;
+  loading: boolean = true;
 
   reasonHead: string = '';
   commend: any;
@@ -155,19 +156,20 @@ export class ViewProcurementreqComponent {
     this.requestService.viewReq(data).subscribe((res) => {
       console.log('fetching data:', res);
       this._requestDetails.set(res);
+      this.loading = false;
 
       const procurementStatusCode =
         this._requestDetails()?.prctAuthData?.authStatusCode;
 
-      if(procurementStatusCode === 102){
+      if (procurementStatusCode === 102) {
         this.isViewAction = true;
       }
 
-      if(procurementStatusCode === 202){
+      if (procurementStatusCode === 202) {
         this.isViewAction = false;
       }
 
-      if(procurementStatusCode === 301){
+      if (procurementStatusCode === 301) {
         this.isViewAction = false;
       }
 
@@ -319,8 +321,6 @@ export class ViewProcurementreqComponent {
 
     this.isApprovelAmt = true;
   }
-
- 
 
   onSelectedFunder(funderData: any) {
     console.log('funderData received in onSelectedFunder:', funderData);

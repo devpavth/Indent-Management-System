@@ -313,14 +313,13 @@ export class ProductListComponent implements OnInit {
     if (check == 0) {
       this.isProductList = action;
 
-      if(this.productData.prdStatus === 200){
+      if (this.productData.prdStatus === 200) {
         // console.log("prdStatus:", this.productData.prdStatus);
         this.fetchProductList(this.offSet, this.pageSize, 'active');
-      }else if(this.productData.prdStatus === 303){
+      } else if (this.productData.prdStatus === 303) {
         // console.log('prdStatus:', this.productData.prdStatus);
         this.fetchProductList(this.offSet, this.pageSize, 'other');
       }
-      
     }
   }
 }

@@ -29,7 +29,7 @@
               height="24"
               fill="none"
               viewBox="0 0 24 24"
-              >
+            >
               <path
                 class=""
                 stroke="currentColor"
@@ -402,8 +402,8 @@
               }"
               required
             ></textarea>
-            <div class="flex items-start justify-between"> 
-              <div class="text-left">                
+            <div class="flex items-start justify-between">
+              <div class="text-left">
                 <small
                   *ngIf="
                     UpdateProductForm?.get('prdDescription')?.invalid &&
@@ -414,11 +414,12 @@
                   Description Required!
                 </small>
               </div>
-              <div class="text-right">  
-                <small
-                  class="text-sm text-gray-400"
-                  >
-                  {{ UpdateProductForm.get('prdDescription')?.value.length || 0 }} / 500
+              <div class="text-right">
+                <small class="text-sm text-gray-400">
+                  {{
+                    UpdateProductForm.get("prdDescription")?.value.length || 0
+                  }}
+                  / 500
                 </small>
               </div>
             </div>
@@ -580,7 +581,9 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 <section
   *ngIf="toastService.isErrorToast"

@@ -85,7 +85,7 @@ export class ViewCompanydetailsComponent {
     this.close.emit(true);
   }
 
-  closePreviewLogo(closeIcon: boolean){
+  closePreviewLogo(closeIcon: boolean) {
     this.isViewPreviewLogo = !closeIcon;
   }
 
