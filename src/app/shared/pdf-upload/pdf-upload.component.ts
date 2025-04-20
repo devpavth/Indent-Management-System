@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
 import {
@@ -27,6 +27,7 @@ import { ToastService } from '../../core/components/service/toast/toast.service'
 })
 export class PdfUploadComponent {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  @ViewChildren('searchInput') searchInputs!: QueryList<ElementRef>;
   searchSubject = new Subject<string>();
   pdfSrc: SafeResourceUrl[] = [];
   pdfFiles: File[] = []; // Array to hold the File objects
@@ -67,9 +68,7 @@ export class PdfUploadComponent {
   }[] = [];
   isEnableUploadBtn: boolean = false;
   isEnableSearch: boolean = false;
-  // isToast: boolean = false;
   isSuccessToast: boolean = false;
-  // warningToastMsg: string = '';
   deleteToastMsg: string = '';
   isQuoteUploaded: boolean = false;
   isQuoteAccepted: boolean = false;
@@ -81,7 +80,6 @@ export class PdfUploadComponent {
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
   filterQuotedHeadOfAcc: indentProductList[] = [];
-  // isViewCloseIcon: boolean = false;
   requestData: ProRequestdata | null = null;
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
@@ -326,6 +324,14 @@ export class PdfUploadComponent {
         this.isSuccessToast = false;
       }, 3000);
 
+      setTimeout(() => {
+        const input = this.searchInputs.toArray()[headOfAccIndex];
+        if (input) {
+          input.nativeElement.value = '';
+        }
+      }, 0);
+
+
       console.log('this.selectedVendorName:', this.selectedVendorName);
 
       console.log(
@@ -368,6 +374,10 @@ export class PdfUploadComponent {
     //   .get('qcVendors') as FormArray;
 
     this.storeVendorList = [];
+    console.log(
+      'comparison form in search vendor:',
+      this.comparisonQuoteForm.value,
+    );
   }
 
   // selectedHeadOfAcc(event: Event) {
@@ -670,10 +680,15 @@ export class PdfUploadComponent {
         if (this.selectedVendorName.length === 3) {
           this.isViewQuoteCompareMsg = true;
           this.quoteCompareAmtPopUpMsg =
-            'The amount to be entered should be the total amount for the particular product in the PDF, calculated as: (Unit Price * GST * Quantity).';
+            'The amount to be entered should be the total amount for the particular product in the PDF, calculated as: (Unit Price * Quantity).';
         }
       }
     }
+
+    console.log(
+      'comparison form in search vendor:',
+      this.comparisonQuoteForm.value,
+    );
   }
 
   closepop(data: boolean) {
@@ -698,9 +713,22 @@ export class PdfUploadComponent {
     console.log('this.selectedVendorName after:', this.selectedVendorName);
     this.isEnableSearch = true;
     this.isEnableUploadBtn = false;
-    const qcVendorsArray = this.getQcVendorsArray(vendorIndex);
-    qcVendorsArray.clear();
-    console.log('qcVendorsArray in removing the vendor:', qcVendorsArray.value);
+    const headOfAccArray = this.comparisonQuoteForm.get(
+      'qcHeadOfAcc',
+    ) as FormArray;
+
+    if(headOfAccArray.length > 0){
+      const qcVendorsArray = headOfAccArray.at(0).get('qcVendors') as FormArray; 
+
+      if (qcVendorsArray && qcVendorsArray.length > vendorIndex) {
+        qcVendorsArray.removeAt(vendorIndex);
+      }
+      console.log(
+        'qcVendorsArray in removing the vendor:',
+        qcVendorsArray.value,
+      );
+    }
+    console.log("comparison form in remove vendor:", this.comparisonQuoteForm.value);
   }
 
   deleteSlide(index: number): void {
@@ -711,11 +739,33 @@ export class PdfUploadComponent {
     if (this.selectedVendorName && this.selectedVendorName.length > index) {
       this.selectedVendorName.splice(index, 1);
     }
+
+    console.log('selectedVendorName in delete slide:', this.selectedVendorName);
+
+    const headOfAccArray = this.comparisonQuoteForm.get(
+      'qcHeadOfAcc',
+    ) as FormArray;
+
+    if (headOfAccArray.length > 0) {
+      const qcVendorsArray = headOfAccArray.at(0).get('qcVendors') as FormArray;
+
+      if (qcVendorsArray && qcVendorsArray.length > index) {
+        qcVendorsArray.removeAt(index);
+      }
+    }
+
     if (this.currentSlideIndex >= this.pdfSrc.length) {
       this.currentSlideIndex = this.pdfSrc.length - 1;
     }
     this.isEnableSearch = true;
     this.isEnableUploadBtn = false;
+    this.ven1Price = [];
+    this.ven2Price = [];
+    this.ven3Price = [];
+    this.quotes = [];
+    this.leastPricedVendorName = '';
+    this.leastPrice = 0;
+    console.log('comparison form:', this.comparisonQuoteForm.value);
   }
 
   uploadPdf(quoteData: any): void {
@@ -762,30 +812,30 @@ export class PdfUploadComponent {
 
     const pdfFilesArray = Array.from(this.pdfFiles);
 
-    this.request
-      .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
-      .subscribe(
-        (response) => {
-          console.log('Upload successful:', response);
-          this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
-          console.log(
-            'this.uniqueProductHeadData:',
-            this.uniqueProductHeadData,
-          );
-          if (this.uniqueProductHeadData.length !== 0) {
-            this.isQuoteUploaded = true;
-          }
-        },
-        (error) => {
-          console.log('Upload failed:', error);
+    // this.request
+    //   .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
+    //   .subscribe(
+    //     (response) => {
+    //       console.log('Upload successful:', response);
+    //       this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
+    //       console.log(
+    //         'this.uniqueProductHeadData:',
+    //         this.uniqueProductHeadData,
+    //       );
+    //       if (this.uniqueProductHeadData.length !== 0) {
+    //         this.isQuoteUploaded = true;
+    //       }
+    //     },
+    //     (error) => {
+    //       console.log('Upload failed:', error);
 
-          this.toastService.showWarning(error.error.errorMessege);
+    //       this.toastService.showWarning(error.error.errorMessege);
 
-          if (error.status === 208) {
-            this.toastService.showWarning(error.error.text);
-          }
-        },
-      );
+    //       if (error.status === 208) {
+    //         this.toastService.showWarning(error.error.text);
+    //       }
+    //     },
+    //   );
   }
 
   updateVendorPrice(
@@ -859,15 +909,16 @@ export class PdfUploadComponent {
   }
 
   isAllVendorInputsFilled(): boolean {
-    return this.ven1Price.every(
-      (val, i) =>
-        val !== null &&
-        val !== undefined &&
-        this.ven2Price[i] !== null &&
-        this.ven2Price[i] !== undefined &&
-        this.ven3Price[i] !== null &&
-        this.ven3Price[i] !== undefined,
+    return this.filterProductHeadData.every(
+      (_, i) =>
+        this.isValidNumber(this.ven1Price[i]) &&
+        this.isValidNumber(this.ven2Price[i]) &&
+        this.isValidNumber(this.ven3Price[i]),
     );
+  }
+
+  isValidNumber(value: number): boolean {
+    return value !== null && value !== undefined && !isNaN(value);
   }
 
   calculateTotalPieces(index: number) {

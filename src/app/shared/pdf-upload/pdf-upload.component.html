@@ -38,7 +38,7 @@
                 (change)="selectedHeadOfAcc($event)"
                 formControlName="headOfAccId"
                 [value]="currentHeadOfAccId"
-                >
+              >
                 <option
                   value=""
                   selected
@@ -103,13 +103,13 @@
                 <div
                   *ngIf="noVendor"
                   class="absolute mt-12 text-sm text-red-600"
-                  >
+                >
                   <small>No vendor found.</small>
                 </div>
                 <ul
                   *ngIf="storeVendorList && storeVendorList.length > 0"
                   class="absolute z-10 mt-12 w-4/6 rounded-lg border border-none border-gray-300 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
-                  >
+                >
                   <li
                     *ngFor="let ven of storeVendorList; let i = index"
                     (click)="onSelectedVendor(ven, currentHeadIndex ?? 0)"
@@ -118,7 +118,7 @@
                       'text-gray-700 dark:text-white': true
                     }"
                     class="cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600"
-                    >
+                  >
                     {{ ven.vendorName }}
                   </li>
                   <li
@@ -146,7 +146,7 @@
                 />
 
                 <!-- Save Button Triggers File Input Click -->
-                <div class="relative group inline-block">                
+                <div class="group relative inline-block">
                   <button
                     *ngIf="pdfSrc.length !== 3"
                     type="button"
@@ -157,7 +157,7 @@
                       'bg-purple-700 hover:bg-purple-900': isEnableUploadBtn
                     }"
                     class="!mt-2 rounded-full bg-purple-700 p-3 font-semibold text-white hover:bg-purple-900"
-                    >
+                  >
                     <svg
                       class="h-5 w-5 text-white"
                       aria-hidden="true"
@@ -176,15 +176,14 @@
                     </svg>
                   </button>
 
-                  <div 
+                  <div
                     *ngIf="isEnableUploadBtn"
-                    class="absolute left-1/2 bottom-full hidden -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-md group-hover:block"
-                    >
+                    class="absolute bottom-full left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-md group-hover:block"
+                  >
                     Upload PDF
-                     <div
-                      class="absolute left-1/2 top-full -translate-x-1/2 w-0 h-0 border-l-8
-                        border-r-8 border-t-8 border-t-gray-800 border-l-transparent border-r-transparent"
-                      ></div>
+                    <div
+                      class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-gray-800"
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -288,7 +287,7 @@
         <div
           class="group relative w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100 shadow-md"
           *ngFor="let pdf of pdfSrc; let i = index"
-          >
+        >
           <!-- PDF Preview -->
           <button
             (click)="deleteSlide(i)"
@@ -325,21 +324,21 @@
                 alt="PDF Icon"
                 class="h-[30px] w-[32px]"
               />
-              <div class="relative w-80 group/input">
-                <input 
+              <div class="group/input relative w-80">
+                <input
                   #pdfInput
-                  [value]="pdfFiles[i].name" 
-                  class="w-72 truncate px-2 py-1" 
+                  [value]="pdfFiles[i].name"
+                  class="w-72 truncate px-2 py-1"
                   readonly
                   (mouseenter)="checkOverflow(pdfInput, i)"
                 />
                 <div
                   *ngIf="overflowDetected[i]"
                   class="absolute left-0 top-full -mt-20 hidden w-max max-w-xs rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-lg group-hover/input:block"
-                  >
+                >
                   {{ pdfFiles[i].name }}
                 </div>
-              </div>          
+              </div>
             </div>
           </div>
         </div>
@@ -360,7 +359,7 @@
         pdfSrc.length > 2
       "
       class="m-4 text-lg font-semibold text-purple-600"
-    >
+      >
       Comparison Table
     </h3>
   </div>
@@ -485,7 +484,7 @@
   </div>
 
   <!-- Quote Section -->
-  <section class="bg-white" *ngIf="pdfSrc.length > 0">
+  <section class="bg-white" *ngIf="pdfSrc.length === 3">
     <div class="px-4 py-8 lg:py-16">
       <form action="#" class="mr-1 grid grid-cols-3 gap-2">
         <ng-container *ngFor="let file of pdfFiles; let i = index">
@@ -527,13 +526,20 @@
       <div class="flex flex-col items-end justify-start">
         <button
           *ngIf="pdfSrc.length == 3"
-          [disabled]="comparisonQuoteForm.invalid || !leastPricedVendorId || !isAllVendorInputsFilled()"
+          [disabled]="
+            comparisonQuoteForm.invalid ||
+            !leastPricedVendorId ||
+            !isAllVendorInputsFilled()
+          "
           [ngClass]="{
-            'bg-opacity-50 hover:bg-opacity-50': comparisonQuoteForm.invalid || !leastPricedVendorId || !isAllVendorInputsFilled()
+            'bg-opacity-50 hover:bg-opacity-50':
+              comparisonQuoteForm.invalid ||
+              !leastPricedVendorId ||
+              !isAllVendorInputsFilled()
           }"
           (click)="uploadPdf(comparisonQuoteForm.value)"
           class="an -mb-2 mt-4 rounded-lg bg-purple-700 p-2 px-4 font-semibold text-white hover:bg-purple-900"
-          >
+        >
           Save
         </button>
       </div>
@@ -592,7 +598,7 @@
 </div>
 <section
   *ngIf="toastService.isErrorToast"
-  class="fixed top-[70px] left-6 z-50 flex w-full items-center justify-center"
+  class="fixed left-6 top-[70px] z-50 flex w-full items-center justify-center"
 >
   <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
 </section>
