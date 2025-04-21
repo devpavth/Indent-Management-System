@@ -30,10 +30,10 @@ export class PdfUploadComponent {
   @ViewChildren('searchInput') searchInputs!: QueryList<ElementRef>;
   searchSubject = new Subject<string>();
   pdfSrc: SafeResourceUrl[] = [];
-  pdfFiles: File[] = []; // Array to hold the File objects
+  pdfFiles: File[] = []; 
   currentSlideIndex: number = 0;
 
-  quotes: number[] = [0, 0, 0]; // Array for the quotes
+  quotes: number[] = [0, 0, 0];
   ven1Price: number[] = [];
   ven2Price: number[] = [];
   ven3Price: number[] = [];
@@ -45,7 +45,7 @@ export class PdfUploadComponent {
   isWarningPopup: boolean = false;
   previousHeadofAccId: number | null = null;
   currentHeadOfAccId: number | null = null;
-  selectedQuote: number | null = null; // Variable for the selected quote index
+  selectedQuote: number | null = null;
 
   // assignedVendor: FormGroup;
   comparisonQuoteForm: FormGroup;
@@ -76,6 +76,7 @@ export class PdfUploadComponent {
   quoteCompareAmtPopUpMsg: string = '';
   Spinner: boolean = false;
   isViewItemPerBox: boolean = false;
+  showClearIcon: boolean = false;
   overflowDetected: boolean[] = [];
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
@@ -257,6 +258,7 @@ export class PdfUploadComponent {
   onSearchChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const searchTerm = inputElement.value.trim();
+    this.showClearIcon = searchTerm.length > 0;
     this.searchSubject.next(searchTerm);
   }
 
@@ -331,6 +333,7 @@ export class PdfUploadComponent {
         }
       }, 0);
 
+      this.showClearIcon = false;
 
       console.log('this.selectedVendorName:', this.selectedVendorName);
 
@@ -378,6 +381,16 @@ export class PdfUploadComponent {
       'comparison form in search vendor:',
       this.comparisonQuoteForm.value,
     );
+  }
+
+  clearSearch(){
+    this.isVendorSelected = false;
+    this.storeVendorList = [];
+
+    if(this.searchInput){
+      this.searchInput.nativeElement.value = "";
+    }
+    this.showClearIcon = false;
   }
 
   // selectedHeadOfAcc(event: Event) {
@@ -717,8 +730,8 @@ export class PdfUploadComponent {
       'qcHeadOfAcc',
     ) as FormArray;
 
-    if(headOfAccArray.length > 0){
-      const qcVendorsArray = headOfAccArray.at(0).get('qcVendors') as FormArray; 
+    if (headOfAccArray.length > 0) {
+      const qcVendorsArray = headOfAccArray.at(0).get('qcVendors') as FormArray;
 
       if (qcVendorsArray && qcVendorsArray.length > vendorIndex) {
         qcVendorsArray.removeAt(vendorIndex);
@@ -728,7 +741,10 @@ export class PdfUploadComponent {
         qcVendorsArray.value,
       );
     }
-    console.log("comparison form in remove vendor:", this.comparisonQuoteForm.value);
+    console.log(
+      'comparison form in remove vendor:',
+      this.comparisonQuoteForm.value,
+    );
   }
 
   deleteSlide(index: number): void {
@@ -812,30 +828,30 @@ export class PdfUploadComponent {
 
     const pdfFilesArray = Array.from(this.pdfFiles);
 
-    // this.request
-    //   .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
-    //   .subscribe(
-    //     (response) => {
-    //       console.log('Upload successful:', response);
-    //       this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
-    //       console.log(
-    //         'this.uniqueProductHeadData:',
-    //         this.uniqueProductHeadData,
-    //       );
-    //       if (this.uniqueProductHeadData.length !== 0) {
-    //         this.isQuoteUploaded = true;
-    //       }
-    //     },
-    //     (error) => {
-    //       console.log('Upload failed:', error);
+    this.request
+      .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
+      .subscribe(
+        (response) => {
+          console.log('Upload successful:', response);
+          this.verifyQuoteComparisonHeadOfAcc(this.requestData?.reqId);
+          console.log(
+            'this.uniqueProductHeadData:',
+            this.uniqueProductHeadData,
+          );
+          if (this.uniqueProductHeadData.length !== 0) {
+            this.isQuoteUploaded = true;
+          }
+        },
+        (error) => {
+          console.log('Upload failed:', error);
 
-    //       this.toastService.showWarning(error.error.errorMessege);
+          this.toastService.showWarning(error.error.errorMessege);
 
-    //       if (error.status === 208) {
-    //         this.toastService.showWarning(error.error.text);
-    //       }
-    //     },
-    //   );
+          if (error.status === 208) {
+            this.toastService.showWarning(error.error.text);
+          }
+        },
+      );
   }
 
   updateVendorPrice(
