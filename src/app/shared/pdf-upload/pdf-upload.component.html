@@ -37,8 +37,7 @@
                 class="mb-2 w-96 rounded-lg border border-gray-500"
                 (change)="selectedHeadOfAcc($event)"
                 formControlName="headOfAccId"
-                [value]="currentHeadOfAccId"
-              >
+                >
                 <option
                   value=""
                   selected
@@ -446,6 +445,12 @@
                   <p class="w-48 text-justify text-xs text-gray-400">
                     {{ product.prdDescription }}
                   </p>
+                  <p class="text-gray-800">
+                    <span>Qty:</span>
+                    {{ product.qty }}
+                    <span>Gst %:</span>
+                    {{ product.prdGstPct }}
+                  </p>
                 </td>
 
                 <td
@@ -560,7 +565,11 @@
           (click)="uploadPdf(comparisonQuoteForm.value)"
           class="an -mb-2 mt-4 rounded-lg bg-purple-700 p-2 px-4 font-semibold text-white hover:bg-purple-900"
         >
-          Save
+          <span *ngIf="!loader">Save</span>
+          <span *ngIf="loader" class="flex items-center gap-2">
+            <span class="h-5 w-5 animate-spin border-2 border-white rounded-full border-t-transparent"></span>
+            <span>Saving...</span>
+          </span>
         </button>
       </div>
     </div>

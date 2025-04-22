@@ -27,17 +27,14 @@ export class OtherProductComponent {
   }
   onsubmit(data: any) {
     this.pService.addOtherProduct(data).subscribe(
-      (res) => {
+      (res: any) => {
         console.log(res);
+        this.isSuccesPop = true;
+        this.successData = { show: 6, text: res.error};
+        this.otherProductForm.reset();
       },
       (error) => {
         console.log(error);
-
-        if (error.status == 200) {
-          this.isSuccesPop = true;
-          this.successData = { show: 6, text: `${error.error.text}` };
-          this.otherProductForm.reset();
-        }
       },
     );
   }

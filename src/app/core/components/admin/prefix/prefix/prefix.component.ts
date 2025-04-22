@@ -1,9 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { RequestService } from '../../../service/Request/request.service';
 import { Prefix } from '../../../../models/prefix/prefix.model';
@@ -25,7 +20,7 @@ export class PrefixComponent {
   toastService = inject(ToastService);
   branchService = inject(BranchService);
 
-  tabs: string[] = ['Indent Code', 'Purchase Order', 'Product Transaction'];
+  tabs: string[] = ['Indent Code', 'Purchase Order', 'IWD/OWD'];
 
   POPrefixData: Prefix | undefined;
   isWarningFYPrefixPO: boolean = false;
@@ -65,13 +60,14 @@ export class PrefixComponent {
         this.initialLastCustomValue = this.POPrefixData.lastCustomValue;
         this.initialTransTypeStatus = this.POPrefixData.transactionType;
 
-        if(this.POPrefixData.fyChangedOn){
-          const fyChangedYear = new Date(this.POPrefixData.fyChangedOn).getFullYear();
+        if (this.POPrefixData.fyChangedOn) {
+          const fyChangedYear = new Date(
+            this.POPrefixData.fyChangedOn,
+          ).getFullYear();
           const currentYear = new Date().getFullYear();
 
           this.isRunYearEndProcessBtn = fyChangedYear === currentYear - 1;
-
-        }else{
+        } else {
           this.isRunYearEndProcessBtn = false;
         }
       },
@@ -110,22 +106,21 @@ export class PrefixComponent {
     event.target.value = formattedValue;
   }
 
-  toggleTransType(){
-    if(this.POPrefixData){
+  toggleTransType() {
+    if (this.POPrefixData) {
       this.POPrefixData.transactionType = !this.POPrefixData.transactionType;
 
-      if(this.POPrefixData.transactionType){
+      if (this.POPrefixData.transactionType) {
         this.toastService.showSuccess('Transaction Type Added Successfully');
-      }else{
+      } else {
         this.toastService.showSuccess('Transaction Type Removed Successfully');
       }
 
-      if(this.initialTransTypeStatus === this.POPrefixData.transactionType){
+      if (this.initialTransTypeStatus === this.POPrefixData.transactionType) {
         this.isPrefixChanged = false;
-      }else{
+      } else {
         this.isPrefixChanged = true;
       }
-
     }
   }
 
@@ -171,19 +166,19 @@ export class PrefixComponent {
 
   confirmFYSwitch() {
     this.isWarningFYPrefixPO = false;
-    
+
     this.branchService.updateFinancialYear().subscribe(
       (res: any) => {
-        console.log("successfully updated financial year:", res);
+        console.log('successfully updated financial year:', res);
 
         this.toastService.showSuccess(res.error);
 
         this.onTabSelect(this.selectedTab);
       },
       (error) => {
-        console.log("error while updating financial year:", error);
-      }
-    )
+        console.log('error while updating financial year:', error);
+      },
+    );
   }
 
   formatFYInput(event: any) {
@@ -259,7 +254,7 @@ export class PrefixComponent {
       branch: this.POPrefixData?.branch,
       dept: this.POPrefixData?.dept,
       lastCustomValue: this.POPrefixData?.lastCustomValue,
-      transactionType: this.POPrefixData?.transactionType
+      transactionType: this.POPrefixData?.transactionType,
     };
 
     console.log('payload:', payload);

@@ -77,6 +77,7 @@ export class PdfUploadComponent {
   Spinner: boolean = false;
   isViewItemPerBox: boolean = false;
   showClearIcon: boolean = false;
+  loader: boolean = false;
   overflowDetected: boolean[] = [];
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
@@ -133,7 +134,7 @@ export class PdfUploadComponent {
   ngOnInit() {
     this.searchSubject
       .pipe(
-        debounceTime(300),
+        debounceTime(100),
         switchMap((searchTerm) => {
           if (typeof searchTerm !== 'string') {
             console.error('Invalid search term:', searchTerm);
@@ -393,44 +394,6 @@ export class PdfUploadComponent {
     this.showClearIcon = false;
   }
 
-  // selectedHeadOfAcc(event: Event) {
-  //   const selectElement = event.target as HTMLSelectElement;
-  //   const headOfAccId = Number(selectElement.value);
-  //   console.log('headOfAccId:', headOfAccId);
-
-  //   if (
-  //     this.previousHeadofAccId !== null &&
-  //     this.previousHeadofAccId !== headOfAccId
-  //   ) {
-  //     this.isSuccessToast = false;
-  //     this.isWarningPopup = true;
-  //     this.currentHeadOfAccId = headOfAccId;
-  //   } else {
-  //     this.isSuccessToast = true;
-  //     this.deleteToastMsg = 'Step 2: Search Vendor Name';
-  //     setTimeout(() => {
-  //       this.isSuccessToast = false;
-  //     }, 3000);
-  //   }
-
-  //   this.filterProductHeadData = this.productHeadData.filter(
-  //     (pro: indentProductList) => {
-  //       return pro.headOfAccId === headOfAccId;
-  //     },
-  //   );
-
-  //   this.isEnableSearch = true;
-
-  //   if (!headOfAccId) {
-  //     this.isSuccessToast = false;
-  //     this.isWarningPopup = true;
-  //   }
-
-  //   this.previousHeadofAccId = headOfAccId;
-
-  //   // this.filterProductHeadData.length = 0;
-  // }
-
   selectedHeadOfAcc(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const headOfAccId = Number(selectElement.value);
@@ -559,7 +522,7 @@ export class PdfUploadComponent {
     this.pdfSrc = [];
     this.selectedVendorName = [];
     this.pdfFiles = [];
-    this.currentHeadOfAccId = null;
+    // this.currentHeadOfAccId = null;
     this.previousHeadofAccId = null;
     this.ven1Price = [];
     this.ven2Price = [];
@@ -576,7 +539,17 @@ export class PdfUploadComponent {
       this.getQcVendorsArray(headOfAccIndex).value,
     );
     this.comparisonQuoteForm.reset();
-    this.isEnableSearch = false;
+
+    this.comparisonQuoteForm.patchValue({
+      qcHeadOfAcc: [
+        {
+          headOfAccId: this.currentHeadOfAccId,
+        },
+      ],
+    });
+
+    console.log("comparison form:", this.comparisonQuoteForm.value);
+
     console.log('Previous quotation cleared!');
   }
 
@@ -803,30 +776,9 @@ export class PdfUploadComponent {
       return;
     }
 
-    // const leastPriceIndex = this.quotes.indexOf(this.leastPrice);
-    // if (leastPriceIndex === -1) {
-    //   console.error('No valid least price found');
-    //   return;
-    // }
-
-    // const leastPricedFileName = this.pdfFiles[leastPriceIndex].name;
-
-    // const formData = new FormData();
-    // console.log(this.pdfFiles);
-    // console.log(leastPricedFileName);
-
-    // this.pdfFiles.forEach((file) => {
-    //   formData.append('files', file, file.name);
-    // });
-
-    // // Append the least priced file name separately
-    // formData.append('leastPricedFileName', leastPricedFileName);
-
-    // formData.forEach((value, key) => {
-    //   console.log(key, value);
-    // });
-
     const pdfFilesArray = Array.from(this.pdfFiles);
+
+    this.loader = true;
 
     this.request
       .uploadPdf(this.comparisonQuoteForm.value, pdfFilesArray)
@@ -841,9 +793,11 @@ export class PdfUploadComponent {
           if (this.uniqueProductHeadData.length !== 0) {
             this.isQuoteUploaded = true;
           }
+          this.loader = false;
         },
         (error) => {
           console.log('Upload failed:', error);
+          this.loader = false;
 
           this.toastService.showWarning(error.error.errorMessege);
 

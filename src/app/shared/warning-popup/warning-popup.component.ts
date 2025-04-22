@@ -14,7 +14,7 @@ export class WarningPopupComponent {
     this.close.emit(false);
   }
 
-  closePopup(){
+  closePopup() {
     this.close.emit(false);
   }
 }

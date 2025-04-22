@@ -1,250 +1,311 @@
 <section class="bg-gray bg-opacity-50">
-    <div class="flex">
-        <div class="w-1/2"></div>
-        <div
-            [ngClass]="{ 'animate-slide-out-right': isStyle }"
-            class="animate-slide-in-right w-3/4 border bg-white h-screen shadow-xl"
+  <div class="flex">
+    <div class="w-1/2"></div>
+    <div
+      [ngClass]="{ 'animate-slide-out-right': isStyle }"
+      class="animate-slide-in-right h-screen w-3/4 border bg-white shadow-xl"
+        >
+      <div class="flex items-center justify-between border bg-purple-50 p-4">
+        <div class="flex items-center space-x-3">
+          <button (click)="closePrefix()">
+            <svg
+              class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
             >
-            <div class="flex items-center justify-between border bg-purple-50 p-4">
-                <div class="flex items-center space-x-3">
-                    <button (click)="closePrefix()">
-                        <svg
-                        class="h-8 w-8 rounded-lg bg-gray-100 p-1 text-gray-600 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        >
-                        <path
-                            class=""
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18 17.94 6M18 18 6.06 6"
-                        />
-                        </svg>
-                    </button>
-                    <h1 class="text-xl font-semibold text-purple-800">Prefix</h1>
-                </div>
-                <div class="mr-2">
-                     <button
-                        type="submit"
-                        [disabled]="!isRunYearEndProcessBtn"
-                        [ngClass]="{
-                            'bg-opacity-50 border-opacity-20': !isRunYearEndProcessBtn
-                        }"
-                        (click)="confirmFYRequest()"
-                        class="px-4 py-2 bg-purple-600 text-white font-medium border border-purple-600 rounded-lg"
-                        >
-                        Run Year End Process
-                     </button>
-                </div>
-            </div>
-
-            <div class="flex border-b bg-gray-100">
-                <button 
-                    *ngFor="let tab of tabs; let i = index"
-                    (click)="onTabSelect(i)"
-                    [class.border-purple-700]="selectedTab === i"
-                    [class.text-purple-700]="selectedTab === i"
-                    [class.text-gray-600]="selectedTab !== i"
-                    [class.border-transparent]="selectedTab !== i"
-                    class="px-6 py-3 border-b-2 font-medium hover:text-purple-900 hover:border-purple-900 transition-all duration-300"
-                    >
-                    {{tab}}
-                </button>
-            </div>
-
-            <div class="flex items-center justify-between p-6 w-full">
-                <div class="flex space-x-2">
-                    <!-- <p class="text-gray-700">{{tabs[selectedTab].content}}</p> -->
-
-                    <div *ngIf="POPrefixData?.id === 1 || POPrefixData?.id === 3">
-                        <input type="text"
-                            class="w-24 rounded-lg text-center"
-                            (input)="companyPrefixField($event)"
-                            [maxLength]="4"
-                            [value]="POPrefixData?.firstCustomValue"
-                        />
-                    </div>
-
-                    <div *ngIf="POPrefixData?.id === 2">
-                        <input type="text"
-                            class="w-24 rounded-lg text-center"
-                            (input)="companyPrefixField($event)"
-                            [maxLength]="4"
-                            [value]="POPrefixData?.firstCustomValue"
-                            readonly
-                        /> 
-                    </div>
-
-
-                    <div class="relative w-32" *ngIf="POPrefixData?.id === 3">
-                        <input type="text"
-                            class="w-full rounded-lg bg-gray-200 pointer-events-none pr-2"
-                            value="TransType"
-                            readonly
-                        />
-
-                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600">
-                            <svg
-                                *ngIf="POPrefixData?.transactionType; else tickTransIcon"
-                                (click)="toggleTransType()"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 bg-red-600 font-bold rounded-full p-0.5 text-white dark:text-gray-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                >
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-
-                            <ng-template #tickTransIcon>
-                                <svg
-                                    (click)="toggleTransType()"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 bg-green-600 font-bold rounded-full p-0.5 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </ng-template>
-                        </button>
-                    </div>
-                    
-                     
-                    
-                    <div class="relative w-28" *ngIf="POPrefixData?.id !== 3">
-                        <input type="text"
-                            class="w-full rounded-lg bg-gray-200 pointer-events-none pr-2"
-                            value="Branch"
-                            readonly
-                        />
-
-                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600">
-                            <svg
-                                *ngIf="POPrefixData?.branch; else tickIcon"
-                                (click)="toggleBranch()"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 bg-red-600 font-bold rounded-full p-0.5 text-white dark:text-gray-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                >
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-
-                            <ng-template #tickIcon>
-                                <svg
-                                    (click)="toggleBranch()"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 bg-green-600 font-bold rounded-full p-0.5 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </ng-template>
-                        </button>
-                    </div>
-                    
-                    <div class="relative w-28" *ngIf="POPrefixData?.id !== 3">
-                        <input type="text"
-                            class="w-full rounded-lg bg-gray-200 pointer-events-none pr-2"
-                            value="Dept"
-                            readonly
-                        />
-
-                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-red-600">
-                            <svg
-                                *ngIf="POPrefixData?.dept; else tickDeptIcon"
-                                (click)="toggleDept()"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-5 w-5 bg-red-600 font-bold rounded-full p-0.5 text-white dark:text-gray-400"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                >
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-
-                            <ng-template #tickDeptIcon>
-                                <svg
-                                    (click)="toggleDept()"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="h-5 w-5 bg-green-600 font-bold rounded-full p-0.5 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                >
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </ng-template>
-                        </button>
-                        
-                    </div>
-                    
-                    <div class="relative flex items-center" *ngIf="POPrefixData?.id === 2 || POPrefixData?.id === 3">
-                        <span class="absolute left-2 text-sm text-gray-900 font-semibold">FY</span>
-                        <input type="text"
-                            class="w-28 pl-8 bg-gray-200 rounded-lg text-center tracking-wide"
-                            (input)="formatFYInput($event)"
-                            [value]="(POPrefixData?.lastCustomValue || '')"
-                            [minLength]="6"
-                            [maxLength]="7"
-                            readonly
-                        />
-                    </div>
-
-                    <div *ngIf="POPrefixData?.id === 1">
-                        <input type="text"
-                            class="w-24 rounded-lg text-center"
-                            (input)="indentLastField($event)"
-                            [value]="POPrefixData?.lastCustomValue"
-                            [maxLength]="5"
-                        />
-                    </div>
-                    
-                    
-                </div>
-                <button
-                    type="submit"
-                    [disabled]="!isPrefixChanged"
-                    [ngClass]="{
-                        'bg-opacity-50 border-opacity-20': !isPrefixChanged                    
-                    }"
-                    (click)="confirmPOPrefixCode()"
-                    class="px-4 py-2 rounded-lg border border-purple-700 bg-purple-600 text-white font-medium"
-                    >
-                    Confirm
-                </button>
-            </div>
-            
-
+              <path
+                class=""
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18 17.94 6M18 18 6.06 6"
+              />
+            </svg>
+          </button>
+          <h1 class="text-xl font-semibold text-purple-700">Prefix</h1>
         </div>
-    </div>
-</section>
+        <div class="mr-2">
+          <button
+            type="submit"
+            [disabled]="!isRunYearEndProcessBtn"
+            [ngClass]="{
+              'border-opacity-20 bg-opacity-50': !isRunYearEndProcessBtn
+            }"
+            (click)="confirmFYRequest()"
+            class="rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white"
+          >
+            Run Year End Process
+          </button>
+        </div>
+      </div>
 
+      <div class="flex border-b bg-gray-100">
+        <button
+          *ngFor="let tab of tabs; let i = index"
+          (click)="onTabSelect(i)"
+          [class.border-purple-700]="selectedTab === i"
+          [class.text-purple-700]="selectedTab === i"
+          [class.text-gray-600]="selectedTab !== i"
+          [class.border-transparent]="selectedTab !== i"
+          class="border-b-2 px-6 py-3 font-medium transition-all duration-300 hover:border-purple-900 hover:text-purple-900"
+          >
+          {{ tab }}
+        </button>
+      </div>
+
+      <div class="flex w-full items-center justify-between p-6">
+        <div class="flex space-x-2">
+          <!-- <p class="text-gray-700">{{tabs[selectedTab].content}}</p> -->
+
+          <div *ngIf="POPrefixData?.id === 1 || POPrefixData?.id === 3">
+            <input
+              type="text"
+              class="w-24 rounded-lg text-center"
+              (input)="companyPrefixField($event)"
+              [maxLength]="4"
+              [value]="POPrefixData?.firstCustomValue"
+            />
+          </div>
+
+          <div *ngIf="POPrefixData?.id === 2">
+            <input
+              type="text"
+              class="w-24 rounded-lg text-center"
+              (input)="companyPrefixField($event)"
+              [maxLength]="4"
+              [value]="POPrefixData?.firstCustomValue"
+              readonly
+            />
+          </div>
+
+          <div class="relative w-32" *ngIf="POPrefixData?.id === 3">
+            <input
+              type="text"
+              class="pointer-events-none w-full rounded-lg bg-gray-200 pr-2"
+              value="TransType"
+              readonly
+            />
+
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 transform text-gray-500 hover:text-red-600"
+            >
+              <svg
+                *ngIf="POPrefixData?.transactionType; else tickTransIcon"
+                (click)="toggleTransType()"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+
+              <ng-template #tickTransIcon>
+                <svg
+                  (click)="toggleTransType()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 rounded-full bg-green-600 p-0.5 font-bold text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </ng-template>
+            </button>
+          </div>
+
+          <div class="relative w-28" *ngIf="POPrefixData?.id !== 3">
+            <input
+              type="text"
+              class="pointer-events-none w-full rounded-lg bg-gray-200 pr-2"
+              value="Branch"
+              readonly
+            />
+
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 transform text-gray-500 hover:text-red-600"
+            >
+              <svg
+                *ngIf="POPrefixData?.branch; else tickIcon"
+                (click)="toggleBranch()"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+
+              <ng-template #tickIcon>
+                <svg
+                  (click)="toggleBranch()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 rounded-full bg-green-600 p-0.5 font-bold text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </ng-template>
+            </button>
+          </div>
+
+          <div class="relative w-28" *ngIf="POPrefixData?.id !== 3">
+            <input
+              type="text"
+              class="pointer-events-none w-full rounded-lg bg-gray-200 pr-2"
+              value="Dept"
+              readonly
+            />
+
+            <button
+              class="absolute right-2 top-1/2 -translate-y-1/2 transform text-gray-500 hover:text-red-600"
+            >
+              <svg
+                *ngIf="POPrefixData?.dept; else tickDeptIcon"
+                (click)="toggleDept()"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+
+              <ng-template #tickDeptIcon>
+                <svg
+                  (click)="toggleDept()"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 rounded-full bg-green-600 p-0.5 font-bold text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </ng-template>
+            </button>
+          </div>
+
+          <div
+            class="relative flex items-center"
+            *ngIf="POPrefixData?.id === 2 || POPrefixData?.id === 3"
+            >
+            <span class="absolute left-2 text-sm font-semibold text-gray-900"
+              >FY</span
+            >
+            <input
+              type="text"
+              class="w-28 rounded-lg bg-gray-200 pl-8 text-center tracking-wide"
+              (input)="formatFYInput($event)"
+              [value]="POPrefixData?.lastCustomValue || ''"
+              [minLength]="6"
+              [maxLength]="7"
+              readonly
+            />
+          </div>
+
+          <div *ngIf="POPrefixData?.id === 1">
+            <input
+              type="text"
+              class="w-24 rounded-lg text-center"
+              (input)="indentLastField($event)"
+              [value]="POPrefixData?.lastCustomValue"
+              [maxLength]="5"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          [disabled]="!isPrefixChanged"
+          [ngClass]="{
+            'border-opacity-20 bg-opacity-50': !isPrefixChanged
+          }"
+          (click)="confirmPOPrefixCode()"
+          class="rounded-lg border border-purple-700 bg-purple-600 px-4 py-2 font-medium text-white"
+        >
+          Confirm
+        </button>
+      </div>
+
+      <div class="p-6">
+        <h2 class="font-medium text-purple-700">Info:</h2>
+
+        <div>
+          <p class="flex items-start gap-3">
+            <span class="font-medium w-[160px]">Branch Name:</span>
+            <span>Head Office</span>
+          </p>
+          <p class="flex items-start gap-3">
+            <span class="font-medium w-[160px]">Department Name:</span>
+            <span>Livelihood</span>
+          </p>
+        </div>
+        <div class="mt-2">
+          <h2 class="font-medium text-purple-700">Example:</h2>
+          <p class="flex items-start">
+            <span class="font-medium w-[173px]">{{ tabs[selectedTab] }}:</span> 
+            <span>{{ POPrefixData?.firstCustomValue }}</span><span *ngIf="POPrefixData?.branch">HEA</span><span *ngIf="POPrefixData?.transactionType">TRA</span><span *ngIf="POPrefixData?.dept">LIV</span><span>{{ POPrefixData?.lastCustomValue }}</span>
+          </p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
 
 <section
   *ngIf="toastService.isSuccessToast"
   class="fixed top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 
 <section *ngIf="isWarningFYPrefixPO">
-  <app-warning-prefix (confirmFYSwitch)="confirmFYSwitch()" (close)="closepop($event)"></app-warning-prefix>
+  <app-warning-prefix
+    (confirmFYSwitch)="confirmFYSwitch()"
+    (close)="closepop($event)"
+  ></app-warning-prefix>
 </section>

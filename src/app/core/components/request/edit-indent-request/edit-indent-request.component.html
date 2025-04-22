@@ -659,6 +659,7 @@
                     <svg
                       class="h-6 w-6 text-violet-600"
                       xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -684,7 +685,7 @@
                   </div>
 
                   <table
-                    class="w-full rounded-lg text-left text-sm text-gray-500"
+                    class="w-full text-left text-sm text-gray-500"
                   >
                     <thead class="bg-violet-600 text-xs uppercase text-gray-50">
                       <tr>
@@ -710,14 +711,14 @@
                         </th>
                         <th
                           scope="col"
-                          class="rounded-tr-lg border-purple-500 px-2 py-3"
-                        >
+                          class="px-2 py-3"
+                          >
                           <span class="sr-only">Actions</span>
                         </th>
                         <th
                           scope="col"
                           class="rounded-tr-lg border-purple-500 px-2 py-3"
-                        >
+                          >
                           <span class="sr-only">Actions</span>
                         </th>
                       </tr>
@@ -729,7 +730,7 @@
                           let i = index;
                           trackBy: trackByProduct
                         "
-                      >
+                        >
                         <tr
                           class="border-x border-b border-violet-300"
                           *ngIf="prd.status !== 404"
