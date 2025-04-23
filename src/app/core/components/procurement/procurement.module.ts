@@ -10,6 +10,10 @@ import { ViewProcurementreqComponent } from './view-procurementreq/view-procurem
 import { ViewAcceptedprocurementreqComponent } from './view-acceptedprocurementreq/view-acceptedprocurementreq.component';
 import { ViewConsolidatedquoteComponent } from './view-consolidatedquote/view-consolidatedquote.component';
 import { ViewPurchaseorderComponent } from './view-purchaseorder/view-purchaseorder.component';
+import { PurchaseorderlistComponent } from './purchaseorderlist/purchaseorderlist.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -19,6 +23,7 @@ import { ViewPurchaseorderComponent } from './view-purchaseorder/view-purchaseor
     ViewAcceptedprocurementreqComponent,
     ViewConsolidatedquoteComponent,
     ViewPurchaseorderComponent,
+    PurchaseorderlistComponent,
   ],
   imports: [
     CommonModule,
@@ -26,9 +31,10 @@ import { ViewPurchaseorderComponent } from './view-purchaseorder/view-purchaseor
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule
   ],
-  exports: [
-    ViewConsolidatedquoteComponent
-  ]
+  exports: [ViewConsolidatedquoteComponent],
 })
 export class ProcurementModule {}

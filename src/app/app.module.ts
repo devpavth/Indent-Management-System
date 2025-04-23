@@ -20,6 +20,7 @@ import { tokenInterceptor } from './core/components/service/token.interceptor';
 import { FinanceModule } from './core/components/finance/finance.module';
 import { ProcurementModule } from './core/components/procurement/procurement.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 // const config: SocketIoConfig = { url: 'http://192.168.1.7:9001/', options: {} };
 
@@ -40,7 +41,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
     // SocketIoModule.forRoot(config)
   ],
-  providers: [provideHttpClient(withInterceptors([tokenInterceptor]))],
+  providers: [
+    provideHttpClient(withInterceptors([tokenInterceptor])),
+    provideAnimationsAsync(),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

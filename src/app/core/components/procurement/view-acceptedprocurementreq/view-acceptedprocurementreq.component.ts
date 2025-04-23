@@ -66,6 +66,26 @@ export class ViewAcceptedprocurementreqComponent {
 
         console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
 
+        this.uniqueProductHeadData.unshift({
+          headOfAccId: 0,
+          headOfAccName: 'All',
+          id: 0,
+          itemTotalPrice: 0,
+          prdCode: '',
+          prdDescription: '',
+          prdGstPct: 0,
+          prdHsnCode: 0,
+          prdStatus: 0,
+          prdUnit: 0,
+          prdbrndName: '',
+          prdcatgName: '',
+          prdgrpName: '',
+          prdmdlName: '',
+          productId: 0,
+          qty: 0,
+          unitPrice: 0,
+        });
+
         console.log(
           'this.uniqueProductHeadData after all:',
           this.uniqueProductHeadData,
@@ -139,7 +159,7 @@ export class ViewAcceptedprocurementreqComponent {
     }
   }
 
-  showTooltipForFewSec(sno: number){
+  showTooltipForFewSec(sno: number) {
     this.tooltipSno = sno;
   }
 

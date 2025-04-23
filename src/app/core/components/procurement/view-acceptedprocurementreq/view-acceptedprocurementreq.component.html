@@ -52,7 +52,7 @@
 
                 <div
                   class="mt-6 flex flex-row items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0"
-                  >
+                >
                   <label class="text-lg font-semibold text-purple-600">
                     Head of Account
                     <span class="ml-[5px]">:</span>
@@ -77,20 +77,28 @@
                       (click)="viewPurchaseOrderReport()"
                       (mouseenter)="showTooltipForFewSec(reqId)"
                       (mouseleave)="tooltipSno = null"
-                      [disabled]="_requestDetails().indentHeaders?.requestStatus !== 100"
+                      [disabled]="
+                        _requestDetails().indentHeaders?.requestStatus !== 100
+                      "
                       [ngClass]="{
-                        'btn-disable-order border-opacity-10': _requestDetails().indentHeaders?.requestStatus !== 100
+                        'btn-disable-order border-opacity-10':
+                          _requestDetails().indentHeaders?.requestStatus !== 100
                       }"
-                      class="border border-purple-600 px-4 py-2 rounded-lg bg-purple-600 text-white font-medium"
-                      >Convert to Purchase Order</button>
+                      class="rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white"
+                    >
+                      Convert to Purchase Order
+                    </button>
 
-                      <div
-                        *ngIf="tooltipSno && _requestDetails().indentHeaders?.requestStatus !== 100" 
-                        class="absolute bottom-full left-1/2 w-56 -translate-x-1/2 -translate-y-1 transform rounded-lg bg-gray-800 p-3 text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        >
-                        Indent request is still processing. After completion, you
-                        can convert to purchase order.
-                      </div>
+                    <div
+                      *ngIf="
+                        tooltipSno &&
+                        _requestDetails().indentHeaders?.requestStatus !== 100
+                      "
+                      class="absolute bottom-full left-1/2 w-56 -translate-x-1/2 -translate-y-1 transform rounded-lg bg-gray-800 p-3 text-xs font-medium text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    >
+                      Indent request is still processing. After completion, you
+                      can convert to purchase order.
+                    </div>
                   </div>
                 </div>
 
@@ -110,7 +118,6 @@
                     height="700px"
                   ></iframe>
                 </div>
-
               </div>
             </div>
           </div>

@@ -13,6 +13,9 @@ import { OtherProductComponent } from './other-product/other-product.component';
 import { VerificationComponent } from './verification/verification.component';
 import { ProgramManagerApprovalComponent } from './program-manager-approval/program-manager-approval.component';
 import { EditIndentRequestComponent } from './edit-indent-request/edit-indent-request.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { EditIndentRequestComponent } from './edit-indent-request/edit-indent-re
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
   ],
 })
 export class RequestModule {}

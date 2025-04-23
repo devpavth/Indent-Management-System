@@ -69,16 +69,16 @@ export class ViewPurchaseorderComponent {
 
   constructor(private sanitizer: DomSanitizer) {}
 
-  fetchCompanyDetails(){
+  fetchCompanyDetails() {
     this.branchService.fetchCompanyName().subscribe(
       (res) => {
-        console.log("fetching company details in purchase order:", res);
+        console.log('fetching company details in purchase order:', res);
         this.companyDetails = res;
       },
       (error) => {
-        console.log("error while fetching company details:", error);
-      }
-    )
+        console.log('error while fetching company details:', error);
+      },
+    );
   }
 
   fetchDetails(reqId: number) {
@@ -259,7 +259,7 @@ export class ViewPurchaseorderComponent {
       const spacing = 3; // Adjust spacing as needed
       doc.text(`PAN AAGCC3235L`, 10 + gstWidth + spacing, adjustedY);
 
-      if(this.companyDetails?.companyLogo){
+      if (this.companyDetails?.companyLogo) {
         const companyLogo = `data:image/png;base64,${this.companyDetails.companyLogo}`;
         const logoX = doc.internal.pageSize.width - 40;
         const logoY = 15;
@@ -273,11 +273,15 @@ export class ViewPurchaseorderComponent {
       doc.setFontSize(9);
       doc.text(`${this.companyDetails?.add1}`, 10, 29);
       doc.text(`${this.companyDetails?.add2}`, 10, 33);
-      doc.text(`${this.companyDetails?.city}, ${this.companyDetails?.state}, ${this.companyDetails?.pinCode}`, 10, 37);
-      const mobileLabel = 'Mobile:'; 
-      const mobileValue = ` ${this.contactPersonList.empPhone}`; 
-      const emailLabel = 'Contact Person Email:'; 
-      const emailValue = ` ${this.contactPersonList.empEmail}`; 
+      doc.text(
+        `${this.companyDetails?.city}, ${this.companyDetails?.state}, ${this.companyDetails?.pinCode}`,
+        10,
+        37,
+      );
+      const mobileLabel = 'Mobile:';
+      const mobileValue = ` ${this.contactPersonList.empPhone}`;
+      const emailLabel = 'Contact Person Email:';
+      const emailValue = ` ${this.contactPersonList.empEmail}`;
       const websiteLabel = 'Contact Person Name:';
       const websiteValue = ` ${this.contactPersonList.empFirstName} ${this.contactPersonList.empLastName}`;
 
@@ -434,7 +438,11 @@ export class ViewPurchaseorderComponent {
       const indentSpacing = 1;
 
       doc.setFont('helvetica', 'normal');
-      doc.text(`${this.indentList.requestNo}`, indentX + indentLabelWidth + indentSpacing, 86);
+      doc.text(
+        `${this.indentList.requestNo}`,
+        indentX + indentLabelWidth + indentSpacing,
+        86,
+      );
 
       doc.setFont('helvetica', 'bold');
       const deptLabel = 'Department:';
@@ -445,8 +453,11 @@ export class ViewPurchaseorderComponent {
       const deptSpacing = 1;
 
       doc.setFont('helvetica', 'normal');
-      doc.text(`${this.branchList.deptName}`, deptX + deptLabelWidth + deptSpacing, 86);
-
+      doc.text(
+        `${this.branchList.deptName}`,
+        deptX + deptLabelWidth + deptSpacing,
+        86,
+      );
 
       // const groupedProducts = this.headOfProduct.reduce((acc, item) => {
       //   if (!acc[item.headOfAccId]) {

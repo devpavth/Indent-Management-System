@@ -10,6 +10,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
 import { AuthService } from '../../service/Auth/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-your-request',
@@ -27,8 +28,9 @@ export class YourRequestComponent implements OnInit {
 
   isViewReq: boolean = false;
 
-  selectedDate: string | undefined;
-  maxDate: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+  maxDate: Date | undefined;
   isViewSelectedDate: boolean = true;
 
   noRequest: boolean = false;
@@ -50,9 +52,13 @@ export class YourRequestComponent implements OnInit {
     private elRef: ElementRef,
   ) {
     const today = new Date();
-    this.selectedDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
 
   ngOnInit() {
     this.reqService.getDebouncedSearchObservable().subscribe((indentCode) => {
@@ -90,15 +96,37 @@ export class YourRequestComponent implements OnInit {
       this.authService.isAuthenticateEditIndentRole();
 
     this.fetchYourRequest();
+
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+        this.fetchYourRequest();
+      }
+    });
+  }
+
+  formatDateOnly(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  setTodayDateRange(){
+    const today = new Date();
+
+    this.range.setValue({
+      start: today,
+      end: today
+    })
   }
   // 102 p,200 c,406 rej
   fetchYourRequest() {
     if (
-      (this.isCreated &&
-        !this.isProcess &&
-        !this.isOnHold &&
-        !this.isCompleted &&
-        !this.isRejected)
+      this.isCreated &&
+      !this.isProcess &&
+      !this.isOnHold &&
+      !this.isCompleted &&
+      !this.isRejected
     ) {
       let status = 201;
       this.isViewSelectedDate = false;
@@ -125,13 +153,13 @@ export class YourRequestComponent implements OnInit {
         },
       );
     }
-    if(
+    if (
       !this.isCreated &&
-      this.isProcess && 
-      !this.isOnHold && 
+      this.isProcess &&
+      !this.isOnHold &&
       !this.isCompleted &&
       !this.isRejected
-    ){
+    ) {
       let status = 102;
       this.isViewSelectedDate = false;
       this.reqService.getUserReq(status).subscribe(
@@ -149,103 +177,112 @@ export class YourRequestComponent implements OnInit {
           );
           this.isSkeletonLoader = false;
 
-          if(error.status === 404){
+          if (error.status === 404) {
             this._yourReq = undefined;
             this.noRequest = true;
             this.isSkeletonLoader = false;
             this.isViewNewRequestBtn = false;
           }
-        }
-      )
+        },
+      );
     }
-    if(
+    if (
       !this.isCreated &&
       !this.isProcess &&
       this.isOnHold &&
       !this.isCompleted &&
       !this.isRejected
-    ){
+    ) {
       let status = 418;
       this.isViewSelectedDate = false;
       this.reqService.getUserReq(status).subscribe(
         (res) => {
-          console.log("fetching onhold user request list:", res);
+          console.log('fetching onhold user request list:', res);
           this._yourReq = res;
 
           this.isSkeletonLoader = false;
           this.noRequest = false;
         },
         (error) => {
-          console.log("error while fetching onhold user request list:", error);
+          console.log('error while fetching onhold user request list:', error);
 
-          if(error.status === 404){
+          if (error.status === 404) {
             this._yourReq = undefined;
             this.noRequest = true;
             this.isSkeletonLoader = false;
             this.isViewNewRequestBtn = false;
           }
-        }
-      )
+        },
+      );
     }
-    if(
+    if (
       !this.isCreated &&
       !this.isProcess &&
       !this.isOnHold &&
       this.isCompleted &&
       !this.isRejected
-    ){
+    ) {
       let status = 100;
-      this.isViewSelectedDate = true;
-      this.reqService.getUserReq(status, this.selectedDate).subscribe(
-        (res) => {
-          console.log("fetching accepted user request list:", res);
-          this._yourReq = res;
+      console.log('date range form:', this.range.value);
+      this.reqService
+        .getUserReq(status, this.startDate, this.endDate)
+        .subscribe(
+          (res) => {
+            console.log('fetching accepted user request list:', res);
+            this._yourReq = res;
 
-          this.isSkeletonLoader = false;
-          this.noRequest = false;
-        },
-        (error) => {
-          console.log("error while fetching accepted user request list:", error);
-          this.isSkeletonLoader = false;
-
-          if(error.status === 404){
-            this._yourReq = undefined;
-            this.noRequest = true;
             this.isSkeletonLoader = false;
-            this.isViewNewRequestBtn = false;
-          }
-        }
-      )
+            this.noRequest = false;
+          },
+          (error) => {
+            console.log(
+              'error while fetching accepted user request list:',
+              error,
+            );
+            this.isSkeletonLoader = false;
+
+            if (error.status === 404) {
+              this._yourReq = undefined;
+              this.noRequest = true;
+              this.isSkeletonLoader = false;
+              this.isViewNewRequestBtn = false;
+            }
+          },
+        );
     }
-    if(
+    if (
       !this.isCreated &&
       !this.isProcess &&
       !this.isOnHold &&
       !this.isCompleted &&
       this.isRejected
-    ){
-      let status  = 406;
-      this.isViewSelectedDate = true;
-      this.reqService.getUserReq(status, this.selectedDate).subscribe(
-        (res) => {
-          console.log("fetching rejected user request list:", res);
-          this._yourReq = res;
+    ) {
+      let status = 406;
+      this.reqService
+        .getUserReq(status, this.startDate, this.endDate)
+        .subscribe(
+          (res) => {
+            console.log('fetching rejected user request list:', res);
+            this._yourReq = res;
 
-          this.isSkeletonLoader = false;
-          this.noRequest = false;
-        },
-        (error) => {
-          console.log("error while fetching rejected user request list:", error);
-          this.isSkeletonLoader = false;
-
-          if(error.status === 404){
-            this._yourReq = undefined;
-            this.noRequest = true;
             this.isSkeletonLoader = false;
-            this.isViewNewRequestBtn = false;
-          }
-        }
-      )
+            this.noRequest = false;
+          },
+          (error) => {
+            console.log(
+              'error while fetching rejected user request list:',
+              error,
+            );
+            this.isSkeletonLoader = false;
+
+            if (error.status === 404) {
+              this._yourReq = undefined;
+              this.noRequest = true;
+              this.isSkeletonLoader = false;
+              this.isViewNewRequestBtn = false;
+            }
+          },
+        );
     }
   }
 
@@ -301,7 +338,7 @@ export class YourRequestComponent implements OnInit {
   editIndentForm(sno: number) {
     this.RequestID = sno;
 
-    if (this.isAuthorizeEditIndentForm = true) {
+    if ((this.isAuthorizeEditIndentForm = true)) {
       this.isViewEditIndentForm = true;
     }
   }

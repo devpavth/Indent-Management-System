@@ -20,12 +20,14 @@ export class PrefixComponent {
   toastService = inject(ToastService);
   branchService = inject(BranchService);
 
-  tabs: string[] = ['Indent Code', 'Purchase Order', 'IWD/OWD'];
+  tabs: string[] = ['Indent Code', 'PO Number', 'IWD/OWD'];
 
   POPrefixData: Prefix | undefined;
   isWarningFYPrefixPO: boolean = false;
   isPrefixChanged: boolean = false;
   isRunYearEndProcessBtn: boolean = false;
+  isInvalidIndentLastPrefix: boolean = false;
+  isInvalidCompanyPrefix: boolean = false;
   initialFirstCustomValue: string = '';
   initialBranchStatus!: boolean;
   initailDeptStatus!: boolean;
@@ -44,6 +46,7 @@ export class PrefixComponent {
     const POCode = index + 1;
 
     this.isPrefixChanged = false;
+    this.isInvalidCompanyPrefix = false;
 
     this.fetchPOMockPrefixCode(POCode);
   }
@@ -79,7 +82,10 @@ export class PrefixComponent {
 
   companyPrefixField(event: any) {
     let inputValue = event.target.value.toUpperCase();
-    let formattedValue = inputValue.replace(/[^A-Z-]/g, '');
+
+    const invalidCharPattern = /[^A-Z-]/g;
+    this.isInvalidCompanyPrefix = invalidCharPattern.test(inputValue);
+    let formattedValue = inputValue.replace(invalidCharPattern, '');
 
     if (!/^[A-Z]/.test(formattedValue)) {
       formattedValue = formattedValue.replace(/[^A-Z]/g, '');
@@ -211,7 +217,10 @@ export class PrefixComponent {
   indentLastField(event: any) {
     let inputValue = event.target.value.toUpperCase();
 
-    let formattedValue = inputValue.replace(/[^A-Z0-9-]/g, '');
+    const invalidCharPattern = /[^A-Z0-9-]/g;
+    this.isInvalidIndentLastPrefix = invalidCharPattern.test(inputValue);
+
+    let formattedValue = inputValue.replace(invalidCharPattern, '');
 
     let hyphenIndex = formattedValue.indexOf('-');
     if (hyphenIndex !== -1) {

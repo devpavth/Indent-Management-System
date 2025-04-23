@@ -1,5 +1,7 @@
-<div class="fixed top-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-purple-950 py- sm:ml-64">
-  <button class="fixed top-20 right-12" (click)="closeView.emit(false)">
+<div
+  class="py- fixed left-0 right-0 top-0 bg-gradient-to-t from-gray-900 to-purple-950 sm:ml-64"
+>
+  <button class="fixed right-12 top-20" (click)="closeView.emit(false)">
     <svg
       class="h-8 w-8 rounded-full bg-gray-100/5 p-1 text-gray-50 transition-all duration-500 hover:bg-red-600 hover:text-white dark:text-white"
       aria-hidden="true"
@@ -8,7 +10,7 @@
       height="24"
       fill="none"
       viewBox="0 0 24 24"
-        >
+    >
       <path
         class=""
         stroke="currentColor"
@@ -21,66 +23,70 @@
   </button>
   <section class="scroll mt-16 h-screen overflow-auto">
     <div class="mx-40">
-      <div class="rounded-xl mt-10 bg-white shadow-lg">
-        
+      <div class="mt-10 rounded-xl bg-white shadow-lg">
         <div class="items-center justify-between">
           <div class=" ">
             <div class="mx-auto">
               <!-- Card -->
               <div class="flex flex-col p-4 sm:p-10">
                 <!-- Grid -->
-                <h2
-                class="text-purple-600 text-xl font-bold text-center mb-2"
-                >Purchase Order</h2>
+                <h2 class="mb-2 text-center text-xl font-bold text-purple-600">
+                  Purchase Order
+                </h2>
 
                 <div class="flex flex-row items-center">
-                    <label
-                      class="mt-6 text-lg font-semibold text-purple-600"
-                      >
-                      Indent ID
-                      <span class="ml-[75px]">:</span>
-                    </label>
+                  <label class="mt-6 text-lg font-semibold text-purple-600">
+                    Indent ID
+                    <span class="ml-[75px]">:</span>
+                  </label>
 
-                    <input
-                      type="text"
-                      class="ml-[15px] mt-4 rounded-lg text-center text-lg font-semibold"
-                      [value]="indentNumber"
-                      readonly
-                    />
+                  <input
+                    type="text"
+                    class="ml-[15px] mt-4 rounded-lg text-center text-lg font-semibold"
+                    [value]="indentNumber"
+                    readonly
+                  />
                 </div>
 
                 <div
-                    class="flex flex-row items-center mt-6 space-y-3 md:flex-row md:space-x-4 md:space-y-0"
+                  class="mt-6 flex flex-row items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0"
+                >
+                  <label class="text-lg font-semibold text-purple-600">
+                    Head of Account
+                    <span class="ml-2">:</span>
+                  </label>
+
+                  <select
+                    class="m-4 w-64 rounded-lg border border-gray-500 text-lg"
+                    (change)="selectedHeadOfAcc($event)"
+                    [value]="selectedHeadOfAccId"
+                  >
+                    <option value="" disabled>Choose Head of Account</option>
+                    <option
+                      *ngFor="let head of uniqueProductHeadData"
+                      [value]="head.headOfAccId"
                     >
-                    <label
-                        class="text-lg font-semibold text-purple-600"
-                        >
-                        Head of Account
-                        <span class="ml-2">:</span>
-                    </label>
-
-                    <select 
-                        class="m-4 w-64 rounded-lg text-lg border border-gray-500"
-                        (change)="selectedHeadOfAcc($event)"
-                        [value]="selectedHeadOfAccId"
-                        >
-                        <option 
-                            value="" disabled>Choose Head of Account</option>
-                        <option 
-                            *ngFor="let head of uniqueProductHeadData"
-                            [value]="head.headOfAccId">
-                            {{ head.headOfAccName }}
-                        </option>
-                    </select>
+                      {{ head.headOfAccName }}
+                    </option>
+                  </select>
                 </div>
 
-                <div class="mt-8 relative">
-                    <div *ngIf="isLoading" class="absolute mt-2 inset-0 flex items-center justify-center bg-white bg-opacity-70">
-                        <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                    <iframe *ngIf="!isLoading && pdfURL" [src]="pdfURL" width="100%" height="700px"></iframe>
+                <div class="relative mt-8">
+                  <div
+                    *ngIf="isLoading"
+                    class="absolute inset-0 mt-2 flex items-center justify-center bg-white bg-opacity-70"
+                  >
+                    <div
+                      class="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
+                    ></div>
+                  </div>
+                  <iframe
+                    *ngIf="!isLoading && pdfURL"
+                    [src]="pdfURL"
+                    width="100%"
+                    height="700px"
+                  ></iframe>
                 </div>
-                
               </div>
             </div>
           </div>

@@ -44,7 +44,7 @@
           </div>
           <div
             class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
-          >
+            >
             <button
               type="button"
               routerLink="/home/addVendor"
@@ -155,13 +155,28 @@
             </tbody>
 
             <tbody *ngIf="isSkeletonLoader">
-              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-36"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-28"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-24"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-36"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-16"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-10"></div></td>
+              <tr
+                *ngFor="let _ of [1, 2, 3, 4, 5]"
+                class="animate-pulse border-b"
+              >
+                <td class="px-4 py-3">
+                  <div class="h-4 w-36 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-28 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-24 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-36 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-16 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-10 rounded-lg bg-gray-300"></div>
+                </td>
               </tr>
             </tbody>
           </table>

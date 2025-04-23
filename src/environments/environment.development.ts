@@ -165,6 +165,10 @@ export const environment = {
 
   fetchRequestByIndentCode: Url + baseRequestApi + '/getrequestbyindentcode/',
   updateIndentRequestDetails: Url + baseRequestApi + '/updaterequestdetails/',
+  purchaseOrderList:
+    Url +
+    baseRequestApi +
+    '/generated/purchaseorderpurchaseorderlist',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 

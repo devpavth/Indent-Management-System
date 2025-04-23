@@ -15,14 +15,14 @@ export class RequestService {
   postRequestIndent(req: any) {
     return this.http.post(environment.postRequestIndent, req);
   }
-  getUserReq(status: number, selectedDate?: string | undefined) {
-    let url = `${environment.getYourReq}/${status}`
+  getUserReq(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+    let url = `${environment.getYourReq}/${status}`;
 
-    if(selectedDate){
-      url += `?startDate=${selectedDate}`;
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
-    console.log("user request api:", url);
+    console.log('user request api:', url);
     return this.http.get(url);
   }
   viewReq(data: any): Observable<any> {
@@ -377,5 +377,9 @@ export class RequestService {
       environment.updateIndentRequestDetails + indentID,
       indentData,
     );
+  }
+
+  fetchPurchaseOrderList(startDate: string | undefined, endDate: string | undefined){
+    return this.http.get(environment.purchaseOrderList + `?startDate=${startDate}&endDate=${endDate}`);
   }
 }
