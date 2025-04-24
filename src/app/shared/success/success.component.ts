@@ -30,6 +30,9 @@ export class SuccessComponent implements OnInit {
     } else if (this.successData.show == 7) {
       this.show = 7;
       this.message = this.successData.text;
+    } else if(this.successData.show == 8){
+      this.show = 8;
+      this.message = this.successData.text;
     }
   }
 }

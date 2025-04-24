@@ -12,6 +12,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { indentProductList } from '../../../models/proRequestData/pro-requestdata.model';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-view-acceptedprocurementreq',
@@ -25,9 +26,11 @@ export class ViewAcceptedprocurementreqComponent {
   _requestDetails = signal<any>(null);
   requestService = inject(RequestService);
   sanitizer = inject(DomSanitizer);
+  toastService = inject(ToastService);
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
   filterProductHeadData: indentProductList[] = [];
+  filterHeadOfAcc: any;
   indentQuoteComparison: QuoteComparison | undefined;
   selectedVendorname: string[] = [];
   vendorQuotedPrice: number[] = [];
@@ -38,9 +41,19 @@ export class ViewAcceptedprocurementreqComponent {
         leastPrice: number | string;
       }
     | undefined;
+  successData: { show: number; text: string; } = {
+    show: 0,
+    text: ''
+  }
 
   isLoading: boolean = false;
   isViewPurchaseOrder: boolean = false;
+  isWarningPopUp: boolean = false;
+  dynamicPOBtn: boolean = false;
+  isSuccesPop: boolean = false;
+
+  confirmPOMsg: string = '';
+  selectedHeadOfAccName: string = '';
 
   tooltipSno: number | null = null;
   pdfURL: SafeResourceUrl | null = null;
@@ -49,6 +62,7 @@ export class ViewAcceptedprocurementreqComponent {
     console.log('reqId:', this.reqId);
 
     this.fetchDetails(this.reqId);
+    this.verifyQuoteComparisonHeadOfAcc(this.reqId);
   }
 
   fetchDetails(reqId: number) {
@@ -66,26 +80,6 @@ export class ViewAcceptedprocurementreqComponent {
 
         console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
 
-        this.uniqueProductHeadData.unshift({
-          headOfAccId: 0,
-          headOfAccName: 'All',
-          id: 0,
-          itemTotalPrice: 0,
-          prdCode: '',
-          prdDescription: '',
-          prdGstPct: 0,
-          prdHsnCode: 0,
-          prdStatus: 0,
-          prdUnit: 0,
-          prdbrndName: '',
-          prdcatgName: '',
-          prdgrpName: '',
-          prdmdlName: '',
-          productId: 0,
-          qty: 0,
-          unitPrice: 0,
-        });
-
         console.log(
           'this.uniqueProductHeadData after all:',
           this.uniqueProductHeadData,
@@ -94,6 +88,8 @@ export class ViewAcceptedprocurementreqComponent {
         if (this.uniqueProductHeadData.length > 0) {
           console.log('checking');
           this.selectedHeadOfAccId = this.uniqueProductHeadData[0].headOfAccId;
+          this.selectedHeadOfAccName =
+            this.uniqueProductHeadData[0].headOfAccName;
           console.log('this.selectedHeadOfAccId:', this.selectedHeadOfAccId);
           this.selectedHeadOfAcc(this.selectedHeadOfAccId);
         }
@@ -118,11 +114,35 @@ export class ViewAcceptedprocurementreqComponent {
       this.selectedHeadOfAccId = Number(selectElement.value);
     }
 
-    if (this.selectedHeadOfAccId || this.selectedHeadOfAccId === 0) {
+    if (this.selectedHeadOfAccId) {
+      const selectedItem = this.filterHeadOfAcc.find(
+        (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
+      );
+      this.dynamicPOBtn = selectedItem?.poCreated === true;
       this.fetchQuote(this.selectedHeadOfAccId);
     }
 
     console.log('Selected headOfAccId:', this.selectedHeadOfAccId);
+  }
+
+  verifyQuoteComparisonHeadOfAcc(sno: number) {
+    this.requestService.verifyQuoteComparisonHeadOfAcc(sno).subscribe(
+      (res) => {
+        console.log('verifying quote compare headofacc:', res);
+        this.filterHeadOfAcc = res;
+        if (this.selectedHeadOfAccId) {
+          const selectedItem = this.filterHeadOfAcc.find(
+            (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
+          );
+          this.dynamicPOBtn = selectedItem?.poCreated === true;
+        }
+
+        console.log('dynamic PO Btn:', this.dynamicPOBtn);
+      },
+      (error) => {
+        console.log('error while verifying headOfacc:', error);
+      },
+    );
   }
 
   fetchQuote(headOfAccId: number) {
@@ -150,17 +170,55 @@ export class ViewAcceptedprocurementreqComponent {
     );
 
     console.log('this.filterProductHeadData:', this.filterProductHeadData);
+
+    this.selectedHeadOfAccName = this.filterProductHeadData[0].headOfAccName;
   }
 
-  viewPurchaseOrderReport() {
+  confirmPOPopup() {
     const indentStatus = this._requestDetails().indentHeaders.requestStatus;
     if (indentStatus === 100) {
-      this.isViewPurchaseOrder = true;
+      if (!this.dynamicPOBtn) {
+        this.isWarningPopUp = true;
+        this.confirmPOMsg = `Are you sure want to convert this '${this.selectedHeadOfAccName}' into Purchase Order?`;
+      } else {
+        this.isViewPurchaseOrder = true;
+      }
     }
   }
 
   showTooltipForFewSec(sno: number) {
     this.tooltipSno = sno;
+  }
+
+  confirmPurchaseOrderReport() {
+    this.requestService
+      .generatePurchaseOrderPDF(this.reqId, this.selectedHeadOfAccId)
+      .subscribe(
+        (res: any) => {
+          console.log('fetching purchase order details:', res);
+          this.toastService.showSuccess(
+            'Purchase Order Converted Successfully',
+          );
+          this.isSuccesPop = true;
+          this.successData = { show: 8, text: res.errorMessege};
+          this.verifyQuoteComparisonHeadOfAcc(this.reqId);
+        },
+        (error) => {
+          console.log('error while fetching purchase order details:', error);
+
+          if (error.status === 400) {
+            this.toastService.showError(error.error.errorMessege);
+          }
+        },
+      );
+  }
+
+  closepop(closeIcon: boolean) {
+    this.isWarningPopUp = closeIcon;
+  }
+
+  togglePop(closeIcon: boolean){
+    this.isSuccesPop = closeIcon;
   }
 
   refresh(closeIcon: boolean) {

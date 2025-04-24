@@ -37,7 +37,7 @@
                 class="mb-2 w-96 rounded-lg border border-gray-500"
                 (change)="selectedHeadOfAcc($event)"
                 formControlName="headOfAccId"
-                >
+              >
                 <option
                   value=""
                   selected
@@ -64,15 +64,15 @@
               <div class="flex flex-row gap-4">
                 <div class="relative">
                   <div
-                    class="pointer-events-none absolute inset-y-0 top-0.5 left-0 flex items-center pl-3"
-                    >
+                    class="pointer-events-none absolute inset-y-0 left-0 top-0.5 flex items-center pl-3"
+                  >
                     <svg
                       aria-hidden="true"
                       class="h-5 w-5 text-gray-500 dark:text-gray-400"
                       fill="currentColor"
                       viewbox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      >
+                    >
                       <path
                         fill-rule="evenodd"
                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
@@ -80,7 +80,7 @@
                       />
                     </svg>
                   </div>
-                
+
                   <input
                     type="text"
                     id="simple-search"
@@ -99,9 +99,9 @@
 
                   <div
                     *ngIf="showClearIcon"
-                    class="absolute inset-y-0 top-0.5 flex items-center cursor-pointer right-2"
+                    class="absolute inset-y-0 right-2 top-0.5 flex cursor-pointer items-center"
                     (click)="clearSearch()"
-                    >
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
@@ -109,7 +109,7 @@
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       stroke-width="2"
-                      >
+                    >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -118,11 +118,11 @@
                     </svg>
                   </div>
                 </div>
-                
+
                 <div
                   *ngIf="noVendor"
                   class="absolute mt-[42px] text-sm text-red-600"
-                  >
+                >
                   <small>No vendor found.</small>
                 </div>
                 <ul
@@ -198,7 +198,7 @@
                   <div
                     *ngIf="isEnableUploadBtn"
                     class="absolute bottom-14 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded bg-gray-800 px-2 py-1 text-sm text-white shadow-md group-hover:block"
-                    >
+                  >
                     Upload PDF
                     <div
                       class="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-gray-800"
@@ -378,7 +378,7 @@
         pdfSrc.length > 2
       "
       class="m-4 text-lg font-semibold text-purple-600"
-      >
+    >
       Comparison Table
     </h3>
   </div>
@@ -567,7 +567,9 @@
         >
           <span *ngIf="!loader">Save</span>
           <span *ngIf="loader" class="flex items-center gap-2">
-            <span class="h-5 w-5 animate-spin border-2 border-white rounded-full border-t-transparent"></span>
+            <span
+              class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+            ></span>
             <span>Saving...</span>
           </span>
         </button>
@@ -591,6 +593,7 @@
 </section>
 <section *ngIf="isWarningPopup">
   <app-warning-popup
+    [popupMsg]="clearQuoteMsg"
     (close)="closepop($event)"
     (clearQuotation)="clearPreviousQuotation()"
   ></app-warning-popup>

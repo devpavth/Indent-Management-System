@@ -1,0 +1,7 @@
+.activeSubMenu {
+  @apply font-semibold text-purple-700;
+}
+
+.subMenu {
+  @apply font-semibold text-gray-400 hover:text-purple-700;
+}

@@ -28,28 +28,41 @@
         <span class="sr-only">Close modal</span>
       </button>
       <div
+        *ngIf="!showWarningIcon"
         class="mx-auto mb-3.5 mt-6 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 p-2 dark:bg-green-900"
       >
         <iframe
           class="w-24"
           src="https://lottie.host/embed/bc10536f-dc09-4cf8-8863-3be19dd382e7/WtKpJtrfHz.lottie"
         ></iframe>
+        <iframe 
+            class="w-16 h-16"
+            src="https://lottie.host/embed/1f9d5d26-13bc-4825-9e43-6ee305ab625d/hqtWFUjx0w.lottie">
+        </iframe>
+      </div>
+      <div
+        *ngIf="showWarningIcon"
+        class="mx-auto mb-3.5 mt-6 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 p-2 dark:bg-green-900"
+      >
+        <iframe 
+            class="w-16 h-16"
+            src="https://lottie.host/embed/1f9d5d26-13bc-4825-9e43-6ee305ab625d/hqtWFUjx0w.lottie">
+        </iframe>
       </div>
       <p class="mb-4 mt-8 text-lg font-semibold text-gray-900 dark:text-white">
-        Do you want to select the current head of account? If you choose "OK,"
-        the previous head of account quotation will be removed automatically.
+        {{ popupMsg }}
       </p>
       <div class="flex flex-row items-end justify-end">
         <button
           type="button"
-          class="mr-4 rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          class="mr-4 rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           (click)="clearPreviousQuotation()"
         >
           OK
         </button>
         <button
           type="button"
-          class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          class="rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           (click)="closePopup()"
         >
           Cancel

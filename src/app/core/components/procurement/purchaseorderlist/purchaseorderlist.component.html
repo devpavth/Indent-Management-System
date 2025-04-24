@@ -38,7 +38,7 @@
                         >
                         <mat-form-field>
                             <mat-label>Enter a date range</mat-label>
-                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
                             <input matStartDate formControlName="start" placeholder="Start date">
                             <input matEndDate formControlName="end" placeholder="End date">
                             </mat-date-range-input>
@@ -58,7 +58,141 @@
   
                     </div>
                 </div>
+                <div class="mb-3 px-4 text-sm -mt-10">
+                    <div class="flex gap-6">
+                        <button
+                            (click)="isCreated = true;
+                            this.setTodayDateRange()"
+                            class="group flex items-center justify-center gap-1"
+                            >
+                            <svg
+                                [ngClass]="{ activeSubMenu: isCreated }"
+                                class="an h-4 w-4 text-gray-400 group-hover:text-purple-700 dark:text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                                width="24"
+                                height="24"
+                                >
+                                <path
+                                stroke="white"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                />
+                            </svg>
+                            <h1
+                                [ngClass]="{ 
+                                    'text-purple-700 font-semibold': isCreated 
+                                }"
+                                class="an font-semibold text-gray-400 hover:text-purple-700"
+                                >
+                                Created
+                            </h1>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <table
+                        class="w-full text-left text-sm text-gray-500 dark:text:gray-400"
+                        >
+                        <thead 
+                            class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
+                            >
+                            <tr>
+                                <th scope="col" class="px-4 py-3">PO Number</th>
+                                <th scope="col" class="px-4 py-3">Indent ID</th>
+                                <th scope="col" class="px-4 py-3">Head of Account</th>
+                                <th scope="col" class="px-4 py-3">Total Price</th>
+                                <th scope="col" class="px-4 py-3">
+                                    <span class="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="!isSkeletonLoader">
+                            <tr
+                                class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
+                                *ngFor="let req of POList"
+                                >
+                                <th
+                                    scope="row"
+                                    class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 dark:text-white"
+                                    >
+                                    {{ req.poNumber }}
+                                </th>
+                                <td class="px-4 py-3">{{ req.requestNo }}</td>
+                                <td class="px-4 py-3">{{ req.headOfAccName }}</td>
+                                <td class="px-4 py-3">
+                                    <span
+                                        [ngClass]="{
+                                            price1: req.totalPrice < 10000,
+                                            price2: req.totalPrice > 10000
+                                        }"
+                                        >{{ req.totalPrice | currency: 'INR'}}</span>
+                                </td>
+                                <td
+                                    class="flex items-center justify-end px-4 py-3"
+                                    >
+                                    <button
+                                        class="inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                                        (click)="viewGeneratedPO(req.sno, req.headOfAccId)"
+                                        type="button"
+                                        >
+                                        <svg
+                                            class="h-5 w-5"
+                                            aria-hidden="true"
+                                            fill="currentColor"
+                                            viewbox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                            <path
+                                                d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
+                                            />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tbody *ngIf="isSkeletonLoader">
+                            <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+                                <td class="px-4 py-3"><div class="h-4 w-44 rounded-lg bg-gray-300"></div></td>
+                                <td class="px-4 py-3"><div class="h-4 w-24 rounded-lg bg-gray-300"></div></td>
+                                <td class="px-4 py-3"><div class="h-4 w-24 rounded-lg bg-gray-300"></div></td>
+                                <td class="px-4 py-3"><div class="h-4 w-20 rounded-lg bg-gray-300"></div></td>
+                                <td class="px-4 py-3"><div class="h-4 w-10 rounded-lg bg-gray-300"></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ng-container *ngIf="noRequest">
+                    <div class="h-96 flex items-center justify-center rounded-lg px-4 bg-white">
+                        <div class="text-center">
+                            <img
+                                src="../../../../../assets/Img/9264882.svg"
+                                class="mx-auto w-52"
+                                alt="No data available"
+                            />
+                            <p
+                                class="mt-4 font-medium text-gray-800 dark:text-gray-700"
+                                >
+                                No Purchase Order Available    
+                            </p>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
         </div>
     </section>
 </div>
+
+<section *ngIf="isViewPurchaseOrder">
+  <app-view-purchaseorder
+    [reqId]="reqId"
+    [headOfAccountId]="selectedHeadOfAccId"
+    (closeView)="refresh($event)"
+  ></app-view-purchaseorder>
+</section>

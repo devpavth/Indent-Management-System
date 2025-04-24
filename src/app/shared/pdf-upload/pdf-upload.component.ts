@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../core/components/service/Request/request.service';
 import {
@@ -30,7 +37,7 @@ export class PdfUploadComponent {
   @ViewChildren('searchInput') searchInputs!: QueryList<ElementRef>;
   searchSubject = new Subject<string>();
   pdfSrc: SafeResourceUrl[] = [];
-  pdfFiles: File[] = []; 
+  pdfFiles: File[] = [];
   currentSlideIndex: number = 0;
 
   quotes: number[] = [0, 0, 0];
@@ -81,6 +88,7 @@ export class PdfUploadComponent {
   overflowDetected: boolean[] = [];
   quotedHeadOfAccName: string = '';
   quoteMsg: string = '';
+  clearQuoteMsg: string = '';
   filterQuotedHeadOfAcc: indentProductList[] = [];
   requestData: ProRequestdata | null = null;
   productHeadData: indentProductList[] = [];
@@ -384,12 +392,12 @@ export class PdfUploadComponent {
     );
   }
 
-  clearSearch(){
+  clearSearch() {
     this.isVendorSelected = false;
     this.storeVendorList = [];
 
-    if(this.searchInput){
-      this.searchInput.nativeElement.value = "";
+    if (this.searchInput) {
+      this.searchInput.nativeElement.value = '';
     }
     this.showClearIcon = false;
   }
@@ -423,6 +431,8 @@ export class PdfUploadComponent {
       this.selectedVendorName.length !== 0
     ) {
       this.isWarningPopup = true;
+      this.clearQuoteMsg = `Do you want to select the current head of account? If you choose "OK,"
+        the previous head of account quotation will be removed automatically.`;
       this.currentHeadOfAccId = headOfAccId; // Store the new selection temporarily
       console.log('this.currentHeadOfAccId:', this.currentHeadOfAccId);
       console.log(
@@ -548,7 +558,7 @@ export class PdfUploadComponent {
       ],
     });
 
-    console.log("comparison form:", this.comparisonQuoteForm.value);
+    console.log('comparison form:', this.comparisonQuoteForm.value);
 
     console.log('Previous quotation cleared!');
   }

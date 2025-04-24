@@ -4,6 +4,7 @@ import { environment } from '../../../../../environments/environment.development
 import { debounceTime, Observable, Subject } from 'rxjs';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
 import { Prefix } from '../../../models/prefix/prefix.model';
+import { Polist } from '../../../models/polist/polist.model';
 
 @Injectable({
   providedIn: 'root',
@@ -352,7 +353,7 @@ export class RequestService {
     );
   }
 
-  generatePurchaseOrderPDF(sno: number, headOfAccId: number) {
+  generatePurchaseOrderPDF(sno: number, headOfAccId: number | null) {
     return this.http.get(
       environment.generatePurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
     );
@@ -379,7 +380,11 @@ export class RequestService {
     );
   }
 
-  fetchPurchaseOrderList(startDate: string | undefined, endDate: string | undefined){
-    return this.http.get(environment.purchaseOrderList + `?startDate=${startDate}&endDate=${endDate}`);
+  fetchPurchaseOrderList(startDate: string | undefined, endDate: string | undefined): Observable<Polist[]>{
+    return this.http.get<Polist[]>(environment.purchaseOrderList + `?startDate=${startDate}&endDate=${endDate}`);
+  }
+
+  viewPurchaseOrder(sno: number, headOfAccId: number | null){
+    return this.http.get(environment.viewPurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`);
   }
 }

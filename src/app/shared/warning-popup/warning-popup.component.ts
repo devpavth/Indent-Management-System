@@ -1,4 +1,4 @@
-import { Component, EventEmitter, output, Output } from '@angular/core';
+import { Component, EventEmitter, Input, output, Output } from '@angular/core';
 
 @Component({
   selector: 'app-warning-popup',
@@ -6,6 +6,8 @@ import { Component, EventEmitter, output, Output } from '@angular/core';
   styleUrl: './warning-popup.component.css',
 })
 export class WarningPopupComponent {
+  @Input() popupMsg!: string;
+  @Input() showWarningIcon!: boolean;
   @Output() close = new EventEmitter<boolean>();
   @Output() clearQuotation = new EventEmitter<void>();
 

@@ -30,7 +30,7 @@ export class OtherProductComponent {
       (res: any) => {
         console.log(res);
         this.isSuccesPop = true;
-        this.successData = { show: 6, text: res.error};
+        this.successData = { show: 6, text: res.error };
         this.otherProductForm.reset();
       },
       (error) => {

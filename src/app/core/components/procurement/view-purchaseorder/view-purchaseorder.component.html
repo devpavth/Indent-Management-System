@@ -23,7 +23,15 @@
   </button>
   <section class="scroll mt-16 h-screen overflow-auto">
     <div class="mx-40">
-      <div class="mt-10 rounded-xl bg-white shadow-lg">
+      <div
+        *ngIf="isLoading"
+        class="absolute inset-0 mt-2 flex items-center justify-center bg-opacity-70"
+        >
+        <div
+          class="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
+        ></div>
+      </div>
+      <div class="mt-10 rounded-xl bg-white shadow-lg" *ngIf="!isLoading">
         <div class="items-center justify-between">
           <div class=" ">
             <div class="mx-auto">
@@ -34,7 +42,7 @@
                   Purchase Order
                 </h2>
 
-                <div class="flex flex-row items-center">
+                <!-- <div class="flex flex-row items-center">
                   <label class="mt-6 text-lg font-semibold text-purple-600">
                     Indent ID
                     <span class="ml-[75px]">:</span>
@@ -46,11 +54,11 @@
                     [value]="indentNumber"
                     readonly
                   />
-                </div>
+                </div> -->
 
-                <div
+                <!-- <div
                   class="mt-6 flex flex-row items-center space-y-3 md:flex-row md:space-x-4 md:space-y-0"
-                >
+                  >
                   <label class="text-lg font-semibold text-purple-600">
                     Head of Account
                     <span class="ml-2">:</span>
@@ -69,19 +77,11 @@
                       {{ head.headOfAccName }}
                     </option>
                   </select>
-                </div>
+                </div> -->
 
-                <div class="relative mt-8">
-                  <div
-                    *ngIf="isLoading"
-                    class="absolute inset-0 mt-2 flex items-center justify-center bg-white bg-opacity-70"
-                  >
-                    <div
-                      class="h-12 w-12 animate-spin rounded-full border-4 border-purple-500 border-t-transparent"
-                    ></div>
-                  </div>
+                <div class="relative mt-1">
                   <iframe
-                    *ngIf="!isLoading && pdfURL"
+                    *ngIf="pdfURL"
                     [src]="pdfURL"
                     width="100%"
                     height="700px"
@@ -95,3 +95,16 @@
     </div>
   </section>
 </div>
+
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
+</section>
+<section
+  *ngIf="toastService.isWarningToast"
+  class="fixed top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-warning-toast [message]="toastService.warningToastMsg"></app-warning-toast>
+</section>

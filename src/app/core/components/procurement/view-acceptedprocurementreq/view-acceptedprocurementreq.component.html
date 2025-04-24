@@ -74,7 +74,7 @@
                   <div class="group relative">
                     <button
                       type="submit"
-                      (click)="viewPurchaseOrderReport()"
+                      (click)="confirmPOPopup()"
                       (mouseenter)="showTooltipForFewSec(reqId)"
                       (mouseleave)="tooltipSno = null"
                       [disabled]="
@@ -86,7 +86,7 @@
                       }"
                       class="rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white"
                     >
-                      Convert to Purchase Order
+                      {{ dynamicPOBtn ? 'View Purchase Order' : 'Convert to Purchase Order'}}
                     </button>
 
                     <div
@@ -127,10 +127,38 @@
   </section>
 </div>
 
+<section *ngIf="isWarningPopUp">
+  <app-warning-popup
+    [showWarningIcon]="isWarningPopUp"
+    [popupMsg]="confirmPOMsg"
+    (close)="closepop($event)"
+    (clearQuotation)="confirmPurchaseOrderReport()"
+  ></app-warning-popup>
+</section>
+<section
+  *ngIf="toastService.isSuccessToast"
+  class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
+>
+  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+</section>
+<section
+  *ngIf="toastService.isErrorToast"
+  class="fixed left-6 top-[70px] z-50 flex w-full items-center justify-center"
+>
+  <app-delete-toast [message]="toastService.errorToastMsg"></app-delete-toast>
+</section>
 <section *ngIf="isViewPurchaseOrder">
   <app-view-purchaseorder
     [reqId]="reqId"
+    [headOfAccountId]="selectedHeadOfAccId"
     [indentNumber]="indentNumber"
     (closeView)="refresh($event)"
   ></app-view-purchaseorder>
 </section>
+<section *ngIf="isSuccesPop">
+  <app-success
+    [successData]="successData"
+    (closeSuccess)="togglePop($event)"
+  ></app-success>
+</section>
+

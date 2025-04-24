@@ -13,6 +13,8 @@ import autoTable from 'jspdf-autotable';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BranchService } from '../../service/Branch/branch.service';
 import { Company } from '../../../models/company/company.model';
+import { ToastService } from '../../service/toast/toast.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-purchaseorder',
@@ -22,10 +24,13 @@ import { Company } from '../../../models/company/company.model';
 export class ViewPurchaseorderComponent {
   @Input() reqId: number = 0;
   @Input() indentNumber: string | undefined = '';
+  @Input() headOfAccountId!: number | null;
   @Output() closeView = new EventEmitter<boolean>();
 
   requestService = inject(RequestService);
   branchService = inject(BranchService);
+  toastService = inject(ToastService);
+  datePipe = inject(DatePipe);
 
   _requestDetails = signal<any>(null);
 
@@ -41,6 +46,9 @@ export class ViewPurchaseorderComponent {
 
   productHeadData: indentProductList[] = [];
   uniqueProductHeadData: indentProductList[] = [];
+
+  PONumber: string = '';
+  PODate: string = '';
 
   headOfProduct: any[] = [];
 
@@ -63,8 +71,10 @@ export class ViewPurchaseorderComponent {
 
   ngOnInit() {
     console.log('reqId:', this.reqId);
+    console.log("checking headofACcound ID:", this.headOfAccountId);
     this.fetchDetails(this.reqId);
     this.fetchCompanyDetails();
+    this.generatePurchaseOrder(this.headOfAccountId);
   }
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -96,35 +106,10 @@ export class ViewPurchaseorderComponent {
 
         console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
 
-        this.uniqueProductHeadData.unshift({
-          headOfAccId: 0,
-          headOfAccName: 'All',
-          id: 0,
-          itemTotalPrice: 0,
-          prdCode: '',
-          prdDescription: '',
-          prdGstPct: 0,
-          prdHsnCode: 0,
-          prdStatus: 0,
-          prdUnit: 0,
-          prdbrndName: '',
-          prdcatgName: '',
-          prdgrpName: '',
-          prdmdlName: '',
-          productId: 0,
-          qty: 0,
-          unitPrice: 0,
-        });
-
-        console.log(
-          'this.uniqueProductHeadData after all:',
-          this.uniqueProductHeadData,
-        );
-
-        if (this.uniqueProductHeadData.length > 0) {
-          this.selectedHeadOfAccId = this.uniqueProductHeadData[0].headOfAccId;
-          this.selectedHeadOfAcc(this.selectedHeadOfAccId);
-        }
+        // if (this.uniqueProductHeadData.length > 0) {
+        //   this.selectedHeadOfAccId = this.uniqueProductHeadData[0].headOfAccId;
+        //   this.selectedHeadOfAcc(this.selectedHeadOfAccId);
+        // }
       },
       (error) => {
         console.log('error while fetching indent request details:', error);
@@ -132,34 +117,34 @@ export class ViewPurchaseorderComponent {
     );
   }
 
-  selectedHeadOfAcc(event: Event | number) {
-    if (typeof event === 'number') {
-      this.selectedHeadOfAccId = event;
-      this.generatePurchaseOrder(this.selectedHeadOfAccId);
-    } else {
-      const selectElement = event.target as HTMLSelectElement;
-      this.selectedHeadOfAccId = Number(selectElement.value);
-      this.generatePurchaseOrder(this.selectedHeadOfAccId);
-    }
-  }
+  // selectedHeadOfAcc(event: Event | number) {
+  //   if (typeof event === 'number') {
+  //     this.selectedHeadOfAccId = event;
+  //     this.generatePurchaseOrder(this.selectedHeadOfAccId);
+  //   } else {
+  //     const selectElement = event.target as HTMLSelectElement;
+  //     this.selectedHeadOfAccId = Number(selectElement.value);
+  //     this.generatePurchaseOrder(this.selectedHeadOfAccId);
+  //   }
+  // }
 
-  generatePurchaseOrder(headOfAccId: number) {
+  generatePurchaseOrder(headOfAccId: number | null) {
     this.isLoading = true;
-    this.requestService
-      .generatePurchaseOrderPDF(this.reqId, headOfAccId)
-      .subscribe(
-        (res) => {
-          console.log('fetching purchase order details:', res);
-          this.purchaseOrderData = res;
-          this.branchList = this.purchaseOrderData.indentBranch;
-          this.contactPersonList = this.purchaseOrderData.contactPersonData;
-          this.indentList = this.purchaseOrderData.indentHeaders;
+    this.requestService.viewPurchaseOrder(this.reqId, headOfAccId).subscribe(
+      (res) => {
+        console.log('viewing the generated purchase order:', res);
+        this.purchaseOrderData = res;
+        this.branchList = this.purchaseOrderData.indentBranch;
+        this.contactPersonList = this.purchaseOrderData.contactPersonData;
+        this.indentList = this.purchaseOrderData.indentHeaders;
+        this.PONumber = this.purchaseOrderData.headofAcc[0].poNumber;
+        this.PODate = this.purchaseOrderData.headofAcc[0].poCreatedOn;
 
-          if (headOfAccId === 0) {
-            this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
-              (h: any) => h.productDetailsDTOs,
-            );
-            this.viewPDF(this.purchaseOrderData.headofAcc);
+        if (headOfAccId === 0) {
+          this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
+            (h: any) => h.productDetailsDTOs,
+          );
+          this.viewPDF(this.purchaseOrderData.headofAcc);
           } else {
             const selectedHead = this.purchaseOrderData.headofAcc.find(
               (h: any) => h.headOfAccId === headOfAccId,
@@ -168,34 +153,56 @@ export class ViewPurchaseorderComponent {
             this.headOfProduct = selectedHead
               ? selectedHead.productDetailsDTOs
               : [];
+            console.log("headofacc list:", this.headOfProduct);
             this.viewPDF([selectedHead]);
-          }
+        }
 
-          this.isLoading = false;
+        this.isLoading = false;
+      },
+      (error) => {
+        console.log("error while viewing generated purchase order:", error);
+        this.isLoading = false;
 
-          // if (headOfAccId) {
-          //   this.headOfProduct =
-          //     this.purchaseOrderData.headofAcc.length > 0
-          //       ? this.purchaseOrderData.headofAcc.find(
-          //           (h: any) => h.headOfAccId === headOfAccId,
-          //         ).productDetailsDTOs
-          //       : [];
-          //   this.viewPDF([
-          //     this.purchaseOrderData.headofAcc.find(
-          //       (h: any) => h.headOfAccId === headOfAccId,
-          //     ),
-          //   ]);
-          //   this.isLoading = false;
-          // } else {
-          //   this.viewPDF(this.purchaseOrderData.headofAcc);
-          //   this.isLoading = false;
-          // }
-        },
-        (error) => {
-          console.log('error while fetching purchase order details:', error);
-          this.isLoading = false;
-        },
-      );
+        if(error.status === 400){
+          this.toastService.showWarning(error.error.errorMessege);
+        }
+      }
+    )
+    // this.isLoading = true;
+    // this.requestService
+    //   .generatePurchaseOrderPDF(this.reqId, headOfAccId)
+    //   .subscribe(
+    //     (res) => {
+    //       console.log('fetching purchase order details:', res);
+    //       this.purchaseOrderData = res;
+    //       this.branchList = this.purchaseOrderData.indentBranch;
+    //       this.contactPersonList = this.purchaseOrderData.contactPersonData;
+    //       this.indentList = this.purchaseOrderData.indentHeaders;
+
+    //       if (headOfAccId === 0) {
+    //         this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
+    //           (h: any) => h.productDetailsDTOs,
+    //         );
+    //         this.viewPDF(this.purchaseOrderData.headofAcc);
+    //       } else {
+    //         const selectedHead = this.purchaseOrderData.headofAcc.find(
+    //           (h: any) => h.headOfAccId === headOfAccId,
+    //         );
+
+    //         this.headOfProduct = selectedHead
+    //           ? selectedHead.productDetailsDTOs
+    //           : [];
+    //         this.viewPDF([selectedHead]);
+    //       }
+
+    //       this.isLoading = false;
+
+    //     },
+    //     (error) => {
+    //       console.log('error while fetching purchase order details:', error);
+    //       this.isLoading = false;
+    //     },
+    //   );
   }
 
   viewPDF(headOfAccList: any[]) {
@@ -339,8 +346,8 @@ export class ViewPurchaseorderComponent {
       currentPOX += doc.getTextWidth(purchaseOrderLabel) + 1; // Add spacing
 
       doc.setFont('helvetica', 'bold');
-      doc.text(purchaseOrderValue, currentPOX, startPOY);
-      currentPOX += doc.getTextWidth(purchaseOrderValue) + 10; // Add spacing
+      doc.text(this.PONumber, currentPOX, startPOY);
+      currentPOX += doc.getTextWidth(this.PONumber) + 10; // Add spacing
 
       // Purchase Order Date
       doc.setFont('helvetica', 'bold');
@@ -348,16 +355,17 @@ export class ViewPurchaseorderComponent {
       currentPOX += doc.getTextWidth(purchaseOrderDateLabel) + 1; // Add spacing
 
       doc.setFont('helvetica', 'bold');
-      doc.text(purchaseOrderDateValue, currentPOX, startPOY);
-      currentPOX += doc.getTextWidth(purchaseOrderDateValue) + 10; // Add spacing
+      const formattedDate = this.datePipe.transform(this.PODate, 'dd MMM yyyy');
+      doc.text(formattedDate || '', currentPOX, startPOY);
+      currentPOX += doc.getTextWidth(formattedDate || '') + 10; // Add spacing
 
       // Payment by
-      doc.setFont('helvetica', 'bold');
-      doc.text(paymentByLabel, currentPOX, startPOY);
-      currentPOX += doc.getTextWidth(paymentByLabel) + 1; // Add spacing
+      // doc.setFont('helvetica', 'bold');
+      // doc.text(paymentByLabel, currentPOX, startPOY);
+      // currentPOX += doc.getTextWidth(paymentByLabel) + 1;
 
-      doc.setFont('helvetica', 'bold');
-      doc.text(paymentByValue, currentPOX, startPOY);
+      // doc.setFont('helvetica', 'bold');
+      // doc.text(paymentByValue, currentPOX, startPOY);
 
       doc.setFontSize(9);
       doc.setFont('helvetica', 'bold');
