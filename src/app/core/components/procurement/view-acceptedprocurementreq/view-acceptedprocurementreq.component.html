@@ -73,6 +73,7 @@
 
                   <div class="group relative">
                     <button
+                      *ngIf="showBtn"
                       type="submit"
                       (click)="confirmPOPopup()"
                       (mouseenter)="showTooltipForFewSec(reqId)"
@@ -84,8 +85,8 @@
                         'btn-disable-order border-opacity-10':
                           _requestDetails().indentHeaders?.requestStatus !== 100
                       }"
-                      class="rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white"
-                    >
+                      class='rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white'
+                      >
                       {{ dynamicPOBtn ? 'View Purchase Order' : 'Convert to Purchase Order'}}
                     </button>
 

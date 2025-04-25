@@ -62,7 +62,6 @@ export class RoleMappingComponent {
     this.isViewAddNewDesignation = !closeIcon;
   }
 
-
   fetchDesignationRole() {
     this.employeeService.getDesignationRoleMapping().subscribe(
       (res: DesignationRoleMapping[]) => {
@@ -75,7 +74,7 @@ export class RoleMappingComponent {
         console.log('error while fetching designation:', error);
         this.isSkeletonLoader = false;
 
-        if(error.status === 404){
+        if (error.status === 404) {
           this.noDesignation = true;
         }
       },
@@ -108,7 +107,6 @@ export class RoleMappingComponent {
 
     return colors[levelId % colors.length];
   }
-
 
   onPageChange(pageNumber: number): void {
     this.currentPage = pageNumber;

@@ -4,6 +4,7 @@ import { debounceTime, Subject } from 'rxjs';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
 import { AuthService } from '../../service/Auth/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-program-manager-approval',
@@ -22,7 +23,9 @@ export class ProgramManagerApprovalComponent {
   _yourReq: any;
 
   selectedDate: string | undefined;
-  maxDate: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+  maxDate: Date | undefined;
 
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
@@ -31,6 +34,7 @@ export class ProgramManagerApprovalComponent {
   isAuthorizeEditIndentForm: boolean = false;
   isAcceptedView: boolean = false;
   isViewEditIndentForm: boolean = false;
+  isEndDateManuallySelected: boolean = false;
 
   requestList: Request | undefined;
 
@@ -41,10 +45,15 @@ export class ProgramManagerApprovalComponent {
   toastService = inject(ToastService);
   authService = inject(AuthService);
 
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(private rService: RequestService) {
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
 
   ngOnInit() {
@@ -77,7 +86,41 @@ export class ProgramManagerApprovalComponent {
     this.isAuthorizeEditIndentForm =
       this.authService.isAuthenticateEditIndentRole();
 
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+        console.log(this.startDate, this.endDate);
+        this.fetchRequestList();
+        this.isEndDateManuallySelected = false;
+        console.log("isEndDateManuallySelected:", this.isEndDateManuallySelected);
+      }
+    });
+
     this.fetchRequestList();
+  }
+
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
   }
 
   fetchRequestList() {
@@ -117,16 +160,11 @@ export class ProgramManagerApprovalComponent {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      this.isViewSelectedDate = true;
       this.rService
-        .fetchProgramManagerRequest(202, this.selectedDate)
+        .fetchProgramManagerRequest(202, this.startDate, this.endDate)
         .subscribe(
           (res: any) => {
             console.log('fetching completed request:', res);
-            // let list: any[] = res;
-            // console.log("listing completed:", list);
-            // list = list.filter((l) => l.requestStatus == 102);
-            // console.log("filtering completed request:", list);
             this._yourReq = res;
             this.noRequest = false;
             this.isSkeletonLoader = false;
@@ -149,9 +187,8 @@ export class ProgramManagerApprovalComponent {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      this.isViewSelectedDate = true;
       this.rService
-        .fetchProgramManagerRequest(406, this.selectedDate)
+        .fetchProgramManagerRequest(406, this.startDate, this.endDate)
         .subscribe(
           (res: any) => {
             console.log('fetching rejected request:', res);

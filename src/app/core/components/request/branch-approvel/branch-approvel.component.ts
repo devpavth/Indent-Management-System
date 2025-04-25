@@ -222,7 +222,7 @@ export class BranchApprovelComponent implements OnInit {
   editIndentForm(sno: number) {
     this.reqId = sno;
 
-    if(this.isAuthorizeEditIndentForm){
+    if (this.isAuthorizeEditIndentForm) {
       this.isViewEditIndentForm = true;
     }
   }

@@ -5,6 +5,7 @@ export interface Polist {
   poCreatedBy: string;
   poCreatedOn: string;
   poNumber: string;
+  productReceived: boolean;
   requestNo: string;
   sno: number;
   totalPrice: number;

@@ -34,7 +34,7 @@
 }
 
 .hold {
-  @apply me-2 rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-green-900 dark:text-green-300;
+  @apply me-2 rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900 dark:text-orange-300;
 }
 
 .subMenu {

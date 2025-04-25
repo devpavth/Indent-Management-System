@@ -52,23 +52,6 @@ export class ViewPurchaseorderComponent {
 
   headOfProduct: any[] = [];
 
-  purchaseOrder = {
-    company: {
-      name: 'THE ASSOCIATION OF PEOPLE WITH DISABILITY',
-      gst: '29AAGCC3235L1ZG',
-      addressLine1: '1125, 21st A Cross, 14th Main Road,',
-      addressLine2: 'Sector-3, HSR Layout',
-      addressLine3: 'Bengaluru Urban, KARNATAKA, 560102',
-      phone: '+91 8197999930',
-      email: 'saigovind@cloute.co.in',
-      website: 'Sathish',
-    },
-    total: 534775,
-    taxAmount: 81575.82,
-    taxableAmount: 453199,
-    roundOff: 0.18,
-  };
-
   ngOnInit() {
     console.log('reqId:', this.reqId);
     console.log("checking headofACcound ID:", this.headOfAccountId);
@@ -97,36 +80,12 @@ export class ViewPurchaseorderComponent {
         console.log('fetching indent request details:', res);
         this._requestDetails.set(res);
         this.productHeadData = this._requestDetails()?.productDetails;
-
-        this.uniqueProductHeadData = [
-          ...new Map(
-            this.productHeadData.map((item) => [item.headOfAccName, item]),
-          ).values(),
-        ];
-
-        console.log('this.uniqueProductHeadData:', this.uniqueProductHeadData);
-
-        // if (this.uniqueProductHeadData.length > 0) {
-        //   this.selectedHeadOfAccId = this.uniqueProductHeadData[0].headOfAccId;
-        //   this.selectedHeadOfAcc(this.selectedHeadOfAccId);
-        // }
       },
       (error) => {
         console.log('error while fetching indent request details:', error);
       },
     );
   }
-
-  // selectedHeadOfAcc(event: Event | number) {
-  //   if (typeof event === 'number') {
-  //     this.selectedHeadOfAccId = event;
-  //     this.generatePurchaseOrder(this.selectedHeadOfAccId);
-  //   } else {
-  //     const selectElement = event.target as HTMLSelectElement;
-  //     this.selectedHeadOfAccId = Number(selectElement.value);
-  //     this.generatePurchaseOrder(this.selectedHeadOfAccId);
-  //   }
-  // }
 
   generatePurchaseOrder(headOfAccId: number | null) {
     this.isLoading = true;
@@ -137,25 +96,29 @@ export class ViewPurchaseorderComponent {
         this.branchList = this.purchaseOrderData.indentBranch;
         this.contactPersonList = this.purchaseOrderData.contactPersonData;
         this.indentList = this.purchaseOrderData.indentHeaders;
-        this.PONumber = this.purchaseOrderData.headofAcc[0].poNumber;
-        this.PODate = this.purchaseOrderData.headofAcc[0].poCreatedOn;
+        const selectElement = this.purchaseOrderData.headofAcc.find(
+          (item: any) => item.headOfAccId === headOfAccId
+        );
 
-        if (headOfAccId === 0) {
-          this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
-            (h: any) => h.productDetailsDTOs,
-          );
-          this.viewPDF(this.purchaseOrderData.headofAcc);
-          } else {
-            const selectedHead = this.purchaseOrderData.headofAcc.find(
-              (h: any) => h.headOfAccId === headOfAccId,
-            );
+        this.PONumber = selectElement?.poNumber;
+        this.PODate = selectElement?.poCreatedOn;
 
-            this.headOfProduct = selectedHead
-              ? selectedHead.productDetailsDTOs
-              : [];
-            console.log("headofacc list:", this.headOfProduct);
-            this.viewPDF([selectedHead]);
-        }
+        // if (headOfAccId === 0) {
+        //   this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
+        //     (h: any) => h.productDetailsDTOs,
+        //   );
+        //   this.viewPDF(this.purchaseOrderData.headofAcc);
+        //   } else {
+        const selectedHead = this.purchaseOrderData.headofAcc.find(
+          (h: any) => h.headOfAccId === headOfAccId,
+        );
+
+        this.headOfProduct = selectedHead
+          ? selectedHead.productDetailsDTOs
+          : [];
+        console.log("headofacc list:", this.headOfProduct);
+        this.viewPDF([selectedHead]);
+        // }
 
         this.isLoading = false;
       },
@@ -168,41 +131,6 @@ export class ViewPurchaseorderComponent {
         }
       }
     )
-    // this.isLoading = true;
-    // this.requestService
-    //   .generatePurchaseOrderPDF(this.reqId, headOfAccId)
-    //   .subscribe(
-    //     (res) => {
-    //       console.log('fetching purchase order details:', res);
-    //       this.purchaseOrderData = res;
-    //       this.branchList = this.purchaseOrderData.indentBranch;
-    //       this.contactPersonList = this.purchaseOrderData.contactPersonData;
-    //       this.indentList = this.purchaseOrderData.indentHeaders;
-
-    //       if (headOfAccId === 0) {
-    //         this.headOfProduct = this.purchaseOrderData.headofAcc.flatMap(
-    //           (h: any) => h.productDetailsDTOs,
-    //         );
-    //         this.viewPDF(this.purchaseOrderData.headofAcc);
-    //       } else {
-    //         const selectedHead = this.purchaseOrderData.headofAcc.find(
-    //           (h: any) => h.headOfAccId === headOfAccId,
-    //         );
-
-    //         this.headOfProduct = selectedHead
-    //           ? selectedHead.productDetailsDTOs
-    //           : [];
-    //         this.viewPDF([selectedHead]);
-    //       }
-
-    //       this.isLoading = false;
-
-    //     },
-    //     (error) => {
-    //       console.log('error while fetching purchase order details:', error);
-    //       this.isLoading = false;
-    //     },
-    //   );
   }
 
   viewPDF(headOfAccList: any[]) {

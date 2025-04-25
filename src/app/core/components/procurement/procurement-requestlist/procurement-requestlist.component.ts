@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { Request } from '../../../models/request/request.model';
 import { ToastService } from '../../service/toast/toast.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-procurement-requestlist',
@@ -10,10 +11,14 @@ import { ToastService } from '../../service/toast/toast.service';
 })
 export class ProcurementRequestlistComponent {
   currentDate: string | undefined;
-  maxDate: string | undefined;
+  maxDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
+  isEndDateManuallySelected: boolean = false;
 
   requestList: Request | undefined;
 
@@ -22,6 +27,34 @@ export class ProcurementRequestlistComponent {
   toastService = inject(ToastService);
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  isProcess = true;
+  isCompleted = false;
+  isView = false;
+  isAcceptedView: boolean = false;
+  isViewQuoteCompare: boolean = false;
+  isViewConsolidatedQuote: boolean = false;
+  userRequest: any;
+  selectedRequestId: number | undefined;
+  tooltipSno: number | null = null;
+  isSkeletonLoader: boolean = true;
+
+  reqId: any;
+  indentNumber: string | undefined = '';
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
+  constructor(
+    private req: RequestService,
+    private elRef: ElementRef,
+  ) {
+    const today = new Date();
+    this.currentDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
+  }
 
   ngOnInit() {
     console.log('checking procurement list');
@@ -46,40 +79,45 @@ export class ProcurementRequestlistComponent {
       );
     });
 
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      console.log('Date range changed:', { start, end });
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+        console.log('Triggering API with:', this.startDate, this.endDate);
+        this.fetchRequestList();
+
+        this.isEndDateManuallySelected = false;
+      }
+    });
+
     this.fetchRequestList();
   }
 
-  constructor(
-    private req: RequestService,
-    private elRef: ElementRef,
-  ) {
-    const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
-  }
-  isProcess = true;
-  isCompleted = false;
-  isHold = false;
-  isRejected = false;
-  isView = false;
-  isAcceptedView: boolean = false;
-  isViewQuoteCompare: boolean = false;
-  isViewConsolidatedQuote: boolean = false;
-  userRequest: any;
-  selectedRequestId: number | undefined;
-  tooltipSno: number | null = null;
-  isSkeletonLoader: boolean = true;
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
 
-  reqId: any;
-  indentNumber: string | undefined = '';
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
+  }
 
   fetchRequestList() {
-    if (
-      this.isProcess == true &&
-      this.isCompleted == false &&
-      this.isHold == false &&
-      this.isRejected == false
-    ) {
+    if (this.isProcess == true && this.isCompleted == false) {
       let status = 102;
       this.isViewSelectedDate = false;
       this.req.fetchPrctReqList(status).subscribe(
@@ -105,20 +143,10 @@ export class ProcurementRequestlistComponent {
         },
       );
     }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == true &&
-      this.isHold == false &&
-      this.isRejected == false
-    ) {
-      this.isViewSelectedDate = true;
-      this.req.fetchPrctReqList(202, this.currentDate).subscribe(
+    if (this.isProcess == false && this.isCompleted == true) {
+      this.req.fetchPrctReqList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed procurement request:', res);
-          // let list: any[] = res;
-          // console.log("listing completed:", list);
-          // list = list.filter((l) => l.requestStatus == 102);
-          // console.log("filtering completed request:", list);
           this.userRequest = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;

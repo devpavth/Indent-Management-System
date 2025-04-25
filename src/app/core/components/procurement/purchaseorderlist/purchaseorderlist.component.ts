@@ -13,6 +13,8 @@ export class PurchaseorderlistComponent {
   noRequest: boolean = false;
   isSkeletonLoader: boolean = true;
   isViewPurchaseOrder: boolean = false;
+  isEndDateManuallySelected: boolean = false;
+  sortIndentInAscending: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -38,21 +40,19 @@ export class PurchaseorderlistComponent {
   ngOnInit() {
     this.range.valueChanges.subscribe((val) => {
       const { start, end } = val;
-      if (start && end) {
+      if (start && end && this.isEndDateManuallySelected) {
         console.log(start, ' ', end);
         this.startDate = this.formatDateOnly(start);
         this.endDate = this.formatDateOnly(end);
         console.log(this.startDate, this.endDate);
         this.fetchPurchaseOrderList();
+
+        this.isEndDateManuallySelected = false;
       }
     });
 
     this.setTodayDateRange();
   }
-
-  // formatDateOnly(date: Date): string {
-  //   return date.toISOString().split('T')[0];
-  // }
 
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
@@ -65,9 +65,22 @@ export class PurchaseorderlistComponent {
   setTodayDateRange() {
     const today = new Date();
     console.log('today:', today);
+    this.isEndDateManuallySelected = true;
     this.range.setValue({
       start: today,
       end: today,
+    });
+  }
+
+  onEndDateSelected(event: any) {
+    this.isEndDateManuallySelected = true;
+  }
+
+  sortByIndentNo(){
+    this.sortIndentInAscending = !this.sortIndentInAscending;
+
+    this.POList.sort((a, b) => {
+      return this.sortIndentInAscending ? a.sno - b.sno : b.sno - a.sno;
     });
   }
 
@@ -101,7 +114,7 @@ export class PurchaseorderlistComponent {
     this.isViewPurchaseOrder = true;
   }
 
-  refresh(closeIcon: boolean){
+  refresh(closeIcon: boolean) {
     this.isViewPurchaseOrder = closeIcon;
   }
 }

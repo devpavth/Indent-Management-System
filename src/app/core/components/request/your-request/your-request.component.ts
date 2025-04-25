@@ -25,8 +25,8 @@ export class YourRequestComponent implements OnInit {
   isOnHold: boolean = false;
   isCompleted: boolean = false;
   isRejected: boolean = false;
-
   isViewReq: boolean = false;
+  isEndDateManuallySelected: boolean = false;
 
   startDate: string | undefined;
   endDate: string | undefined;
@@ -99,26 +99,38 @@ export class YourRequestComponent implements OnInit {
 
     this.range.valueChanges.subscribe((val) => {
       const { start, end } = val;
-      if (start && end) {
+      if (start && end && this.isEndDateManuallySelected) {
         this.startDate = this.formatDateOnly(start);
         this.endDate = this.formatDateOnly(end);
+        console.log(this.startDate, this.endDate);
         this.fetchYourRequest();
+
+        this.isEndDateManuallySelected = false;
       }
     });
   }
 
   formatDateOnly(date: Date): string {
-    return date.toISOString().split('T')[0];
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
-  setTodayDateRange(){
+  setTodayDateRange() {
     const today = new Date();
-
+    this.isEndDateManuallySelected = true;
     this.range.setValue({
       start: today,
-      end: today
-    })
+      end: today,
+    });
   }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
+  }
+
   // 102 p,200 c,406 rej
   fetchYourRequest() {
     if (

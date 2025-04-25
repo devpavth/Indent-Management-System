@@ -16,7 +16,11 @@ export class RequestService {
   postRequestIndent(req: any) {
     return this.http.post(environment.postRequestIndent, req);
   }
-  getUserReq(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+  getUserReq(
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ) {
     let url = `${environment.getYourReq}/${status}`;
 
     if (startDate && endDate) {
@@ -161,16 +165,14 @@ export class RequestService {
     return this.http.get(environment.confirmOtp);
   }
 
-  fetchProgramManagerRequest(id: any, data?: string) {
-    let mesgParams = new HttpParams();
+  fetchProgramManagerRequest(status: any, startDate?: string | undefined, endDate?: string | undefined) {
+    let url = `${environment.fetchProgramManagerRequest}/${status}`;
 
-    if (data) {
-      mesgParams = mesgParams.append('startDate', data);
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`
     }
 
-    return this.http.get(environment.fetchProgramManagerRequest + id, {
-      params: mesgParams,
-    });
+    return this.http.get(url);
   }
 
   programManagerApproval(id: any) {
@@ -189,16 +191,14 @@ export class RequestService {
     return this.http.get(environment.fetchFunderDetails + funderId);
   }
 
-  fetchPrctReqList(status: any, data?: string): Observable<any> {
-    let params = new HttpParams();
-
-    if (data) {
-      params = params.append('startDate', data);
+  fetchPrctReqList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+    let url = `${environment.fetchProcurementList}/${status}`;
+    
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`
     }
 
-    return this.http.get(environment.fetchProcurementList + status, {
-      params: params,
-    });
+    return this.http.get(url);
   }
 
   holdOrRejectcomments(id: any, data: any, check: number) {
@@ -380,11 +380,19 @@ export class RequestService {
     );
   }
 
-  fetchPurchaseOrderList(startDate: string | undefined, endDate: string | undefined): Observable<Polist[]>{
-    return this.http.get<Polist[]>(environment.purchaseOrderList + `?startDate=${startDate}&endDate=${endDate}`);
+  fetchPurchaseOrderList(
+    startDate: string | undefined,
+    endDate: string | undefined,
+  ): Observable<Polist[]> {
+    return this.http.get<Polist[]>(
+      environment.purchaseOrderList +
+        `?startDate=${startDate}&endDate=${endDate}`,
+    );
   }
 
-  viewPurchaseOrder(sno: number, headOfAccId: number | null){
-    return this.http.get(environment.viewPurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`);
+  viewPurchaseOrder(sno: number, headOfAccId: number | null) {
+    return this.http.get(
+      environment.viewPurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
+    );
   }
 }

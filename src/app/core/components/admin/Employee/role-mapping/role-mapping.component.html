@@ -128,7 +128,7 @@
           >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-              >
+            >
               <tr>
                 <th scope="col" class="px-4 py-3">S.No</th>
                 <th scope="col" class="px-4 py-3">
@@ -159,7 +159,6 @@
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <span> Designation List </span>
-
                   </div>
                 </th>
 
@@ -188,7 +187,6 @@
                 >
                   {{ desig.empDesignation }}
                 </th>
-
 
                 <td class="flex items-center justify-end gap-4 px-4 py-3">
                   <button
@@ -245,7 +243,10 @@
             </tbody>
 
             <tbody *ngIf="isSkeletonLoader">
-              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
+              <tr
+                *ngFor="let _ of [1, 2, 3, 4, 5]"
+                class="animate-pulse border-b"
+              >
                 <td class="px-4 py-3">
                   <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
                 </td>
@@ -266,7 +267,7 @@
         <ng-container *ngIf="noDesignation">
           <div
             class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
-            >
+          >
             <div class="text-center">
               <img
                 src="../../../../../assets/Img/9264882.svg"

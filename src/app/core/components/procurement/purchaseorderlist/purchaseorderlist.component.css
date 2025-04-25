@@ -5,3 +5,11 @@
 .subMenu {
   @apply font-semibold text-gray-400 hover:text-purple-700;
 }
+
+.poreceived{
+  @apply me-2 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-300;
+}
+
+.popending{
+  @apply me-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-900 dark:text-red-300;
+}

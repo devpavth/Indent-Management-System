@@ -51,6 +51,7 @@ export class ViewAcceptedprocurementreqComponent {
   isWarningPopUp: boolean = false;
   dynamicPOBtn: boolean = false;
   isSuccesPop: boolean = false;
+  showBtn: boolean = false;
 
   confirmPOMsg: string = '';
   selectedHeadOfAccName: string = '';
@@ -119,6 +120,7 @@ export class ViewAcceptedprocurementreqComponent {
         (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
       );
       this.dynamicPOBtn = selectedItem?.poCreated === true;
+      this.showBtn = true;
       this.fetchQuote(this.selectedHeadOfAccId);
     }
 
@@ -135,6 +137,7 @@ export class ViewAcceptedprocurementreqComponent {
             (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
           );
           this.dynamicPOBtn = selectedItem?.poCreated === true;
+          this.showBtn = true;
         }
 
         console.log('dynamic PO Btn:', this.dynamicPOBtn);

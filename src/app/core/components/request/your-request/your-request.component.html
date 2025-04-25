@@ -65,24 +65,12 @@
           <div
             class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
             >
-           
-            <!-- <div *ngIf="isViewSelectedDate">
-              <input
-                type="date"
-                (change)="fetchYourRequest()"
-                class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                [value]="selectedDate"
-                [(ngModel)]="selectedDate"
-                [max]="maxDate"
-              />
-            </div> -->
-
             <div *ngIf="isViewSelectedDate">          
               <mat-form-field>
                 <mat-label class="date-label">Enter a date range</mat-label>
                 <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
                   <input matStartDate formControlName="start" placeholder="Start date">
-                  <input matEndDate formControlName="end" placeholder="End date">
+                  <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onEndDateSelected($event)">
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
