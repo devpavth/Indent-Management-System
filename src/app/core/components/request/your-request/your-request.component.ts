@@ -245,6 +245,7 @@ export class YourRequestComponent implements OnInit {
 
             this.isSkeletonLoader = false;
             this.noRequest = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log(
@@ -252,6 +253,7 @@ export class YourRequestComponent implements OnInit {
               error,
             );
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
 
             if (error.status === 404) {
               this._yourReq = undefined;
@@ -279,6 +281,7 @@ export class YourRequestComponent implements OnInit {
 
             this.isSkeletonLoader = false;
             this.noRequest = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log(
@@ -286,6 +289,7 @@ export class YourRequestComponent implements OnInit {
               error,
             );
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
 
             if (error.status === 404) {
               this._yourReq = undefined;

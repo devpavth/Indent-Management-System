@@ -150,6 +150,7 @@ export class ProcurementRequestlistComponent {
           this.userRequest = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
         },
         (error) => {
           console.log(
@@ -158,6 +159,7 @@ export class ProcurementRequestlistComponent {
           );
 
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {

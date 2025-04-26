@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
 import { AuthService } from '../../service/Auth/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-approvel',
@@ -20,7 +21,9 @@ export class AdminApprovelComponent implements OnInit {
   branch = sessionStorage.getItem('branchCode');
 
   currentDate: string | undefined;
-  maxDate: string | undefined;
+  maxDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
 
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
@@ -29,6 +32,7 @@ export class AdminApprovelComponent implements OnInit {
   isAuthorizeEditIndentForm: boolean = false;
   isAcceptedView: boolean = false;
   isViewEditIndentForm: boolean = false;
+  isEndDateManuallySelected: boolean = false;
 
   requestList: Request | undefined;
 
@@ -36,6 +40,11 @@ export class AdminApprovelComponent implements OnInit {
 
   toastService = inject(ToastService);
   authService = inject(AuthService);
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
 
   ngOnInit() {
     this.ReqService.getDebouncedSearchObservable().subscribe((indentCode) => {
@@ -63,13 +72,47 @@ export class AdminApprovelComponent implements OnInit {
     this.isAuthorizeEditIndentForm =
       this.authService.isAuthenticateEditIndentRole();
 
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+
+        this.fetchRequestList();
+        this.isEndDateManuallySelected = false;
+      }
+    });
+
     this.fetchRequestList();
   }
   constructor(private ReqService: RequestService) {
     const today = new Date();
     this.currentDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
+
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
+  }
+
   fetchRequestList() {
     if (
       this.isProcess == true &&
@@ -108,13 +151,13 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == false
     ) {
       let status = 202;
-      this.isViewSelectedDate = true;
-      this.ReqService.adminRequestList(status, this.currentDate).subscribe(
+      this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
         (res) => {
           this._yourReq = res;
           console.log('fetching admin request accepted list:', res);
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
         },
         (error) => {
           console.log(
@@ -122,6 +165,7 @@ export class AdminApprovelComponent implements OnInit {
             error,
           );
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -137,13 +181,13 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == true
     ) {
       let status = 406;
-      this.isViewSelectedDate = true;
-      this.ReqService.adminRequestList(status, this.currentDate).subscribe(
+      this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
         (res) => {
           this._yourReq = res;
           console.log('fetching admin request rejected list:', res);
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
         },
         (error) => {
           console.log(
@@ -152,6 +196,7 @@ export class AdminApprovelComponent implements OnInit {
           );
 
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
           if (error.status == 204) {
             this._yourReq = undefined;
           } else if (error.status === 404) {
@@ -207,10 +252,10 @@ export class AdminApprovelComponent implements OnInit {
     this.isViewReq = true;
   }
 
-  editIdentForm(sno: number){
+  editIdentForm(sno: number) {
     this.reqId = sno;
 
-    if(this.isAuthorizeEditIndentForm){
+    if (this.isAuthorizeEditIndentForm) {
       this.isViewEditIndentForm = true;
     }
   }

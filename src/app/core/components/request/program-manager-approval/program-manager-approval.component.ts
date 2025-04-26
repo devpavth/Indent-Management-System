@@ -94,7 +94,10 @@ export class ProgramManagerApprovalComponent {
         console.log(this.startDate, this.endDate);
         this.fetchRequestList();
         this.isEndDateManuallySelected = false;
-        console.log("isEndDateManuallySelected:", this.isEndDateManuallySelected);
+        console.log(
+          'isEndDateManuallySelected:',
+          this.isEndDateManuallySelected,
+        );
       }
     });
 
@@ -119,7 +122,7 @@ export class ProgramManagerApprovalComponent {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -168,10 +171,12 @@ export class ProgramManagerApprovalComponent {
             this._yourReq = res;
             this.noRequest = false;
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log('error while fetching completed request:', error);
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
             if (error.status == 204) {
               this._yourReq = undefined;
               // this.noRequest = true;
@@ -198,10 +203,12 @@ export class ProgramManagerApprovalComponent {
             this._yourReq = list;
             this.noRequest = false;
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log('error while fetching rejected request:', error);
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
             if (error.status == 204) {
               this._yourReq = undefined;
               // this.noRequest = true;

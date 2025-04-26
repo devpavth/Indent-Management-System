@@ -37,16 +37,14 @@ export class RequestService {
     return this.http.get(environment.reqProduct + data);
   }
 
-  branchRequestList(id: any, data?: string) {
-    let params = new HttpParams();
+  branchRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+    let url = `${environment.branchApprovelList}/${status}`;
 
-    if (data) {
-      params = params.append('startDate', data);
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`
     }
 
-    return this.http.get(environment.branchApprovelList + id, {
-      params: params,
-    });
+    return this.http.get(url);
   }
 
   branchApprovel(data: any) {
@@ -59,16 +57,14 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  adminRequestList(status: any, data?: string) {
-    let params = new HttpParams();
+  adminRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+    let url = `${environment.adminAprovalList}/${status}`;
 
-    if (data) {
-      params = params.append('startDate', data);
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`
     }
 
-    return this.http.get(environment.adminAprovalList + status, {
-      params: params,
-    });
+    return this.http.get(url);
   }
   adminApprovel(data: any) {
     return this.http.post(environment.adminAprovel + data, data);
@@ -165,11 +161,15 @@ export class RequestService {
     return this.http.get(environment.confirmOtp);
   }
 
-  fetchProgramManagerRequest(status: any, startDate?: string | undefined, endDate?: string | undefined) {
+  fetchProgramManagerRequest(
+    status: any,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ) {
     let url = `${environment.fetchProgramManagerRequest}/${status}`;
 
-    if(startDate && endDate){
-      url += `?startDate=${startDate}&endDate=${endDate}`
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get(url);
@@ -191,11 +191,15 @@ export class RequestService {
     return this.http.get(environment.fetchFunderDetails + funderId);
   }
 
-  fetchPrctReqList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+  fetchPrctReqList(
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ) {
     let url = `${environment.fetchProcurementList}/${status}`;
-    
-    if(startDate && endDate){
-      url += `?startDate=${startDate}&endDate=${endDate}`
+
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get(url);

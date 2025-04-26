@@ -94,9 +94,11 @@ export class PurchaseorderlistComponent {
             console.log('fetching purchase order list:', res);
             this.noRequest = false;
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log('error while fetching purchase order list:', error);
+            this.isEndDateManuallySelected = false;
 
             if (error.status === 404) {
               this.POList = [];

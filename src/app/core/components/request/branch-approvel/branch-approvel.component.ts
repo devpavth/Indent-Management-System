@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { Request } from '../../../models/request/request.model';
 import { ToastService } from '../../service/toast/toast.service';
 import { AuthService } from '../../service/Auth/auth.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-branch-approvel',
@@ -19,8 +20,11 @@ export class BranchApprovelComponent implements OnInit {
   reqId: any;
   showBranch: number = 0;
   _yourReq: any;
+
   currentDate: string | undefined;
-  maxDate: string | undefined;
+  maxDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
 
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
@@ -29,6 +33,7 @@ export class BranchApprovelComponent implements OnInit {
   isAuthorizeEditIndentForm: boolean = false;
   isAcceptedView: boolean = false;
   isViewEditIndentForm: boolean = false;
+  isEndDateManuallySelected: boolean = false;
 
   requestList: Request | undefined;
 
@@ -37,10 +42,15 @@ export class BranchApprovelComponent implements OnInit {
   toastService = inject(ToastService);
   authService = inject(AuthService);
 
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(private rService: RequestService) {
     const today = new Date();
     this.currentDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
   ngOnInit() {
     this.rService.getDebouncedSearchObservable().subscribe((indentCode) => {
@@ -72,7 +82,41 @@ export class BranchApprovelComponent implements OnInit {
     this.isAuthorizeEditIndentForm =
       this.authService.isAuthenticateEditIndentRole();
 
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+
+        this.fetchRequestList();
+        this.isEndDateManuallySelected = false;
+      }
+    });
+
     this.fetchRequestList();
+  }
+
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+ 
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
   }
 
   fetchRequestList() {
@@ -115,63 +159,66 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
-      this.isViewSelectedDate = true;
-      this.rService.branchRequestList(202, this.currentDate).subscribe(
-        (res: any) => {
-          console.log('fetching branch request accepted list:', res);
-          // let list: any[] = res;
-          // list = list.filter((l) => l.requestStatus == 102);
-          // console.log('fetching branch request accepted list:', list);
-          this._yourReq = res;
-          this.noRequest = false;
-          this.isSkeletonLoader = false;
-        },
-        (error) => {
-          console.log(
-            'error while fetching branch request accepted list:',
-            error,
-          );
-          this.isSkeletonLoader = false;
-          if (error.status == 204) {
-            this._yourReq = undefined;
-          } else if (error.status === 404) {
-            this._yourReq = undefined;
-            this.noRequest = true;
-          }
-        },
-      );
+      this.rService
+        .branchRequestList(202, this.startDate, this.endDate)
+        .subscribe(
+          (res: any) => {
+            console.log('fetching branch request accepted list:', res);
+            this._yourReq = res;
+            this.noRequest = false;
+            this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
+          },
+          (error) => {
+            console.log(
+              'error while fetching branch request accepted list:',
+              error,
+            );
+            this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
+            if (error.status == 204) {
+              this._yourReq = undefined;
+            } else if (error.status === 404) {
+              this._yourReq = undefined;
+              this.noRequest = true;
+            }
+          },
+        );
     }
     if (
       this.isProcess == false &&
       this.isCompleted == false &&
       this.isRejected == true
     ) {
-      this.isViewSelectedDate = true;
-      this.rService.branchRequestList(406, this.currentDate).subscribe(
-        (res: any) => {
-          console.log('fetching branch request rejected list:', res);
-          let list: any[] = res;
-          list = list.filter((l) => l.requestStatus == 406);
-          console.log('fetching branch request rejected list:', list);
-          this._yourReq = list;
-          this.noRequest = false;
-          this.isSkeletonLoader = false;
-        },
-        (error) => {
-          console.log(
-            'error while fetching branch request rejected list:',
-            error,
-          );
+      this.rService
+        .branchRequestList(406, this.startDate, this.endDate)
+        .subscribe(
+          (res: any) => {
+            console.log('fetching branch request rejected list:', res);
+            let list: any[] = res;
+            list = list.filter((l) => l.requestStatus == 406);
+            console.log('fetching branch request rejected list:', list);
+            this._yourReq = list;
+            this.noRequest = false;
+            this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
+          },
+          (error) => {
+            console.log(
+              'error while fetching branch request rejected list:',
+              error,
+            );
 
-          this.isSkeletonLoader = false;
-          if (error.status == 204) {
-            this._yourReq = undefined;
-          } else if (error.status === 404) {
-            this._yourReq = undefined;
-            this.noRequest = true;
-          }
-        },
-      );
+            this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
+            if (error.status == 204) {
+              this._yourReq = undefined;
+            } else if (error.status === 404) {
+              this._yourReq = undefined;
+              this.noRequest = true;
+            }
+          },
+        );
     }
   }
 
