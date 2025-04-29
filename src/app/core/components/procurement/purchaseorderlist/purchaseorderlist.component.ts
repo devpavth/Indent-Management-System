@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../service/Request/request.service';
 import { Polist } from '../../../models/polist/polist.model';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-purchaseorderlist',
@@ -15,6 +16,8 @@ export class PurchaseorderlistComponent {
   isViewPurchaseOrder: boolean = false;
   isEndDateManuallySelected: boolean = false;
   sortIndentInAscending: boolean = false;
+  showSearchInfo: boolean = false;
+  isWarningPopUp: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -23,6 +26,9 @@ export class PurchaseorderlistComponent {
 
   selectedHeadOfAccId: number | null = null;
   reqId: number = 0;
+  POId: number = 0;
+
+  confirmPOMsg: string = '';
 
   POList: Polist[] = [];
 
@@ -37,7 +43,7 @@ export class PurchaseorderlistComponent {
     this.maxDate = new Date();
   }
 
-  ngOnInit() {
+  ngOnInit() {   
     this.range.valueChanges.subscribe((val) => {
       const { start, end } = val;
       if (start && end && this.isEndDateManuallySelected) {
@@ -52,6 +58,41 @@ export class PurchaseorderlistComponent {
     });
 
     this.setTodayDateRange();
+  }
+
+  handleFocus(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  handleInput(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+
+    this.showSearchInfo = inputValue.trim() === '';
+  }
+
+  fetchPOListByPONumber(event: Event) {
+    const enteredPOCode = (event.target as HTMLInputElement).value;
+    console.log("enteredPOCode:", enteredPOCode);
+
+    if (enteredPOCode) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
+      this.requestService.searchPurchaseOrder(enteredPOCode).subscribe(
+        (res: Polist[]) => {
+          console.log('successfully fetching search PO List:', res);
+          this.POList = res;
+          this.noRequest = false;
+          this.isSkeletonLoader = false;
+        },
+        (error) => {
+          console.log('error while fetching search PO List:', error);
+          this.noRequest = false;
+          this.isSkeletonLoader = false;
+        },
+      );
+    }
   }
 
   formatDateOnly(date: Date): string {
@@ -76,7 +117,7 @@ export class PurchaseorderlistComponent {
     this.isEndDateManuallySelected = true;
   }
 
-  sortByIndentNo(){
+  sortByIndentNo() {
     this.sortIndentInAscending = !this.sortIndentInAscending;
 
     this.POList.sort((a, b) => {
@@ -86,6 +127,8 @@ export class PurchaseorderlistComponent {
 
   fetchPurchaseOrderList() {
     if (this.isCreated) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.requestService
         .fetchPurchaseOrderList(this.startDate, this.endDate)
         .subscribe(
@@ -108,6 +151,28 @@ export class PurchaseorderlistComponent {
           },
         );
     }
+  }
+
+  togglePrdStatus(POId: number) {
+    this.POId = POId;
+    this.isWarningPopUp = true;
+    this.confirmPOMsg = `Are you sure the product has been received?`;
+  }
+
+  confirmPOProductStatus(){
+    console.log("API Call Pending.");
+    this.requestService.updatePOProductStatus(this.POId).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  closepop(closeIcon: boolean) {
+    this.isWarningPopUp = closeIcon;
   }
 
   viewGeneratedPO(sno: number, headOfAccId: number) {

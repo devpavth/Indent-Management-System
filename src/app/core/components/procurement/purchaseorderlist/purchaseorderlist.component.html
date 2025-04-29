@@ -35,13 +35,23 @@
                   type="text"
                   class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                   placeholder="Search"
+                  (focus)="handleFocus($event)"
+                  (input)="handleInput($event)"
+                  (blur)="showSearchInfo = false"
+                  (keydown.enter)="fetchPOListByPONumber($event)"
                 />
+                <p
+                  *ngIf="showSearchInfo"
+                  class="absolute left-0 top-full mt-1 text-xs text-red-500 dark:text-gray-400"
+                  >
+                  Please Enter the PO Number and Press Enter.
+                </p>
               </div>
             </div>
           </div>
           <div
             class="flex w-full flex-shrink-0 flex-col justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
-          >
+            >
             <mat-form-field>
               <mat-label>Enter a date range</mat-label>
               <mat-date-range-input
@@ -53,12 +63,14 @@
                   matStartDate
                   formControlName="start"
                   placeholder="Start date"
+                  readonly
                 />
                 <input
                   matEndDate
                   formControlName="end"
                   placeholder="End date"
                   (dateChange)="onEndDateSelected($event)"
+                  readonly
                 />
               </mat-date-range-input>
               <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
@@ -124,28 +136,28 @@
               <tr>
                 <th scope="col" class="px-4 py-3">PO Number</th>
                 <th scope="col" class="px-4 py-3">
-                    <div class="flex items-center justify-center gap-2">
-                        <span>Indent ID</span>
-                        <button
-                            class="an rounded-full hover:bg-purple-800 hover:text-white"
-                            (click)="sortByIndentNo()"
-                            >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="h-4 w-4"
-                                >
-                                <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                                />
-                            </svg>
-                        </button>
-                    </div>
+                  <div class="flex items-center justify-center gap-2">
+                    <span>Indent ID</span>
+                    <button
+                      class="an rounded-full hover:bg-purple-800 hover:text-white"
+                      (click)="sortByIndentNo()"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="h-4 w-4"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </th>
                 <th scope="col" class="px-4 py-3">Head of Account</th>
                 <th scope="col" class="px-4 py-3">PO Status</th>
@@ -168,12 +180,13 @@
                 <td class="px-4 py-3">{{ req.requestNo }}</td>
                 <td class="px-4 py-3">{{ req.headOfAccName }}</td>
                 <td class="px-4 py-3">
-                  <span
+                  <button
+                    (click)="togglePrdStatus(req.id)"
                     [ngClass]="{
                       poreceived: req.productReceived,
                       popending: !req.productReceived
                     }"
-                    >{{ req.productReceived ? 'Received' : 'Pending' }}</span
+                    >{{ req.productReceived ? "Received" : "Pending" }}</button
                   >
                 </td>
                 <td class="flex items-center justify-end px-4 py-3">
@@ -250,4 +263,12 @@
     [headOfAccountId]="selectedHeadOfAccId"
     (closeView)="refresh($event)"
   ></app-view-purchaseorder>
+</section>
+<section *ngIf="isWarningPopUp">
+  <app-warning-popup
+    [showWarningIcon]="isWarningPopUp"
+    [popupMsg]="confirmPOMsg"
+    (close)="closepop($event)"
+    (clearQuotation)="confirmPOProductStatus()"
+  ></app-warning-popup>
 </section>

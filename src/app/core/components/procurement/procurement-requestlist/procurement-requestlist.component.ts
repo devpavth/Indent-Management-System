@@ -10,7 +10,6 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrl: './procurement-requestlist.component.css',
 })
 export class ProcurementRequestlistComponent {
-  currentDate: string | undefined;
   maxDate: Date | undefined;
   startDate: string | undefined;
   endDate: string | undefined;
@@ -52,7 +51,6 @@ export class ProcurementRequestlistComponent {
     private elRef: ElementRef,
   ) {
     const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
     this.maxDate = new Date();
   }
 
@@ -120,6 +118,8 @@ export class ProcurementRequestlistComponent {
     if (this.isProcess == true && this.isCompleted == false) {
       let status = 102;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.req.fetchPrctReqList(status).subscribe(
         (res) => {
           this.userRequest = res;
@@ -144,6 +144,8 @@ export class ProcurementRequestlistComponent {
       );
     }
     if (this.isProcess == false && this.isCompleted == true) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.req.fetchPrctReqList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed procurement request:', res);

@@ -72,12 +72,14 @@
                     matStartDate
                     formControlName="start"
                     placeholder="Start date"
+                    readonly
                   />
                   <input
                     matEndDate
                     formControlName="end"
                     placeholder="End date"
                     (dateChange)="onEndDateSelected($event)"
+                    readonly
                   />
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>

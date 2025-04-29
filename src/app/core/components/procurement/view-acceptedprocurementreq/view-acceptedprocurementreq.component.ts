@@ -41,10 +41,10 @@ export class ViewAcceptedprocurementreqComponent {
         leastPrice: number | string;
       }
     | undefined;
-  successData: { show: number; text: string; } = {
+  successData: { show: number; text: string } = {
     show: 0,
-    text: ''
-  }
+    text: '',
+  };
 
   isLoading: boolean = false;
   isViewPurchaseOrder: boolean = false;
@@ -203,7 +203,7 @@ export class ViewAcceptedprocurementreqComponent {
             'Purchase Order Converted Successfully',
           );
           this.isSuccesPop = true;
-          this.successData = { show: 8, text: res.errorMessege};
+          this.successData = { show: 8, text: res.errorMessege };
           this.verifyQuoteComparisonHeadOfAcc(this.reqId);
         },
         (error) => {
@@ -220,7 +220,7 @@ export class ViewAcceptedprocurementreqComponent {
     this.isWarningPopUp = closeIcon;
   }
 
-  togglePop(closeIcon: boolean){
+  togglePop(closeIcon: boolean) {
     this.isSuccesPop = closeIcon;
   }
 

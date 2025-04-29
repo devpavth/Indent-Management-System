@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { EmployeeServiceService } from '../../service/Employee/employee-service.service';
 import { Request as AppRequest } from '../../../models/request/request.model';
 import { ToastService } from '../../service/toast/toast.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-ceo-cfoapproval-requisitionlist',
@@ -10,8 +11,10 @@ import { ToastService } from '../../service/toast/toast.service';
   styleUrl: './ceo-cfoapproval-requisitionlist.component.css',
 })
 export class CeoCfoapprovalRequisitionlistComponent {
-  currentDate: string;
-  maxDate: string | undefined;
+  maxDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   userId: string | null = '';
   specialRoleId: number = 0;
@@ -19,8 +22,21 @@ export class CeoCfoapprovalRequisitionlistComponent {
   isApproved: boolean = false;
   signUploaded!: boolean;
   isViewConsolidatedQuote: boolean = false;
-
   showSearchResult: boolean = false;
+
+  isProcess = true;
+  isCompleted = false;
+  isView = false;
+  isAcceptedView: boolean = false;
+  isViewQuoteCompare: boolean = false;
+  selectedRequestId: number | null | undefined = null;
+  noRequest: boolean = false;
+  isSkeletonLoader: boolean = true;
+  isEndDateManuallySelected: boolean = false;
+
+  reqId: any;
+  indentNumber: string | undefined = '';
+
   requestList: AppRequest | undefined;
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -30,13 +46,17 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
   specialRolesProcessList: AppRequest[] = [];
 
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
+
   constructor(
     private req: RequestService,
     private elRef: ElementRef,
   ) {
     const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
 
   ngOnInit() {
@@ -76,34 +96,50 @@ export class CeoCfoapprovalRequisitionlistComponent {
         console.log('error while employee details:', error);
       },
     );
+
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+
+        this.fetchRequestList();
+        this.isEndDateManuallySelected = false;
+      }
+    });
   }
 
-  isProcess = true;
-  isCompleted = false;
-  isHold = false;
-  isRejected = false;
-  isView = false;
-  isAcceptedView: boolean = false;
-  isViewQuoteCompare: boolean = false;
-  selectedRequestId: number | null | undefined = null;
-  noRequest: boolean = false;
-  isSkeletonLoader: boolean = true;
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
 
-  reqId: any;
-  indentNumber: string | undefined = '';
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
+  }
 
   fetchRequestList() {
-    if (
-      this.isProcess == true &&
-      this.isCompleted == false &&
-      this.isHold == false &&
-      this.isRejected == false
-    ) {
+    if (this.isProcess == true && this.isCompleted == false) {
       let status = 102;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       console.log('this.specialRoleId in method:', this.specialRoleId);
       this.req
-        .fetchSpecialRolesRequestIsProcess(status, this.specialRoleId)
+        .fetchSpecialRolesRequestIsProcessAndAccept(status, this.specialRoleId)
         .subscribe(
           (res: any) => {
             this.specialRolesProcessList = res;
@@ -126,18 +162,15 @@ export class CeoCfoapprovalRequisitionlistComponent {
           },
         );
     }
-    if (
-      this.isProcess == false &&
-      this.isCompleted == true &&
-      this.isHold == false &&
-      this.isRejected == false
-    ) {
-      this.isViewSelectedDate = true;
+    if (this.isProcess == false && this.isCompleted == true) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.req
-        .fetchSpecialRolesRequestIsAccept(
+        .fetchSpecialRolesRequestIsProcessAndAccept(
           202,
           this.specialRoleId,
-          this.currentDate,
+          this.startDate,
+          this.endDate
         )
         .subscribe(
           (res: any) => {
@@ -146,6 +179,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
             this.noRequest = false;
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
           },
           (error) => {
             console.log(
@@ -154,6 +188,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
             );
 
             this.isSkeletonLoader = false;
+            this.isEndDateManuallySelected = false;
             if (error.status == 204) {
               this.specialRolesProcessList = [];
             } else if (error.status === 404) {
@@ -328,7 +363,6 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
   refresh(data: any) {
     this.isView = data;
-    // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
     this.isViewConsolidatedQuote = data;
     this.fetchRequestList();

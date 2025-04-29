@@ -133,6 +133,8 @@ export class ProgramManagerApprovalComponent {
       this.isRejected == false
     ) {
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService.fetchProgramManagerRequest(102).subscribe(
         (res: any) => {
           console.log('fetching processing request:', res);
@@ -163,6 +165,8 @@ export class ProgramManagerApprovalComponent {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService
         .fetchProgramManagerRequest(202, this.startDate, this.endDate)
         .subscribe(
@@ -192,6 +196,8 @@ export class ProgramManagerApprovalComponent {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService
         .fetchProgramManagerRequest(406, this.startDate, this.endDate)
         .subscribe(

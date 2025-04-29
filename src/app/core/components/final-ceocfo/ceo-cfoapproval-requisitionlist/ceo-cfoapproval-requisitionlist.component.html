@@ -15,10 +15,15 @@
           <div class="w-full md:flex md:items-center md:justify-between">
             <div class="relative mr-28 w-full md:w-auto md:flex-grow">
               <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative mr-28">
+              <div 
+                class="relative mr-28"
+                [ngClass]="{
+                  '-mt-10': isViewSelectedDate
+                }"
+                >
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                  >
+                >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -43,141 +48,92 @@
                   placeholder="Search"
                 />
 
-                <p 
+                <p
                   *ngIf="showSearchResult"
-                  class="absolute top-full left-0 mt-1 text-xs text-red-500 dark:text-gray-400"
-                  >
+                  class="absolute left-0 top-full mt-1 text-xs text-red-500 dark:text-gray-400"
+                >
                   Please Enter the Indent Code and Press Enter
                 </p>
               </div>
             </div>
 
-            <div 
-              *ngIf="isAnyCheckboxSelected()"
-              class="relative group"
-              >
-              <button 
+            <div *ngIf="isAnyCheckboxSelected()" class="group relative">
+              <button
                 type="submit"
                 [disabled]="!signUploaded"
                 (click)="acceptSelectedRequestSpecialRole()"
                 [ngClass]="{
-                  'bg-blue-300 hover:bg-blue-300 border-blue-300': !signUploaded
+                  'border-blue-300 bg-blue-300 hover:bg-blue-300': !signUploaded
                 }"
-                class="border border-blue-700 text-white font-medium px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700">
+                class="rounded-lg border border-blue-700 bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+              >
                 Accept
               </button>
-              <div 
-                  *ngIf="!signUploaded"
-                  class="absolute left-1/4 -top-[50%] z-10 min-w-[250px] -translate-x-1/2 rounded-lg bg-black px-3 py-2 text-sm text-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                >
-                  Before accepting the indent request, you need to upload a signature
+              <div
+                *ngIf="!signUploaded"
+                class="absolute -top-[50%] left-1/4 z-10 min-w-[250px] -translate-x-1/2 rounded-lg bg-black px-3 py-2 text-sm text-white opacity-0 shadow-md transition-opacity duration-300 group-hover:opacity-100"
+              >
+                Before accepting the indent request, you need to upload a
+                signature
               </div>
             </div>
 
-            <div class="w-full md:mt-0 md:w-auto" *ngIf="isViewSelectedDate">
-              <input
-                type="date"
-                (change)="fetchRequestList()"
-                class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                [value]="currentDate"
-                [(ngModel)]="currentDate"
-                [max]="maxDate"
-              />
-            </div>
           </div>
           <div
             class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
-          >
-            <!-- <button type="button" routerLink="/home/request"
-                          class="flex items-center justify-center text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
-                          <svg class="w-4 h-4 mr-2 " fill="currentColor" aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                              viewBox="0 0 24 24">
-                              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                  stroke-width="3" d="M5 12h14m-7 7V5" />
-                          </svg>
-  
-                          New Request
-                      </button> -->
-            <!-- <div class="flex items-center space-x-3 w-full md:w-auto">
-                        <button (click)="generatePdf()" id="actionsDropdownButton" data-dropdown-toggle="actionsDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
-                            <svg class="-ml-1 mr-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                            </svg>
-                            Actions
-                        </button>
-                        <div id="actionsDropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="actionsDropdownButton">
-                                <li>
-                                    <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mass Edit</a>
-                                </li>
-                            </ul>
-                            <div class="py-1">
-                                <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete all</a>
-                            </div>
-                        </div>
-                        <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown" class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" type="button">
-                            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-4 w-4 mr-2 text-gray-400" viewbox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
-                            </svg>
-                            Filter
-                            <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                            </svg>
-                        </button>
-                        <div id="filterDropdown" class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                            <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Choose brand</h6>
-                            <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                <li class="flex items-center">
-                                    <input id="apple" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="apple" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Apple (56)</label>
-                                </li>
-                                <li class="flex items-center">
-                                    <input id="fitbit" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="fitbit" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Microsoft (16)</label>
-                                </li>
-                                <li class="flex items-center">
-                                    <input id="razor" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="razor" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Razor (49)</label>
-                                </li>
-                                <li class="flex items-center">
-                                    <input id="nikon" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="nikon" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Nikon (12)</label>
-                                </li>
-                                <li class="flex items-center">
-                                    <input id="benq" type="checkbox" value="" class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="benq" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">BenQ (74)</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> -->
+            >
+              <div *ngIf="isViewSelectedDate">
+                <mat-form-field>
+                  <mat-label>Enter a date range</mat-label>
+                  <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
+                    <input matStartDate formControlName="start" placeholder="Start date" readonly>
+                    <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onEndDateSelected($event)" readonly>
+                  </mat-date-range-input>
+                  <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-date-range-picker #picker></mat-date-range-picker>
+
+                  @if(range.controls.start.hasError('matStartDateInvalid')){
+                    <mat-error>Invalid start date</mat-error>
+                  }
+
+                  @if(range.controls.end.hasError('matEndDateInvalid')){
+                    <mat-error>Invalid end date</mat-error>
+                  }
+                </mat-form-field>
+              </div>
           </div>
         </div>
-        <div class="mb-4 px-4 text-sm">
+        <div 
+          class="mb-4 px-4 text-sm"
+          [ngClass]="{
+            '-mt-10': isViewSelectedDate
+          }"
+          >
           <div class="flex gap-6">
             <button
               (click)="
                 isProcess = true;
                 isCompleted = false;
-                isHold = false;
-                isRejected = false;
                 fetchRequestList()
               "
               class="group flex items-center justify-center gap-1"
             >
-              <svg 
+              <svg
                 [ngClass]="{ activeSubMenu: isProcess }"
                 class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
                 aria-hidden="true"
                 width="24"
                 height="24"
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="currentColor" 
-                >
-                <path 
-                  fill-rule="evenodd" 
-                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clip-rule="evenodd" />
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"
+                  clip-rule="evenodd"
+                />
               </svg>
 
               <h1
@@ -191,9 +147,8 @@
               (click)="
                 isProcess = false;
                 isCompleted = true;
-                isHold = false;
-                isRejected = false;
-                fetchRequestList()
+                isViewSelectedDate = true;
+                setTodayDateRange()
               "
               class="group flex items-center justify-center gap-1"
             >
@@ -220,73 +175,6 @@
                 Accepted
               </h1>
             </button>
-            <!-- <button
-                (click)="
-                  isProcess = false;
-                  isCompleted = false;
-                  isHold = true;
-                  isRejected = false;
-                  fetchRequestList()
-                "
-                class="group flex items-center justify-center gap-1"
-                >
-                <svg
-                  [ngClass]="{ activeSubMenu: isHold }"
-                  class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Zm-1 7a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H12Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-  
-                <h1
-                  [ngClass]="{ activeSubMenu: isHold }"
-                  class="subMenu an group"
-                >
-                  On Hold
-                </h1>
-              </button> -->
-            <!-- <button
-                (click)="
-                  isProcess = false;
-                  isCompleted = false;
-                  isHold = false;
-                  isRejected = true;
-                  fetchRequestList()
-                "
-                class="group flex items-center justify-center gap-1"
-              >
-                <svg
-                  [ngClass]="{ activeSubMenu: isRejected }"
-                  class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm7.707-3.707a1 1 0 0 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <h1
-                  [ngClass]="{ activeSubMenu: isRejected }"
-                  class="subMenu an group"
-                >
-                  Rejected
-                </h1>
-              </button> -->
           </div>
         </div>
 
@@ -298,15 +186,13 @@
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
-                <th *ngIf="isProcess"
-                  class="pl-4 pr-2 py-3"
-                  >
+                <th *ngIf="isProcess" class="py-3 pl-4 pr-2">
                   <button
                     *ngIf="isAnyCheckboxSelected()"
                     (click)="toggleSelectAll()"
-                    class="text-purple-900 uppercase"
-                    >
-                    {{isAllSelected() ? 'Clear All' : 'Select All'}}
+                    class="uppercase text-purple-900"
+                  >
+                    {{ isAllSelected() ? "Clear All" : "Select All" }}
                   </button>
                 </th>
                 <th scope="col" class="px-4 py-3">
@@ -381,8 +267,7 @@
                     </button>
                   </div>
                 </th>
-                <!-- <th scope="col" class="px-4 py-3">GST %</th>
-                            <th scope="col" class="px-4 py-3">Price</th> -->
+
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
@@ -391,15 +276,19 @@
             <tbody *ngIf="!isSkeletonLoader">
               <tr
                 class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
-                [ngClass]="{'bg-purple-100 hover:bg-purple-200': selectedRequests.has(req.sno)}"
+                [ngClass]="{
+                  'bg-purple-100 hover:bg-purple-200': selectedRequests.has(
+                    req.sno
+                  )
+                }"
                 *ngFor="let req of specialRolesProcessList"
-                > 
-                <th *ngIf="isProcess" class="pl-4 pr-2 py-3">
-                  <input 
+              >
+                <th *ngIf="isProcess" class="py-3 pl-4 pr-2">
+                  <input
                     type="checkbox"
                     [checked]="selectedRequests.has(req.sno)"
                     (change)="toggleSelection(req.sno, $event)"
-                  >
+                  />
                 </th>
                 <th
                   scope="row"
@@ -434,13 +323,12 @@
                     >{{ req.totalPrice | currency: "INR" }}</span
                   >
                 </td>
-                
+
                 <td class="relative flex items-center justify-end px-4 py-3">
                   <button
                     (click)="viewRequest($event, req.sno, req.requestNo)"
                     class="dropdown-button inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                     type="button"
-                    
                   >
                     <svg
                       class="h-5 w-5"
@@ -456,20 +344,24 @@
                   </button>
                   <div
                     *ngIf="isAcceptedView && selectedRequestId === req.sno"
-                    class="dropdown-container absolute overflow-hidden right-0 -mt-12 w-56 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                    class="dropdown-container absolute right-0 -mt-12 w-56 overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700"
+                  >
+                    <ul
+                      class="py-1 text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
-                    <ul class="py-1 text-sm text-gray-700 font-medium dark:text-gray-200">
-                      
                       <li>
-                        <button (click)="openQuoteComparison(req.sno, req.requestNo)" 
-                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
-                           Comparison Quote
+                        <button
+                          (click)="openQuoteComparison(req.sno, req.requestNo)"
+                          class="block w-56 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        >
+                          Comparison Quote
                         </button>
                       </li>
                       <li>
                         <button
-                          (click)="openConsolidatedQuote(req.sno)" 
-                          class="block px-4 py-2 w-56 hover:bg-gray-100 dark:hover:bg-gray-600">
+                          (click)="openConsolidatedQuote(req.sno)"
+                          class="block w-56 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        >
                           Consolidated Quote
                         </button>
                       </li>
@@ -480,25 +372,51 @@
             </tbody>
 
             <tbody *ngIf="isSkeletonLoader">
-              <tr *ngFor="let _ of [1,2,3,4,5]" class="animate-pulse border-b">
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-8"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-20"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-32"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-24"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-28"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-16"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-20"></div></td>
-                <td class="px-4 py-3"><div class="h-4 bg-gray-300 rounded-lg w-10"></div></td>
+              <tr
+                *ngFor="let _ of [1, 2, 3, 4, 5]"
+                class="animate-pulse border-b"
+              >
+                <td class="px-4 py-3">
+                  <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-20 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-32 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-24 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-28 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-16 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-20 rounded-lg bg-gray-300"></div>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="h-4 w-10 rounded-lg bg-gray-300"></div>
+                </td>
               </tr>
             </tbody>
-
           </table>
         </div>
         <ng-container *ngIf="noRequest">
-          <div class="flex h-96 items-center justify-center bg-white rounded-lg px-4">
+          <div
+            class="flex h-96 items-center justify-center rounded-lg bg-white px-4"
+          >
             <div class="text-center">
-              <img src="../../../../../assets/Img/9264882.svg" class="w-52 mx-auto" alt="No data available"/>
-              <p class="text-gray-800 font-medium dark:text-gray-700 mt-4">No Request Available</p>
+              <img
+                src="../../../../../assets/Img/9264882.svg"
+                class="mx-auto w-52"
+                alt="No data available"
+              />
+              <p class="mt-4 font-medium text-gray-800 dark:text-gray-700">
+                No Request Available
+              </p>
             </div>
           </div>
         </ng-container>
@@ -518,10 +436,7 @@
   <app-success-pop (close)="closepop($event)"></app-success-pop>
 </section>
 <section *ngIf="isViewConsolidatedQuote">
-  <app-view-consolidatedquote
-    [reqId]="reqId"
-    (closeView)="refresh($event)"
-  >
+  <app-view-consolidatedquote [reqId]="reqId" (closeView)="refresh($event)">
   </app-view-consolidatedquote>
 </section>
 <!-- <section *ngIf="isViewQuoteCompare" class="">

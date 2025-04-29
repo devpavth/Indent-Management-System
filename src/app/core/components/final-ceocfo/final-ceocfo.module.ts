@@ -9,6 +9,9 @@ import { ViewceoCfoapprovalRequisitionComponent } from './viewceo-cfoapproval-re
 import { UpdateSignatureComponent } from './update-signature/update-signature.component';
 import { SharedModule } from "../../../shared/shared.module";
 import { ProcurementModule } from "../procurement/procurement.module";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -16,6 +19,16 @@ import { ProcurementModule } from "../procurement/procurement.module";
     ViewceoCfoapprovalRequisitionComponent,
     UpdateSignatureComponent
   ],
-  imports: [CommonModule, FinalCeocfoRoutingModule, FormsModule, ReactiveFormsModule, SharedModule, ProcurementModule],
+  imports: [
+    CommonModule, 
+    FinalCeocfoRoutingModule, 
+    FormsModule, 
+    ReactiveFormsModule, 
+    SharedModule, 
+    ProcurementModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule
+  ],
 })
 export class FinalCeocfoModule {}

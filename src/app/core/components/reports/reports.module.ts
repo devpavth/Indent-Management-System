@@ -8,15 +8,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IndentreportsComponent } from './indentreports/indentreports.component';
 import { SharedModule } from "../../../shared/shared.module";
 
-
 @NgModule({
-  declarations: [StockreportBranchComponent, IndentreportsComponent],
+  declarations: [
+    StockreportBranchComponent, 
+    IndentreportsComponent
+  ],
   imports: [
     CommonModule,
     ReportsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
-],
+    SharedModule,
+  ],
 })
 export class ReportsModule {}

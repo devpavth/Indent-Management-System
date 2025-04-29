@@ -85,9 +85,13 @@
                         'btn-disable-order border-opacity-10':
                           _requestDetails().indentHeaders?.requestStatus !== 100
                       }"
-                      class='rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white'
-                      >
-                      {{ dynamicPOBtn ? 'View Purchase Order' : 'Convert to Purchase Order'}}
+                      class="rounded-lg border border-purple-600 bg-purple-600 px-4 py-2 font-medium text-white"
+                    >
+                      {{
+                        dynamicPOBtn
+                          ? "View Purchase Order"
+                          : "Convert to Purchase Order"
+                      }}
                     </button>
 
                     <div
@@ -140,7 +144,9 @@
   *ngIf="toastService.isSuccessToast"
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
-  <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
+  <app-success-toast
+    [message]="toastService.successToastMsg"
+  ></app-success-toast>
 </section>
 <section
   *ngIf="toastService.isErrorToast"
@@ -162,4 +168,3 @@
     (closeSuccess)="togglePop($event)"
   ></app-success>
 </section>
-

@@ -58,7 +58,7 @@ export class RequestService {
     });
   }
   adminRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
-    let url = `${environment.adminAprovalList}/${status}`;
+    let url = `${environment.adminAprovalList}${status}`;
 
     if(startDate && endDate){
       url += `?startDate=${startDate}&endDate=${endDate}`
@@ -76,16 +76,14 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  finRequestList(status: any, data?: string): Observable<any> {
-    let params = new HttpParams();
+  finRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined): Observable<any> {
+    let url = `${environment.finRequestList}${status}`;
 
-    if (data) {
-      params = params.append('startDate', data);
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`
     }
 
-    return this.http.get(environment.finRequestList + status, {
-      params: params,
-    });
+    return this.http.get(url);
   }
   commands() {
     return this.http.get(environment.commend);
@@ -263,25 +261,19 @@ export class RequestService {
     });
   }
 
-  fetchSpecialRolesRequestIsProcess(
+  fetchSpecialRolesRequestIsProcessAndAccept(
     statusCode: number,
     specialRoleId: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined
   ): Observable<Request[]> {
-    return this.http.get<Request[]>(
-      environment.fetchSpecialRolesRequestIsProcess +
-        `${statusCode}?specialRoleId=${specialRoleId}`,
-    );
-  }
+    let url = `${environment.fetchSpecialRolesRequestIsProcessAndAccept}${statusCode}?specialRoleId=${specialRoleId}`;
 
-  fetchSpecialRolesRequestIsAccept(
-    statusCode: number,
-    specialRoleId: number,
-    startDate: string,
-  ) {
-    return this.http.get(
-      environment.fetchSpecialRolesRequestIsAccept +
-        `${statusCode}?specialRoleId=${specialRoleId}&startDate=${startDate}`,
-    );
+    if(startDate && endDate){
+      url += `&startDate=${startDate}&endDate=${endDate}`
+    }
+
+    return this.http.get<Request[]>(url);
   }
 
   acceptSpecialRoleRequest(specialRoleId: number, reqList: { sno: number }[]) {
@@ -398,5 +390,13 @@ export class RequestService {
     return this.http.get(
       environment.viewPurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
     );
+  }
+
+  searchPurchaseOrder(PONumber: string): Observable<Polist[]>{
+    return this.http.get<Polist[]>(environment.searchPurchaseOrder + PONumber);
+  }
+
+  updatePOProductStatus(POId: number){
+    return this.http.put(environment.updatePOProductStatus + POId, "");
   }
 }

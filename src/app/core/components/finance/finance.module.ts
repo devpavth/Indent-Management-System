@@ -13,6 +13,9 @@ import { AddFunderComponent } from './Funder/add-funder/add-funder.component';
 import { FunderListComponent } from './Funder/funder-list/funder-list.component';
 import { ViewFunderComponent } from './Funder/view-funder/view-funder.component';
 import { FundaddComponent } from './Funder/fundadd/fundadd.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,7 @@ import { FundaddComponent } from './Funder/fundadd/fundadd.component';
     AddFunderComponent,
     FunderListComponent,
     ViewFunderComponent,
-    FundaddComponent
+    FundaddComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +35,9 @@ import { FundaddComponent } from './Funder/fundadd/fundadd.component';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatNativeDateModule,
   ],
 })
 export class FinanceModule {}

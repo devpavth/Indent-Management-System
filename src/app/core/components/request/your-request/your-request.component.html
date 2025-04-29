@@ -69,8 +69,8 @@
               <mat-form-field>
                 <mat-label>Enter a date range</mat-label>
                 <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
-                  <input matStartDate formControlName="start" placeholder="Start date">
-                  <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onEndDateSelected($event)">
+                  <input matStartDate formControlName="start" placeholder="Start date" readonly>
+                  <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onEndDateSelected($event)" readonly>
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>

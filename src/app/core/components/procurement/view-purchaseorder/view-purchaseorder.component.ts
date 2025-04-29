@@ -54,7 +54,7 @@ export class ViewPurchaseorderComponent {
 
   ngOnInit() {
     console.log('reqId:', this.reqId);
-    console.log("checking headofACcound ID:", this.headOfAccountId);
+    console.log('checking headofACcound ID:', this.headOfAccountId);
     this.fetchDetails(this.reqId);
     this.fetchCompanyDetails();
     this.generatePurchaseOrder(this.headOfAccountId);
@@ -97,7 +97,7 @@ export class ViewPurchaseorderComponent {
         this.contactPersonList = this.purchaseOrderData.contactPersonData;
         this.indentList = this.purchaseOrderData.indentHeaders;
         const selectElement = this.purchaseOrderData.headofAcc.find(
-          (item: any) => item.headOfAccId === headOfAccId
+          (item: any) => item.headOfAccId === headOfAccId,
         );
 
         this.PONumber = selectElement?.poNumber;
@@ -116,21 +116,21 @@ export class ViewPurchaseorderComponent {
         this.headOfProduct = selectedHead
           ? selectedHead.productDetailsDTOs
           : [];
-        console.log("headofacc list:", this.headOfProduct);
+        console.log('headofacc list:', this.headOfProduct);
         this.viewPDF([selectedHead]);
         // }
 
         this.isLoading = false;
       },
       (error) => {
-        console.log("error while viewing generated purchase order:", error);
+        console.log('error while viewing generated purchase order:', error);
         this.isLoading = false;
 
-        if(error.status === 400){
+        if (error.status === 400) {
           this.toastService.showWarning(error.error.errorMessege);
         }
-      }
-    )
+      },
+    );
   }
 
   viewPDF(headOfAccList: any[]) {

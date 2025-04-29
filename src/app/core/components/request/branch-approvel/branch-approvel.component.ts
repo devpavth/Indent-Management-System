@@ -112,10 +112,9 @@ export class BranchApprovelComponent implements OnInit {
       start: today,
       end: today,
     });
- 
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -126,6 +125,8 @@ export class BranchApprovelComponent implements OnInit {
       this.isRejected == false
     ) {
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService.branchRequestList(102).subscribe(
         (res: any) => {
           console.log('fetching branch request processing list:', res);
@@ -159,6 +160,8 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == true &&
       this.isRejected == false
     ) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService
         .branchRequestList(202, this.startDate, this.endDate)
         .subscribe(
@@ -190,6 +193,8 @@ export class BranchApprovelComponent implements OnInit {
       this.isCompleted == false &&
       this.isRejected == true
     ) {
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.rService
         .branchRequestList(406, this.startDate, this.endDate)
         .subscribe(

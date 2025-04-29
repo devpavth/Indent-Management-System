@@ -141,6 +141,8 @@ export class YourRequestComponent implements OnInit {
       !this.isRejected
     ) {
       let status = 201;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.isViewSelectedDate = false;
       this.reqService.getUserReq(status).subscribe(
         (res) => {
@@ -174,6 +176,8 @@ export class YourRequestComponent implements OnInit {
     ) {
       let status = 102;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.reqService.getUserReq(status).subscribe(
         (res) => {
           console.log('fetching processing user request list:', res);
@@ -207,6 +211,8 @@ export class YourRequestComponent implements OnInit {
     ) {
       let status = 418;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.reqService.getUserReq(status).subscribe(
         (res) => {
           console.log('fetching onhold user request list:', res);
@@ -235,6 +241,8 @@ export class YourRequestComponent implements OnInit {
       !this.isRejected
     ) {
       let status = 100;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       console.log('date range form:', this.range.value);
       this.reqService
         .getUserReq(status, this.startDate, this.endDate)
@@ -272,6 +280,8 @@ export class YourRequestComponent implements OnInit {
       this.isRejected
     ) {
       let status = 406;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.reqService
         .getUserReq(status, this.startDate, this.endDate)
         .subscribe(

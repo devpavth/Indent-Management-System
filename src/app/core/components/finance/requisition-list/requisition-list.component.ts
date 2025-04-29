@@ -3,6 +3,7 @@ import { RequestService } from '../../service/Request/request.service';
 import { SharedServiceService } from '../../service/shared-service/shared-service.service';
 import { ToastService } from '../../service/toast/toast.service';
 import { Request } from '../../../models/request/request.model';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-requisition-list',
@@ -10,16 +11,32 @@ import { Request } from '../../../models/request/request.model';
   styleUrl: './requisition-list.component.css',
 })
 export class RequisitionListComponent implements OnInit {
-  currentDate: string | undefined;
-  maxDate: string | undefined;
+  maxDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
+  isEndDateManuallySelected: boolean = false;
+  isProcess = true;
+  isCompleted = false;
+  isHold = false;
+  isRejected = false;
+  isView = false;
+
+  userRequest: any;
+  reqId: any;
 
   requestList: Request | undefined;
 
   toastService = inject(ToastService);
+
+  range = new FormGroup({
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
+  });
 
   ngOnInit() {
     this.req.getDebouncedSearchObservable().subscribe((indentCode) => {
@@ -39,22 +56,46 @@ export class RequisitionListComponent implements OnInit {
       );
     });
 
+    this.range.valueChanges.subscribe((val) => {
+      const { start, end } = val;
+      if (start && end && this.isEndDateManuallySelected) {
+        this.startDate = this.formatDateOnly(start);
+        this.endDate = this.formatDateOnly(end);
+
+        this.fetchRequestList();
+        this.isEndDateManuallySelected = false;
+      }
+    });
+
     this.fetchRequestList();
   }
 
   constructor(private req: RequestService) {
     const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
-    this.maxDate = today.toISOString().split('T')[0];
+    this.maxDate = new Date();
   }
-  isProcess = true;
-  isCompleted = false;
-  isHold = false;
-  isRejected = false;
-  isView = false;
-  userRequest: any;
 
-  reqId: any;
+  formatDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  setTodayDateRange() {
+    const today = new Date();
+    this.isEndDateManuallySelected = true;
+
+    this.range.setValue({
+      start: today,
+      end: today,
+    });
+  }
+
+  onEndDateSelected(event: any){
+    this.isEndDateManuallySelected = true;
+  }
 
   fetchRequestList() {
     if (
@@ -65,6 +106,8 @@ export class RequisitionListComponent implements OnInit {
     ) {
       let status = 102;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.req.finRequestList(status).subscribe(
         (res) => {
           this.userRequest = res;
@@ -94,21 +137,20 @@ export class RequisitionListComponent implements OnInit {
       this.isHold == false &&
       this.isRejected == false
     ) {
-      this.isViewSelectedDate = true;
-      this.req.finRequestList(202, this.currentDate).subscribe(
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
+      this.req.finRequestList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed finance request:', res);
-          // let list: any[] = res;
-          // console.log("listing completed:", list);
-          // list = list.filter((l) => l.requestStatus == 102);
-          // console.log("filtering completed request:", list);
           this.userRequest = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
         },
         (error) => {
           console.log('error while fetching completed finance request:', error);
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {
@@ -125,6 +167,8 @@ export class RequisitionListComponent implements OnInit {
       this.isRejected == false
     ) {
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.req.finRequestList(418).subscribe(
         (res: any) => {
           console.log('fetching finance request on hold list:', res);
@@ -150,17 +194,20 @@ export class RequisitionListComponent implements OnInit {
       this.isHold == false &&
       this.isRejected == true
     ) {
-      this.isViewSelectedDate = true;
-      this.req.finRequestList(406, this.currentDate).subscribe(
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
+      this.req.finRequestList(406, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching finance request rejected list:', res);
           this.userRequest = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
         },
         (error) => {
           console.log('error while fetching rejected finance request:', error);
           this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
           if (error.status == 204) {
             this.userRequest = undefined;
           } else if (error.status === 404) {

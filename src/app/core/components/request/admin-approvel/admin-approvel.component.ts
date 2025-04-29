@@ -20,7 +20,6 @@ export class AdminApprovelComponent implements OnInit {
   _yourReq: any;
   branch = sessionStorage.getItem('branchCode');
 
-  currentDate: string | undefined;
   maxDate: Date | undefined;
   startDate: string | undefined;
   endDate: string | undefined;
@@ -87,7 +86,6 @@ export class AdminApprovelComponent implements OnInit {
   }
   constructor(private ReqService: RequestService) {
     const today = new Date();
-    this.currentDate = today.toISOString().split('T')[0];
     this.maxDate = new Date();
   }
 
@@ -121,6 +119,8 @@ export class AdminApprovelComponent implements OnInit {
     ) {
       let status = 102;
       this.isViewSelectedDate = false;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.ReqService.adminRequestList(status).subscribe(
         (res) => {
           this._yourReq = res;
@@ -151,6 +151,8 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == false
     ) {
       let status = 202;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
         (res) => {
           this._yourReq = res;
@@ -181,6 +183,8 @@ export class AdminApprovelComponent implements OnInit {
       this.isRejected == true
     ) {
       let status = 406;
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
       this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
         (res) => {
           this._yourReq = res;

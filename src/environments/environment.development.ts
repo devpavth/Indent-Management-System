@@ -148,9 +148,7 @@ export const environment = {
   fetchConsolidatedQuotePDF:
     Url + baseRequestApi + '/quote/consolidate/generate-report/',
 
-  fetchSpecialRolesRequestIsProcess:
-    Url + baseRequestApi + '/requestforspecialroles/',
-  fetchSpecialRolesRequestIsAccept:
+  fetchSpecialRolesRequestIsProcessAndAccept:
     Url + baseRequestApi + '/requestforspecialroles/',
 
   acceptSpecialRoleRequest: Url + baseRequestApi + '/acceptspecialroleauth',
@@ -166,8 +164,9 @@ export const environment = {
   fetchRequestByIndentCode: Url + baseRequestApi + '/getrequestbyindentcode/',
   updateIndentRequestDetails: Url + baseRequestApi + '/updaterequestdetails/',
   purchaseOrderList: Url + baseRequestApi + '/generated/purchaseorderlist',
-  viewPurchaseOrder:
-    Url + baseRequestApi + '/viewgenerated/purchaseorder/',
+  viewPurchaseOrder: Url + baseRequestApi + '/viewgenerated/purchaseorder/',
+  searchPurchaseOrder: Url + baseRequestApi + '/findgenerated/purchaseorder/',
+  updatePOProductStatus: Url + baseRequestApi + '/update/purchaseorderstatus/',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 
