@@ -2,6 +2,12 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeServiceService } from '../../core/components/service/Employee/employee-service.service';
 import { ToastService } from '../../core/components/service/toast/toast.service';
+import {
+  ImageCroppedEvent,
+  LoadedImage,
+  ImageTransform,
+} from 'ngx-image-cropper';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-signature',
@@ -12,12 +18,23 @@ export class UploadSignatureComponent {
   @Input() specialRoleId: number | undefined;
   @Input() isViewUploadSignature!: boolean;
   @Output() close = new EventEmitter<boolean>();
+
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
+  imageChangedEvent: Event | null = null;
+  croppedImage: SafeUrl | null = null;
+  croppedBlob: Blob | null = null;
+
+  showCropper: boolean = false;
+  isDragOver: boolean = false;
+
+  transform: ImageTransform = {};
 
   empService = inject(EmployeeServiceService);
   route = inject(Router);
   toastService = inject(ToastService);
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     console.log('specialRoleId:', this.specialRoleId);
@@ -27,42 +44,85 @@ export class UploadSignatureComponent {
     this.close.emit(true);
   }
 
+  onDragOver(event: DragEvent){
+    event.preventDefault();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent){
+    event.preventDefault();
+    this.isDragOver = false;
+  }
+
+  onFileDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragOver = false;
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      const isValid = this.handleSelectedFile(file);
+
+      if (isValid) {
+        this.imageChangedEvent = {
+          target: { files: [file] },
+        } as unknown as Event;
+
+        this.showCropper = true;
+      }
+    }
+  }
+
   onFileSelected(event: Event) {
-    console.log('specialRoleId in file selected:', this.specialRoleId);
+    this.imageChangedEvent = event;
+    this.showCropper = true;
     const input = event.target as HTMLInputElement;
 
-    if (input.files && input.files[0]) {
+    if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      // this.selectedFile = input.files[0];
-
-      const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg'];
-
-      if (!allowedExtensions.includes(file.type)) {
-        // alert('Invalid file format! Please upload a JPG, JPEG, or PNG image.');
-        this.toastService.showError(
-          'Invalid file format! Please upload a JPG, JPEG, or PNG image.',
-        );
-        // this.isErrorToast = true;
-        // this.errorToastMsg =
-        //   'Invalid file format! Please upload a JPG, JPEG, or PNG image.';
-        this.previewUrl = null;
-        this.selectedFile = null;
-        // setTimeout(() => {
-        //   this.isErrorToast = false;
-        // }, 3000);
-
-        return;
-      }
-
-      this.selectedFile = file;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
-
-      reader.readAsDataURL(this.selectedFile);
+      this.handleSelectedFile(file);
     }
+  }
+
+  handleSelectedFile(file: File) {
+    console.log('specialRoleId in file selected:', this.specialRoleId);
+
+    const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg'];
+
+    if (!allowedExtensions.includes(file.type)) {
+      this.toastService.showError(
+        'Invalid file format! Please upload a JPG, JPEG, or PNG image.',
+      );
+
+      this.showCropper = false;
+      this.previewUrl = null;
+      this.selectedFile = null;
+      return false;
+    }
+
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+    };
+
+    reader.readAsDataURL(this.selectedFile);
+    return true;
+  }
+
+  imageCropped(event: any) {
+    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
+    this.croppedBlob = event.blob;
+  }
+
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
   }
 
   uploadSignature() {
@@ -92,10 +152,7 @@ export class UploadSignatureComponent {
         // this.close.emit(true);
 
         this.toastService.showSuccess(res.errorMessege);
-        // this.isToast = true;
-        // this.successToastMsg = res.errorMessege;
         setTimeout(() => {
-          // this.isToast = false;
           this.close.emit(true);
           if (this.isViewUploadSignature) {
             this.route.navigate(['/home/updateSign']);

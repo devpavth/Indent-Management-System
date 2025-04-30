@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../service/Request/request.service';
 import { Polist } from '../../../models/polist/polist.model';
 import { debounceTime, Subject } from 'rxjs';
+import { ToastService } from '../../service/toast/toast.service';
 
 @Component({
   selector: 'app-purchaseorderlist',
@@ -38,6 +39,7 @@ export class PurchaseorderlistComponent {
   });
 
   requestService = inject(RequestService);
+  toastService = inject(ToastService);
 
   constructor() {
     this.maxDate = new Date();
@@ -142,6 +144,7 @@ export class PurchaseorderlistComponent {
           (error) => {
             console.log('error while fetching purchase order list:', error);
             this.isEndDateManuallySelected = false;
+            this.isSkeletonLoader = false;
 
             if (error.status === 404) {
               this.POList = [];
@@ -153,20 +156,31 @@ export class PurchaseorderlistComponent {
     }
   }
 
-  togglePrdStatus(POId: number) {
-    this.POId = POId;
+  togglePrdStatus(id: number) {
+    this.POId = id;
+    console.log("POId:", this.POId);
     this.isWarningPopUp = true;
     this.confirmPOMsg = `Are you sure the product has been received?`;
   }
 
+  deletePO(id: number){
+    this.POList = this.POList.filter(
+      (item) => item.id !== id
+    )
+    console.log("POList in delete PO:", this.POList);
+  }
+
   confirmPOProductStatus(){
     console.log("API Call Pending.");
+    console.log("POId after OK:", this.POId);
     this.requestService.updatePOProductStatus(this.POId).subscribe(
-      (res) => {
-        console.log(res);
+      (res: any) => {
+        console.log("successfully changed product Status in PO:", res);
+        this.toastService.showSuccess(res.errorMessege);
+        this.fetchPurchaseOrderList();
       },
       (error) => {
-        console.log(error);
+        console.log("error while changing product Status in PO:", error);
       }
     )
   }

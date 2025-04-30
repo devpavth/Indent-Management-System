@@ -65,6 +65,7 @@ export class ProgramManagerApprovalComponent {
 
           if (this.branch === this.requestList?.branchCode) {
             this.isAuthorizeEditIndentForm = false;
+            // this._yourReq = res;
             this.viewRequest(this.requestList.sno);
 
             this.isAuthorizeEditIndentForm =
@@ -282,6 +283,5 @@ export class ProgramManagerApprovalComponent {
   closeView(data: boolean) {
     this.isViewReq = data;
     this.isViewEditIndentForm = data;
-    this.fetchRequestList();
   }
 }

@@ -397,6 +397,6 @@ export class RequestService {
   }
 
   updatePOProductStatus(POId: number){
-    return this.http.put(environment.updatePOProductStatus + POId, "");
+    return this.http.put(environment.updatePOProductStatus + POId, '');
   }
 }

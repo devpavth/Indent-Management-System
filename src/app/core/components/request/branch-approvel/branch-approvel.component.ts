@@ -282,6 +282,5 @@ export class BranchApprovelComponent implements OnInit {
   closeView(data: boolean) {
     this.isViewReq = data;
     this.isViewEditIndentForm = data;
-    this.fetchRequestList();
   }
 }

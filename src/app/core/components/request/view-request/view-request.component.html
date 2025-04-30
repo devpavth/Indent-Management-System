@@ -62,7 +62,6 @@
                     class="h-32"
                   />
 
-                  <!-- <h1 class="mt-2 text-lg md:text-xl font-semibold text-blue-600">Preline Inc.</h1> -->
                 </div>
                 <!-- Col -->
 
@@ -70,7 +69,9 @@
                   <h2 class="text-2xl font-semibold text-gray-800 md:text-3xl">
                     Request#
                   </h2>
-                  <div class="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
+                  <div
+                    class="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2"
+                  >
                     <dl class="grid gap-x-3 sm:grid-cols-5">
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
@@ -80,9 +81,7 @@
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
                       >
-                        {{
-                          _requestDetails?.indentHeaders.requestNo
-                        }}
+                        {{ _requestDetails?.indentHeaders.requestNo }}
                       </dd>
                     </dl>
                     <dl class="grid gap-x-3 sm:grid-cols-5">
@@ -103,33 +102,32 @@
               </div>
               <div class="mt-8 grid gap-3 sm:grid-cols-2">
                 <div>
-                  <div class="flex gap-3 items-start text-gray-800 font-semibold dark:text-neutral-200">
-                    <span 
-                      class="w-[100px]"
-                      >Created By:
-                    </span>
+                  <div
+                    class="flex items-start gap-3 font-semibold text-gray-800 dark:text-neutral-200"
+                  >
+                    <span class="w-[100px]">Created By: </span>
                     <span
                       class="font-normal text-gray-500 dark:text-neutral-200"
-                      >
+                    >
                       {{ _requestDetails?.createdEmpData.empFirstName }}
                       {{ _requestDetails?.createdEmpData.empLastName }}
                     </span>
                   </div>
 
                   <address
-                    class="mt-2 not-italic text-gray-500 dark:text-neutral-500 space-y-2"
+                    class="mt-2 space-y-2 not-italic text-gray-500 dark:text-neutral-500"
                   >
-                    <div class="flex gap-3 text-gray-800 font-semibold">
-                      <span class="w-[100px]">Branch:</span> 
+                    <div class="flex gap-3 font-semibold text-gray-800">
+                      <span class="w-[100px]">Branch:</span>
                       <span class="font-normal text-gray-500">
                         {{ _requestDetails?.indentBranch.branchName }}
-                      </span>                 
+                      </span>
                     </div>
-                    <div class="flex gap-3 text-gray-800 font-semibold">
-                      <span class="w-[100px]">Department:</span> 
+                    <div class="flex gap-3 font-semibold text-gray-800">
+                      <span class="w-[100px]">Department:</span>
                       <span class="font-normal text-gray-500">
                         {{ _requestDetails?.indentBranch.deptName }}
-                      </span>                   
+                      </span>
                     </div>
                   </address>
                 </div>
@@ -141,12 +139,12 @@
                     <dl class="grid gap-x-3 sm:grid-cols-5">
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
-                        >
+                      >
                         Created On:
                       </dt>
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
-                        >
+                      >
                         {{
                           _requestDetails?.createdEmpData.createdOn
                             | date: "dd-MMM-yyyy"
@@ -154,13 +152,12 @@
                       </dd>
                       <dt
                         class="col-span-3 font-semibold text-gray-800 dark:text-neutral-200"
-                        >
-
-                      </dt>
+                      ></dt>
                       <dd
                         class="col-span-2 text-gray-500 dark:text-neutral-500"
-                        >
-                        {{ _requestDetails?.createdEmpData.createdOn 
+                      >
+                        {{
+                          _requestDetails?.createdEmpData.createdOn
                             | date: "hh:mm a"
                         }}
                       </dd>
@@ -191,7 +188,7 @@
                   <div class="inline-block min-w-full p-1.5 align-middle">
                     <div class="overflow-hidden rounded-lg border">
                       <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-purple-500 text-white font-semibold">
+                        <thead class="bg-purple-500 font-semibold text-white">
                           <tr>
                             <th
                               scope="col"
@@ -279,10 +276,6 @@
                 <div class="w-full max-w-2xl space-y-2 sm:text-end">
                   <!-- Grid -->
                   <div class="grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
-                    <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                    <dt class="col-span-3 font-semibold text-gray-800">Subtotal:</dt>
-                    <dd class="col-span-2 text-gray-500">$2750.00</dd>
-                  </dl> -->
 
                     <dl class="grid gap-x-3 sm:grid-cols-5">
                       <dt class="col-span-3 font-semibold text-gray-800">
@@ -292,21 +285,6 @@
                         {{ this._requestDetails?.indentHeaders.totalPrice }}
                       </dd>
                     </dl>
-
-                    <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Tax:</dt>
-                <dd class="col-span-2 text-gray-500">$39.00</dd>
-              </dl> -->
-
-                    <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Amount paid:</dt>
-                <dd class="col-span-2 text-gray-500">$2789.00</dd>
-              </dl> -->
-
-                    <!-- <dl class="grid sm:grid-cols-5 gap-x-3">
-                <dt class="col-span-3 font-semibold text-gray-800">Due balance:</dt>
-                <dd class="col-span-2 text-gray-500">$0.00</dd>
-              </dl> -->
                   </div>
                   <!-- End Grid -->
                 </div>
@@ -595,8 +573,8 @@
                     <svg
                       *ngIf="
                         _requestDetails?.adminAuthData.authStatusCode == 405 &&
-                        (_requestDetails?.indentHeaders.totalPrice > 5000 &&
-                        _requestDetails?.indentHeaders.totalPrice < 10000)
+                        _requestDetails?.indentHeaders.totalPrice > 5000 &&
+                          _requestDetails?.indentHeaders.totalPrice < 10000
                       "
                       class="-top-0.1 absolute z-10 -ml-3 h-6 w-6 bg-white text-amber-500"
                       aria-hidden="true"
@@ -686,7 +664,8 @@
                             _requestDetails?.adminAuthData.authStatusCode ==
                             202,
                           nsts:
-                            _requestDetails?.adminAuthData.authStatusCode == 405 &&
+                            _requestDetails?.adminAuthData.authStatusCode ==
+                              405 &&
                             _requestDetails?.indentHeaders?.totalPrice > 5000 &&
                             _requestDetails?.indentHeaders.totalPrice < 10000,
                           dsts:
@@ -1105,13 +1084,13 @@
 
               <div
                 *ngIf="
-                  (showID &&
+                  (showID === 1 &&
                     this._requestDetails?.progarmMgrAuthData.authStatusCode ===
                       102) ||
-                  (showID &&
+                  (showID === 2 &&
                     this._requestDetails?.branchAuthData.authStatusCode ===
                       102) ||
-                  (showID &&
+                  (showID === 3 &&
                     this._requestDetails?.adminAuthData.authStatusCode === 102)
                 "
                 class="mt-8 flex gap-3"
@@ -1135,17 +1114,6 @@
                   </button>
                 </div>
               </div>
-              <!-- 
-        <div class="mt-8 sm:mt-12">
-          <h4 class="text-lg font-semibold text-gray-800">Thank you!</h4>
-          <p class="text-gray-500">If you have any questions concerning this invoice, use the following contact information:</p>
-          <div class="mt-2">
-            <p class="block text-sm font-medium text-gray-800">examplesite.com</p>
-            <p class="block text-sm font-medium text-gray-800">+1 (062) 109-9222</p>
-          </div>
-        </div> -->
-
-              <!-- <p class="mt-5 text-sm text-gray-500">© 2022 Preline.</p> -->
             </div>
             <!-- End Card -->
 

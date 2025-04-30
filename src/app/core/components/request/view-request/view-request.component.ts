@@ -22,8 +22,6 @@ export class ViewRequestComponent implements OnInit {
   isRejected: boolean = false;
   isApproved: boolean = false;
   isRejectPop: boolean = false;
-  // isToast: boolean = false;
-  // warningToastMsg: string = '';
   commendArray: { key: string; value: string }[] = [];
 
   toastService = inject(ToastService);
@@ -44,6 +42,7 @@ export class ViewRequestComponent implements OnInit {
   authoritiesList: Specialrolesign[] = [];
 
   constructor(private readonly requstService: RequestService) {}
+  
   ngOnInit(): void {
     this.fetchReason();
     console.log('hello', this.showID);
@@ -76,7 +75,7 @@ export class ViewRequestComponent implements OnInit {
       }
       this.pendingOrProcessFinalState =
         this.authoritiesList === null &&
-        this._requestDetails.indentHeaders.totalPrice > 5000 && 
+        this._requestDetails.indentHeaders.totalPrice > 5000 &&
         this._requestDetails.indentHeaders.requestStatus !== 406
           ? 'Action Pending'
           : 'Action Not Required';

@@ -1,4 +1,11 @@
-import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { ToastService } from '../../../service/toast/toast.service';
 import { BranchService } from '../../../service/Branch/branch.service';
 import {
@@ -149,16 +156,16 @@ export class UploadCompanylogoComponent {
     this.updateTooltipPosition(slider);
     this.showTooltip = true;
 
-    if(this.tooltipTimeout){
+    if (this.tooltipTimeout) {
       clearTimeout(this.tooltipTimeout);
     }
-    
+
     this.tooltipTimeout = setTimeout(() => {
       this.showTooltip = false;
     }, 2000);
   }
 
-  updateTooltipPosition(slider: HTMLInputElement){
+  updateTooltipPosition(slider: HTMLInputElement) {
     const min = parseFloat(slider.min);
     const max = parseFloat(slider.max);
     const percent = (this.scale - min) / (max - min);

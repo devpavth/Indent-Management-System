@@ -7,7 +7,7 @@
     <button
       (click)="onClose()"
       type="button"
-      class="absolute right-4 top-4 text-gray-800 hover:bg-gray-300 rounded-full p-2 bg-transparent dark:hover:text-white"
+      class="absolute right-4 top-4 rounded-full bg-transparent p-2 text-gray-800 hover:bg-gray-300 dark:hover:text-white"
     >
       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -21,47 +21,46 @@
     <h2
       class="mb-4 text-left text-xl font-semibold text-purple-600 dark:text-white"
     >
-      {{ showCropper ? 'Crop Logo' : 'Upload Logo' }}
+      {{ showCropper ? "Crop Logo" : "Upload Logo" }}
     </h2>
 
-    <div 
+    <div
       class="flex flex-col items-center"
       (drop)="onFileDrop($event)"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
-      >
+    >
       <label
         *ngIf="!showCropper && !croppedImage"
         for="file-upload"
         [class.border-blue-500]="isDragOver"
         [class.bg-blue-50]="isDragOver"
-        class="relative flex h-40 mb-4 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
-        >
+        class="relative mb-4 flex h-40 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
+      >
         <ng-container>
-          <svg 
-            class="w-10 h-10 mb-4 text-gray-500 dark:text-gray-400" 
-            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
+          <svg
+            class="mb-4 h-10 w-10 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
             viewBox="0 0 20 16"
-            >
-              <path 
-                stroke="currentColor" 
-                stroke-linecap="round" 
-                stroke-linejoin="round" 
-                stroke-width="2" 
-                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+            />
           </svg>
 
           <span class="text-sm text-gray-500 dark:text-gray-400"
             >Click to Upload or Drag and Drop Logo</span
           >
-          <span
-            class="text-xs text-gray-500 dark:text-gray-400 block"
-            >
+          <span class="block text-xs text-gray-500 dark:text-gray-400">
             Only PNG files (Max size: 1MB) are allowed
           </span>
         </ng-container>
-
       </label>
 
       <input
@@ -71,7 +70,6 @@
         class="hidden"
         accept="image/*"
       />
-       
     </div>
 
     <ng-container *ngIf="showCropper">
@@ -86,32 +84,34 @@
           (cropperReady)="cropperReady()"
           (loadImageFailed)="loadImageFailed()"
           class="crop"
-          >
+        >
         </image-cropper>
       </div>
-    </ng-container> 
+    </ng-container>
 
-    <div 
+    <div
       *ngIf="showCropper"
-      class="flex items-center justify-center gap-4 mt-8"
-      >
-      <button 
+      class="mt-8 flex items-center justify-center gap-4"
+    >
+      <button
         type="button"
         (click)="decreaseZoom(zoomSlider)"
-        class="text-xl font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 px-4 py-0 rounded-md shadow"
-        >-</button>
+        class="rounded-md border border-gray-300 px-4 py-0 text-xl font-medium text-gray-700 shadow hover:bg-gray-100"
+      >
+        -
+      </button>
       <div class="relative w-72">
-        <div 
+        <div
           *ngIf="showTooltip"
-          class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-purple-600 text-white text-xs rounded px-2 py-1 shadow-md"
+          class="absolute -top-8 left-1/2 -translate-x-1/2 transform rounded bg-purple-600 px-2 py-1 text-xs text-white shadow-md"
           [style.left.px]="tooltipLeft"
-          >
-          {{scale}}
+        >
+          {{ scale }}
 
           <div class="tooltip-arrow"></div>
         </div>
 
-        <input 
+        <input
           #zoomSlider
           type="range"
           id="zoomSlider"
@@ -120,24 +120,24 @@
           step="0.1"
           [(ngModel)]="scale"
           (input)="onZoomChange(zoomSlider)"
-          class="w-full bg-purple-600 appearance-none h-2 rounded outline-none"
+          class="h-2 w-full appearance-none rounded bg-purple-600 outline-none"
         />
       </div>
-      
+
       <button
         type="button"
         (click)="increaseZoom(zoomSlider)"
-        class="text-xl font-medium text-gray-700 border border-gray-300 hover:bg-gray-100 px-4 py-0 rounded-md shadow"
-        >
+        class="rounded-md border border-gray-300 px-4 py-0 text-xl font-medium text-gray-700 shadow hover:bg-gray-100"
+      >
         +
       </button>
     </div>
 
     <div class="flex justify-end gap-2" *ngIf="showCropper">
-      <button  
-        (click)="onClose()"  
+      <button
+        (click)="onClose()"
         class="mt-6 rounded-lg border border-gray-300 px-4 py-2 text-black hover:bg-gray-100 focus:outline-none"
-        >
+      >
         Cancel
       </button>
       <button
@@ -147,11 +147,10 @@
           'bg-gray-400 hover:bg-gray-400': !croppedBlob
         }"
         class="mt-6 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
-        >
+      >
         OK
       </button>
     </div>
-  
   </div>
 </div>
 

@@ -127,7 +127,7 @@ export class YourRequestComponent implements OnInit {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 

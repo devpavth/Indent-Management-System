@@ -107,7 +107,7 @@ export class AdminApprovelComponent implements OnInit {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -153,7 +153,11 @@ export class AdminApprovelComponent implements OnInit {
       let status = 202;
       this.isSkeletonLoader = true;
       this.noRequest = false;
-      this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
+      this.ReqService.adminRequestList(
+        status,
+        this.startDate,
+        this.endDate,
+      ).subscribe(
         (res) => {
           this._yourReq = res;
           console.log('fetching admin request accepted list:', res);
@@ -185,7 +189,11 @@ export class AdminApprovelComponent implements OnInit {
       let status = 406;
       this.isSkeletonLoader = true;
       this.noRequest = false;
-      this.ReqService.adminRequestList(status, this.startDate, this.endDate).subscribe(
+      this.ReqService.adminRequestList(
+        status,
+        this.startDate,
+        this.endDate,
+      ).subscribe(
         (res) => {
           this._yourReq = res;
           console.log('fetching admin request rejected list:', res);

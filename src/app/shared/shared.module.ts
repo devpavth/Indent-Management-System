@@ -36,6 +36,7 @@ import { WarningPrefixComponent } from './warning-prefix/warning-prefix.componen
 import { AmountInWordsPipe } from './pipes/amountInWords/amount-in-words.pipe';
 import { ClickoutsideDropdownDirective } from './Directives/clickoutsideDropdown/clickoutside-dropdown.directive';
 import { RequiredFieldDirective } from './Directives/requiredField/required-field.directive';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { RequiredFieldDirective } from './Directives/requiredField/required-fiel
     SharedRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    ImageCropperModule,
   ],
   exports: [
     SuccessToastComponent,
@@ -107,7 +109,7 @@ import { RequiredFieldDirective } from './Directives/requiredField/required-fiel
     AmountInWordsPipe,
     ClickoutsideDropdownDirective,
     RequiredFieldDirective,
-    ProfileComponent
+    ProfileComponent,
   ],
 })
 export class SharedModule {}
