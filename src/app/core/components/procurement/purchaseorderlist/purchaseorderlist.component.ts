@@ -19,6 +19,7 @@ export class PurchaseorderlistComponent {
   sortIndentInAscending: boolean = false;
   showSearchInfo: boolean = false;
   isWarningPopUp: boolean = false;
+  isDelete: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -33,6 +34,16 @@ export class PurchaseorderlistComponent {
 
   POList: Polist[] = [];
 
+  deletePurchaseOrder: {
+    title: string;
+    action: number;
+    deleteId: number;
+  } = {
+    title: '',
+    action: 0,
+    deleteId: 0,
+  };
+
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
@@ -45,7 +56,7 @@ export class PurchaseorderlistComponent {
     this.maxDate = new Date();
   }
 
-  ngOnInit() {   
+  ngOnInit() {
     this.range.valueChanges.subscribe((val) => {
       const { start, end } = val;
       if (start && end && this.isEndDateManuallySelected) {
@@ -76,7 +87,7 @@ export class PurchaseorderlistComponent {
 
   fetchPOListByPONumber(event: Event) {
     const enteredPOCode = (event.target as HTMLInputElement).value;
-    console.log("enteredPOCode:", enteredPOCode);
+    console.log('enteredPOCode:', enteredPOCode);
 
     if (enteredPOCode) {
       this.isSkeletonLoader = true;
@@ -158,31 +169,41 @@ export class PurchaseorderlistComponent {
 
   togglePrdStatus(id: number) {
     this.POId = id;
-    console.log("POId:", this.POId);
+    console.log('POId:', this.POId);
     this.isWarningPopUp = true;
     this.confirmPOMsg = `Are you sure the product has been received?`;
   }
 
-  deletePO(id: number){
-    this.POList = this.POList.filter(
-      (item) => item.id !== id
-    )
-    console.log("POList in delete PO:", this.POList);
+  toggledelete(check: number, isView: boolean, id: number){
+    if(check === 1){
+      this.isDelete = isView;
+      this.deletePurchaseOrder = {
+        title: 'Purchase Order',
+        action: 7,
+        deleteId: id
+      }
+    }else if(check === 0){
+      this.isDelete = isView
+    }
   }
 
-  confirmPOProductStatus(){
-    console.log("API Call Pending.");
-    console.log("POId after OK:", this.POId);
+  deletePO() {
+    this.fetchPurchaseOrderList();
+  }
+
+  confirmPOProductStatus() {
+    console.log('API Call Pending.');
+    console.log('POId after OK:', this.POId);
     this.requestService.updatePOProductStatus(this.POId).subscribe(
       (res: any) => {
-        console.log("successfully changed product Status in PO:", res);
+        console.log('successfully changed product Status in PO:', res);
         this.toastService.showSuccess(res.errorMessege);
         this.fetchPurchaseOrderList();
       },
       (error) => {
-        console.log("error while changing product Status in PO:", error);
-      }
-    )
+        console.log('error while changing product Status in PO:', error);
+      },
+    );
   }
 
   closepop(closeIcon: boolean) {

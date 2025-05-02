@@ -207,7 +207,7 @@
 
                 <td class="px-1 py-3">
                   <svg 
-                    (click)="deletePO(req.id)"
+                    (click)="toggledelete(1, true, req.id)"
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" 
                     viewBox="0 0 24 24" 
@@ -304,6 +304,12 @@
     (clearQuotation)="confirmPOProductStatus()"
   ></app-warning-popup>
 </section>
+<section *ngIf="isDelete">
+  <app-delete
+    [deleteData]="deletePurchaseOrder"
+    (close)="toggledelete(0, $event, 0)"
+    (deletePurchaseOrderItem)="deletePO()"
+  ></app-delete>
 <section
   *ngIf="toastService.isSuccessToast"
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"

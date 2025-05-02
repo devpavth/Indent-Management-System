@@ -11,6 +11,8 @@ import { ProductService } from '../../core/components/service/Product/product.se
 import { VendorService } from '../../core/components/service/vendor/vendor.service';
 import { BranchService } from '../../core/components/service/Branch/branch.service';
 import { Router } from '@angular/router';
+import { RequestService } from '../../core/components/service/Request/request.service';
+import { ToastService } from '../../core/components/service/toast/toast.service';
 
 @Component({
   selector: 'app-delete',
@@ -21,17 +23,17 @@ export class DeleteComponent {
   @Input() deleteData: any;
   @Output() close = new EventEmitter<boolean>();
   @Output() deleteProduct = new EventEmitter<boolean>();
-
-  isToast: boolean = false;
-  successToastMsg: string = '';
+  @Output() deletePurchaseOrderItem = new EventEmitter<void>();
 
   route = inject(Router);
+  toastService = inject(ToastService);
 
   constructor(
     private funderService: FunderService,
     private productService: ProductService,
     private vendorService: VendorService,
     private branchService: BranchService,
+    private requestService: RequestService,
   ) {}
 
   deleteFunction() {
@@ -85,11 +87,8 @@ export class DeleteComponent {
       this.branchService.deleteDepartment(this.deleteData.deleteId).subscribe(
         (res: any) => {
           console.log(res);
-          // this.close.emit(false);
-          this.isToast = true;
-          this.successToastMsg = res.error;
+          this.toastService.showSuccess(res.error);
           setTimeout(() => {
-            this.isToast = false;
             this.close.emit(false);
           }, 3000);
         },
@@ -122,6 +121,21 @@ export class DeleteComponent {
     if (this.deleteData.action === 6) {
       this.deleteProduct.emit(this.deleteData);
       this.close.emit(false);
+    }
+    if(this.deleteData.action === 7){
+      this.requestService.deletePOItemFromList(this.deleteData.deleteId).subscribe(
+        (res: any) => {
+          console.log('successfully deleted PO item:', res);
+          this.toastService.showSuccess(res.errorMessege);
+          setTimeout(() => {
+            this.deletePurchaseOrderItem.emit();
+            this.close.emit(false);
+          }, 3000);
+        },
+        (error) => {
+          console.log('error while deleting PO Item:', error);
+        },
+      );
     }
   }
 }

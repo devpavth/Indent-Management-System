@@ -355,8 +355,8 @@ export class RequestService {
     );
   }
 
-  fetchRequestByIndentCode(indentCode: string): Observable<Request> {
-    return this.http.get<Request>(
+  fetchRequestByIndentCode(indentCode: string): Observable<Request[]> {
+    return this.http.get<Request[]>(
       environment.fetchRequestByIndentCode + indentCode,
     );
   }
@@ -398,5 +398,9 @@ export class RequestService {
 
   updatePOProductStatus(POId: number){
     return this.http.put(environment.updatePOProductStatus + POId, '');
+  }
+
+  deletePOItemFromList(POId: number){
+    return this.http.delete(environment.deletePOItem + POId);
   }
 }

@@ -27,6 +27,9 @@ export class ProgramManagerApprovalComponent {
   endDate: string | undefined;
   maxDate: Date | undefined;
 
+  branchCode: string = '';
+  searchText: string = '';
+
   isViewSelectedDate: boolean = true;
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
@@ -36,7 +39,7 @@ export class ProgramManagerApprovalComponent {
   isViewEditIndentForm: boolean = false;
   isEndDateManuallySelected: boolean = false;
 
-  requestList: Request | undefined;
+  requestList: Request[] = [];
 
   selectedRequestId: number | undefined | null = null;
 
@@ -62,11 +65,15 @@ export class ProgramManagerApprovalComponent {
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
+          this.branchCode = this.requestList[0].branchCode;
 
-          if (this.branch === this.requestList?.branchCode) {
+          console.log("branchCode:", this.branchCode);
+
+          if (this.branch === this.branchCode) {
             this.isAuthorizeEditIndentForm = false;
-            // this._yourReq = res;
-            this.viewRequest(this.requestList.sno);
+            this._yourReq = res;
+            this.noRequest = false;
+            // this.viewRequest(this.requestList.sno);
 
             this.isAuthorizeEditIndentForm =
               this.authService.isAuthenticateEditIndentRole();
@@ -136,6 +143,7 @@ export class ProgramManagerApprovalComponent {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService.fetchProgramManagerRequest(102).subscribe(
         (res: any) => {
           console.log('fetching processing request:', res);
@@ -168,6 +176,7 @@ export class ProgramManagerApprovalComponent {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService
         .fetchProgramManagerRequest(202, this.startDate, this.endDate)
         .subscribe(
@@ -199,6 +208,7 @@ export class ProgramManagerApprovalComponent {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService
         .fetchProgramManagerRequest(406, this.startDate, this.endDate)
         .subscribe(
@@ -240,6 +250,10 @@ export class ProgramManagerApprovalComponent {
     const inputValue = (event.target as HTMLInputElement).value;
 
     this.showSearchInfo = inputValue.trim() === '';
+
+    if(this.showSearchInfo){
+      this.fetchRequestList();
+    }
   }
 
   fetchReqByIndentCode(event: Event) {
@@ -250,6 +264,11 @@ export class ProgramManagerApprovalComponent {
     }
 
     this.rService.triggerSearch(enteredIndentCode);
+  }
+
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
   }
 
   viewRequest(data: number) {
