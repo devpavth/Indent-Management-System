@@ -45,15 +45,10 @@ export class ViewceoCfoapprovalRequisitionComponent {
   isViewAcceptBtn: boolean = false;
   isApproved: boolean = false;
   signUploaded!: boolean;
-  isFullScreenError: boolean = false;
+  isFullScreenError: boolean = true;
 
   ngOnInit() {
     console.log('isCompleted:', this.isCompleted);
-    // if(this.isCompleted){
-    //   console.log('this.isViewAcceptBtn before:', this.isViewAcceptBtn);
-    //   this.isViewAcceptBtn = false;
-    //   console.log('this.isViewAcceptBtn after:', this.isViewAcceptBtn);
-    // }
 
     this.fetchDetails(this.reqId);
 

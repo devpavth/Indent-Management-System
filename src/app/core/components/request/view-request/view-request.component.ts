@@ -42,7 +42,7 @@ export class ViewRequestComponent implements OnInit {
   authoritiesList: Specialrolesign[] = [];
 
   constructor(private readonly requstService: RequestService) {}
-  
+
   ngOnInit(): void {
     this.fetchReason();
     console.log('hello', this.showID);

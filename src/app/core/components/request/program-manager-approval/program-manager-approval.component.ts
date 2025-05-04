@@ -27,7 +27,6 @@ export class ProgramManagerApprovalComponent {
   endDate: string | undefined;
   maxDate: Date | undefined;
 
-  branchCode: string = '';
   searchText: string = '';
 
   isViewSelectedDate: boolean = true;
@@ -65,11 +64,8 @@ export class ProgramManagerApprovalComponent {
         (res: any) => {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
-          this.branchCode = this.requestList[0].branchCode;
 
-          console.log("branchCode:", this.branchCode);
-
-          if (this.branch === this.branchCode) {
+          if (this.branch === this.requestList[0].branchCode) {
             this.isAuthorizeEditIndentForm = false;
             this._yourReq = res;
             this.noRequest = false;
@@ -249,11 +245,11 @@ export class ProgramManagerApprovalComponent {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    this.showSearchInfo = inputValue.trim() === '';
-
-    if(this.showSearchInfo){
+    if(inputValue === ''){
       this.fetchRequestList();
     }
+
+    this.showSearchInfo = inputValue.trim() === '';
   }
 
   fetchReqByIndentCode(event: Event) {
@@ -266,7 +262,7 @@ export class ProgramManagerApprovalComponent {
     this.rService.triggerSearch(enteredIndentCode);
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.fetchRequestList();
   }

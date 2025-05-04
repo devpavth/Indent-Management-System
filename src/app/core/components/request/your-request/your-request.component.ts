@@ -34,7 +34,7 @@ export class YourRequestComponent implements OnInit {
   isViewSelectedDate: boolean = true;
 
   noRequest: boolean = false;
-  requestList: Request | undefined;
+  requestList: Request[] = [];
 
   showSearchInfo: boolean = false;
   isSkeletonLoader: boolean = true;
@@ -43,6 +43,8 @@ export class YourRequestComponent implements OnInit {
   isAcceptedView: boolean = false;
   selectedRequestId: number | undefined | null = null;
   isViewEditIndentForm: boolean = false;
+
+  searchText: string = '';
 
   toastService = inject(ToastService);
   authService = inject(AuthService);
@@ -70,11 +72,10 @@ export class YourRequestComponent implements OnInit {
           const branchCode = sessionStorage.getItem('branchCode');
           console.log('branchCode validation:', branchCode);
 
-          if (branchCode === this.requestList?.branchCode) {
-            // this.showSearchInfo = false;
-
+          if (branchCode === this.requestList[0].branchCode) {
             this.isAuthorizeEditIndentForm = false;
-            this.viewRequest(this.requestList?.sno);
+            this._yourReq = res;
+            this.noRequest = false;
 
             this.isAuthorizeEditIndentForm =
               this.authService.isAuthenticateEditIndentRole();
@@ -108,6 +109,11 @@ export class YourRequestComponent implements OnInit {
         this.isEndDateManuallySelected = false;
       }
     });
+  }
+
+  clearSearch(){
+    this.searchText = '';
+    this.fetchYourRequest();
   }
 
   formatDateOnly(date: Date): string {
@@ -144,6 +150,7 @@ export class YourRequestComponent implements OnInit {
       this.isSkeletonLoader = true;
       this.noRequest = false;
       this.isViewSelectedDate = false;
+      this.searchText = '';
       this.reqService.getUserReq(status).subscribe(
         (res) => {
           this._yourReq = res;
@@ -178,6 +185,7 @@ export class YourRequestComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.reqService.getUserReq(status).subscribe(
         (res) => {
           console.log('fetching processing user request list:', res);
@@ -213,6 +221,7 @@ export class YourRequestComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.reqService.getUserReq(status).subscribe(
         (res) => {
           console.log('fetching onhold user request list:', res);
@@ -243,6 +252,7 @@ export class YourRequestComponent implements OnInit {
       let status = 100;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       console.log('date range form:', this.range.value);
       this.reqService
         .getUserReq(status, this.startDate, this.endDate)
@@ -282,6 +292,7 @@ export class YourRequestComponent implements OnInit {
       let status = 406;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.reqService
         .getUserReq(status, this.startDate, this.endDate)
         .subscribe(
@@ -331,7 +342,10 @@ export class YourRequestComponent implements OnInit {
 
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
-    // console.log('inputValue check:', inputValue);
+
+    if(inputValue === ""){
+      this.fetchYourRequest();
+    }
 
     this.showSearchInfo = inputValue.trim() === '';
   }

@@ -36,8 +36,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
   reqId: any;
   indentNumber: string | undefined = '';
-
-  requestList: AppRequest | undefined;
+  searchText: string = '';
 
   private closeDropdownTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -65,12 +64,8 @@ export class CeoCfoapprovalRequisitionlistComponent {
       this.req.fetchRequestByIndentCode(indentCode).subscribe(
         (res: any) => {
           console.log('fetching indent request in user request:', res);
-          this.requestList = res;
-          this.viewRequest(
-            event as Event,
-            this.requestList?.sno,
-            this.requestList?.requestNo,
-          );
+          this.specialRolesProcessList = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -109,6 +104,11 @@ export class CeoCfoapprovalRequisitionlistComponent {
     });
   }
 
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
+  }
+
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -127,7 +127,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -137,6 +137,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       console.log('this.specialRoleId in method:', this.specialRoleId);
       this.req
         .fetchSpecialRolesRequestIsProcessAndAccept(status, this.specialRoleId)
@@ -165,12 +166,13 @@ export class CeoCfoapprovalRequisitionlistComponent {
     if (this.isProcess == false && this.isCompleted == true) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req
         .fetchSpecialRolesRequestIsProcessAndAccept(
           202,
           this.specialRoleId,
           this.startDate,
-          this.endDate
+          this.endDate,
         )
         .subscribe(
           (res: any) => {
@@ -210,6 +212,10 @@ export class CeoCfoapprovalRequisitionlistComponent {
 
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
+
+    if(inputValue === ''){
+      this.fetchRequestList();
+    }
 
     this.showSearchResult = inputValue.trim() === '';
   }
@@ -365,7 +371,6 @@ export class CeoCfoapprovalRequisitionlistComponent {
     this.isView = data;
     this.isViewQuoteCompare = data;
     this.isViewConsolidatedQuote = data;
-    this.fetchRequestList();
   }
 
   closepop(closeIcon: boolean) {

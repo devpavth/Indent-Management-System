@@ -35,7 +35,9 @@ export class BranchApprovelComponent implements OnInit {
   isViewEditIndentForm: boolean = false;
   isEndDateManuallySelected: boolean = false;
 
-  requestList: Request | undefined;
+  searchText: string = '';
+
+  requestList: Request[] = [];
 
   selectedRequestId: number | undefined | null = null;
 
@@ -59,9 +61,10 @@ export class BranchApprovelComponent implements OnInit {
           console.log('fetching indent request in user request:', res);
           this.requestList = res;
 
-          if (this.branch === this.requestList?.branchCode) {
+          if (this.branch === this.requestList[0].branchCode) {
             this.isAuthorizeEditIndentForm = false;
-            this.viewRequest(this.requestList.sno);
+            this._yourReq = res;
+            this.noRequest = false;
 
             this.isAuthorizeEditIndentForm =
               this.authService.isAuthenticateEditIndentRole();
@@ -96,6 +99,11 @@ export class BranchApprovelComponent implements OnInit {
     this.fetchRequestList();
   }
 
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
+  }
+
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -127,6 +135,7 @@ export class BranchApprovelComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService.branchRequestList(102).subscribe(
         (res: any) => {
           console.log('fetching branch request processing list:', res);
@@ -162,6 +171,7 @@ export class BranchApprovelComponent implements OnInit {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService
         .branchRequestList(202, this.startDate, this.endDate)
         .subscribe(
@@ -195,6 +205,7 @@ export class BranchApprovelComponent implements OnInit {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.rService
         .branchRequestList(406, this.startDate, this.endDate)
         .subscribe(
@@ -237,6 +248,10 @@ export class BranchApprovelComponent implements OnInit {
 
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
+
+    if(inputValue === ''){
+      this.fetchRequestList();
+    }
 
     this.showSearchInfo = inputValue.trim() === '';
   }

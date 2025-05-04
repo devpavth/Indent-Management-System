@@ -26,10 +26,10 @@ export class RequisitionListComponent implements OnInit {
   isRejected = false;
   isView = false;
 
+  searchText: string = '';
+
   userRequest: any;
   reqId: any;
-
-  requestList: Request | undefined;
 
   toastService = inject(ToastService);
 
@@ -43,8 +43,8 @@ export class RequisitionListComponent implements OnInit {
       this.req.fetchRequestByIndentCode(indentCode).subscribe(
         (res: any) => {
           console.log('fetching indent request in user request:', res);
-          this.requestList = res;
-          this.viewRequest(this.requestList?.sno);
+          this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -75,6 +75,11 @@ export class RequisitionListComponent implements OnInit {
     this.maxDate = new Date();
   }
 
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
+  }
+
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -93,7 +98,7 @@ export class RequisitionListComponent implements OnInit {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -108,6 +113,7 @@ export class RequisitionListComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.finRequestList(status).subscribe(
         (res) => {
           this.userRequest = res;
@@ -139,6 +145,7 @@ export class RequisitionListComponent implements OnInit {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.finRequestList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed finance request:', res);
@@ -169,6 +176,7 @@ export class RequisitionListComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.finRequestList(418).subscribe(
         (res: any) => {
           console.log('fetching finance request on hold list:', res);
@@ -196,6 +204,7 @@ export class RequisitionListComponent implements OnInit {
     ) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.finRequestList(406, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching finance request rejected list:', res);
@@ -230,6 +239,10 @@ export class RequisitionListComponent implements OnInit {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
+    if(inputValue === ''){
+      this.fetchRequestList();
+    }
+
     this.showSearchInfo = inputValue.trim() === '';
   }
 
@@ -250,6 +263,5 @@ export class RequisitionListComponent implements OnInit {
   }
   refresh(data: any) {
     this.isView = data;
-    this.fetchRequestList();
   }
 }

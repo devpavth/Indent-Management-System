@@ -37,6 +37,8 @@ export class AdminApprovelComponent implements OnInit {
 
   selectedRequestId: number | null = null;
 
+  searchText: string = '';
+
   toastService = inject(ToastService);
   authService = inject(AuthService);
 
@@ -53,7 +55,8 @@ export class AdminApprovelComponent implements OnInit {
           this.requestList = res;
 
           this.isAuthorizeEditIndentForm = false;
-          this.viewRequest(this.requestList?.sno);
+          this._yourReq = res;
+          this.noRequest = false;
 
           this.isAuthorizeEditIndentForm =
             this.authService.isAuthenticateEditIndentRole();
@@ -89,6 +92,11 @@ export class AdminApprovelComponent implements OnInit {
     this.maxDate = new Date();
   }
 
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
+  }
+
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -121,6 +129,7 @@ export class AdminApprovelComponent implements OnInit {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.ReqService.adminRequestList(status).subscribe(
         (res) => {
           this._yourReq = res;
@@ -153,6 +162,7 @@ export class AdminApprovelComponent implements OnInit {
       let status = 202;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.ReqService.adminRequestList(
         status,
         this.startDate,
@@ -189,6 +199,7 @@ export class AdminApprovelComponent implements OnInit {
       let status = 406;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.ReqService.adminRequestList(
         status,
         this.startDate,
@@ -230,6 +241,10 @@ export class AdminApprovelComponent implements OnInit {
 
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
+
+    if(inputValue === ''){
+      this.fetchRequestList();
+    }
 
     this.showSearchInfo = inputValue.trim() === '';
   }
@@ -275,6 +290,5 @@ export class AdminApprovelComponent implements OnInit {
   closeView(data: any) {
     this.isViewReq = data;
     this.isViewEditIndentForm = data;
-    this.fetchRequestList();
   }
 }

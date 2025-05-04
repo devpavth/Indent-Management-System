@@ -19,8 +19,6 @@ export class ProcurementRequestlistComponent {
   showSearchInfo: boolean = false;
   isEndDateManuallySelected: boolean = false;
 
-  requestList: Request | undefined;
-
   dropdownPosition = { top: 0, right: 0 };
 
   toastService = inject(ToastService);
@@ -37,6 +35,8 @@ export class ProcurementRequestlistComponent {
   selectedRequestId: number | undefined;
   tooltipSno: number | null = null;
   isSkeletonLoader: boolean = true;
+
+  searchText: string = '';
 
   reqId: any;
   indentNumber: string | undefined = '';
@@ -60,12 +60,8 @@ export class ProcurementRequestlistComponent {
       this.req.fetchRequestByIndentCode(indentCode).subscribe(
         (res: any) => {
           console.log('fetching indent request in user request:', res);
-          this.requestList = res;
-          this.viewRequest(
-            event as Event,
-            this.requestList?.sno,
-            this.requestList?.requestNo,
-          );
+          this.userRequest = res;
+          this.noRequest = false;
         },
         (error) => {
           console.log('error while fetching indent details:', error);
@@ -93,6 +89,11 @@ export class ProcurementRequestlistComponent {
     this.fetchRequestList();
   }
 
+  clearSearch(){
+    this.searchText = '';
+    this.fetchRequestList();
+  }
+
   formatDateOnly(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -110,7 +111,7 @@ export class ProcurementRequestlistComponent {
     });
   }
 
-  onEndDateSelected(event: any){
+  onEndDateSelected(event: any) {
     this.isEndDateManuallySelected = true;
   }
 
@@ -120,6 +121,7 @@ export class ProcurementRequestlistComponent {
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.fetchPrctReqList(status).subscribe(
         (res) => {
           this.userRequest = res;
@@ -146,6 +148,7 @@ export class ProcurementRequestlistComponent {
     if (this.isProcess == false && this.isCompleted == true) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
+      this.searchText = '';
       this.req.fetchPrctReqList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed procurement request:', res);
@@ -279,6 +282,10 @@ export class ProcurementRequestlistComponent {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
+    if(inputValue === ""){
+      this.fetchRequestList();
+    }
+
     this.showSearchInfo = inputValue.trim() === '';
   }
 
@@ -294,9 +301,7 @@ export class ProcurementRequestlistComponent {
 
   refresh(data: any) {
     this.isView = data;
-    // this.isAcceptedView = data;
     this.isViewQuoteCompare = data;
     this.isViewConsolidatedQuote = data;
-    this.fetchRequestList();
   }
 }

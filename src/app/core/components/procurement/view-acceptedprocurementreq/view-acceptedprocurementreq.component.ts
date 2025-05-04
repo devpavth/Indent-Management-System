@@ -119,7 +119,7 @@ export class ViewAcceptedprocurementreqComponent {
       const selectedItem = this.filterHeadOfAcc.find(
         (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
       );
-      this.dynamicPOBtn = selectedItem?.poCreated === true;
+      this.dynamicPOBtn = selectedItem?.poStatus === 201;
       this.showBtn = true;
       this.fetchQuote(this.selectedHeadOfAccId);
     }
@@ -132,11 +132,19 @@ export class ViewAcceptedprocurementreqComponent {
       (res) => {
         console.log('verifying quote compare headofacc:', res);
         this.filterHeadOfAcc = res;
+        console.log(
+          'checking selectedHeadOfAccId:',
+          this.selectedHeadOfAccId,
+        );
         if (this.selectedHeadOfAccId) {
+          console.log("checking selectedHeadOfAccId in if condition:", this.selectedHeadOfAccId);
           const selectedItem = this.filterHeadOfAcc.find(
             (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
           );
-          this.dynamicPOBtn = selectedItem?.poCreated === true;
+
+          console.log("selectedItem in BTN:", selectedItem);
+          console.log("selectedItem in postatus:", selectedItem?.poStatus);
+          this.dynamicPOBtn = selectedItem?.poStatus === 201;
           this.showBtn = true;
         }
 
