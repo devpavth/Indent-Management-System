@@ -18,8 +18,8 @@ export class PurchaseorderlistComponent {
   isEndDateManuallySelected: boolean = false;
   sortIndentInAscending: boolean = false;
   showSearchInfo: boolean = false;
-  isWarningPopUp: boolean = false;
   isDelete: boolean = false;
+  showPOPrdModal: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -33,6 +33,14 @@ export class PurchaseorderlistComponent {
   confirmPOMsg: string = '';
 
   POList: Polist[] = [];
+
+  selectedPO: {
+    sno: number;
+    headOfAccId: number;
+  } = {
+    sno: 0,
+    headOfAccId: 0,
+  };
 
   deletePurchaseOrder: {
     title: string;
@@ -167,23 +175,21 @@ export class PurchaseorderlistComponent {
     }
   }
 
-  togglePrdStatus(id: number) {
-    this.POId = id;
-    console.log('POId:', this.POId);
-    this.isWarningPopUp = true;
-    this.confirmPOMsg = `Are you sure the product has been received?`;
+  openPrdStatus(sno: number, headOfAccId: number) {
+    this.selectedPO = { sno: sno, headOfAccId: headOfAccId };
+    this.showPOPrdModal = true;
   }
 
-  toggledelete(check: number, isView: boolean, id: number){
-    if(check === 1){
+  toggledelete(check: number, isView: boolean, id: number) {
+    if (check === 1) {
       this.isDelete = isView;
       this.deletePurchaseOrder = {
         title: 'Purchase Order',
         action: 7,
-        deleteId: id
-      }
-    }else if(check === 0){
-      this.isDelete = isView
+        deleteId: id,
+      };
+    } else if (check === 0) {
+      this.isDelete = isView;
     }
   }
 
@@ -206,10 +212,6 @@ export class PurchaseorderlistComponent {
     );
   }
 
-  closepop(closeIcon: boolean) {
-    this.isWarningPopUp = closeIcon;
-  }
-
   viewGeneratedPO(sno: number, headOfAccId: number) {
     this.reqId = sno;
     this.selectedHeadOfAccId = headOfAccId;
@@ -218,5 +220,10 @@ export class PurchaseorderlistComponent {
 
   refresh(closeIcon: boolean) {
     this.isViewPurchaseOrder = closeIcon;
+  }
+
+  closeModal(closeIcon: boolean){
+    console.log('Parent: received close', closeIcon);
+    this.showPOPrdModal = closeIcon;
   }
 }

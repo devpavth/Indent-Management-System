@@ -168,6 +168,8 @@ export const environment = {
   searchPurchaseOrder: Url + baseRequestApi + '/findgenerated/purchaseorder/',
   updatePOProductStatus: Url + baseRequestApi + '/update/purchaseorderstatus/',
   deletePOItem: Url + baseRequestApi + '/delete/purchaseorder/',
+  fetchPOProductDetails:
+    Url + baseRequestApi + '/getproductdetailsbyheadofacc',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 

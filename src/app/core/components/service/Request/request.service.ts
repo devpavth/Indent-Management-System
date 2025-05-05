@@ -5,6 +5,7 @@ import { debounceTime, Observable, Subject } from 'rxjs';
 import { QuoteComparison } from '../../../models/quoteComparison/quote-comparison.model';
 import { Prefix } from '../../../models/prefix/prefix.model';
 import { Polist } from '../../../models/polist/polist.model';
+import { POProductList } from '../../../models/proRequestData/pro-requestdata.model';
 
 @Injectable({
   providedIn: 'root',
@@ -402,5 +403,9 @@ export class RequestService {
 
   deletePOItemFromList(POId: number){
     return this.http.delete(environment.deletePOItem + POId);
+  }
+
+  fetchPOProductDetails(sno: number, headOfAccId: number): Observable<POProductList[]>{
+    return this.http.get<POProductList[]>(environment.fetchPOProductDetails + `?sno=${sno}&headOfAccId=${headOfAccId}`);
   }
 }

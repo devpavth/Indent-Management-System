@@ -138,46 +138,48 @@
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-start gap-2">
                     <span class="cursor-pointer">Indent ID</span>
-                    @if(sortIndentInAscending){          
-                      <button
-                        class="an hover:text-purple-800 transition"
-                        (click)="sortByIndentNo()"
-                        >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width="2.0" 
-                          stroke="currentColor" 
-                          class="size-4">
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" 
-                          />
-                        </svg>
-                      </button>
-                    } 
-                    @else {                    
-                      <button
-                        class="an hover:text-purple-800 transition"
-                        (click)="sortByIndentNo()"
-                        >
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke-width="2.0" 
-                          stroke="currentColor" 
-                          class="size-4"
+                    @if(POList.length > 1){
+                      @if(sortIndentInAscending){          
+                        <button
+                          class="an hover:text-purple-800 transition"
+                          (click)="sortByIndentNo()"
                           >
-                          <path 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" 
-                          />
-                        </svg>
-                      </button>
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke-width="2.0" 
+                            stroke="currentColor" 
+                            class="size-4">
+                            <path 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round" 
+                              d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" 
+                            />
+                          </svg>
+                        </button>
+                      } 
+                      @else {                    
+                        <button
+                          class="an hover:text-purple-800 transition"
+                          (click)="sortByIndentNo()"
+                          >
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke-width="2.0" 
+                            stroke="currentColor" 
+                            class="size-4"
+                            >
+                            <path 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round" 
+                              d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" 
+                            />
+                          </svg>
+                        </button>
+                      }
                     }
                   </div>
                 </th>
@@ -207,7 +209,7 @@
                 
                 <td class="px-4 py-3">
                   <button
-                    (click)="togglePrdStatus(req.id)"
+                    (click)="openPrdStatus(req.sno, req.headOfAccId)"
                     class="flex items-center justify-center w-28 px-3 py-1 rounded-full transition-all duration-300"
                     [ngClass]="{
                       'bg-green-400 text-gray-50 dark:bg-green-900 dark:text-gray-50 flex-row-reverse': req.poStatus === 226,
@@ -310,23 +312,25 @@
     (closeView)="refresh($event)"
   ></app-view-purchaseorder>
 </section>
-<section *ngIf="isWarningPopUp">
-  <app-warning-popup
-    [showWarningIcon]="isWarningPopUp"
-    [popupMsg]="confirmPOMsg"
-    (close)="closepop($event)"
-    (clearQuotation)="confirmPOProductStatus()"
-  ></app-warning-popup>
-</section>
 <section *ngIf="isDelete">
   <app-delete
     [deleteData]="deletePurchaseOrder"
     (close)="toggledelete(0, $event, 0)"
     (deletePurchaseOrderItem)="deletePO()"
   ></app-delete>
+</section>
 <section
   *ngIf="toastService.isSuccessToast"
   class="fixed left-6 right-2 top-10 z-50 flex w-full items-center justify-center"
 >
   <app-success-toast [message]="toastService.successToastMsg"></app-success-toast>
 </section>
+
+@if(showPOPrdModal){
+  <ng-container>
+    <app-view-po-productdetails
+      [selectedPO]="selectedPO"
+      (close)="closeModal($event)"
+    ></app-view-po-productdetails>
+  </ng-container>
+}

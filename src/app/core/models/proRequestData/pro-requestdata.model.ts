@@ -18,6 +18,13 @@ export interface indentProductList {
   unitPrice: number;
 }
 
+export type POProductList = indentProductList & {
+  lastReceivedDate?: string;
+  receivedQty?: number;
+  status?: number;
+  totalPieces?: number;
+};
+
 export interface ProRequestdata {
   reqId: number;
   requestNo: string;

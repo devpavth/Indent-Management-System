@@ -14,6 +14,7 @@ import { PurchaseorderlistComponent } from './purchaseorderlist/purchaseorderlis
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ViewPoProductdetailsComponent } from './view-po-productdetails/view-po-productdetails.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     ViewConsolidatedquoteComponent,
     ViewPurchaseorderComponent,
     PurchaseorderlistComponent,
+    ViewPoProductdetailsComponent,
   ],
   imports: [
     CommonModule,
