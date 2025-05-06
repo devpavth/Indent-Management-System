@@ -203,7 +203,9 @@ export class EditIndentRequestComponent {
         console.log(this._requestIndentDetails.indentHeaders.priorityType);
 
         this.productList = this._requestIndentDetails.productDetails;
-        this.initialUnitPriceList = this.productList.map((prd) => prd.unitPrice);
+        this.initialUnitPriceList = this.productList.map(
+          (prd) => prd.unitPrice,
+        );
         this.initialQtyList = this.productList.map((prd) => prd.qty);
 
         console.log('unitPriceList:', this.initialUnitPriceList);
@@ -472,10 +474,7 @@ export class EditIndentRequestComponent {
       return;
     }
 
-     console.log(
-       'unit price based on index:',
-       this.initialUnitPriceList[index],
-     );
+    console.log('unit price based on index:', this.initialUnitPriceList[index]);
 
     if (
       inputValue === this.initialUnitPriceList[index] &&
@@ -515,11 +514,13 @@ export class EditIndentRequestComponent {
 
     console.log('qty based on index:', this.initialQtyList[index]);
 
-    if (inputValue === this.initialQtyList[index] && this.productList[index].id !== 0) {
+    if (
+      inputValue === this.initialQtyList[index] &&
+      this.productList[index].id !== 0
+    ) {
       this.productList[index].status = 200;
       this.isEnableSaveBtn = false;
-    }
-    else {
+    } else {
       this.productList[index].status = 301;
       this.isEnableSaveBtn = true;
     }
@@ -551,7 +552,7 @@ export class EditIndentRequestComponent {
     this.isEditIndentPrdIndex = index;
 
     console.log('qty based on index:', this.initialQtyList[index]);
-    console.log("unit price based on index:", this.initialUnitPriceList[index]);
+    console.log('unit price based on index:', this.initialUnitPriceList[index]);
 
     console.log('productList in edit product:', this.productList);
     console.log('after edit indentProductForm:', this.indentProductForm.value);

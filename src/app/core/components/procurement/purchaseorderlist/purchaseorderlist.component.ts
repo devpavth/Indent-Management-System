@@ -37,9 +37,11 @@ export class PurchaseorderlistComponent {
   selectedPO: {
     sno: number;
     headOfAccId: number;
+    poId: number
   } = {
     sno: 0,
     headOfAccId: 0,
+    poId: 0
   };
 
   deletePurchaseOrder: {
@@ -175,9 +177,11 @@ export class PurchaseorderlistComponent {
     }
   }
 
-  openPrdStatus(sno: number, headOfAccId: number) {
-    this.selectedPO = { sno: sno, headOfAccId: headOfAccId };
-    this.showPOPrdModal = true;
+  openPrdStatus(sno: number, headOfAccId: number, poId: number, poStatus: number) {
+    this.selectedPO = { sno: sno, headOfAccId: headOfAccId, poId: poId};
+    if(poStatus === 201 || poStatus === 206){
+      this.showPOPrdModal = true;
+    }
   }
 
   toggledelete(check: number, isView: boolean, id: number) {

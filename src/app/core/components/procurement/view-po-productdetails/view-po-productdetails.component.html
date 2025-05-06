@@ -50,14 +50,14 @@
                             <tbody
                                 class="divide-y divide-gray-200"
                                 >
-                                @for(poprd of POProductList; track poprd.id){
+                                @for(poprd of POProductList; track poprd.id; let i = $index){
                                     <tr
                                         class="text-sm text-center text-gray-800"
                                         >
                                         <td class="px-4 py-3">
                                             <input 
                                                 type="checkbox"
-                                                (click)="toggleCheckBox()"
+                                                (click)="toggleCheckBox(poprd, i)"
                                             />
                                         </td>
                                         <td class="px-1 py-3 font-medium text-start">
@@ -72,24 +72,33 @@
                                             <p class="text-gray-400 text-justify text-xs">
                                                 {{ poprd.prdDescription }}
                                             </p>
+                                            @if(poprd.lastReceivedDate !== null){
+                                                <p class="text-xs">
+                                                    Last Received On:{{ poprd.lastReceivedDate }}
+                                                </p>
+                                            }
                                         </td>
                                         <td class="px-4 py-3">{{poprd.qty}}</td>
                                         <td class="px-4 py-3">{{poprd.receivedQty}}</td>
                                         <td class="px-4 py-3">
                                             <input 
                                                 type="number"
+                                                [(ngModel)]="poprd.inputReceivedQty"
                                                 [ngClass]="{
-                                                    'pointer-events-none': !isEnableInput
+                                                    'pointer-events-none': !isEnableInputArray[i]
                                                 }"
+                                                (input)="updateReceivedQty(poprd)"
                                                 class="w-28 rounded-lg text-sm text-gray-800"
                                             />
                                         </td>
                                         <td class="px-4 py-3">
                                             <input 
                                                 type="date"
+                                                [(ngModel)]="poprd.inputCurrentDate"
                                                 [ngClass]="{
-                                                    'pointer-events-none': !isEnableInput
+                                                    'pointer-events-none': !isEnableInputArray[i]
                                                 }"
+                                                (input)="updateReceivedDate(poprd)"
                                                 class="rounded-lg text-sm text-gray-800"
                                             />
                                         </td>
@@ -108,7 +117,11 @@
                     Cancel
                 </button>
                 <button
-                    (click)="confirmPOPrdStatus(updatePurchaseOrderForm.value)"
+                    (click)="confirmPOPrdStatus()"
+                    [disabled]="updatePurchaseOrderForm.invalid || !isEnableConfirmBtn"
+                    [ngClass]="{
+                        'bg-slate-400': !isEnableConfirmBtn
+                    }"
                     class="border px-4 py-2 rounded-lg bg-purple-500 text-white"
                     >
                     Confirm

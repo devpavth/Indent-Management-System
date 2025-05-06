@@ -408,4 +408,8 @@ export class RequestService {
   fetchPOProductDetails(sno: number, headOfAccId: number): Observable<POProductList[]>{
     return this.http.get<POProductList[]>(environment.fetchPOProductDetails + `?sno=${sno}&headOfAccId=${headOfAccId}`);
   }
+
+  updatePOPrdDetails(poId: number, POPrdForm: any){
+    return this.http.put(environment.updatePOPrdDetails + poId, POPrdForm);
+  }
 }

@@ -23,6 +23,8 @@ export type POProductList = indentProductList & {
   receivedQty?: number;
   status?: number;
   totalPieces?: number;
+  inputReceivedQty?: number;
+  inputCurrentDate?: string;
 };
 
 export interface ProRequestdata {
