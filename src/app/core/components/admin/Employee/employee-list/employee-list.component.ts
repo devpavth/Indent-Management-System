@@ -71,6 +71,7 @@ export class EmployeeListComponent implements OnInit {
   fetchEmployeeList(data: any) {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
+    this.isSkeletonLoader = true;
     this.employeeService.getAllEmployeeDetails(data).subscribe(
       (res) => {
         // this.employeeList=res;

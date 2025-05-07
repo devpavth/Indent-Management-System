@@ -1,132 +1,190 @@
 <div
-    class="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
-    >
-    <div class="relative h-full w-full max-w-3xl md:h-auto">
-        <div class="relative bg-white rounded-lg p-3 shadow dark:bg-gray-800">
-            <div class="flex items-center justify-between">    
-                <h1 
-                    class="text-purple-600 text-lg font-semibold"
-                    >Product Details
-                </h1>
-                <button
-                    (click)="closeModal()"
-                    type="button"
-                    class="ml-auto text-gray-600 rounded-full bg-transparent text-2xl hover:bg-gray-200 p-1.5 dark:hover:text-white dark:hover:bg-gray-200"
-                    >
-                    <svg
-                        aria-hidden="true"
-                        class="h-5 w-5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        >
-                        <path
-                            fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"
-                        ></path>
-                    </svg>
-                </button>
-            </div>
+  class="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+>
+  <div class="relative h-full w-full max-w-3xl md:h-auto">
+    <div class="relative rounded-lg bg-white p-3 shadow dark:bg-gray-800">
+      <div class="flex items-center justify-between">
+        <h1 class="text-lg font-semibold text-purple-600">Product Details</h1>
+        <button
+          (click)="closeModal()"
+          type="button"
+          class="ml-auto rounded-full bg-transparent p-1.5 text-2xl text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-200 dark:hover:text-white"
+        >
+          <svg
+            aria-hidden="true"
+            class="h-5 w-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
 
-            <div class="mt-4">
-                <div class="rounded-lg border overflow-hidden">
-                    <div class="max-h-[400px] scroll overflow-y-auto">                    
-                        <table
-                            class="w-full"
-                            >
-                            <thead
-                                class="bg-purple-500 text-white text-xs font-normal uppercase sticky top-0"
-                                >
-                                <tr>
-                                    <th scope="col" class="px-4 py-3"></th>
-                                    <th scope="col" class="px-1 py-3 text-start">Product</th>
-                                    <th scope="col" class="px-4 py-3">Ordered Qty</th>
-                                    <th scope="col" class="px-4 py-3">Total Received</th>
-                                    <th scope="col" class="px-4 py-3">Received This Time</th>
-                                    <th scope="col" class="px-4 py-3">Received On</th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                class="divide-y divide-gray-200"
-                                >
-                                @for(poprd of POProductList; track poprd.id; let i = $index){
-                                    <tr
-                                        class="text-sm text-center text-gray-800"
-                                        >
-                                        <td class="px-4 py-3">
-                                            <input 
-                                                type="checkbox"
-                                                (click)="toggleCheckBox(poprd, i)"
-                                            />
-                                        </td>
-                                        <td class="px-1 py-3 font-medium text-start">
-                                            <p
-                                                class="font-bold"
-                                                >
-                                                {{ poprd.prdmdlName }} - {{ poprd.prdcatgName }}
-                                            </p>
-                                            <p>
-                                                {{ poprd.prdbrndName }} | HOA - {{ poprd.headOfAccName }}
-                                            </p>
-                                            <p class="text-gray-400 text-justify text-xs">
-                                                {{ poprd.prdDescription }}
-                                            </p>
-                                            @if(poprd.lastReceivedDate !== null){
-                                                <p class="text-xs">
-                                                    Last Received On:{{ poprd.lastReceivedDate }}
-                                                </p>
-                                            }
-                                        </td>
-                                        <td class="px-4 py-3">{{poprd.qty}}</td>
-                                        <td class="px-4 py-3">{{poprd.receivedQty}}</td>
-                                        <td class="px-4 py-3">
-                                            <input 
-                                                type="number"
-                                                [(ngModel)]="poprd.inputReceivedQty"
-                                                [ngClass]="{
-                                                    'pointer-events-none': !isEnableInputArray[i]
-                                                }"
-                                                (input)="updateReceivedQty(poprd)"
-                                                class="w-28 rounded-lg text-sm text-gray-800"
-                                            />
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <input 
-                                                type="date"
-                                                [(ngModel)]="poprd.inputCurrentDate"
-                                                [ngClass]="{
-                                                    'pointer-events-none': !isEnableInputArray[i]
-                                                }"
-                                                (input)="updateReceivedDate(poprd)"
-                                                class="rounded-lg text-sm text-gray-800"
-                                            />
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-end gap-4 mt-4">
-                <button
-                    (click)="closeModal()"
-                    class="border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-100"
-                    >
-                    Cancel
-                </button>
-                <button
-                    (click)="confirmPOPrdStatus()"
-                    [disabled]="updatePurchaseOrderForm.invalid || !isEnableConfirmBtn"
+      <div class="mt-4">
+        <div class="overflow-hidden rounded-lg border">
+          <div class="scroll max-h-[380px] overflow-y-auto overflow-x-hidden">
+            <table class="w-full">
+              <thead
+                class="sticky top-0 bg-purple-500 text-xs font-normal uppercase text-white"
+              >
+                <tr>
+                  <th scope="col" class="px-4 py-3"></th>
+                  <th scope="col" class="px-1 py-3 text-start">Product</th>
+                  <th scope="col" class="px-4 py-3">Ordered Qty</th>
+                  <th scope="col" class="px-4 py-3">Total Received</th>
+                  <th scope="col" class="px-4 py-3">Current Qty</th>
+                  <th scope="col" class="px-4 py-3">Received On</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200" *ngIf="!skeletonLoader">
+                @for (poprd of POProductList; track poprd.id; let i = $index) {
+                  <tr 
+                    class="text-center text-sm text-gray-800"
                     [ngClass]="{
-                        'bg-slate-400': !isEnableConfirmBtn
+                        'bg-purple-50': poprd.qty === poprd.inputReceivedQty
                     }"
-                    class="border px-4 py-2 rounded-lg bg-purple-500 text-white"
                     >
-                    Confirm
-                </button>
-            </div>
+                    <td class="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        [disabled]="poprd.qty === poprd.inputReceivedQty"
+                        [checked]="poprd.qty === poprd.inputReceivedQty"
+                        (click)="toggleCheckBox(poprd, i)"
+                      />
+                    </td>
+                    <td class="px-1 py-3 text-start font-medium">
+                      <p class="font-bold">
+                        {{ poprd.prdmdlName }} - {{ poprd.prdcatgName }}
+                      </p>
+                      <p>
+                        {{ poprd.prdbrndName }} | HOA -
+                        {{ poprd.headOfAccName }}
+                      </p>
+                      <p class="text-justify text-xs text-gray-400">
+                        {{ poprd.prdDescription }}
+                      </p>
+                      @if (poprd.lastReceivedDate !== null) {
+                        <p class="text-xs">
+                          Last Received On:{{ poprd.lastReceivedDate }}
+                        </p>
+                      }
+                    </td>
+                    <td class="px-4 py-3">{{ poprd.qty }}</td>
+                    <td class="px-4 py-3">{{ poprd.inputReceivedQty }}</td>
+                    <td class="px-4 py-3 align-middle">
+                      <div class="inline-block align-middle">
+                        <input
+                          type="number"
+                          [(ngModel)]="poprd.receivedQty"
+                          [ngClass]="{
+                            'pointer-events-none': !isEnableInputArray[i],
+                            'bg-purple-50': poprd.qty === poprd.inputReceivedQty
+                          }"
+                          (input)="updateReceivedQty(poprd)"
+                          class="mt-1 w-28 rounded-lg text-sm text-gray-800"
+                        />
+                        <div class="mt-1 h-0">
+                          <small
+                            [ngStyle]="{
+                              visibility: poprd.prdQtyValidationError
+                                ? 'visible'
+                                : 'hidden'
+                            }"
+                            class="block w-32 text-xs text-red-600"
+                          >
+                            Entered qty cannot be more than the ordered qty ({{
+                              poprd.qty
+                            }}).
+                          </small>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-4 py-3">
+                      <input
+                        type="date"
+                        [(ngModel)]="poprd.inputCurrentDate"
+                        [ngClass]="{
+                          'pointer-events-none': !isEnableInputArray[i],
+                          'bg-purple-50': poprd.qty === poprd.inputReceivedQty
+                        }"
+                        (input)="updateReceivedDate(poprd)"
+                        [max]="currentDateString"
+                        class="rounded-lg text-sm text-gray-800"
+                      />
+                    </td>
+                  </tr>
+                }
+              </tbody>
+
+              <tbody *ngIf="skeletonLoader">
+                <tr *ngFor="let _ of [1, 2, 3]" class="animate-pulse border-b">
+                  <td class="px-4 py-3">
+                    <div class="h-4 w-8 rounded-lg bg-gray-300"></div>
+                  </td>
+                  <td class="px-1 py-3">
+                    <div class="mb-1 h-4 w-20 rounded-lg bg-gray-300"></div>
+                    <div class="mb-1 h-4 w-24 rounded-lg bg-gray-300"></div>
+                    <div class="mb-1 h-4 w-24 rounded-lg bg-gray-300"></div>
+                    <div class="mb-1 h-4 w-24 rounded-lg bg-gray-300"></div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex h-full items-center justify-center">
+                      <div class="h-4 w-10 rounded-lg bg-gray-300"></div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex h-full items-center justify-center">
+                      <div class="h-4 w-10 rounded-lg bg-gray-300"></div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="h-4 w-28 rounded-lg bg-gray-300"></div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="h-4 w-32 rounded-lg bg-gray-300"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
+      <div class="mt-4 flex justify-end gap-4">
+        <button
+          (click)="closeModal()"
+          class="rounded-lg border border-gray-400 px-4 py-2 hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          (click)="confirmPOPrdStatus()"
+          [disabled]="updatePurchaseOrderForm.invalid || !isEnableConfirmBtn"
+          [ngClass]="{
+            'bg-slate-400': !isEnableConfirmBtn
+          }"
+          class="rounded-lg border bg-purple-500 px-4 py-2 text-white"
+        >
+          <span *ngIf="!btnLoader">Confirm</span>
+          <span *ngIf="btnLoader" class="flex items-center justify-center gap-2">
+            <span class="w-5 h-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+            <span>loading...</span>
+          </span>
+        </button>
+      </div>
     </div>
+  </div>
 </div>
+
+<section *ngIf="isWarningPopUp">
+  <app-warning-popup
+    [popupMsg]="confirmPOMsg"
+    (close)="closepopup($event)"
+    (clearQuotation)="clearPOPrdDetails()"
+  ></app-warning-popup>
+</section>

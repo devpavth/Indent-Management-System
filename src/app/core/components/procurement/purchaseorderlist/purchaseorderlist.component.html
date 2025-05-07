@@ -219,8 +219,8 @@
                     }"
                     >
                     <span class="relative">
-                      {{ req.poStatus === 201 ? 'Queued' : 
-                        req.poStatus === 206 ? 'Midway' :
+                      {{ req.poStatus === 201 ? 'Pending' : 
+                        req.poStatus === 206 ? 'In Transit' :
                         req.poStatus === 226 ? 'Completed' : ''
                       }}
                     </span>
@@ -234,7 +234,7 @@
                     viewBox="0 0 24 24" 
                     stroke-width="1.5" 
                     stroke="currentColor" 
-                    class="w-7 h-7 cursor-pointer bg-red-100 rounded-full p-1 text-red-600 hover:bg-red-200">
+                    class="w-7 h-7 bg-red-100 rounded-full p-1 text-red-600 hover:bg-red-200">
                     <path 
                       stroke-linecap="round" 
                       stroke-linejoin="round" 
