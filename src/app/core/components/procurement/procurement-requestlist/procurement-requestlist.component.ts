@@ -89,7 +89,7 @@ export class ProcurementRequestlistComponent {
     this.fetchRequestList();
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.fetchRequestList();
   }
@@ -282,7 +282,7 @@ export class ProcurementRequestlistComponent {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    if(inputValue === ""){
+    if (inputValue === '') {
       this.fetchRequestList();
     }
 

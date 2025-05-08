@@ -53,9 +53,9 @@
                     <td class="px-4 py-3">
                       <input
                         type="checkbox"
-                        [disabled]="poprd.qty === poprd.inputReceivedQty"
+                        [disabled]="poprd.qty === poprd.inputReceivedQty || isDisableCheckBox"
                         [checked]="poprd.qty === poprd.inputReceivedQty"
-                        (click)="toggleCheckBox(poprd, i)"
+                        (change)="toggleCheckBox($event, poprd, i)"
                       />
                     </td>
                     <td class="px-1 py-3 text-start font-medium">
@@ -84,10 +84,12 @@
                           [(ngModel)]="poprd.receivedQty"
                           [ngClass]="{
                             'pointer-events-none': !isEnableInputArray[i],
-                            'bg-purple-50': poprd.qty === poprd.inputReceivedQty
+                            'bg-purple-50': poprd.qty === poprd.inputReceivedQty,
+                            'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500': poprd.prdZeroQtyValidationError || poprd.prdQtyValidationError
                           }"
-                          (input)="updateReceivedQty(poprd)"
-                          class="mt-1 w-28 rounded-lg text-sm text-gray-800"
+                          (input)="updateReceivedQty($event, poprd)"
+                          [min]="1"
+                          class="mt-1.5 w-28 rounded-lg text-sm text-gray-800"
                         />
                         <div class="mt-1 h-0">
                           <small
@@ -96,12 +98,24 @@
                                 ? 'visible'
                                 : 'hidden'
                             }"
-                            class="block w-32 text-xs text-red-600"
+                            class="block w-32 text-xs leading-3 text-red-600"
                           >
                             Entered qty cannot be more than the ordered qty ({{
                               poprd.qty
                             }}).
                           </small>
+                        </div>
+                        <div class="mt-1 h-0">
+                            <small
+                                [ngStyle]="{
+                                    visibility: poprd.prdZeroQtyValidationError
+                                    ? 'visible'
+                                    : 'hidden'
+                                }"
+                                class="text-xs block w-32 text-red-600 leading-3"
+                            >
+                                Qty cannot be less than 1.
+                            </small>
                         </div>
                       </div>
                     </td>
@@ -180,11 +194,3 @@
     </div>
   </div>
 </div>
-
-<section *ngIf="isWarningPopUp">
-  <app-warning-popup
-    [popupMsg]="confirmPOMsg"
-    (close)="closepopup($event)"
-    (clearQuotation)="clearPOPrdDetails()"
-  ></app-warning-popup>
-</section>

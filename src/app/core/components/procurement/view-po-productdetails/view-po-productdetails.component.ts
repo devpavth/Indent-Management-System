@@ -23,17 +23,15 @@ export class ViewPoProductdetailsComponent implements OnInit {
   isEnableConfirmBtn: boolean = false;
   skeletonLoader: boolean = true;
   btnLoader: boolean = false;
-  isWarningPopUp: boolean = false;
+  isDisableCheckBox: boolean = false;
 
   POProductList: POProductList[] = [];
-  selectedPOPrdList: POProductList | undefined;
+
+  selectedIndices: number[] = [];
 
   currentDate = new Date();
 
   currentDateString: string = '';
-  confirmPOMsg: string = '';
-
-  selectedIndex: number = 0;
 
   requestService = inject(RequestService);
   toastService = inject(ToastService);
@@ -86,44 +84,81 @@ export class ViewPoProductdetailsComponent implements OnInit {
       );
   }
 
-  toggleCheckBox(prd: POProductList, index: number) {
-    // this.isEnableInputArray[index] = !this.isEnableInputArray[index];
-    // this.selectedPOPrdList = prd;
-    // this.selectedIndex = index;
-    // if (!this.isEnableInputArray[index]) {
-    //   this.isWarningPopUp = true;
-    //   this.confirmPOMsg =
-    //     'This will clear your current input. Do you want to continue?';
-    // }else{
-    //   this.isEnableInputArray[index] = true;
-    // }
-    
-    if (this.isEnableInputArray[index]) {
-      // Only show popup if the product wasn't already cleared
-      const isAlreadyCleared = prd.receivedQty === 0;
+  toggleCheckBox(event: Event, prd: POProductList, index: number) {
+    const input = event.target as HTMLInputElement;
+    if(!input) return;
 
-      if (!isAlreadyCleared) {
-        this.isWarningPopUp = true;
-        this.confirmPOMsg =
-          'This will clear your current input. Do you want to continue?';
-        this.selectedPOPrdList = prd;
-        this.selectedIndex = index;
-      } else {
-        // Already cleared before, just disable directly
-        this.isEnableInputArray[index] = true;
+    let checked = input.checked;
+    console.log("checked:", checked);
+
+    this.isEnableInputArray[index] = checked;
+    
+    if(checked){
+      if(!this.selectedIndices.includes(index)){
+        this.selectedIndices.push(index);
+        console.log('this.selectedIndices:', this.selectedIndices);
+      } else{
+        console.log("this.selectedIndices:", this.selectedIndices);
+
+        prd.receivedQty = 0;
+        prd.prdQtyValidationError = false;
+        prd.prdZeroQtyValidationError = false;
+        prd.inputCurrentDate = this.currentDateString;
+        this.selectedIndices = this.selectedIndices.filter((i) => i !== index);
       }
-    } else {
-      // Checking the box back on — allow directly
-      this.isEnableInputArray[index] = true;
-    }
+
+      const hasInvalidQty = this.selectedIndices.some(
+        (i) => this.POProductList[i].receivedQty === 0
+      );
+
+      if(hasInvalidQty){
+        this.isEnableConfirmBtn = false;
+
+        this.selectedIndices.forEach(
+          (i) => {
+            if(this.POProductList[i].receivedQty === 0){
+              this.POProductList[i].prdZeroQtyValidationError = true;
+            }
+          }
+        )
+      } else{
+        this.isEnableConfirmBtn = true;
+      }
+    } else{
+      prd.receivedQty = 0;
+      prd.prdQtyValidationError = false;
+      prd.prdZeroQtyValidationError = false;
+      prd.inputCurrentDate = this.currentDateString;
+      this.selectedIndices = this.selectedIndices.filter((i) => i !== index);
+      if(this.selectedIndices.length > 0){
+        const hasError = this.selectedIndices.some(
+          (i) => this.POProductList[i].prdZeroQtyValidationError === true || this.POProductList[i].prdQtyValidationError === true 
+        )
+
+        this.isEnableConfirmBtn = !hasError; 
+      } else{
+        this.isEnableConfirmBtn = false;
+      }
+
+      console.log('this.selectedIndices:', this.selectedIndices);
+      console.log('this.isEnableConfirmBtn:', this.isEnableConfirmBtn);
+    }   
   }
 
-  updateReceivedQty(prd: POProductList) {
-    if (!prd.receivedQty || prd.receivedQty <= 0) {
-      this.isEnableConfirmBtn = false;
+  updateReceivedQty(event: Event, prd: POProductList) {
+    const input = (event.target as HTMLInputElement);
+    const inputQty = Number(input.value);
+    
+    if(inputQty < 1){
+      prd.receivedQty = undefined;
+      input.value = '';
+      prd.prdZeroQtyValidationError = true;
       prd.prdQtyValidationError = false;
+      this.isEnableConfirmBtn = false;
       return;
     }
+
+    prd.prdZeroQtyValidationError = false;
 
     if ((prd.qty ?? 0) < (prd.inputReceivedQty ?? 0) + (prd.receivedQty ?? 0)) {
       console.log(
@@ -131,10 +166,10 @@ export class ViewPoProductdetailsComponent implements OnInit {
         (prd.inputReceivedQty ?? 0) + (prd.receivedQty ?? 0),
       );
       prd.prdQtyValidationError = true;
+      prd.prdZeroQtyValidationError = false;
       this.isEnableConfirmBtn = false;
     } else {
       prd.prdQtyValidationError = false;
-      this.isEnableConfirmBtn = true;
     }
 
     const formArray = this.poPrdItems;
@@ -169,6 +204,24 @@ export class ViewPoProductdetailsComponent implements OnInit {
       });
       console.log('inside else condition formArray:', formArray.value);
     }
+
+    const hasInvalidQty = this.selectedIndices.some(
+      (i) => this.POProductList[i].receivedQty === 0,
+    );
+
+    this.isEnableConfirmBtn = !hasInvalidQty && !prd.prdQtyValidationError;
+
+    if(this.selectedIndices.length > 0){
+      const hasError = this.selectedIndices.some(
+        (i) => this.POProductList[i].prdZeroQtyValidationError === true || this.POProductList[i].prdQtyValidationError === true
+      );
+
+      this.isEnableConfirmBtn = !hasError;
+    } else{
+      this.isEnableConfirmBtn = false;
+    }
+    console.log('this.selectedIndices:', this.selectedIndices);
+    console.log('this.isEnableConfirmBtn:', this.isEnableConfirmBtn);
   }
 
   updateReceivedDate(prd: POProductList) {
@@ -202,26 +255,6 @@ export class ViewPoProductdetailsComponent implements OnInit {
     }
   }
 
-  clearPOPrdDetails(){
-    this.isEnableConfirmBtn = false;
-    if(!this.selectedPOPrdList){
-      return;
-    }
-    this.selectedPOPrdList.receivedQty = 0;
-    this.selectedPOPrdList.inputCurrentDate = this.currentDateString;
-    this.selectedPOPrdList.prdQtyValidationError = false;
-    if (this.selectedIndex !== undefined) {
-      this.isEnableInputArray[this.selectedIndex] = true;
-    }
-
-    // Clear references so popup doesn't appear again unnecessarily
-    this.selectedPOPrdList = null as any;
-    this.selectedIndex = -1;
-
-    // Close popup
-    this.isWarningPopUp = false;
-  }
-
   confirmPOPrdStatus() {
     this.POProductList.forEach((prd, i) => {
       if (this.isEnableInputArray[i]) {
@@ -252,13 +285,6 @@ export class ViewPoProductdetailsComponent implements OnInit {
           },
         );
     }
-  }
-
-  closepopup(closeIcon: boolean) {
-    this.isWarningPopUp = closeIcon;
-    this.isEnableInputArray[this.selectedIndex] = true;
-    this.selectedPOPrdList = null as any;
-    this.selectedIndex = -1;
   }
 
   closeModal() {

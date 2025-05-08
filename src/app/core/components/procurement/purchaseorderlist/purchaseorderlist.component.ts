@@ -31,6 +31,7 @@ export class PurchaseorderlistComponent {
   POId: number = 0;
 
   confirmPOMsg: string = '';
+  searchText: string = '';
 
   POList: Polist[] = [];
 
@@ -93,6 +94,10 @@ export class PurchaseorderlistComponent {
     const inputValue = (event.target as HTMLInputElement).value;
 
     this.showSearchInfo = inputValue.trim() === '';
+
+    if(this.showSearchInfo){
+      this.fetchPurchaseOrderList();
+    }
   }
 
   fetchPOListByPONumber(event: Event) {
@@ -113,9 +118,20 @@ export class PurchaseorderlistComponent {
           console.log('error while fetching search PO List:', error);
           this.noRequest = false;
           this.isSkeletonLoader = false;
+
+          if(error.error.status === 204){
+            this.toastService.showError(error.error.errorMessege);
+            this.noRequest = true;
+            this.POList = [];
+          }
         },
       );
     }
+  }
+
+  clearSearch(){
+    this.searchText = '';
+    this.fetchPurchaseOrderList();
   }
 
   formatDateOnly(date: Date): string {

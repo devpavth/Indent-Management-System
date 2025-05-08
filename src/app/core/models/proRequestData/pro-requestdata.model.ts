@@ -26,6 +26,7 @@ export type POProductList = indentProductList & {
   inputReceivedQty?: number;
   inputCurrentDate?: string;
   prdQtyValidationError?: boolean;
+  prdZeroQtyValidationError?: boolean;
 };
 
 export interface ProRequestdata {
