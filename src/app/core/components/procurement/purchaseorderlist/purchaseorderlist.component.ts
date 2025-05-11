@@ -20,6 +20,7 @@ export class PurchaseorderlistComponent {
   showSearchInfo: boolean = false;
   isDelete: boolean = false;
   showPOPrdModal: boolean = false;
+  searchTriggered: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -93,9 +94,11 @@ export class PurchaseorderlistComponent {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
+    this.searchText = inputValue;
+
     this.showSearchInfo = inputValue.trim() === '';
 
-    if(this.showSearchInfo){
+    if(inputValue.trim() === ''){
       this.fetchPurchaseOrderList();
     }
   }
@@ -113,6 +116,7 @@ export class PurchaseorderlistComponent {
           this.POList = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;
+          this.searchTriggered =  true;
         },
         (error) => {
           console.log('error while fetching search PO List:', error);
@@ -123,6 +127,7 @@ export class PurchaseorderlistComponent {
             this.toastService.showError(error.error.errorMessege);
             this.noRequest = true;
             this.POList = [];
+            this.searchTriggered = true;
           }
         },
       );
@@ -131,7 +136,11 @@ export class PurchaseorderlistComponent {
 
   clearSearch(){
     this.searchText = '';
-    this.fetchPurchaseOrderList();
+
+    if(this.searchTriggered){
+      this.fetchPurchaseOrderList();
+      this.searchTriggered = false;
+    }
   }
 
   formatDateOnly(date: Date): string {

@@ -7,9 +7,9 @@
 }
 
 .poreceived {
-  @apply me-2 rounded-md bg-green-200 hover:bg-green-300 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900 dark:text-green-300;
+  @apply me-2 rounded-md bg-green-200 px-3 py-1 text-sm font-medium text-green-800 hover:bg-green-300 dark:bg-green-900 dark:text-green-300;
 }
 
 .popending {
-  @apply me-2 rounded-md bg-red-200 hover:bg-red-300 px-3 py-1 text-sm font-medium text-red-800 dark:bg-red-900 dark:text-red-300;
+  @apply me-2 rounded-md bg-red-200 px-3 py-1 text-sm font-medium text-red-800 hover:bg-red-300 dark:bg-red-900 dark:text-red-300;
 }

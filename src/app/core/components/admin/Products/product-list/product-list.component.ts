@@ -9,8 +9,7 @@ import { ProductService } from '../../../service/Product/product.service';
 import {
   catchError,
   debounceTime,
-  distinctUntilChanged,
-  fromEvent,
+  map,
   of,
   Subject,
   switchMap,
@@ -33,7 +32,6 @@ export class ProductListComponent implements OnInit {
   productList: any[] | undefined;
   otherPrdLen: number = 0;
   productData: any;
-  // Spinner: boolean = true;'
   isSkeletonLoader: boolean = true;
   noProduct: boolean = false;
 
@@ -51,7 +49,6 @@ export class ProductListComponent implements OnInit {
   activeProductList: any[] = [];
   otherProductList: any[] = [];
 
-  storeProductList: Product[] = [];
   noResults: boolean = false;
   isProductSelected: boolean = false;
   searchText: string = '';
@@ -69,7 +66,6 @@ export class ProductListComponent implements OnInit {
           }
           this.noResults = false;
           if (!searchTerm || searchTerm.length < 3) {
-            this.storeProductList = [];
             return of([]);
           }
 
@@ -86,12 +82,26 @@ export class ProductListComponent implements OnInit {
             }),
           );
         }),
+        map((items: Product[]) => {
+          console.log(items);
+          const filterItems = items.filter(
+            (item: Product) => this.activeProduct === 'active' ? item.prdStatus === 200 : item.prdStatus === 303);
+          console.log("filterItems:", filterItems);
+          return filterItems;
+        }),
+        tap((items) => {
+          console.log(items);
+        }),
       )
       .subscribe((response: Product[]) => {
         console.log('fetching product data from backend:', response);
 
         if (response.length > 0) {
-          this.storeProductList = response;
+          this.productList = response;
+          this.noProduct = false;
+        } else if(response.length === 0){
+          this.noProduct = true;
+          this.productList = [];
         }
         this.isProductSelected = false;
       });
@@ -104,20 +114,19 @@ export class ProductListComponent implements OnInit {
   onSearchChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const searchTerm = inputElement.value;
-    this.searchSubject.next(searchTerm);
-  }
-
-  onSelectProduct(product: Product) {
-    this.isProductSelected = true;
-    this.toggleView(true, 1, product);
-    this.storeProductList = [];
-    this.searchText = '';
+    if(searchTerm === ''){
+      this.fetchProductList(this.offSet, this.pageSize, 'active');
+      this.noProduct = false;
+    }else{
+      this.searchSubject.next(searchTerm);
+    }
   }
 
   clearSearch() {
     this.searchText = '';
-    this.storeProductList = [];
     this.noResults = false;
+    this.noProduct = false;
+    this.fetchProductList(this.offSet, this.pageSize, 'active');
   }
 
   fetchProductList(
@@ -134,6 +143,9 @@ export class ProductListComponent implements OnInit {
       'initail endIndex:',
       endIndex,
     );
+
+    this.isSkeletonLoader = true;
+    this.searchText = '';
 
     const productServiceCall =
       productType === 'active'
@@ -311,15 +323,7 @@ export class ProductListComponent implements OnInit {
       this.productData = productData;
     }
     if (check == 0) {
-      this.isProductList = action;
-
-      if (this.productData.prdStatus === 200) {
-        // console.log("prdStatus:", this.productData.prdStatus);
-        this.fetchProductList(this.offSet, this.pageSize, 'active');
-      } else if (this.productData.prdStatus === 303) {
-        // console.log('prdStatus:', this.productData.prdStatus);
-        this.fetchProductList(this.offSet, this.pageSize, 'other');
-      }
+      this.isProductList = action;    
     }
   }
 }

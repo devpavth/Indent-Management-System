@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { filter, Observable, Subject, tap, map } from 'rxjs';
 import { Vendor } from '../../../models/vendor/vendor.type';
 import { Product } from '../../../models/product/product.model';
 
@@ -38,14 +38,17 @@ export class ProductService {
 
   getAllProduct(offSet: number, pageSize: number) {
     let params = new HttpParams()
-    .set('offSet', offSet.toString())
-    .set('pageSize', pageSize.toString())
+      .set('offSet', offSet.toString())
+      .set('pageSize', pageSize.toString());
 
-    return this.productHttp.get(environment.getAllProduct, {params});
+    return this.productHttp.get(environment.getAllProduct, { params });
   }
 
   deleteProduct(id: any) {
-    console.log("environment.deleteProduct + id:", environment.deleteProduct + id);
+    console.log(
+      'environment.deleteProduct + id:',
+      environment.deleteProduct + id,
+    );
     return this.productHttp.delete(environment.deleteProduct + id);
   }
   getProductByCode(id: any) {
@@ -55,7 +58,7 @@ export class ProductService {
     return this.productHttp.post(environment.inward, data);
   }
 
-  saveOutward(data: any){
+  saveOutward(data: any) {
     return this.productHttp.post(environment.saveOutward, data);
   }
 
@@ -91,71 +94,88 @@ export class ProductService {
     return this.productHttp.post(environment.addHeadOfAcc, data);
   }
 
-  fetchLiveProductDetails(httpParams: HttpParams): Observable<Product[]>{
-    // let httpParams = new HttpParams();
-
-    // Object.keys(params).forEach((key) => {
-    //   httpParams = httpParams.append(key, params[key]);
-    // });
-
-    // console.log("httpParams:", httpParams.toString());
-
-    return this.productHttp.get<Product[]>(environment.fetchLiveProductDetails, {params: httpParams});
+  fetchLiveProductDetails(httpParams: HttpParams): Observable<Product[]> {
+    return this.productHttp.get<Product[]>(
+      environment.fetchLiveProductDetails,
+      { params: httpParams },
+    )
   }
 
-  fetchLiveVendorDetails(params: {[key: string]: string}): Observable<Vendor[]>{
+  fetchLiveVendorDetails(params: {
+    [key: string]: string;
+  }): Observable<Vendor[]> {
     let httpParams = new HttpParams();
 
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.append(key, params[key]);
     });
 
-    console.log("httpParams:", httpParams.toString());
+    console.log('httpParams:', httpParams.toString());
 
-    return this.productHttp.get<Vendor[]>(environment.fetchLiveVendorDetails, {params: httpParams});
+    return this.productHttp.get<Vendor[]>(environment.fetchLiveVendorDetails, {
+      params: httpParams,
+    });
   }
 
-  fetchOtherProductDetails(){
+  fetchOtherProductDetails() {
     return this.productHttp.get(environment.fetchOtherProductDetails);
   }
 
-  fetchInwardForBranch(id: any){
-    console.log("environment.fetchInwardForBranch + id:", environment.fetchInwardForBranch + id);
+  fetchInwardForBranch(id: any) {
+    console.log(
+      'environment.fetchInwardForBranch + id:',
+      environment.fetchInwardForBranch + id,
+    );
     return this.productHttp.get(environment.fetchInwardForBranch + id);
   }
 
-  confirmInward(code: any){
+  confirmInward(code: any) {
     return this.productHttp.post(environment.confirmInward + code, '');
   }
 
-  updateProductDetails(productId: any, data: any){
-    return this.productHttp.put(environment.updateProductDetails + productId, data);
+  updateProductDetails(productId: any, data: any) {
+    return this.productHttp.put(
+      environment.updateProductDetails + productId,
+      data,
+    );
   }
 
-  updateOtherProductDetails(productId: any, data: any){
-    return this.productHttp.put(environment.updateOtherProductDetails + productId, data);
+  updateOtherProductDetails(productId: any, data: any) {
+    return this.productHttp.put(
+      environment.updateOtherProductDetails + productId,
+      data,
+    );
   }
 
-  fetchStockReportForBranch(branchId: number, startDate: Date | undefined, endDate: Date | undefined){
+  fetchStockReportForBranch(
+    branchId: number,
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     });
-    return this.productHttp.get(environment.fetchStockReportForBranch + 
-      `${branchId}?startDate=${startDate}&endDate=${endDate}`, 
+    return this.productHttp.get(
+      environment.fetchStockReportForBranch +
+        `${branchId}?startDate=${startDate}&endDate=${endDate}`,
       {
         headers,
-        responseType: 'blob'
-      }
-    )
+        responseType: 'blob',
+      },
+    );
   }
 
-  fetchAllBranchStockReport(startDate: Date | undefined, endDate: Date | undefined){
-    return this.productHttp.get(environment.fetchAllStockReport + 
-      `?startDate=${startDate}&endDate=${endDate}`,
+  fetchAllBranchStockReport(
+    startDate: Date | undefined,
+    endDate: Date | undefined,
+  ) {
+    return this.productHttp.get(
+      environment.fetchAllStockReport +
+        `?startDate=${startDate}&endDate=${endDate}`,
       {
-        responseType: 'blob'
-      }
-    )
+        responseType: 'blob',
+      },
+    );
   }
 }
