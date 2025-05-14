@@ -93,7 +93,9 @@ export class AddListComponent implements OnInit {
       (error) => {
         console.log('error adding department name:', error);
 
-        this.toastService.showError(error.error);
+        if(error.status === 409){
+          this.toastService.showError(error.error.error);
+        }
       },
     );
   }

@@ -92,7 +92,7 @@
     <div
       *ngIf="showCropper"
       class="mt-8 flex items-center justify-center gap-4"
-    >
+      >
       <button
         type="button"
         (click)="decreaseZoom(zoomSlider)"
@@ -103,7 +103,7 @@
       <div class="relative w-72">
         <div
           *ngIf="showTooltip"
-          class="absolute -top-8 left-1/2 -translate-x-1/2 transform rounded bg-purple-600 px-2 py-1 text-xs text-white shadow-md"
+          class="absolute -top-8 left-1/2 -translate-x-1/2 transform rounded bg-purple-500 px-2 py-1 text-xs text-white shadow-md"
           [style.left.px]="tooltipLeft"
         >
           {{ scale }}
@@ -120,7 +120,7 @@
           step="0.1"
           [(ngModel)]="scale"
           (input)="onZoomChange(zoomSlider)"
-          class="h-2 w-full appearance-none rounded bg-purple-600 outline-none"
+          class="h-3 w-full appearance-none rounded-md bg-purple-500 outline-none"
         />
       </div>
 

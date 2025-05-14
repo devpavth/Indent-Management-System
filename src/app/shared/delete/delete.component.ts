@@ -105,8 +105,13 @@ export class DeleteComponent {
     if (this.deleteData.action == 5) {
       console.log(this.deleteData);
       this.branchService.deleteProj(this.deleteData.deleteId).subscribe(
-        (res) => {
+        (res: any) => {
           console.log(res);
+          this.toastService.showSuccess(res.error);
+          setTimeout(() => {
+            this.close.emit(false);
+            this.route.navigate(['/home/viewList/2']);
+          }, 3000);
         },
         (error) => {
           console.log(error);
@@ -122,20 +127,22 @@ export class DeleteComponent {
       this.deleteProduct.emit(this.deleteData);
       this.close.emit(false);
     }
-    if(this.deleteData.action === 7){
-      this.requestService.deletePOItemFromList(this.deleteData.deleteId).subscribe(
-        (res: any) => {
-          console.log('successfully deleted PO item:', res);
-          this.toastService.showSuccess(res.errorMessege);
-          setTimeout(() => {
-            this.deletePurchaseOrderItem.emit();
-            this.close.emit(false);
-          }, 3000);
-        },
-        (error) => {
-          console.log('error while deleting PO Item:', error);
-        },
-      );
+    if (this.deleteData.action === 7) {
+      this.requestService
+        .deletePOItemFromList(this.deleteData.deleteId)
+        .subscribe(
+          (res: any) => {
+            console.log('successfully deleted PO item:', res);
+            this.toastService.showSuccess(res.errorMessege);
+            setTimeout(() => {
+              this.deletePurchaseOrderItem.emit();
+              this.close.emit(false);
+            }, 3000);
+          },
+          (error) => {
+            console.log('error while deleting PO Item:', error);
+          },
+        );
     }
   }
 }

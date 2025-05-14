@@ -14,7 +14,7 @@
     height: 0;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 6px solid #9333ea;
+    border-top: 6px solid #9061f9;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
   
@@ -22,46 +22,6 @@ input[type='range']#zoomSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 20px;
   width: 20px;
-  background-color: #9333ea;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-top: -3px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: #9061f9;
   border: none;
-}
-
-input[type='range']#zoomSlider::-webkit-slider-runnable-track {
-  background-color: #e9d5ff;
-  border-radius: 20px;
-}
-
-
-input[type='range']#zoomSlider {
-  --progress: 0%;
-  width: 100%;
-  height: 8px;
-  border-radius: 10px;
-  outline: none;
-  background: linear-gradient(
-    to right,
-    #9333ea 0%,
-    #9333ea var(--progress),
-    #9333ea var(--progress),
-    #9333ea 100%
-  );
-  transition-property: background;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
-}
-
-
-#progressBar{
-    width: 50%;
-    height: 7px;
-    background: #9333ea;
-    border-radius: 20px;
-    position: absolute;
-    top: 0;
-    margin-top: 10px;
-    left: 0;
 }

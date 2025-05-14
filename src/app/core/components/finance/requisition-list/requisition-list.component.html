@@ -15,11 +15,12 @@
           <div class="w-full md:flex md:items-center md:justify-between">
             <div class="relative mr-28 w-full md:w-auto md:flex-grow">
               <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative mr-28"
+              <div
+                class="relative mr-28"
                 [ngClass]="{
                   '-mt-10': isViewSelectedDate
                 }"
-                >
+              >
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
                 >
@@ -48,11 +49,11 @@
                   placeholder="Search"
                 />
 
-                @if(searchText){
+                @if (searchText) {
                   <div
-                    class="absolute flex items-center cursor-pointer inset-y-0 right-0 pr-3"
+                    class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3"
                     (click)="clearSearch()"
-                    >
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
@@ -60,7 +61,7 @@
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       stroke-width="2"
-                      >
+                    >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
@@ -80,35 +81,55 @@
             </div>
           </div>
 
-          <div class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
+          <div
+            class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
+          >
             <div *ngIf="isViewSelectedDate">
               <mat-form-field>
                 <mat-label>Enter a date range</mat-label>
-                <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [max]="maxDate">
-                  <input matStartDate formControlName="start" placeholder="Start date" readonly>
-                  <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onEndDateSelected($event)" readonly>
+                <mat-date-range-input
+                  [formGroup]="range"
+                  [rangePicker]="picker"
+                  [max]="maxDate"
+                >
+                  <input
+                    matStartDate
+                    formControlName="start"
+                    placeholder="Start date"
+                    readonly
+                  />
+                  <input
+                    matEndDate
+                    formControlName="end"
+                    placeholder="End date"
+                    (dateChange)="onEndDateSelected($event)"
+                    readonly
+                  />
                 </mat-date-range-input>
                 <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker-toggle
+                  matIconSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
 
-                @if(range.controls.start.hasError('matStartDateInvalid')){
+                @if (range.controls.start.hasError("matStartDateInvalid")) {
                   <mat-error>Invalid start date</mat-error>
                 }
 
-                @if(range.controls.end.hasError('matEndDateInvalid')){
+                @if (range.controls.end.hasError("matEndDateInvalid")) {
                   <mat-error>Invalid end date</mat-error>
                 }
               </mat-form-field>
             </div>
           </div>
         </div>
-        <div 
+        <div
           class="mb-4 px-4 text-sm"
           [ngClass]="{
             '-mt-10': isViewSelectedDate
           }"
-          >
+        >
           <div class="flex gap-6">
             <button
               (click)="

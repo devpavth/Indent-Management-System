@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmployeeServiceService } from '../../core/components/service/Employee/employee-service.service';
 import { ToastService } from '../../core/components/service/toast/toast.service';
@@ -19,6 +19,8 @@ export class UploadSignatureComponent {
   @Input() isViewUploadSignature!: boolean;
   @Output() close = new EventEmitter<boolean>();
 
+  @ViewChild('zoomSlider') sliderRef!: ElementRef<HTMLInputElement>;
+
   previewUrl: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   imageChangedEvent: Event | null = null;
@@ -27,6 +29,12 @@ export class UploadSignatureComponent {
 
   showCropper: boolean = false;
   isDragOver: boolean = false;
+  showTooltip: boolean = false;
+
+  scale: number = 1;
+  tooltipLeft: number = 0;
+
+  tooltipTimeout: ReturnType<typeof setTimeout> | null = null;
 
   transform: ImageTransform = {};
 
@@ -44,12 +52,12 @@ export class UploadSignatureComponent {
     this.close.emit(true);
   }
 
-  onDragOver(event: DragEvent){
+  onDragOver(event: DragEvent) {
     event.preventDefault();
     this.isDragOver = true;
   }
 
-  onDragLeave(event: DragEvent){
+  onDragLeave(event: DragEvent) {
     event.preventDefault();
     this.isDragOver = false;
   }
@@ -125,6 +133,52 @@ export class UploadSignatureComponent {
     // show message
   }
 
+  decreaseZoom(slider: HTMLInputElement) {
+    if (this.scale > 1) {
+      this.scale = parseFloat((this.scale - 0.1).toFixed(1));
+      this.onZoomChange(slider);
+    }
+  }
+
+  increaseZoom(slider: HTMLInputElement) {
+    if (this.scale < 3) {
+      this.scale = parseFloat((this.scale + 0.1).toFixed(1));
+      this.onZoomChange(slider);
+    }
+  }
+
+  onZoomChange(slider: HTMLInputElement) {
+    this.transform = {
+      ...this.transform,
+      scale: this.scale,
+    };
+
+    this.updateTooltipPosition(slider);
+    this.showTooltip = true;
+
+    if(this.tooltipTimeout){
+      clearTimeout(this.tooltipTimeout);
+    }
+
+    this.tooltipTimeout = setTimeout(() => {
+      this.showTooltip = false;
+    }, 2000);
+  }
+
+  updateTooltipPosition(slider: HTMLInputElement){
+    const min = parseFloat(slider.min);
+    const max = parseFloat(slider.max);
+    const percent = (this.scale - min) / (max - min);
+    console.log(percent);
+
+    const sliderWidth = slider.offsetWidth;
+    console.log(sliderWidth);
+    const thumbOffset = 20;
+
+    this.tooltipLeft = percent * (sliderWidth - thumbOffset) + thumbOffset / 2;
+    console.log(this.tooltipLeft);
+  }
+
   uploadSignature() {
     console.log('specialRoleId:', this.specialRoleId);
     if (this.specialRoleId === undefined || this.specialRoleId === null) {
@@ -133,14 +187,18 @@ export class UploadSignatureComponent {
       return;
     }
 
-    if (!this.selectedFile) {
-      console.error('No file selected!');
+    if (!this.croppedBlob) {
+      console.log('No file selected!');
       // alert('Please select a file first.');
       return;
     }
     const formData = new FormData();
+    
+    const croppedFile = new File([this.croppedBlob], 'cropped-signature.png', {
+      type: this.croppedBlob.type,
+    })
     formData.append('specialRoleId', this.specialRoleId.toString());
-    formData.append('signature', this.selectedFile, this.selectedFile.name);
+    formData.append('signature', croppedFile);
 
     for (const pair of (formData as any).entries()) {
       console.log(`${pair[0]}:`, pair[1]);

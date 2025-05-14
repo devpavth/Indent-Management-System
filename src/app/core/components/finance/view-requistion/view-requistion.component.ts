@@ -581,7 +581,7 @@ export class ViewRequistionComponent implements OnInit {
         (error) => {
           console.log('error while holding the request:', error);
           if (error.status == 200) {
-            // alert('This Request is on Hold');          
+            // alert('This Request is on Hold');
           }
         },
       );

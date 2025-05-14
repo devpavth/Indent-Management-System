@@ -39,11 +39,11 @@ export class PurchaseorderlistComponent {
   selectedPO: {
     sno: number;
     headOfAccId: number;
-    poId: number
+    poId: number;
   } = {
     sno: 0,
     headOfAccId: 0,
-    poId: 0
+    poId: 0,
   };
 
   deletePurchaseOrder: {
@@ -98,7 +98,7 @@ export class PurchaseorderlistComponent {
 
     this.showSearchInfo = inputValue.trim() === '';
 
-    if(inputValue.trim() === ''){
+    if (inputValue.trim() === '') {
       this.fetchPurchaseOrderList();
     }
   }
@@ -116,14 +116,14 @@ export class PurchaseorderlistComponent {
           this.POList = res;
           this.noRequest = false;
           this.isSkeletonLoader = false;
-          this.searchTriggered =  true;
+          this.searchTriggered = true;
         },
         (error) => {
           console.log('error while fetching search PO List:', error);
           this.noRequest = false;
           this.isSkeletonLoader = false;
 
-          if(error.error.status === 204){
+          if (error.error.status === 204) {
             this.toastService.showError(error.error.errorMessege);
             this.noRequest = true;
             this.POList = [];
@@ -134,10 +134,10 @@ export class PurchaseorderlistComponent {
     }
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
 
-    if(this.searchTriggered){
+    if (this.searchTriggered) {
       this.fetchPurchaseOrderList();
       this.searchTriggered = false;
     }
@@ -202,9 +202,14 @@ export class PurchaseorderlistComponent {
     }
   }
 
-  openPrdStatus(sno: number, headOfAccId: number, poId: number, poStatus: number) {
-    this.selectedPO = { sno: sno, headOfAccId: headOfAccId, poId: poId};
-    if(poStatus === 201 || poStatus === 206){
+  openPrdStatus(
+    sno: number,
+    headOfAccId: number,
+    poId: number,
+    poStatus: number,
+  ) {
+    this.selectedPO = { sno: sno, headOfAccId: headOfAccId, poId: poId };
+    if (poStatus === 201 || poStatus === 206) {
       this.showPOPrdModal = true;
     }
   }
@@ -251,7 +256,7 @@ export class PurchaseorderlistComponent {
     this.isViewPurchaseOrder = closeIcon;
   }
 
-  closeModal(closeIcon: boolean){
+  closeModal(closeIcon: boolean) {
     console.log('Parent: received close', closeIcon);
     this.showPOPrdModal = closeIcon;
   }

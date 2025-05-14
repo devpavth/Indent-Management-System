@@ -75,7 +75,7 @@ export class RequisitionListComponent implements OnInit {
     this.maxDate = new Date();
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.fetchRequestList();
   }
@@ -239,7 +239,7 @@ export class RequisitionListComponent implements OnInit {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    if(inputValue === ''){
+    if (inputValue === '') {
       this.fetchRequestList();
     }
 

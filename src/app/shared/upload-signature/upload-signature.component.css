@@ -1,0 +1,14 @@
+.crop{
+    width: 350px;
+    height: auto;
+    object-fit: scale-down;
+    background-color: #eee;
+}
+
+input[type="range"]#zoomSlider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background-color: #9061f9;
+    border: none;
+}

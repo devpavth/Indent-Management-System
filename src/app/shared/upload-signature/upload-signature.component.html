@@ -7,7 +7,7 @@
     <button
       (click)="onClose()"
       type="button"
-      class="absolute right-4 top-4 text-gray-400 hover:text-gray-900 dark:hover:text-white"
+      class="absolute right-4 top-4 rounded-full p-1.5 text-gray-600 hover:bg-gray-100 dark:hover:text-white"
     >
       <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -21,21 +21,22 @@
     <h2
       class="mb-4 text-start text-xl font-semibold text-purple-600 dark:text-white"
     >
-      {{showCropper ? 'Crop Signature' : 'Upload Signature'}}
+      {{ showCropper ? "Crop Signature" : "Upload Signature" }}
     </h2>
 
-    <div class="flex flex-col items-center"
+    <div
+      class="flex flex-col items-center"
       (drop)="onFileDrop($event)"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
-      >
+    >
       <label
         *ngIf="!showCropper"
         for="file-upload"
         [class.border-blue-500]="isDragOver"
         [class.bg-blue-50]="isDragOver"
-        class="flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
-        >
+        class="flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700"
+      >
         <ng-container>
           <svg
             class="mb-4 h-10 w-10 text-gray-500 dark:text-gray-400"
@@ -43,7 +44,7 @@
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 20 16"
-            >
+          >
             <path
               stroke="currentColor"
               stroke-linecap="round"
@@ -56,9 +57,7 @@
           <span class="text-sm text-gray-500 dark:text-gray-400"
             >Click to Upload or Drag and Drop Signature</span
           >
-          <span
-            class="block text-xs text-gray-500 dark:text-gray-400"
-            >
+          <span class="block text-xs text-gray-500 dark:text-gray-400">
             JPG, PNG, JPEG files are allowed
           </span>
         </ng-container>
@@ -90,21 +89,64 @@
       </div>
     </ng-container>
 
-    <div class="flex justify-end gap-2" *ngIf="showCropper">
+    <ng-container *ngIf="showCropper">
+      <div class="mt-10 flex justify-between">
+        <button
+          type="button"
+          (click)="decreaseZoom(zoomSlider)"
+          class="rounded border border-gray-300 px-4 py-0 text-xl font-medium text-gray-700 shadow hover:bg-gray-50"
+        >
+          -
+        </button>
+        <div class="relative w-72">
+          <div
+            *ngIf="showTooltip"
+            class="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-purple-500 px-2 py-1 text-xs text-white shadow-md"
+            [style.left.px]="tooltipLeft"
+          >
+            {{ scale }}
+            <div
+              class="absolute left-1/2 top-[22px] -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-purple-500"
+            ></div>
+          </div>
+          <input
+            #zoomSlider
+            type="range"
+            id="zoomSlider"
+            min="1"
+            max="3"
+            step="0.1"
+            [(ngModel)]="scale"
+            (input)="onZoomChange(zoomSlider)"
+            class="w-full h-3 appearance-none mt-2 bg-purple-500 rounded-md outline-none"
+          />
+        </div>
+
+        <button
+          type="button"
+          (click)="increaseZoom(zoomSlider)"
+          class="rounded border border-gray-300 px-4 py-0 text-xl font-medium text-gray-700 shadow hover:bg-gray-50"
+        >
+          +
+        </button>
+      </div>
+    </ng-container>
+
+    <div class="mt-6 flex justify-end gap-2" *ngIf="showCropper">
       <button
         (click)="onClose()"
-        class="mt-6 rounded-lg text-black border border-gray-300 px-4 py-2 hover:bg-gray-100 focus:outline-none"
-        >
+        class="rounded-lg border border-gray-300 px-4 py-2 text-black hover:bg-gray-100 focus:outline-none"
+      >
         Cancel
       </button>
-    
+
       <button
         (click)="uploadSignature()"
-        [disabled]="!selectedFile"
+        [disabled]="!croppedBlob"
         [ngClass]="{
-          'bg-gray-400 hover:bg-gray-400': !selectedFile
+          'bg-gray-400 hover:bg-gray-400': !croppedBlob
         }"
-        class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
+        class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none"
       >
         Upload Signature
       </button>

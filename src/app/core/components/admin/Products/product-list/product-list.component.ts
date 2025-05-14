@@ -84,9 +84,12 @@ export class ProductListComponent implements OnInit {
         }),
         map((items: Product[]) => {
           console.log(items);
-          const filterItems = items.filter(
-            (item: Product) => this.activeProduct === 'active' ? item.prdStatus === 200 : item.prdStatus === 303);
-          console.log("filterItems:", filterItems);
+          const filterItems = items.filter((item: Product) =>
+            this.activeProduct === 'active'
+              ? item.prdStatus === 200
+              : item.prdStatus === 303,
+          );
+          console.log('filterItems:', filterItems);
           return filterItems;
         }),
         tap((items) => {
@@ -99,7 +102,7 @@ export class ProductListComponent implements OnInit {
         if (response.length > 0) {
           this.productList = response;
           this.noProduct = false;
-        } else if(response.length === 0){
+        } else if (response.length === 0) {
           this.noProduct = true;
           this.productList = [];
         }
@@ -114,10 +117,10 @@ export class ProductListComponent implements OnInit {
   onSearchChange(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     const searchTerm = inputElement.value;
-    if(searchTerm === ''){
+    if (searchTerm === '') {
       this.fetchProductList(this.offSet, this.pageSize, 'active');
       this.noProduct = false;
-    }else{
+    } else {
       this.searchSubject.next(searchTerm);
     }
   }
@@ -219,6 +222,10 @@ export class ProductListComponent implements OnInit {
           }
           case 'other': {
             this.productList = list;
+            console.log(
+              'this.activeProduct inside switch in other:',
+              this.activeProduct,
+            );
 
             console.log('Hello');
             break;
@@ -323,7 +330,7 @@ export class ProductListComponent implements OnInit {
       this.productData = productData;
     }
     if (check == 0) {
-      this.isProductList = action;    
+      this.isProductList = action;
     }
   }
 }
