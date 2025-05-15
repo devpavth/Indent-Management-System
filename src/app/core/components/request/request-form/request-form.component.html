@@ -255,7 +255,7 @@
           </section>
           <section
             class="mx-auto grid w-1/2 max-w-lg snap-center snap-always grid-cols-8 gap-2"
-            >
+          >
             <div class="col-span-8 mb-2">
               <label
                 for="Address"
@@ -373,9 +373,9 @@
 
               <div
                 *ngIf="productForm.get('productId')?.value"
-                class="absolute inset-y-0 flex items-center right-2 cursor-pointer"
+                class="absolute inset-y-0 right-2 flex cursor-pointer items-center"
                 (click)="clearSearch()"
-                >
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
@@ -392,7 +392,7 @@
                 </svg>
               </div>
             </div>
-            
+
             <div *ngIf="noResults" class="absolute mt-1 text-sm text-red-600">
               <small>No Products found.</small>
             </div>
@@ -431,7 +431,7 @@
           <div
             *ngIf="productData && !noResults && isProductSelected"
             class="col-span-full flex flex-col"
-            >
+          >
             <div class="overflow-x-auto">
               <div class="inline-block min-w-full p-1.5 align-middle">
                 <div class="overflow-hidden rounded-lg border">
@@ -1085,7 +1085,10 @@
         <button
           (click)="onSubmitIndent()"
           [disabled]="
-            requestIndentHead.invalid || !isEnableSave || !isEnableSaveBtn || loader
+            requestIndentHead.invalid ||
+            !isEnableSave ||
+            !isEnableSaveBtn ||
+            loader
           "
           [ngClass]="{
             'btn-blue-disable hover:bg-gray-400':
@@ -1093,7 +1096,7 @@
           }"
           type="button"
           class="flex items-center justify-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
+        >
           <svg
             *ngIf="!loader"
             xmlns="http://www.w3.org/2000/svg"
@@ -1108,7 +1111,9 @@
           </svg>
           <span *ngIf="!loader">Save</span>
           <span *ngIf="loader" class="flex items-center gap-2">
-            <span class="h-5 w-5 animate-spin border-2 border-white rounded-full border-t-transparent"></span>
+            <span
+              class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+            ></span>
             <span>Saving...</span>
           </span>
         </button>

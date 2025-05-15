@@ -28,6 +28,12 @@ export class LeftMenuComponent {
   isAuthenticatePgrmManager: boolean = false;
   isAuthenticateBranchManager: boolean = false;
   isAuthenticateAdmin: boolean = false;
+  isAuthenticateITAdmin: boolean = false;
+  isAuthenticateFinance: boolean = false;
+  isAuthenticateQuoteCompare: boolean = false;
+  isAuthenticateTransaction: boolean = false;
+  isAuthenticateInwardAlert: boolean = false;
+  isAuthenticateSpecialRole: boolean = false;
 
   employeeService = inject(EmployeeServiceService);
   authService = inject(AuthService);
@@ -36,7 +42,6 @@ export class LeftMenuComponent {
   user: any;
   userData: any;
   isLevelView: boolean = true;
-  isBlockRequest: boolean = false;
   isBlockUser: boolean = true;
   isAccessUserFinance: boolean = false;
 
@@ -52,19 +57,6 @@ export class LeftMenuComponent {
           'this.userData with empRole:',
           typeof this.userData.empRole,
         );
-
-        // if(this.userData.empDesig !== 15){
-        //   console.log("logging");
-        //   this.isLevelView = false;
-        // }else{
-        //   this.isBlockRequest = true;
-        // }
-
-        // if(this.userData.empDesig !== 10){
-        //   this.isBlockUser = false;
-        // }
-
-        // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
 
       const user = this.authService.getUserRoles();
@@ -83,17 +75,14 @@ export class LeftMenuComponent {
     this.isAuthenticateBranchManager =
       this.authService.isAuthenticateBranchManager();
     this.isAuthenticateAdmin = this.authService.isAuthenticateAdmin();
+    console.log('this.isAuthenticateAdmin:', this.isAuthenticateAdmin);
     this.isAuthenticateUser = this.authService.isAuthenticateUser();
-
-    // const roleString = sessionStorage.getItem('roles');
-    // const roles: string[] = roleString ? JSON.parse(roleString) : [];
-    // console.log('role:', roles);
-    // console.log('role:', typeof roles);
-
-    // if (roles.includes('ROLE_USER')) {
-    //   console.log('checking user role.');
-    //   this.isAccessUserFinance = true;
-    // }
+    this.isAuthenticateITAdmin = this.authService.isAuthenticateITAdmin();
+    this.isAuthenticateFinance = this.authService.isAuthenticateFinance();
+    this.isAuthenticateQuoteCompare = this.authService.isAuthenticateQuoteCompare();
+    this.isAuthenticateTransaction = this.authService.isAuthenticatePrdTransaction();
+    this.isAuthenticateInwardAlert = this.authService.isAuthenticateInwardAlert();
+    this.isAuthenticateSpecialRole = this.authService.isAuthenticateSpecialRoles();
   }
 
   toggleRequest() {
@@ -167,7 +156,7 @@ export class LeftMenuComponent {
 
   toggleEmployee() {
     this.employee = !this.employee;
-    if(this.employee){
+    if (this.employee) {
       this.company = false;
       this.product = false;
       this.branch = false;
@@ -176,7 +165,7 @@ export class LeftMenuComponent {
 
   toggleProduct() {
     this.product = !this.product;
-    if(this.product){
+    if (this.product) {
       this.employee = false;
       this.company = false;
       this.branch = false;
@@ -184,7 +173,7 @@ export class LeftMenuComponent {
   }
   toggleBranch() {
     this.branch = !this.branch;
-    if(this.branch){
+    if (this.branch) {
       this.product = false;
       this.employee = false;
       this.company = false;

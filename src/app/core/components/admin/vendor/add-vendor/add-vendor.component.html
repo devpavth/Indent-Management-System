@@ -55,7 +55,7 @@
                 "
                 class="text-danger text-red-600"
               >
-                Vendor Name Should not be Empty!
+                Vendor Name must be in characters!
               </small>
             </div>
             <div class="col-span-3">
@@ -122,14 +122,18 @@
                 appFirstCapLetter
                 [ngClass]="{
                   error:
-                    addVendorForm.get('vdrContactPersonName')?.hasError('pattern') &&
+                    addVendorForm
+                      .get('vdrContactPersonName')
+                      ?.hasError('pattern') &&
                     addVendorForm.get('vdrContactPersonName')?.touched
                 }"
                 required
               />
               <small
                 *ngIf="
-                  addVendorForm?.get('vdrContactPersonName')?.hasError('pattern') &&
+                  addVendorForm
+                    ?.get('vdrContactPersonName')
+                    ?.hasError('pattern') &&
                   addVendorForm?.get('vdrContactPersonName')?.touched
                 "
                 class="text-danger text-red-600"
@@ -146,7 +150,7 @@
               <div class="relative">
                 <div
                   class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
-                  >
+                >
                   <svg
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
                     aria-hidden="true"
@@ -170,19 +174,25 @@
                   placeholder="123-456-970"
                   [ngClass]="{
                     error:
-                      addVendorForm.get('vdrContactPersonPhone')?.hasError('pattern') &&
+                      addVendorForm
+                        .get('vdrContactPersonPhone')
+                        ?.hasError('pattern') &&
                       addVendorForm.get('vdrContactPersonPhone')?.touched
                   }"
                   required
                 />
               </div>
-                <small *ngIf="
-                  addVendorForm.get('vdrContactPersonPhone')?.hasError('pattern') &&
+              <small
+                *ngIf="
+                  addVendorForm
+                    .get('vdrContactPersonPhone')
+                    ?.hasError('pattern') &&
                   addVendorForm.get('vdrContactPersonPhone')?.touched
                 "
-                class="text-danger text-red-600">
+                class="text-danger text-red-600"
+              >
                 Contact Person Number must be 10 digits.
-                </small>     
+              </small>
             </div>
             <div class="col-span-3">
               <label
@@ -242,25 +252,21 @@
             <div
               *ngIf="
                 (addVendorForm.controls['vdrAdd1'].invalid &&
-                addVendorForm.controls['vdrAdd1'].touched) ||
+                  addVendorForm.controls['vdrAdd1'].touched) ||
                 addVendorForm.controls['vdrAdd1'].dirty
               "
             >
               <small
-                *ngIf="
-                  addVendorForm?.get('vdrAdd1')?.errors?.['required']
-                "
+                *ngIf="addVendorForm?.get('vdrAdd1')?.errors?.['required']"
                 class="text-danger text-red-600"
-              > 
-                Address-1 is Required !             
+              >
+                Address-1 is Required !
               </small>
 
               <small
-                *ngIf="
-                  addVendorForm?.get('vdrAdd1')?.errors?.['minlength']
-                "
+                *ngIf="addVendorForm?.get('vdrAdd1')?.errors?.['minlength']"
                 class="text-danger text-red-600"
-              > 
+              >
                 Address Should be atleast 20 characters!
               </small>
             </div>
@@ -280,25 +286,21 @@
             <div
               *ngIf="
                 (addVendorForm.controls['vdrAdd2'].invalid &&
-                addVendorForm.controls['vdrAdd2'].touched) ||
+                  addVendorForm.controls['vdrAdd2'].touched) ||
                 addVendorForm.controls['vdrAdd2'].dirty
               "
             >
               <small
-                *ngIf="
-                addVendorForm?.get('vdrAdd2')?.errors?.['required']
-                "
+                *ngIf="addVendorForm?.get('vdrAdd2')?.errors?.['required']"
                 class="text-danger text-red-600"
-              > 
-                Address-2 is Required !   
+              >
+                Address-2 is Required !
               </small>
               <small
-                *ngIf="
-                addVendorForm?.get('vdrAdd2')?.errors?.['minlength']
-                "
+                *ngIf="addVendorForm?.get('vdrAdd2')?.errors?.['minlength']"
                 class="text-danger text-red-600"
-              >   
-              Address Should be atleast 20 characters!
+              >
+                Address Should be atleast 20 characters!
               </small>
             </div>
           </div>
@@ -324,9 +326,15 @@
                 required
               />
 
-              <div *ngIf="noPincode && addVendorForm.get('vdrPincode')?.value?.toString().length === 6" 
-                class="absolute mt-1 text-sm text-red-600">
-                  <small>No Pincode found.</small>
+              <div
+                *ngIf="
+                  noPincode &&
+                  addVendorForm.get('vdrPincode')?.value?.toString().length ===
+                    6
+                "
+                class="absolute mt-1 text-sm text-red-600"
+              >
+                <small>No Pincode found.</small>
               </div>
 
               <small
@@ -357,13 +365,14 @@
                     addVendorForm.get('vdrCity')?.touched
                 }"
                 required
-                
               >
-                <option *ngFor="let option of cityDropDownOptions" value="{{ option.value }}">
+                <option
+                  *ngFor="let option of cityDropDownOptions"
+                  value="{{ option.value }}"
+                >
                   {{ option.label }}
                 </option>
               </select>
-
 
               <small
                 *ngIf="
@@ -434,10 +443,7 @@
                 Country Should not be Empty!
               </small>
             </div>
-            
 
-            
-           
             <div class="col-span-full mb-3 flex justify-between">
               <h1 class="text-xl font-semibold text-purple-800">
                 Business Details
@@ -755,14 +761,14 @@
                   required
                 />
                 <small
-                *ngIf="
-                  addVendorForm?.get('bizDetailName')?.invalid &&
-                  addVendorForm?.get('bizDetailName')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid Business details Name!
-              </small>
+                  *ngIf="
+                    addVendorForm?.get('bizDetailName')?.invalid &&
+                    addVendorForm?.get('bizDetailName')?.touched
+                  "
+                  class="text-danger text-red-600"
+                >
+                  Invalid Business details Name!
+                </small>
               </div>
             </div>
           </div>
@@ -838,7 +844,7 @@
                       addVendorForm?.get('bankAccNo')?.touched
                     "
                     class="text-danger text-red-600"
-                    >
+                  >
                     Invalid Account Number!
                   </small>
                 </div>
@@ -860,16 +866,16 @@
               [disabled]="addVendorForm.invalid || loading"
               (click)="submitVendorDetails(addVendorForm.value)"
               [ngClass]="{
-                'bg-gray-400':
-                  addVendorForm.invalid,
-                'hover:bg-gray-400':
-                  addVendorForm.invalid
+                'bg-gray-400': addVendorForm.invalid,
+                'hover:bg-gray-400': addVendorForm.invalid
               }"
               class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
             >
               <span *ngIf="!loading">Submit</span>
               <span *ngIf="loading" class="flex items-center gap-2">
-                <span class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span
+                  class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+                ></span>
                 <span>Submitting...</span>
               </span>
             </button>

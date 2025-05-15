@@ -27,7 +27,6 @@ import { Router } from '@angular/router';
 export class RequestFormComponent implements OnInit {
   isHeader: boolean = true;
   isProductAdd: boolean = false;
-  // isTost: boolean = false;
   isOtherProduct: boolean = false;
   isEditHeader: boolean = false;
   isSuccessPop: boolean = false;
@@ -755,7 +754,7 @@ export class RequestFormComponent implements OnInit {
     this.storeProductData = [];
   }
 
-  clearSearch(){
+  clearSearch() {
     this.productForm.get('productId')?.setValue('');
     this.storeProductData = [];
     this.productForm.reset();

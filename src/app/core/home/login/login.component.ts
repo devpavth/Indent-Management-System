@@ -81,12 +81,12 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  onEnterKey(event: Event){
+  onEnterKey(event: Event) {
     const keyboardEvent = event as KeyboardEvent;
     const passwordControl = this.loginForm.get('empPassword');
-    if(!passwordControl || !passwordControl.value){
+    if (!passwordControl || !passwordControl.value) {
       keyboardEvent.preventDefault();
-    }else if(this.loginForm.valid){
+    } else if (this.loginForm.valid) {
       this.login(this.loginForm.value);
     }
   }

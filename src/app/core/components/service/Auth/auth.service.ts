@@ -57,4 +57,41 @@ export class AuthService {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_ADMIN_AUTH');
   }
+
+  isAuthenticateITAdmin(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_IT_ADMIN');
+  }
+
+  isAuthenticatePrdTransaction(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_ADD_PRD_TRANS');
+  }
+
+  isAuthenticateInwardAlert(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_PRD_INW_ALERT');
+  }
+
+  isAuthenticateFinance(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_FINANCE_AUTH');
+  }
+
+  isAuthenticateQuoteCompare(){
+    const userRoles = this.getUserRoles();
+    return userRoles.includes('ROLE_QUOTE_COMPARE');
+  }
+
+  isAuthenticateSpecialRoles(){
+    const userRoles = this.getUserRoles();
+    const specialRoles = [
+      'ROLE_CEO',
+      'ROLE_DIRECTOR_FINANCE',
+      'ROLE_PROCUREMENT_MANAGER',
+      'ROLE_HEAD_ADMIN',
+    ];
+
+    return specialRoles.some(role => userRoles.includes(role));
+  }
 }

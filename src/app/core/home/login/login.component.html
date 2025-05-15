@@ -57,10 +57,10 @@
                 success: isVerfied === 302,
                 error1: isVerfied === 404
               }"
+              tabindex="1"
               class="group/input w-full rounded-lg border border-purple-100 bg-transparent py-2 pl-12 pr-3 text-gray-50 shadow-sm outline-none focus:border-purple-600"
             />
 
-            <!-- <input type="text" formControlName="employeeId" (change)="verifiedUser(id.value)"  #id ngClass="'isVerfied==302':error" class="w-full pl-12 pr-3  py-2 text-gray-500 bg-transparent outline-none border group/input focus:border-blue-600 shadow-sm rounded-lg" /> -->
           </div>
           <small *ngIf="isVerfied === 404" class=""
             ><span #incorrect class="text-red-600">User Id Incorrect</span>
@@ -82,8 +82,7 @@
               />
             </svg>
 
-            <!-- <iframe src="https://lottie.host/embed/7768fbf2-5be6-42ce-8778-647735aa206f/0gLuxEMDzd.json"></iframe> -->
-            <small class=""
+            <small
               ><span #incorrect class="text-blue-600">Verified User </span>
             </small>
           </div>
@@ -97,7 +96,7 @@
               (click)="toggle()"
               tabindex="-1"
               class="absolute inset-y-0 right-3 my-auto text-gray-50 active:text-gray-600"
-              >
+            >
               <div *ngIf="isPasswordHidden" class="">
                 <svg
                   class="h-6 w-6"
@@ -146,6 +145,7 @@
               #password
               formControlName="empPassword"
               autocomplete="current-password"
+              tabindex="0"
               (keydown.enter)="onEnterKey($event)"
               class="w-full rounded-lg border bg-transparent py-2 pl-3 pr-12 tracking-widest text-gray-50 shadow-sm outline-none focus:border-blue-600"
             />
@@ -162,7 +162,7 @@
             [ngClass]="{ 'diabale-login ': loginForm.invalid }"
             type="button"
             class="mb-2 me-2 w-full rounded-lg bg-purple-700 px-5 py-2.5 text-sm font-medium text-white transition-all duration-500 hover:scale-105 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-            >
+          >
             <span *ngIf="!loading">Login</span>
             <span
               *ngIf="loading"
