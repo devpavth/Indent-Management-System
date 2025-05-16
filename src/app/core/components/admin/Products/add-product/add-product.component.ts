@@ -10,8 +10,10 @@ import { Router } from '@angular/router';
 })
 export class AddProductComponent implements OnInit {
   addingData: any;
+
   isCloseAdding: boolean = false;
   loading: boolean = false;
+  isPriceLabel: boolean = false;
 
   groupList: any;
   catList: any;
@@ -95,6 +97,21 @@ export class AddProductComponent implements OnInit {
       this.brandList = res;
       console.log(res);
     });
+  }
+
+  selectedUnitOfMaterial(event: Event){
+    const inputElement = event.target as HTMLSelectElement;
+    const inputValue = Number(inputElement.value);
+    console.log("inputValue:", inputValue);
+
+    const boxUnitId = this.units.find(unit => unit.id === 200);
+    console.log("unitId:", boxUnitId);
+
+    if(inputValue === boxUnitId?.id){
+      this.isPriceLabel = true;
+    }else{
+      this.isPriceLabel = false;
+    }
   }
 
   onSubmit(data: any) {

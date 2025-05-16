@@ -13,7 +13,7 @@
               <div class="relative w-full">
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-                  >
+                >
                   <svg
                     aria-hidden="true"
                     class="h-5 w-5 text-gray-500 dark:text-gray-400"
@@ -34,13 +34,12 @@
                   class="focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2 pl-10 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
                   placeholder="Search"
                 />
-                
               </div>
               <button
                 (click)="fetchTransaction(value.value)"
                 type="button"
                 class="an flex items-center justify-center rounded-lg bg-purple-700 px-4 py-2 text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800"
-                >
+              >
                 <svg
                   class="mr-2 h-4 w-4"
                   aria-hidden="true"
@@ -70,7 +69,7 @@
               type="button"
               routerLink="/home/inoutstock"
               class="an flex items-center justify-center rounded-lg bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-              >
+            >
               <svg
                 class="mr-2 h-4 w-4"
                 fill="currentColor"
@@ -91,7 +90,6 @@
               </svg>
               Add Transaction
             </button>
-            
           </div>
         </div>
       </div>
@@ -105,6 +103,7 @@
       Transaction id
       <span class="text-blue-600">#{{ transactionData.prdtrnsCode }}</span>
     </h1>
+    <p class="font-semibold">Reference No: {{ transactionData.tranRefNo }}</p>
     <p class="my-4 font-semibold">
       Date : {{ transactionData.tranUpdOn | date: "medium" }}
     </p>
@@ -165,7 +164,7 @@
           E-mail : {{ transactionData.vendorDto.vdrEmail }}
         </p>
       </div>
-      <div class="w-1/3 flex justify-end" *ngIf="companyLogo">
+      <div class="flex w-1/3 justify-end" *ngIf="companyLogo">
         <img
           [src]="'data:image/png;base64,' + companyLogo"
           alt="Company Logo"
@@ -247,7 +246,6 @@
       </tbody>
     </table>
 
-    
     <div class="w-full text-end">
       <h1 class="font-semibold">
         Total Price :
@@ -299,4 +297,3 @@
 >
   <app-delete-toast [message]="errorToastMsg"></app-delete-toast>
 </section>
-

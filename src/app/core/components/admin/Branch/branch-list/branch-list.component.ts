@@ -11,9 +11,7 @@ export class BranchListComponent implements OnInit {
   _branch: any;
   branchCode: any;
   isSuccess: boolean = false;
-  // Spinner: boolean = true;
   isSkeletonLoader: boolean = true;
-  // userid: any = this.userdata.loginUserData.sno
 
   isAuth: boolean = false;
   constructor(
@@ -34,7 +32,6 @@ export class BranchListComponent implements OnInit {
 
         this._branch = res;
         this.isSkeletonLoader = false;
-        // this.Spinner = false;
       },
       (error) => {
         this.isSkeletonLoader = false;

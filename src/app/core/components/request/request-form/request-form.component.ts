@@ -464,11 +464,6 @@ export class RequestFormComponent implements OnInit {
     //this.isVendorView = false;
 
     this.toastService.showSuccess('Item Added');
-    // this.deleteToastMsg = 'Item Added';
-    // this.isTost = true;
-    // setTimeout(() => {
-    //   this.isTost = false;
-    // }, 3000);
 
     const existingIndex = this.productList.findIndex(
       (p) => p.productId === product.productId,
@@ -506,24 +501,12 @@ export class RequestFormComponent implements OnInit {
       this.isVendorView = false;
     }
 
-    // this.isVendorView = this.checkVendorView();
-    // console.log("Updated isVendorView:", this.isVendorView);
-
     this.isEnableSave = true;
     this.productData = '';
     this.calculateSums();
     this.productForm.reset();
     // this.productReset();
   }
-
-  // checkVendorView(): boolean {
-  // // Calculate total from the product list
-  //   const total = this.productList.reduce((acc, product) => acc + product.total, 0);
-  //   console.log("Calculated total in checkVendorView:", total);
-
-  //   // Return true if total <= 5000 (show vendor view), false otherwise
-  //   return total <= 5000;
-  // }
 
   calculateSums() {
     this.totalSum = this.productList.reduce(
@@ -553,32 +536,17 @@ export class RequestFormComponent implements OnInit {
     this.productList.splice(i, 1);
 
     this.toastService.showSuccess('Item Deleted');
-    // this.deleteToastMsg = 'Item Deleted';
-    // this.isTost = true;
-    // setTimeout(() => {
-    //   this.isTost = false;
-    // }, 3000);
     this.calculateSums();
   }
   deleteFunder(i: any) {
     this.funderList?.splice(i, 1);
 
     this.toastService.showSuccess('Funder Deleted');
-    // this.deleteToastMsg = 'Funder Deleted';
-    // this.isTost = true;
-    // setTimeout(() => {
-    //   this.isTost = false;
-    // }, 3000);
   }
   deleteVendor(i: any) {
     this.vendorList?.splice(i, 1);
 
     this.toastService.showSuccess('Vendor Deleted');
-    // this.deleteToastMsg = 'Vendor Deleted';
-    // this.isTost = true;
-    // setTimeout(() => {
-    //   this.isTost = false;
-    // }, 3000);
   }
 
   onSelectionValue(selectedValue: any, check: number) {

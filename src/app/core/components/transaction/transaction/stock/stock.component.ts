@@ -1,7 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { BranchService } from '../../../service/Branch/branch.service';
 import { ProductService } from '../../../service/Product/product.service';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { SharedServiceService } from '../../../service/shared-service/shared-service.service';
 import { VendorService } from '../../../service/vendor/vendor.service';
 import { catchError, debounceTime, filter, of, switchMap } from 'rxjs';
@@ -95,7 +100,7 @@ export class StockComponent implements OnInit {
   selectedHeadOfAccId: number = 0;
   selectVendorName: string = '';
   selectVendorId: number = 0;
-  isManualVendorSelection: boolean  = false;
+  isManualVendorSelection: boolean = false;
 
   constructor(
     private branchService: BranchService,
@@ -113,7 +118,6 @@ export class StockComponent implements OnInit {
     this.inwardForm = this.fb.group({
       productId: [],
       prdUnit: [],
-      itemprebox: [],
       prdQty: ['', [Validators.required, this.quantityValidator.bind(this)]],
       purchasedPrice: [],
       gstPercentage: [],
@@ -211,13 +215,6 @@ export class StockComponent implements OnInit {
           'this.userData with empRole:',
           typeof this.userData.empRole,
         );
-
-        // if (this.userData.empRole !== 'Level 4') {
-        //   console.log('logging');
-        //   this.isLevelView = false;
-        // }
-
-        // sessionStorage.setItem('branchId', this.userData.branchCode);
       });
     }
 
@@ -242,7 +239,6 @@ export class StockComponent implements OnInit {
         console.log('API should be triggered with:', value);
         this.fetchHeadOfAccByIndent(value);
       });
-
 
     this.inwardFormHeader.get('inwardFromCode')?.valueChanges.subscribe(() => {
       this.inwardForm.get('prdQty')?.updateValueAndValidity();
@@ -398,30 +394,6 @@ export class StockComponent implements OnInit {
     console.log('this.selectedBranchId:', this.selectedBranchId);
   }
 
-  // onFromBranchChange(selectedBranchId: any){
-  //   console.log("selectedBranchId before conversion:", selectedBranchId);
-
-  //   if (typeof selectedBranchId === 'string') {
-  //     selectedBranchId = selectedBranchId.split(':')[1];
-  //   }
-
-  //   selectedBranchId = +selectedBranchId;
-
-  //   console.log("Converted selectedBranchId to number:", selectedBranchId);
-
-  //   if (isNaN(selectedBranchId)) {
-  //     console.log("Error: Invalid selectedBranchId:", selectedBranchId);
-  //     return;
-  //   }
-
-  //   this.filteredToBranch = this._branch.filter(
-  //     (branch: any) => {
-  //       console.log("Comparing with branchId:", branch.branchId);
-  //       return branch.branchId !== selectedBranchId;
-  //     }
-  //   )
-  // }
-
   onSelectProduct(product: Product) {
     console.log('after selecting the product from the list', product);
     this.isProductSelected = true;
@@ -486,28 +458,6 @@ export class StockComponent implements OnInit {
     this.vendorSearchList = [];
   }
 
-  // fetchProductData(data: string) {
-  //   this.productService.getProductByCode(data).subscribe((res) => {
-  //     console.log(res);
-  //     this.productData = res;
-  //     this.inwardForm.patchValue({
-  //       productId: this.productData.productId,
-  //       prdUnit: this.productData.prdUnit,
-
-  //       prdQty: this.productData.prouctId,
-  //       purchasedPrice: this.productData.prdPurchasedPrice,
-  //       gstPercentage: this.productData.prdGstPct,
-  //     });
-
-  //   });
-  // }
-  // fetchVendorList() {
-  //   this.vendorService.getVendorName().subscribe((res) => {
-  //     console.log(res);
-  //     this.vendorList = res;
-  //   });
-  // }
-
   ifBox(data: any) {
     console.log(data);
     this.isBox = data == 200;
@@ -528,11 +478,18 @@ export class StockComponent implements OnInit {
   }
 
   calculateBoxItem() {
-    this.totalItem =
-      this.inwardForm.get('prdQty')?.value *
-      this.inwardForm.get('itemprebox')?.value;
-    console.log(this.totalItem);
-    this.inwardForm.patchValue({ totalPieces: this.totalItem });
+    if(this.isBox){
+      this.totalItem =
+        this.inwardForm.get('totalPieces')?.value /
+        this.inwardForm.get('prdQty')?.value;
+
+      console.log('prdQty:', this.inwardForm.get('prdQty')?.value);
+      console.log('prdUnit:', this.inwardForm.get('totalPieces')?.value);
+      console.log('this.totalItem:', this.totalItem);
+      this.inwardForm.patchValue({ purchasedPrice: this.totalItem });
+      console.log('inward form:', this.inwardForm.value);
+    }   
+    this.updateForm();
   }
 
   addProductList(data: any) {
@@ -576,26 +533,6 @@ export class StockComponent implements OnInit {
     this.isBox = false;
   }
 
-  // inwardHeader(data: any) {
-  //   // console.log(data);
-
-  //   this.header = data;
-  //   let branch: any[] = this._branch;
-  //   let vendor: any[] = this.vendorList;
-  //   let branchDetails = branch.find((f) => f.branchId == data.branchId);
-  //   if (branchDetails) {
-  //     this.header.branchName = branchDetails.branchName;
-  //   }
-  //   let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
-  //   if (this.inwardFormHeader.get('inwardFromCode')?.value == 269) {
-  //     let vendorDetails = vendor.find((v) => v.vendorId == data.vendorId);
-  //     this.header.vendorName = vendorDetails.vendorName;
-  //   } else if (this.inwardFormHeader.get('inwardFromCode')?.value == 298) {
-  //     let vendorDetails = branch.find((v) => v.branchId == data.vendorId);
-  //     this.header.vendorName = vendorDetails.branchName;
-  //   }
-  //   console.log(this.header);
-  // }
   inwardHeader(data: any) {
     console.log('inwardHeader add header btn:', data);
 
@@ -605,12 +542,11 @@ export class StockComponent implements OnInit {
       this.header.vendorId = this.selectedVendorId;
     }
 
-    if(this.isIndentConfirmed){
+    if (this.isIndentConfirmed) {
       if (this.inwardFormHeader.get('inwardFromCode')?.value === '269') {
         this.header.vendorId = this.selectVendorId;
         // data.vendorId = this.selectVendorId;
       }
-      
     }
 
     let branch: any[] = this._branch;

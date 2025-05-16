@@ -522,16 +522,6 @@
                 placeholder=""
                 appFirstCapLetter
               />
-
-              <!-- <small
-                *ngIf="
-                  addVendorForm?.get('vdrTanNo')?.invalid &&
-                  addVendorForm?.get('vdrTanNo')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid Tan Number!
-              </small> -->
             </div>
             <div>
               <label
@@ -546,16 +536,6 @@
                 autocomplete="postal-code"
                 placeholder=""
               />
-
-              <!-- <small
-                *ngIf="
-                  addVendorForm?.get('vdrMsmeNo')?.invalid &&
-                  addVendorForm?.get('vdrMsmeNo')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Invalid pin!
-              </small> -->
             </div>
             <div class="col-span-full mb-2">
               <label
@@ -635,16 +615,6 @@
                 placeholder=""
                 appFirstCapLetter
               />
-
-              <!-- <small
-                *ngIf="
-                  addVendorForm?.get('estDate')?.invalid &&
-                  addVendorForm?.get('estDate')?.touched
-                "
-                class="text-danger text-red-600"
-              >
-                Business Type should not be empty!
-              </small> -->
             </div>
             <div>
               <label
@@ -727,7 +697,7 @@
                 </div>
                 <div class="flex items-center">
                   <input
-                    (click)="this.isChecked = !this.isChecked"
+                    (click)="isChecked = !isChecked"
                     formControlName="bizDetails"
                     id="3"
                     type="radio"
@@ -741,7 +711,7 @@
                   >
                 </div>
               </div>
-              <div *ngIf="isChecked" class="mt-4">
+              <div *ngIf="isChecked && addVendorForm.get('bizDetails')?.value === '259'" class="mt-4">
                 <label
                   for="Pincode"
                   class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
