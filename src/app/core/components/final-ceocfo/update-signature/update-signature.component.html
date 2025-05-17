@@ -1,6 +1,8 @@
-<div class="flex flex-col items-center justify-center min-h-screen p-6">
+<div class="flex min-h-screen flex-col items-center justify-center p-6">
   <div class="w-full max-w-md rounded-lg bg-white p-6 text-center shadow-lg">
-    <h2 class="mb-4 text-xl font-semibold text-purple-600">{{designationName}} Signature</h2>
+    <h2 class="mb-4 text-xl font-semibold text-purple-600">
+      {{ designationName }} Signature
+    </h2>
 
     <div *ngIf="signatureImage" class="mb-4 flex items-center justify-center">
       <img
@@ -11,19 +13,22 @@
     </div>
 
     <button
-        type="submit"
-        (click)="updateSpecialRoleSiganture()"
-      class="w-full rounded-lg bg-purple-600 px-4 py-3 font-medium text-white hover:bg-purple-700 transition-all duration-300 shadow-md"
+      type="submit"
+      (click)="updateSpecialRoleSiganture()"
+      class="w-full rounded-lg bg-purple-600 px-4 py-3 font-medium text-white shadow-md transition-all duration-300 hover:bg-purple-700"
     >
       Update Signature
     </button>
   </div>
 </div>
 
-<section *ngIf="isViewUploadSignature" class="absolute left-0 right-0 top-0 z-50 h-screen">
+<section
+  *ngIf="isViewUploadSignature"
+  class="absolute left-0 right-0 top-0 z-50 h-screen"
+>
   <app-upload-signature
     [specialRoleId]="specialRoleId"
     [isViewUploadSignature]="isViewUploadSignature"
-   (close)="clearUploadSignature($event)"
-   ></app-upload-signature>
+    (close)="clearUploadSignature($event)"
+  ></app-upload-signature>
 </section>

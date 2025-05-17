@@ -1,5 +1,5 @@
 .crop{
-    width: 350px;
+    width: auto;
     height: auto;
     object-fit: scale-down;
     background-color: #eee;
