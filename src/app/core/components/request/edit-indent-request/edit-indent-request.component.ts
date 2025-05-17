@@ -57,6 +57,7 @@ export class EditIndentRequestComponent {
   isEnableAddHeader: boolean = false;
   loader: boolean = false;
   suppressValueChanges: boolean = false;
+  isBox: boolean = false;
 
   subtotal: number = 0;
   tax: number = 0;
@@ -327,6 +328,12 @@ export class EditIndentRequestComponent {
     }
 
     console.log('productData:', this.productData);
+
+    if(product.prdUnit === 200){
+      this.isBox = true;
+    } else{
+      this.isBox = false;
+    }
 
     this.indentProductForm.patchValue({
       qty: 1,

@@ -31,6 +31,7 @@ export class RequestFormComponent implements OnInit {
   isEditHeader: boolean = false;
   isSuccessPop: boolean = false;
   isNeed: boolean = false;
+  isBox: boolean = false;
 
   groupList: any;
   catList: any;
@@ -58,7 +59,6 @@ export class RequestFormComponent implements OnInit {
   taxSum: number = 0;
   subtotalSum: number = 0;
 
-  // deleteToastMsg: any;
   toastService = inject(ToastService);
   route = inject(Router);
 
@@ -703,6 +703,12 @@ export class RequestFormComponent implements OnInit {
       this.productData = [];
       this.storeProductData = [];
       return;
+    }
+
+    if(product.prdUnit === 200){
+      this.isBox = true
+    } else{
+      this.isBox = false;
     }
 
     this.productForm.patchValue({
