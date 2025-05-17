@@ -49,19 +49,19 @@
                   placeholder="Search"
                 />
 
-                @if(searchText){
+                @if (searchText) {
                   <div
-                    class="absolute flex items-center right-0 inset-y-0 cursor-pointer pr-3"
+                    class="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-3"
                     (click)="clearSearch()"
-                    >
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5 rounded-full bg-red-600 p-0.5 text-white font-bold dark:text-gray-400"
+                      class="h-5 w-5 rounded-full bg-red-600 p-0.5 font-bold text-white dark:text-gray-400"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       stroke-width="2"
-                      >
+                    >
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"

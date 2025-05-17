@@ -104,7 +104,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
     });
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.fetchRequestList();
   }
@@ -213,7 +213,7 @@ export class CeoCfoapprovalRequisitionlistComponent {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    if(inputValue === ''){
+    if (inputValue === '') {
       this.fetchRequestList();
     }
 

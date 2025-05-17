@@ -42,7 +42,7 @@
               <div class="flex flex-col p-4 sm:p-10">
                 <!-- Grid -->
                 <div class="flex justify-between">
-                  <div class="-ml-6">
+                  <div class="bg-gray-100">
                     <img
                       *ngIf="companyLogo"
                       [src]="'data:image/png;base64,' + companyLogo"
@@ -475,7 +475,9 @@
                         >Ensure that these requirements are met:</span
                       >
                       <ul class="mt-1.5 list-inside list-disc">
-                        <li>Request Amount and Approval Amount should be same</li>
+                        <li>
+                          Request Amount and Approval Amount should be same
+                        </li>
                         <li>
                           Donor Amount Should also match with the Requested &
                           Approval Amount
