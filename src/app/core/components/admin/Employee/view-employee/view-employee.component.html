@@ -2,11 +2,11 @@
   <div class="flex">
     <div class="w-1/2"></div>
     <div
-      [ngClass]="{ 
-        'animate-slide-out-right': isStyle,
-       }"
+      [ngClass]="{
+        'animate-slide-out-right': isStyle
+      }"
       class="animate-slide-in-right w-3/4 border bg-white shadow-xl"
-      >
+    >
       <div class="flex items-center justify-between border bg-purple-50">
         <div class="m-4">
           <button (click)="closeEmployeeView()">
@@ -489,10 +489,12 @@
                     viewEmployeeForm.get('levelId')?.invalid &&
                     viewEmployeeForm.get('levelId')?.touched
                 }"
-              >
+                >
                 <option null selected disabled>Choose Role</option>
-                <option *ngFor="let level of levelForDesignation" 
-                  [ngValue]="level.levelId">
+                <option
+                  *ngFor="let level of levelForDesignation"
+                  [ngValue]="level.levelId"
+                >
                   {{ level.levelName }}
                 </option>
               </select>
@@ -506,6 +508,41 @@
                 Field should not be Empty!
               </small>
             </div>
+
+            <div>
+              <label
+                for="Designation"
+                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >Designation</label
+              >
+              <select
+                class="input-form"
+                formControlName="empDesig"
+                [ngClass]="{
+                  error:
+                    viewEmployeeForm.get('empDesig')?.invalid &&
+                    viewEmployeeForm.get('empDesig')?.touched
+                }"
+              >
+                <option null selected disabled>Choose Designation</option>
+                <option
+                  *ngFor="let desig of designationList"
+                  [ngValue]="desig.empDesig"
+                >
+                  {{ desig.empDesignation }}
+                </option>
+              </select>
+              <small
+                *ngIf="
+                  viewEmployeeForm?.get('empDesig')?.invalid &&
+                  viewEmployeeForm?.get('empDesig')?.touched
+                "
+                class="text-danger text-red-600"
+              >
+                Designation should not be null!
+              </small>
+            </div>
+
             <div>
               <label
                 for="Branch"
@@ -541,41 +578,7 @@
               </small>
             </div>
 
-            <div>
-              <label
-                for="Designation"
-                class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                >Designation</label
-              >
-              <select
-                class="input-form"
-                formControlName="empDesig"
-                [ngClass]="{
-                  error:
-                    viewEmployeeForm.get('empDesig')?.invalid &&
-                    viewEmployeeForm.get('empDesig')?.touched
-                }"
-                >
-                <option null selected disabled>Choose Designation</option>
-                <option
-                  *ngFor="let desig of designationList"
-                  [ngValue]="desig.empDesig"
-                >
-                  {{ desig.empDesignation }}
-                </option>
-              </select>
-              <small
-                *ngIf="
-                  viewEmployeeForm?.get('empDesig')?.invalid &&
-                  viewEmployeeForm?.get('empDesig')?.touched
-                "
-                class="text-danger text-red-600"
-                >
-                Designation should not be null!
-              </small>
-            </div>
-
-            <div class="flex">
+            <div class="flex mt-6">
               <div class="me-4 flex items-center">
                 <input
                   type="radio"
