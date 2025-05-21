@@ -58,32 +58,32 @@ export class AuthService {
     return userRoles.includes('ROLE_ADMIN_AUTH');
   }
 
-  isAuthenticateITAdmin(){
+  isAuthenticateITAdmin() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_IT_ADMIN');
   }
 
-  isAuthenticatePrdTransaction(){
+  isAuthenticatePrdTransaction() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_ADD_PRD_TRANS');
   }
 
-  isAuthenticateInwardAlert(){
+  isAuthenticateInwardAlert() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_PRD_INW_ALERT');
   }
 
-  isAuthenticateFinance(){
+  isAuthenticateFinance() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_FINANCE_AUTH');
   }
 
-  isAuthenticateQuoteCompare(){
+  isAuthenticateQuoteCompare() {
     const userRoles = this.getUserRoles();
     return userRoles.includes('ROLE_QUOTE_COMPARE');
   }
 
-  isAuthenticateSpecialRoles(){
+  isAuthenticateSpecialRoles() {
     const userRoles = this.getUserRoles();
     const specialRoles = [
       'ROLE_CEO',
@@ -92,6 +92,6 @@ export class AuthService {
       'ROLE_HEAD_ADMIN',
     ];
 
-    return specialRoles.some(role => userRoles.includes(role));
+    return specialRoles.some((role) => userRoles.includes(role));
   }
 }

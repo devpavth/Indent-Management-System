@@ -38,11 +38,15 @@ export class RequestService {
     return this.http.get(environment.reqProduct + data);
   }
 
-  branchRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+  branchRequestList(
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ) {
     let url = `${environment.branchApprovelList}/${status}`;
 
-    if(startDate && endDate){
-      url += `?startDate=${startDate}&endDate=${endDate}`
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get(url);
@@ -58,11 +62,15 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  adminRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined) {
+  adminRequestList(
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ) {
     let url = `${environment.adminAprovalList}${status}`;
 
-    if(startDate && endDate){
-      url += `?startDate=${startDate}&endDate=${endDate}`
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get(url);
@@ -77,11 +85,15 @@ export class RequestService {
       params: mesgParams,
     });
   }
-  finRequestList(status: number, startDate?: string | undefined, endDate?: string | undefined): Observable<any> {
+  finRequestList(
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
+  ): Observable<any> {
     let url = `${environment.finRequestList}${status}`;
 
-    if(startDate && endDate){
-      url += `?startDate=${startDate}&endDate=${endDate}`
+    if (startDate && endDate) {
+      url += `?startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get(url);
@@ -266,12 +278,12 @@ export class RequestService {
     statusCode: number,
     specialRoleId: number,
     startDate?: string | undefined,
-    endDate?: string | undefined
+    endDate?: string | undefined,
   ): Observable<Request[]> {
     let url = `${environment.fetchSpecialRolesRequestIsProcessAndAccept}${statusCode}?specialRoleId=${specialRoleId}`;
 
-    if(startDate && endDate){
-      url += `&startDate=${startDate}&endDate=${endDate}`
+    if (startDate && endDate) {
+      url += `&startDate=${startDate}&endDate=${endDate}`;
     }
 
     return this.http.get<Request[]>(url);
@@ -378,13 +390,17 @@ export class RequestService {
   }
 
   fetchPurchaseOrderList(
-    startDate: string | undefined,
-    endDate: string | undefined,
+    status: number,
+    startDate?: string | undefined,
+    endDate?: string | undefined,
   ): Observable<Polist[]> {
-    return this.http.get<Polist[]>(
-      environment.purchaseOrderList +
-        `?startDate=${startDate}&endDate=${endDate}`,
-    );
+    let url = `${environment.purchaseOrderList}/${status}`;
+
+    if(startDate && endDate){
+      url += `?startDate=${startDate}&endDate=${endDate}`;
+    }
+
+    return this.http.get<Polist[]>(url);
   }
 
   viewPurchaseOrder(sno: number, headOfAccId: number | null) {
@@ -393,23 +409,29 @@ export class RequestService {
     );
   }
 
-  searchPurchaseOrder(PONumber: string): Observable<Polist[]>{
+  searchPurchaseOrder(PONumber: string): Observable<Polist[]> {
     return this.http.get<Polist[]>(environment.searchPurchaseOrder + PONumber);
   }
 
-  updatePOProductStatus(POId: number){
+  updatePOProductStatus(POId: number) {
     return this.http.put(environment.updatePOProductStatus + POId, '');
   }
 
-  deletePOItemFromList(POId: number){
+  deletePOItemFromList(POId: number) {
     return this.http.delete(environment.deletePOItem + POId);
   }
 
-  fetchPOProductDetails(sno: number, headOfAccId: number): Observable<POProductList[]>{
-    return this.http.get<POProductList[]>(environment.fetchPOProductDetails + `?sno=${sno}&headOfAccId=${headOfAccId}`);
+  fetchPOProductDetails(
+    sno: number,
+    headOfAccId: number,
+  ): Observable<POProductList[]> {
+    return this.http.get<POProductList[]>(
+      environment.fetchPOProductDetails +
+        `?sno=${sno}&headOfAccId=${headOfAccId}`,
+    );
   }
 
-  updatePOPrdDetails(poId: number, POPrdForm: any){
+  updatePOPrdDetails(poId: number, POPrdForm: any) {
     return this.http.put(environment.updatePOPrdDetails + poId, POPrdForm);
   }
 }

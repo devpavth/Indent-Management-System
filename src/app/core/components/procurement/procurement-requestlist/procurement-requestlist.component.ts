@@ -18,6 +18,10 @@ export class ProcurementRequestlistComponent {
   noRequest: boolean = false;
   showSearchInfo: boolean = false;
   isEndDateManuallySelected: boolean = false;
+  isPendingPO: boolean = false;
+  isPendingPOView: boolean = false;
+  isProcessAndAccepted: boolean = false;
+  isViewModeOfPayment: boolean = false;
 
   dropdownPosition = { top: 0, right: 0 };
 
@@ -116,12 +120,14 @@ export class ProcurementRequestlistComponent {
   }
 
   fetchRequestList() {
-    if (this.isProcess == true && this.isCompleted == false) {
+    if (this.isProcess == true && this.isCompleted == false && !this.isPendingPO) {
       let status = 102;
       this.isViewSelectedDate = false;
       this.isSkeletonLoader = true;
       this.noRequest = false;
       this.searchText = '';
+      this.isProcessAndAccepted = true;
+      this.isPendingPOView = false;
       this.req.fetchPrctReqList(status).subscribe(
         (res) => {
           this.userRequest = res;
@@ -145,10 +151,12 @@ export class ProcurementRequestlistComponent {
         },
       );
     }
-    if (this.isProcess == false && this.isCompleted == true) {
+    if (this.isProcess == false && this.isCompleted == true && !this.isPendingPO) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
       this.searchText = '';
+      this.isProcessAndAccepted = true;
+      this.isPendingPOView = false;
       this.req.fetchPrctReqList(202, this.startDate, this.endDate).subscribe(
         (res: any) => {
           console.log('fetching completed procurement request:', res);
@@ -170,6 +178,32 @@ export class ProcurementRequestlistComponent {
           } else if (error.status === 404) {
             this.userRequest = undefined;
             this.noRequest = true;
+          }
+        },
+      );
+    }
+    if(!this.isProcess && !this.isCompleted && this.isPendingPO){
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
+      this.searchText = '';
+      this.isPendingPOView = true;
+      this.isProcessAndAccepted = false;
+      this.req.fetchPurchaseOrderList(102).subscribe(
+        (res) => {
+          console.log('fetching pending po list:', res);
+          this.userRequest = res;
+          this.isSkeletonLoader = false;
+          this.noRequest = false;
+          this.isEndDateManuallySelected = false;
+        },
+        (error) => {
+          console.log('error while fetching pending po list:', error);
+          this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
+
+          if (error.status === 404) {
+            this.noRequest = true;
+            this.userRequest = undefined;
           }
         },
       );
@@ -218,6 +252,10 @@ export class ProcurementRequestlistComponent {
         this.isAcceptedView = true;
       }
     }
+  }
+
+  viewModeOfPaymentModal(){
+    this.isViewModeOfPayment = true;
   }
 
   @HostListener('document:click', ['$event'])

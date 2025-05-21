@@ -119,7 +119,7 @@ export class ViewAcceptedprocurementreqComponent {
       const selectedItem = this.filterHeadOfAcc.find(
         (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
       );
-      this.dynamicPOBtn = selectedItem?.poStatus === 201;
+      this.dynamicPOBtn = selectedItem?.poStatus === 102;
       this.showBtn = true;
       this.fetchQuote(this.selectedHeadOfAccId);
     }
@@ -132,19 +132,19 @@ export class ViewAcceptedprocurementreqComponent {
       (res) => {
         console.log('verifying quote compare headofacc:', res);
         this.filterHeadOfAcc = res;
-        console.log(
-          'checking selectedHeadOfAccId:',
-          this.selectedHeadOfAccId,
-        );
+        console.log('checking selectedHeadOfAccId:', this.selectedHeadOfAccId);
         if (this.selectedHeadOfAccId) {
-          console.log("checking selectedHeadOfAccId in if condition:", this.selectedHeadOfAccId);
+          console.log(
+            'checking selectedHeadOfAccId in if condition:',
+            this.selectedHeadOfAccId,
+          );
           const selectedItem = this.filterHeadOfAcc.find(
             (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
           );
 
-          console.log("selectedItem in BTN:", selectedItem);
-          console.log("selectedItem in postatus:", selectedItem?.poStatus);
-          this.dynamicPOBtn = selectedItem?.poStatus === 201;
+          console.log('selectedItem in BTN:', selectedItem);
+          console.log('selectedItem in postatus:', selectedItem?.poStatus);
+          this.dynamicPOBtn = selectedItem?.poStatus === 102;
           this.showBtn = true;
         }
 
@@ -188,7 +188,7 @@ export class ViewAcceptedprocurementreqComponent {
   confirmPOPopup() {
     const indentStatus = this._requestDetails().indentHeaders.requestStatus;
     if (indentStatus === 100) {
-      if (!this.dynamicPOBtn) {
+      if (this.dynamicPOBtn) {
         this.isWarningPopUp = true;
         this.confirmPOMsg = `Are you sure want to convert this '${this.selectedHeadOfAccName}' into Purchase Order?`;
       } else {

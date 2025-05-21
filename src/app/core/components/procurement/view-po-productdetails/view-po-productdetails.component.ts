@@ -1,7 +1,19 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { RequestService } from '../../service/Request/request.service';
 import { POProductList } from '../../../models/proRequestData/pro-requestdata.model';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { ToastService } from '../../service/toast/toast.service';
 import { Router } from '@angular/router';
 
@@ -86,19 +98,19 @@ export class ViewPoProductdetailsComponent implements OnInit {
 
   toggleCheckBox(event: Event, prd: POProductList, index: number) {
     const input = event.target as HTMLInputElement;
-    if(!input) return;
+    if (!input) return;
 
     let checked = input.checked;
-    console.log("checked:", checked);
+    console.log('checked:', checked);
 
     this.isEnableInputArray[index] = checked;
-    
-    if(checked){
-      if(!this.selectedIndices.includes(index)){
+
+    if (checked) {
+      if (!this.selectedIndices.includes(index)) {
         this.selectedIndices.push(index);
         console.log('this.selectedIndices:', this.selectedIndices);
-      } else{
-        console.log("this.selectedIndices:", this.selectedIndices);
+      } else {
+        console.log('this.selectedIndices:', this.selectedIndices);
 
         prd.receivedQty = 0;
         prd.prdQtyValidationError = false;
@@ -108,48 +120,48 @@ export class ViewPoProductdetailsComponent implements OnInit {
       }
 
       const hasInvalidQty = this.selectedIndices.some(
-        (i) => this.POProductList[i].receivedQty === 0
+        (i) => this.POProductList[i].receivedQty === 0,
       );
 
-      if(hasInvalidQty){
+      if (hasInvalidQty) {
         this.isEnableConfirmBtn = false;
 
-        this.selectedIndices.forEach(
-          (i) => {
-            if(this.POProductList[i].receivedQty === 0){
-              this.POProductList[i].prdZeroQtyValidationError = true;
-            }
+        this.selectedIndices.forEach((i) => {
+          if (this.POProductList[i].receivedQty === 0) {
+            this.POProductList[i].prdZeroQtyValidationError = true;
           }
-        )
-      } else{
+        });
+      } else {
         this.isEnableConfirmBtn = true;
       }
-    } else{
+    } else {
       prd.receivedQty = 0;
       prd.prdQtyValidationError = false;
       prd.prdZeroQtyValidationError = false;
       prd.inputCurrentDate = this.currentDateString;
       this.selectedIndices = this.selectedIndices.filter((i) => i !== index);
-      if(this.selectedIndices.length > 0){
+      if (this.selectedIndices.length > 0) {
         const hasError = this.selectedIndices.some(
-          (i) => this.POProductList[i].prdZeroQtyValidationError === true || this.POProductList[i].prdQtyValidationError === true 
-        )
+          (i) =>
+            this.POProductList[i].prdZeroQtyValidationError === true ||
+            this.POProductList[i].prdQtyValidationError === true,
+        );
 
-        this.isEnableConfirmBtn = !hasError; 
-      } else{
+        this.isEnableConfirmBtn = !hasError;
+      } else {
         this.isEnableConfirmBtn = false;
       }
 
       console.log('this.selectedIndices:', this.selectedIndices);
       console.log('this.isEnableConfirmBtn:', this.isEnableConfirmBtn);
-    }   
+    }
   }
 
   updateReceivedQty(event: Event, prd: POProductList) {
-    const input = (event.target as HTMLInputElement);
+    const input = event.target as HTMLInputElement;
     const inputQty = Number(input.value);
-    
-    if(inputQty < 1){
+
+    if (inputQty < 1) {
       prd.receivedQty = undefined;
       input.value = '';
       prd.prdZeroQtyValidationError = true;
@@ -211,13 +223,15 @@ export class ViewPoProductdetailsComponent implements OnInit {
 
     this.isEnableConfirmBtn = !hasInvalidQty && !prd.prdQtyValidationError;
 
-    if(this.selectedIndices.length > 0){
+    if (this.selectedIndices.length > 0) {
       const hasError = this.selectedIndices.some(
-        (i) => this.POProductList[i].prdZeroQtyValidationError === true || this.POProductList[i].prdQtyValidationError === true
+        (i) =>
+          this.POProductList[i].prdZeroQtyValidationError === true ||
+          this.POProductList[i].prdQtyValidationError === true,
       );
 
       this.isEnableConfirmBtn = !hasError;
-    } else{
+    } else {
       this.isEnableConfirmBtn = false;
     }
     console.log('this.selectedIndices:', this.selectedIndices);

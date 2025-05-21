@@ -32,6 +32,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.user = sessionStorage.getItem('userId');
     console.log('this.user in header:', this.user);
+    console.log('checking header page');
+
     if (this.user) {
       this.userDetailService.getEmployeeDetails(this.user).subscribe((res) => {
         console.table(res);

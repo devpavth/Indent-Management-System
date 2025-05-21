@@ -37,6 +37,7 @@ import { AmountInWordsPipe } from './pipes/amountInWords/amount-in-words.pipe';
 import { ClickoutsideDropdownDirective } from './Directives/clickoutsideDropdown/clickoutside-dropdown.directive';
 import { RequiredFieldDirective } from './Directives/requiredField/required-field.directive';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { ModeOfPaymentModalComponent } from './mode-of-payment-modal/mode-of-payment-modal.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     AmountInWordsPipe,
     ClickoutsideDropdownDirective,
     RequiredFieldDirective,
+    ModeOfPaymentModalComponent,
   ],
   imports: [
     CommonModule,
@@ -110,6 +112,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     ClickoutsideDropdownDirective,
     RequiredFieldDirective,
     ProfileComponent,
+    ModeOfPaymentModalComponent
   ],
 })
 export class SharedModule {}

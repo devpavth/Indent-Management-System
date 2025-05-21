@@ -11,7 +11,8 @@ import { ToastService } from '../../service/toast/toast.service';
   styleUrl: './purchaseorderlist.component.css',
 })
 export class PurchaseorderlistComponent {
-  isCreated: boolean = true;
+  isPendingOrPartial: boolean = true;
+  isCompleted: boolean = false;
   noRequest: boolean = false;
   isSkeletonLoader: boolean = true;
   isViewPurchaseOrder: boolean = false;
@@ -21,6 +22,7 @@ export class PurchaseorderlistComponent {
   isDelete: boolean = false;
   showPOPrdModal: boolean = false;
   searchTriggered: boolean = false;
+  isViewSelectedDate: boolean = false;
 
   maxDate: Date | undefined;
 
@@ -174,11 +176,11 @@ export class PurchaseorderlistComponent {
   }
 
   fetchPurchaseOrderList() {
-    if (this.isCreated) {
+    if (this.isPendingOrPartial && !this.isCompleted) {
       this.isSkeletonLoader = true;
       this.noRequest = false;
       this.requestService
-        .fetchPurchaseOrderList(this.startDate, this.endDate)
+        .fetchPurchaseOrderList(201)
         .subscribe(
           (res) => {
             this.POList = res;
@@ -199,6 +201,31 @@ export class PurchaseorderlistComponent {
             }
           },
         );
+    }
+
+    if(!this.isPendingOrPartial && this.isCompleted){
+      this.isSkeletonLoader = true;
+      this.noRequest = false;
+      this.requestService.fetchPurchaseOrderList(226, this.startDate, this.endDate).subscribe(
+        (res) => {
+          console.log("fetching completed PO List:", res);
+          this.POList = res;
+          this.noRequest = false;
+          this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false;
+        },
+        (error) => {
+          this.isSkeletonLoader = false;
+          this.isEndDateManuallySelected = false
+          console.log("error while fethcing PO completed List:", error);
+
+          if(error.status === 404){
+            this.POList = [];
+            this.noRequest = true;
+            this.isSkeletonLoader = false;
+          }
+        }
+      )
     }
   }
 

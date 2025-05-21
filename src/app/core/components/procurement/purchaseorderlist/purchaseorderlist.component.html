@@ -13,7 +13,11 @@
           <div class="w-full md:w-1/2">
             <div class="flex items-center">
               <label for="simple-search" class="sr-only">Search</label>
-              <div class="relative -mt-10 w-full">
+              <div class="relative -mt-10 w-full"
+                [ngClass]="{
+                  '-mt-10': isViewSelectedDate
+                }"
+                >
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
                 >
@@ -73,7 +77,7 @@
           <div
             class="flex w-full flex-shrink-0 flex-col justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0"
           >
-            <mat-form-field>
+            <mat-form-field *ngIf="isViewSelectedDate">
               <mat-label>Enter a date range</mat-label>
               <mat-date-range-input
                 [formGroup]="range"
@@ -112,15 +116,23 @@
             <!-- <p>Selected range: {{range.value | json}}</p> -->
           </div>
         </div>
-        <div class="-mt-10 mb-3 px-4 text-sm">
+        <div class="mb-3 px-4 text-sm"
+          [ngClass]="{
+            '-mt-10': isViewSelectedDate
+          }"
+          >
           <div class="flex gap-6">
             <button
-              (click)="isCreated = true; this.setTodayDateRange()"
+              (click)="isPendingOrPartial = true;
+              isCompleted = false;
+              isViewSelectedDate = false;
+              fetchPurchaseOrderList()
+              "
               class="group flex items-center justify-center gap-1"
             >
               <svg
-                [ngClass]="{ activeSubMenu: isCreated }"
-                class="an h-4 w-4 text-gray-400 group-hover:text-purple-700 dark:text-white"
+                [ngClass]="{ activeSubMenu: isPendingOrPartial }"
+                class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
                 viewBox="0 0 24 24"
@@ -129,20 +141,46 @@
                 height="24"
               >
                 <path
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  fill-rule="evenodd"
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z"
+                  clip-rule="evenodd"
                 />
               </svg>
               <h1
                 [ngClass]="{
-                  'font-semibold text-purple-700': isCreated
+                  activeSubMenu: isPendingOrPartial
                 }"
                 class="an font-semibold text-gray-400 hover:text-purple-700"
               >
-                Created
+                Pending/Partial
+              </h1>
+            </button>
+            <button
+              (click)="
+              isPendingOrPartial = false;
+              isCompleted = true;
+              isViewSelectedDate = true; 
+              setTodayDateRange()"
+              class="group flex items-center justify-center gap-1"
+              >
+              <svg 
+                [ngClass]="{ activeSubMenu: isCompleted}"
+                class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                >
+                <path 
+                  fill-rule="evenodd" 
+                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+              </svg>
+              
+              <h1 
+                [ngClass]="{
+                  activeSubMenu: isCompleted
+                }"
+                class="an font-semibold text-gray-400 hover:text-purple-700">
+                Completed
               </h1>
             </button>
           </div>

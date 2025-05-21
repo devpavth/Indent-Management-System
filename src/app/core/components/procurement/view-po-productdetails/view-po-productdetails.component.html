@@ -9,7 +9,7 @@
           (click)="closeModal()"
           type="button"
           class="ml-auto rounded-full bg-transparent p-1.5 text-2xl text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-200 dark:hover:text-white"
-        >
+          >
           <svg
             aria-hidden="true"
             class="h-5 w-5"
@@ -44,16 +44,19 @@
               </thead>
               <tbody class="divide-y divide-gray-200" *ngIf="!skeletonLoader">
                 @for (poprd of POProductList; track poprd.id; let i = $index) {
-                  <tr 
+                  <tr
                     class="text-center text-sm text-gray-800"
                     [ngClass]="{
-                        'bg-purple-50': poprd.qty === poprd.inputReceivedQty
+                      'bg-purple-50': poprd.qty === poprd.inputReceivedQty
                     }"
-                    >
+                  >
                     <td class="px-4 py-3">
                       <input
                         type="checkbox"
-                        [disabled]="poprd.qty === poprd.inputReceivedQty || isDisableCheckBox"
+                        [disabled]="
+                          poprd.qty === poprd.inputReceivedQty ||
+                          isDisableCheckBox
+                        "
                         [checked]="poprd.qty === poprd.inputReceivedQty"
                         (change)="toggleCheckBox($event, poprd, i)"
                       />
@@ -84,8 +87,11 @@
                           [(ngModel)]="poprd.receivedQty"
                           [ngClass]="{
                             'pointer-events-none': !isEnableInputArray[i],
-                            'bg-purple-50': poprd.qty === poprd.inputReceivedQty,
-                            'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500': poprd.prdZeroQtyValidationError || poprd.prdQtyValidationError
+                            'bg-purple-50':
+                              poprd.qty === poprd.inputReceivedQty,
+                            'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500':
+                              poprd.prdZeroQtyValidationError ||
+                              poprd.prdQtyValidationError
                           }"
                           (input)="updateReceivedQty($event, poprd)"
                           [min]="1"
@@ -106,16 +112,16 @@
                           </small>
                         </div>
                         <div class="mt-1 h-0">
-                            <small
-                                [ngStyle]="{
-                                    visibility: poprd.prdZeroQtyValidationError
-                                    ? 'visible'
-                                    : 'hidden'
-                                }"
-                                class="text-xs block w-32 text-red-600 leading-3"
-                            >
-                                Qty cannot be less than 1.
-                            </small>
+                          <small
+                            [ngStyle]="{
+                              visibility: poprd.prdZeroQtyValidationError
+                                ? 'visible'
+                                : 'hidden'
+                            }"
+                            class="block w-32 text-xs leading-3 text-red-600"
+                          >
+                            Qty cannot be less than 1.
+                          </small>
                         </div>
                       </div>
                     </td>
@@ -185,8 +191,13 @@
           class="rounded-lg border bg-purple-500 px-4 py-2 text-white"
         >
           <span *ngIf="!btnLoader">Confirm</span>
-          <span *ngIf="btnLoader" class="flex items-center justify-center gap-2">
-            <span class="w-5 h-5 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+          <span
+            *ngIf="btnLoader"
+            class="flex items-center justify-center gap-2"
+          >
+            <span
+              class="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"
+            ></span>
             <span>loading...</span>
           </span>
         </button>

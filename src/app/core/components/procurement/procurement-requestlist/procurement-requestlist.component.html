@@ -131,10 +131,12 @@
           <div class="flex gap-6">
             <button
               (click)="
-                isProcess = true; isCompleted = false; fetchRequestList()
+                isProcess = true; isCompleted = false; 
+                isPendingPO = false;
+                fetchRequestList()
               "
               class="group flex items-center justify-center gap-1"
-            >
+              >
               <svg
                 [ngClass]="{ activeSubMenu: isProcess }"
                 class="an h-3.5 w-3.5 text-gray-400 group-hover:text-purple-700 dark:text-white"
@@ -163,6 +165,7 @@
               (click)="
                 isProcess = false;
                 isCompleted = true;
+                isPendingPO = false;
                 isViewSelectedDate = true;
                 setTodayDateRange()
               "
@@ -191,6 +194,35 @@
                 Accepted
               </h1>
             </button>
+            <button
+              (click)="
+                isProcess = false;
+                isCompleted = false;
+                isPendingPO = true;
+                isViewSelectedDate = false;
+                fetchRequestList()
+              "
+              class="group flex items-center justify-center gap-1"
+              >
+              <svg 
+                [ngClass]="{ activeSubMenu: isPendingPO }"
+                class="an h-4 w-4 text-gray-400 group-hover:text-purple-700 dark:text-white"
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="currentColor" 
+                >
+                <path 
+                  fill-rule="evenodd" 
+                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 0 1-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 0 1-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 0 1-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.83-.727.83-1.857 0-2.584ZM12 18a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+              </svg>
+              
+              <h1
+                [ngClass]="{ activeSubMenu: isPendingPO }"
+                class="subMenu an group"
+                >
+                Pending PO
+              </h1>
+            </button>
           </div>
         </div>
 
@@ -205,75 +237,25 @@
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <div>Indent ID</div>
-                    <button
-                      class="an rounded-full hover:bg-gray-600 hover:text-white"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="h-4 w-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                        />
-                      </svg>
-                    </button>
                   </div>
                 </th>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
                     <div>Date</div>
-                    <button
-                      class="an rounded-full hover:bg-gray-600 hover:text-white"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="h-4 w-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                        />
-                      </svg>
-                    </button>
                   </div>
                 </th>
-                <th scope="col" class="px-4 py-3">Branch</th>
-                <th scope="col" class="px-4 py-3">Department</th>
-                <th scope="col" class="px-4 py-3">Status</th>
-                <th scope="col" class="px-4 py-3">
+                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Branch</th>
+                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Department</th>
+                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Status</th>
+                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">
                   <div class="flex items-center justify-between">
                     <div>Amount</div>
-                    <button
-                      class="an rounded-full hover:bg-gray-600 hover:text-white"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="h-4 w-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                        />
-                      </svg>
-                    </button>
                   </div>
                 </th>
+                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">Head Of Account</th>
+                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></th>
+                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">PO Status</th>
+                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></th>
 
                 <th scope="col" class="px-4 py-3">
                   <span class="sr-only">Actions</span>
@@ -295,9 +277,9 @@
                 <td class="px-4 py-3">
                   {{ req.createdOn | date: "dd-MMMM-yyyy" }}
                 </td>
-                <td class="px-4 py-3">{{ req.branchName }}</td>
-                <td class="px-4 py-3">{{ req.deptName }}</td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">{{ req.branchName }}</td>
+                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">{{ req.deptName }}</td>
+                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">
                   <span
                     [ngClass]="{
                       created: req.requestStatus == 201,
@@ -310,7 +292,7 @@
                     >{{ req.requestStatusStr }}</span
                   >
                 </td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">
                   <span
                     [ngClass]="{
                       price1: req.totalPrice < 20000,
@@ -319,8 +301,12 @@
                     >{{ req.totalPrice | currency: "INR" }}</span
                   >
                 </td>
+                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">{{req.headOfAccName}}</td>
+                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></td>
+                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">{{req.poStatus}}</td>
+                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></td>
 
-                <td class="relative flex items-center justify-end px-4 py-3">
+                <td class="relative flex items-center justify-end px-4 py-3" *ngIf="isProcessAndAccepted">
                   <button
                     (click)="viewRequest($event, req.sno, req.requestNo)"
                     class="dropdown-button inline-flex items-center rounded-lg p-0.5 text-center text-sm font-medium text-gray-500 hover:text-gray-800 focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
@@ -337,6 +323,15 @@
                         d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"
                       />
                     </svg>
+                  </button>
+                </td>
+                <td *ngIf="isPendingPOView"
+                  class="flex items-center justify-end px-4 py-3"
+                  >
+                  <button 
+                    (click)="viewModeOfPaymentModal()"
+                    class="bg-purple-600 text-white px-2 py-2 font-medium rounded-lg">
+                    Convert to Purchase Order
                   </button>
                 </td>
               </tr>
@@ -440,6 +435,9 @@
 <section *ngIf="isViewConsolidatedQuote">
   <app-view-consolidatedquote [reqId]="reqId" (closeView)="refresh($event)">
   </app-view-consolidatedquote>
+</section>
+<section *ngIf="isViewModeOfPayment">
+  <app-mode-of-payment-modal></app-mode-of-payment-modal>
 </section>
 
 <section

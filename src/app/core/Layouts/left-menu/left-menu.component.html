@@ -226,7 +226,7 @@
           type="button"
           class="left-menu group"
           (click)="toggleProcurement()"
-        >
+          >
           <svg
             class="left-menusvg h-6 w-6"
             aria-hidden="true"
@@ -254,7 +254,7 @@
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 10 6"
-          >
+            >
             <path
               stroke="currentColor"
               stroke-linecap="round"
@@ -430,6 +430,7 @@
             </button>
             <ul *ngIf="company">
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 [routerLink]="isAuthenticateITAdmin ? '/home/companyList': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -472,12 +473,14 @@
             </button>
             <ul *ngIf="employee">
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 [routerLink]="isAuthenticateITAdmin ? '/home/employeeList' : '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Employee List
               </li>
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="/home/designationRoleMapping"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -515,12 +518,14 @@
 
             <ul *ngIf="product">
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="productList"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Product List
               </li>
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="headOfAcc"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -558,18 +563,21 @@
 
             <ul *ngIf="branch">
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="/home/branchList"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Branch
               </li>
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="/home/viewList/1"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Department
               </li>
               <li
+                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
                 routerLink="/home/viewList/2"
                 class="left-submenu group ml-3 cursor-pointer"
               >

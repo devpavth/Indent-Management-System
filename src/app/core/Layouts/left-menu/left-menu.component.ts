@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { EmployeeServiceService } from '../../components/service/Employee/employee-service.service';
 import { AuthService } from '../../components/service/Auth/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { SidebarStateService } from '../../components/service/sidebar/sidebar-state.service';
 
 @Component({
   selector: 'app-left-menu',
@@ -37,7 +38,8 @@ export class LeftMenuComponent {
 
   employeeService = inject(EmployeeServiceService);
   authService = inject(AuthService);
-  route = inject(Router);
+  router = inject(Router);
+  sideBarService = inject(SidebarStateService);
 
   user: any;
   userData: any;
@@ -79,10 +81,70 @@ export class LeftMenuComponent {
     this.isAuthenticateUser = this.authService.isAuthenticateUser();
     this.isAuthenticateITAdmin = this.authService.isAuthenticateITAdmin();
     this.isAuthenticateFinance = this.authService.isAuthenticateFinance();
-    this.isAuthenticateQuoteCompare = this.authService.isAuthenticateQuoteCompare();
-    this.isAuthenticateTransaction = this.authService.isAuthenticatePrdTransaction();
-    this.isAuthenticateInwardAlert = this.authService.isAuthenticateInwardAlert();
-    this.isAuthenticateSpecialRole = this.authService.isAuthenticateSpecialRoles();
+    this.isAuthenticateQuoteCompare =
+      this.authService.isAuthenticateQuoteCompare();
+    this.isAuthenticateTransaction =
+      this.authService.isAuthenticatePrdTransaction();
+    this.isAuthenticateInwardAlert =
+      this.authService.isAuthenticateInwardAlert();
+    this.isAuthenticateSpecialRole =
+      this.authService.isAuthenticateSpecialRoles();
+
+    console.log('checking routes checking routes:', this.router.events);
+    // this.router.events.subscribe((event) => {
+    //   console.log('checking routes event:', event);
+    //   if (
+    //     'routerEvent' in event &&
+    //     event.routerEvent instanceof NavigationEnd
+    //   ) {
+    //     console.log('checking routes event in if condition:', event);
+    //     const currentUrl = event.routerEvent.urlAfterRedirects;
+    //     console.log('currentUrl:', currentUrl);
+    //     this.procurement =
+    //       currentUrl.includes('/home/proReqList') ||
+    //       currentUrl.includes('/home/POList');
+
+    //     console.log('procurement state:', this.procurement);
+    //   }
+    // });
+
+    this.sideBarService.tRequest$.subscribe((show) => {
+      this.tRequest = show;
+    });
+    this.sideBarService.finance$.subscribe((show) => {
+      this.finance = show;
+    });
+    this.sideBarService.procurement$.subscribe((show) => {
+      this.procurement = show;
+    });
+    this.sideBarService.poapproval$.subscribe((show) => {
+      this.poapproval = show;
+    });
+    this.sideBarService.tAdmin$.subscribe((show) => {
+      this.tAdmin = show;
+    });
+    this.sideBarService.company$.subscribe((show) => {
+      this.company = show;
+      this.tAdmin = show;
+    });
+    this.sideBarService.employee$.subscribe((show) => {
+      this.employee = show;
+      this.tAdmin = show;
+    });
+    this.sideBarService.product$.subscribe((show) => {
+      this.product = show;
+      this.tAdmin = show;
+    });
+    this.sideBarService.branch$.subscribe((show) => {
+      this.branch = show;
+      this.tAdmin = show;
+    });
+    this.sideBarService.transaction$.subscribe((show) => {
+      this.transaction = show;
+    });
+    this.sideBarService.report$.subscribe((show) => {
+      this.report = show;
+    });
   }
 
   toggleRequest() {

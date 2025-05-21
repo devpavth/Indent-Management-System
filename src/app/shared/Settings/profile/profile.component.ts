@@ -11,6 +11,7 @@ export class ProfileComponent implements OnInit {
   userId: any; //userId
   userDetail: any; //user details
   ngOnInit(): void {
+    console.log('checking profile page');
     this.userId = sessionStorage.getItem('userId');
     this.userDetailService.getEmployeeDetails(this.userId).subscribe((res) => {
       this.userDetail = res;
