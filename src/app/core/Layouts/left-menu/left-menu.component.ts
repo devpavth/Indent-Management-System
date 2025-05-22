@@ -90,24 +90,6 @@ export class LeftMenuComponent {
     this.isAuthenticateSpecialRole =
       this.authService.isAuthenticateSpecialRoles();
 
-    console.log('checking routes checking routes:', this.router.events);
-    // this.router.events.subscribe((event) => {
-    //   console.log('checking routes event:', event);
-    //   if (
-    //     'routerEvent' in event &&
-    //     event.routerEvent instanceof NavigationEnd
-    //   ) {
-    //     console.log('checking routes event in if condition:', event);
-    //     const currentUrl = event.routerEvent.urlAfterRedirects;
-    //     console.log('currentUrl:', currentUrl);
-    //     this.procurement =
-    //       currentUrl.includes('/home/proReqList') ||
-    //       currentUrl.includes('/home/POList');
-
-    //     console.log('procurement state:', this.procurement);
-    //   }
-    // });
-
     this.sideBarService.tRequest$.subscribe((show) => {
       this.tRequest = show;
     });

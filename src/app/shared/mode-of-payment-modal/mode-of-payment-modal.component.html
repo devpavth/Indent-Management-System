@@ -3,6 +3,7 @@
         <div class="bg-white p-3 rounded-lg shadow">
             <div class="flex items-center justify-between">
                 <button
+                    (click)="closeModal.emit(false)"
                     class="ml-auto text-gray-600 bg-transparent rounded-full p-1.5 hover:bg-gray-200 dark:hover:bg-gray-200 dark:hover:text-white"
                     >
                     <svg
@@ -27,17 +28,30 @@
                     >Choose Mode Of Payment</label>
                 <select
                     class="-mt-1 rounded-lg"
+                    (change)="selectedModeOfPayment($event)"
                     >
-                    <option value="">Choose mode of payment</option>
+                    <option value="" selected disabled>Choose Mode Of Payment</option>
+                    <option 
+                        *ngFor="let payment of modeOfPaymentList"
+                        [value]="payment.id"
+                        >
+                        {{ payment.modeOfPayment }}
+                    </option>
                 </select>
             </div>
             <div class="flex items-center justify-end gap-2 p-2">
                 <button
+                    (click)="closeModal.emit(false)"
                     class="border border-gray-400 font-medium rounded-lg px-3 py-1.5 hover:bg-gray-100"
                     >
                     Cancel
                 </button>
                 <button
+                    [disabled]="!selectedModeOfPaymentId"
+                    [ngClass]="{
+                        'bg-gray-400 hover:bg-gray-400': !selectedModeOfPaymentId
+                    }"
+                    (click)="confirmModeOfPayment()"
                     class="bg-blue-600 text-white font-medium px-3 py-1.5 rounded-lg hover:bg-blue-700"
                     >
                     OK
@@ -46,3 +60,18 @@
         </div>
     </div>
 </div>
+
+<ng-container *ngIf="toastService.isSuccessToast">
+    <div class="fixed top-10 flex items-center justify-center w-full">
+        <app-success-toast 
+            [message]="toastService.successToastMsg">
+        </app-success-toast>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="isSuccessPopup">
+    <app-success
+        [successData]="successData"
+        (closeSuccess)="togglePopup($event)"
+    ></app-success>
+</ng-container>

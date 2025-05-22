@@ -41,29 +41,17 @@ export class ViewAcceptedprocurementreqComponent {
         leastPrice: number | string;
       }
     | undefined;
-  successData: { show: number; text: string } = {
-    show: 0,
-    text: '',
-  };
 
   isLoading: boolean = false;
-  isViewPurchaseOrder: boolean = false;
-  isWarningPopUp: boolean = false;
-  dynamicPOBtn: boolean = false;
-  isSuccesPop: boolean = false;
-  showBtn: boolean = false;
 
-  confirmPOMsg: string = '';
   selectedHeadOfAccName: string = '';
 
-  tooltipSno: number | null = null;
   pdfURL: SafeResourceUrl | null = null;
 
   ngOnInit() {
     console.log('reqId:', this.reqId);
 
     this.fetchDetails(this.reqId);
-    this.verifyQuoteComparisonHeadOfAcc(this.reqId);
   }
 
   fetchDetails(reqId: number) {
@@ -116,44 +104,10 @@ export class ViewAcceptedprocurementreqComponent {
     }
 
     if (this.selectedHeadOfAccId) {
-      const selectedItem = this.filterHeadOfAcc.find(
-        (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
-      );
-      this.dynamicPOBtn = selectedItem?.poStatus === 102;
-      this.showBtn = true;
       this.fetchQuote(this.selectedHeadOfAccId);
     }
 
     console.log('Selected headOfAccId:', this.selectedHeadOfAccId);
-  }
-
-  verifyQuoteComparisonHeadOfAcc(sno: number) {
-    this.requestService.verifyQuoteComparisonHeadOfAcc(sno).subscribe(
-      (res) => {
-        console.log('verifying quote compare headofacc:', res);
-        this.filterHeadOfAcc = res;
-        console.log('checking selectedHeadOfAccId:', this.selectedHeadOfAccId);
-        if (this.selectedHeadOfAccId) {
-          console.log(
-            'checking selectedHeadOfAccId in if condition:',
-            this.selectedHeadOfAccId,
-          );
-          const selectedItem = this.filterHeadOfAcc.find(
-            (item: any) => item.headOfAccId === this.selectedHeadOfAccId,
-          );
-
-          console.log('selectedItem in BTN:', selectedItem);
-          console.log('selectedItem in postatus:', selectedItem?.poStatus);
-          this.dynamicPOBtn = selectedItem?.poStatus === 102;
-          this.showBtn = true;
-        }
-
-        console.log('dynamic PO Btn:', this.dynamicPOBtn);
-      },
-      (error) => {
-        console.log('error while verifying headOfacc:', error);
-      },
-    );
   }
 
   fetchQuote(headOfAccId: number) {
@@ -183,57 +137,6 @@ export class ViewAcceptedprocurementreqComponent {
     console.log('this.filterProductHeadData:', this.filterProductHeadData);
 
     this.selectedHeadOfAccName = this.filterProductHeadData[0].headOfAccName;
-  }
-
-  confirmPOPopup() {
-    const indentStatus = this._requestDetails().indentHeaders.requestStatus;
-    if (indentStatus === 100) {
-      if (this.dynamicPOBtn) {
-        this.isWarningPopUp = true;
-        this.confirmPOMsg = `Are you sure want to convert this '${this.selectedHeadOfAccName}' into Purchase Order?`;
-      } else {
-        this.isViewPurchaseOrder = true;
-      }
-    }
-  }
-
-  showTooltipForFewSec(sno: number) {
-    this.tooltipSno = sno;
-  }
-
-  confirmPurchaseOrderReport() {
-    this.requestService
-      .generatePurchaseOrderPDF(this.reqId, this.selectedHeadOfAccId)
-      .subscribe(
-        (res: any) => {
-          console.log('fetching purchase order details:', res);
-          this.toastService.showSuccess(
-            'Purchase Order Converted Successfully',
-          );
-          this.isSuccesPop = true;
-          this.successData = { show: 8, text: res.errorMessege };
-          this.verifyQuoteComparisonHeadOfAcc(this.reqId);
-        },
-        (error) => {
-          console.log('error while fetching purchase order details:', error);
-
-          if (error.status === 400) {
-            this.toastService.showError(error.error.errorMessege);
-          }
-        },
-      );
-  }
-
-  closepop(closeIcon: boolean) {
-    this.isWarningPopUp = closeIcon;
-  }
-
-  togglePop(closeIcon: boolean) {
-    this.isSuccesPop = closeIcon;
-  }
-
-  refresh(closeIcon: boolean) {
-    this.isViewPurchaseOrder = closeIcon;
   }
 
   getAllQuotedPrices() {

@@ -229,10 +229,10 @@
         <div class="overflow-x-auto" #test>
           <table
             class="w-full text-left text-sm text-gray-500 dark:text-gray-400"
-          >
+            >
             <thead
               class="bg-purple-50 text-xs uppercase text-purple-900 dark:bg-gray-700 dark:text-gray-400"
-            >
+              >
               <tr>
                 <th scope="col" class="px-4 py-3">
                   <div class="flex items-center justify-between">
@@ -244,8 +244,8 @@
                     <div>Date</div>
                   </div>
                 </th>
-                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Branch</th>
-                <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Department</th>
+                <th scope="col" class="px-4 py-3">Branch</th>
+                <th scope="col" class="px-4 py-3">Department</th>
                 <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">Status</th>
                 <th scope="col" class="px-4 py-3" *ngIf="isProcessAndAccepted">
                   <div class="flex items-center justify-between">
@@ -253,8 +253,6 @@
                   </div>
                 </th>
                 <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">Head Of Account</th>
-                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></th>
-                <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">PO Status</th>
                 <th scope="col" class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></th>
 
                 <th scope="col" class="px-4 py-3">
@@ -266,7 +264,7 @@
               <tr
                 class="animation-translate border-b transition-all duration-300 hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700"
                 *ngFor="let req of userRequest"
-              >
+                >
                 <th
                   scope="row"
                   #reqID
@@ -277,8 +275,8 @@
                 <td class="px-4 py-3">
                   {{ req.createdOn | date: "dd-MMMM-yyyy" }}
                 </td>
-                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">{{ req.branchName }}</td>
-                <td class="px-4 py-3" *ngIf="isProcessAndAccepted">{{ req.deptName }}</td>
+                <td class="px-4 py-3">{{ req.branchName }}</td>
+                <td class="px-4 py-3">{{ req.deptName }}</td>
                 <td class="px-4 py-3" *ngIf="isProcessAndAccepted">
                   <span
                     [ngClass]="{
@@ -302,8 +300,6 @@
                   >
                 </td>
                 <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">{{req.headOfAccName}}</td>
-                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></td>
-                <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView">{{req.poStatus}}</td>
                 <td class="px-4 py-3" *ngIf="!isProcessAndAccepted && isPendingPOView"></td>
 
                 <td class="relative flex items-center justify-end px-4 py-3" *ngIf="isProcessAndAccepted">
@@ -329,7 +325,7 @@
                   class="flex items-center justify-end px-4 py-3"
                   >
                   <button 
-                    (click)="viewModeOfPaymentModal()"
+                    (click)="viewModeOfPaymentModal(req.sno, req.headOfAccId)"
                     class="bg-purple-600 text-white px-2 py-2 font-medium rounded-lg">
                     Convert to Purchase Order
                   </button>
@@ -436,9 +432,14 @@
   <app-view-consolidatedquote [reqId]="reqId" (closeView)="refresh($event)">
   </app-view-consolidatedquote>
 </section>
-<section *ngIf="isViewModeOfPayment">
-  <app-mode-of-payment-modal></app-mode-of-payment-modal>
-</section>
+<ng-container *ngIf="isViewModeOfPayment">
+  <app-mode-of-payment-modal 
+    [reqId]="reqId"
+    [headOfAccId]="selectedHeadOfAccId"
+    (callPendingPOApi)="fetchRequestList()"
+    (closeModal)="closeModeOfPaymentModal($event)">
+  </app-mode-of-payment-modal>
+</ng-container>
 
 <section
   *ngIf="toastService.isErrorToast"

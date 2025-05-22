@@ -313,6 +313,8 @@ export class ViewPurchaseorderComponent {
       // Vendor Billing Address Heading (Right Side)
       doc.text('Vendor Billing Address:', rightColumnX, 62);
 
+      doc.text('Mode Of Payment:', rightColumnX + 66, 62);
+
       // Vendor Information (Left)
       doc.setFontSize(9);
       doc.text(`${head.assgndVendorData.vendorName}`, leftColumnX, 67);
@@ -329,6 +331,8 @@ export class ViewPurchaseorderComponent {
         rightColumnX,
         75,
       );
+
+      doc.text(`${head.modeOfPayment}`, rightColumnX + 66, 67);
       // doc.text(`${this.vendorList[0].vdrCountry}`, rightColumnX, 77);
 
       doc.setFontSize(9);

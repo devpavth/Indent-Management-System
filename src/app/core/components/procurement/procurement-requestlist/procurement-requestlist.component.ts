@@ -40,6 +40,7 @@ export class ProcurementRequestlistComponent {
   tooltipSno: number | null = null;
   isSkeletonLoader: boolean = true;
 
+  selectedHeadOfAccId: number = 0;
   searchText: string = '';
 
   reqId: any;
@@ -254,7 +255,9 @@ export class ProcurementRequestlistComponent {
     }
   }
 
-  viewModeOfPaymentModal(){
+  viewModeOfPaymentModal(reqId: number, headOfAccId: number){
+    this.reqId = reqId;
+    this.selectedHeadOfAccId = headOfAccId;
     this.isViewModeOfPayment = true;
   }
 
@@ -335,6 +338,10 @@ export class ProcurementRequestlistComponent {
     }
 
     this.req.triggerSearch(enteredIndentCode);
+  }
+
+  closeModeOfPaymentModal(closeIcon: boolean){
+    this.isViewModeOfPayment = closeIcon;
   }
 
   refresh(data: any) {

@@ -170,6 +170,8 @@ export const environment = {
   deletePOItem: Url + baseRequestApi + '/delete/purchaseorder/',
   fetchPOProductDetails: Url + baseRequestApi + '/getproductdetailsbyheadofacc',
   updatePOPrdDetails: Url + baseRequestApi + '/update/purchaseorderstatus/',
+  fetchActiveModeOfPaymentList:
+    Url + baseRequestApi + '/get/activemodeofpayments',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 

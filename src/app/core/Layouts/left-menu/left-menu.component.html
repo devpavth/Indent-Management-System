@@ -48,11 +48,7 @@
         </a>
       </li>
       <li>
-        <button
-          type="button"
-          class="left-menu group"
-          (click)="toggleRequest()"
-        >
+        <button type="button" class="left-menu group" (click)="toggleRequest()">
           <svg
             class="left-menusvg h-6 w-6"
             aria-hidden="true"
@@ -156,11 +152,7 @@
         </ul>
       </li>
       <li>
-        <button
-          type="button"
-          class="left-menu group"
-          (click)="toggleFinance()"
-        >
+        <button type="button" class="left-menu group" (click)="toggleFinance()">
           <svg
             class="left-menusvg h-6 w-6"
             aria-hidden="true"
@@ -204,16 +196,24 @@
         >
           <li>
             <a
-              [routerLinkActive]="isAuthenticateFinance ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateFinance ? '/home/funderList' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateFinance ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateFinance ? '/home/funderList' : '/home/unauth'
+              "
               class="left-submenu group"
               >Funder Details</a
             >
           </li>
           <li>
             <a
-              [routerLinkActive]="isAuthenticateFinance ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateFinance ? '/home/finRequestList' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateFinance ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateFinance ? '/home/finRequestList' : '/home/unauth'
+              "
               class="left-submenu group"
               >Updated Requisition</a
             >
@@ -226,7 +226,7 @@
           type="button"
           class="left-menu group"
           (click)="toggleProcurement()"
-          >
+        >
           <svg
             class="left-menusvg h-6 w-6"
             aria-hidden="true"
@@ -254,7 +254,7 @@
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 10 6"
-            >
+          >
             <path
               stroke="currentColor"
               stroke-linecap="round"
@@ -270,16 +270,24 @@
         >
           <li>
             <a
-              [routerLinkActive]="isAuthenticateQuoteCompare ? 'side-menu-active': ''"
-              [routerLink]="isAuthenticateQuoteCompare ? '/home/proReqList': '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateQuoteCompare ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateQuoteCompare ? '/home/proReqList' : '/home/unauth'
+              "
               class="left-submenu group"
               >Updated Requisition</a
             >
-          </li>         
+          </li>
           <li>
             <a
-              [routerLinkActive]="isAuthenticateQuoteCompare ? 'side-menu-active': ''"
-              [routerLink]="isAuthenticateQuoteCompare ? '/home/POList': '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateQuoteCompare ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateQuoteCompare ? '/home/POList' : '/home/unauth'
+              "
               class="left-submenu group"
               >Converted PO</a
             >
@@ -335,8 +343,14 @@
         >
           <li>
             <a
-              [routerLinkActive]="isAuthenticateSpecialRole ? 'side-menu-active': ''"
-              [routerLink]="isAuthenticateSpecialRole ? '/home/ceocfoapproval': '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateSpecialRole ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateSpecialRole
+                  ? '/home/ceocfoapproval'
+                  : '/home/unauth'
+              "
               class="left-submenu group"
               >PO Approval</a
             >
@@ -430,8 +444,12 @@
             </button>
             <ul *ngIf="company">
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
-                [routerLink]="isAuthenticateITAdmin ? '/home/companyList': '/home/unauth'"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
+                [routerLink]="
+                  isAuthenticateITAdmin ? '/home/companyList' : '/home/unauth'
+                "
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Company Details
@@ -473,14 +491,20 @@
             </button>
             <ul *ngIf="employee">
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
-                [routerLink]="isAuthenticateITAdmin ? '/home/employeeList' : '/home/unauth'"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
+                [routerLink]="
+                  isAuthenticateITAdmin ? '/home/employeeList' : '/home/unauth'
+                "
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Employee List
               </li>
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="/home/designationRoleMapping"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -518,14 +542,18 @@
 
             <ul *ngIf="product">
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="productList"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Product List
               </li>
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="headOfAcc"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -563,21 +591,27 @@
 
             <ul *ngIf="branch">
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="/home/branchList"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Branch
               </li>
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="/home/viewList/1"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Department
               </li>
               <li
-                [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+                [routerLinkActive]="
+                  isAuthenticateITAdmin ? 'side-menu-active' : ''
+                "
                 routerLink="/home/viewList/2"
                 class="left-submenu group ml-3 cursor-pointer"
               >
@@ -593,6 +627,15 @@
               class="left-submenu group"
               >Vendor</a
             >
+          </li>
+          <li>
+            <a 
+              routerLinkActive="side-menu-active"
+              routerLink="/home/modeOfPayment"
+              class="left-submenu group"
+              >
+              MOP
+            </a>
           </li>
         </ul>
       </li>
@@ -646,16 +689,26 @@
         >
           <li>
             <a
-              [routerLinkActive]="isAuthenticateTransaction ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateTransaction ? '/home/pTransaction' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateTransaction ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateTransaction
+                  ? '/home/pTransaction'
+                  : '/home/unauth'
+              "
               class="left-submenu group"
               >Product Transaction</a
             >
           </li>
           <li>
             <a
-              [routerLinkActive]="isAuthenticateInwardAlert ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateInwardAlert ? '/home/inwardAlert' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateInwardAlert ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateInwardAlert ? '/home/inwardAlert' : '/home/unauth'
+              "
               class="left-submenu group"
               >Inward Alert</a
             >
@@ -664,11 +717,7 @@
       </li>
 
       <li>
-        <button
-          type="button"
-          class="left-menu group"
-          (click)="toggleReport()"
-        >
+        <button type="button" class="left-menu group" (click)="toggleReport()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -709,16 +758,24 @@
         >
           <li>
             <a
-              [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateITAdmin ? '/home/indentReports' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateITAdmin ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateITAdmin ? '/home/indentReports' : '/home/unauth'
+              "
               class="left-submenu group"
               >Indent Report</a
             >
           </li>
           <li>
             <a
-              [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
-              [routerLink]="isAuthenticateITAdmin ? '/home/stockReports' : '/home/unauth'"
+              [routerLinkActive]="
+                isAuthenticateITAdmin ? 'side-menu-active' : ''
+              "
+              [routerLink]="
+                isAuthenticateITAdmin ? '/home/stockReports' : '/home/unauth'
+              "
               class="left-submenu group"
               >Stock Report</a
             >
@@ -727,9 +784,12 @@
       </li>
 
       <li>
-        <a 
-          [routerLink]="isAuthenticateSpecialRole ? '/home/updateSign' : '/home/unauth'" 
-          class="left-menu group">
+        <a
+          [routerLink]="
+            isAuthenticateSpecialRole ? '/home/updateSign' : '/home/unauth'
+          "
+          class="left-menu group"
+        >
           <svg
             class="left-menusvg h-6 w-6"
             aria-hidden="true"

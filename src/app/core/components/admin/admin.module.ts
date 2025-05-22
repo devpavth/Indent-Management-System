@@ -42,6 +42,7 @@ import { UploadCompanylogoComponent } from './Company/upload-companylogo/upload-
 import { PrefixComponent } from './prefix/prefix/prefix.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { PreviewCompanylogoComponent } from './Company/preview-companylogo/preview-companylogo.component';
+import { ModeOfPaymentListComponent } from './MOP/mode-of-payment-list/mode-of-payment-list.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -82,6 +83,7 @@ import { PreviewCompanylogoComponent } from './Company/preview-companylogo/previ
     UploadCompanylogoComponent,
     PrefixComponent,
     PreviewCompanylogoComponent,
+    ModeOfPaymentListComponent,
   ],
   imports: [
     CommonModule,

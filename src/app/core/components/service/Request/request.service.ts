@@ -6,6 +6,8 @@ import { QuoteComparison } from '../../../models/quoteComparison/quote-compariso
 import { Prefix } from '../../../models/prefix/prefix.model';
 import { Polist } from '../../../models/polist/polist.model';
 import { POProductList } from '../../../models/proRequestData/pro-requestdata.model';
+import { ModeOfPaymentModalComponent } from '../../../../shared/mode-of-payment-modal/mode-of-payment-modal.component';
+import { Modeofpayment } from '../../../models/modeofpayment/modeofpayment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -362,9 +364,9 @@ export class RequestService {
     );
   }
 
-  generatePurchaseOrderPDF(sno: number, headOfAccId: number | null) {
+  generatePurchaseOrderPDF(sno: number, headOfAccId: number | null, modeOfPaymentId: number) {
     return this.http.get(
-      environment.generatePurchaseOrder + `${sno}?headOfAccId=${headOfAccId}`,
+      environment.generatePurchaseOrder + `${sno}?headOfAccId=${headOfAccId}&modeOfPayId=${modeOfPaymentId}`,
     );
   }
 
@@ -433,5 +435,11 @@ export class RequestService {
 
   updatePOPrdDetails(poId: number, POPrdForm: any) {
     return this.http.put(environment.updatePOPrdDetails + poId, POPrdForm);
+  }
+
+  fetchModeOfPaymentsList(): Observable<Modeofpayment[]>{
+    return this.http.get<Modeofpayment[]>(
+      environment.fetchActiveModeOfPaymentList,
+    );
   }
 }

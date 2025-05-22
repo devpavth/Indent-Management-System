@@ -31,7 +31,8 @@
                         'data:image/png;base64,' + companyDetails?.companyLogo
                       "
                       alt="Company Logo"
-                      class="h-16 w-16 rounded-full object-scale-down shadow-md"
+                      (click)="updateCompanyDetails()"
+                      class="h-16 w-16 rounded-full cursor-pointer object-scale-down shadow-md"
                     />
 
                     <ng-template #defaultLogo>
