@@ -50,7 +50,7 @@ export class SidebarStateService {
       finance: ['/home/funderList', '/home/finRequestList', '/home/unauth'],
       procurement: ['/home/proReqList', '/home/POList', '/home/unauth'],
       poapproval: ['/home/ceocfoapproval', '/home/unauth'],
-      tAdmin: ['/home/vendorList', '/home/unauth'],
+      tAdmin: ['/home/vendorList', '/home/modeOfPayment', '/home/unauth'],
       company: ['/home/companyList', '/home/unauth'],
       employee: [
         '/home/employeeList',

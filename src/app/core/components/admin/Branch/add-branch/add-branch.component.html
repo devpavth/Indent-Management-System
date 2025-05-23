@@ -52,7 +52,7 @@
                     addBranchForm.controls['branchName'].touched) ||
                   addBranchForm.controls['branchName'].dirty
                 "
-                >
+              >
                 <small
                   class="text-danger ml-2 text-red-600"
                   *ngIf="
@@ -259,7 +259,7 @@
               </div>
               <div class="text-right">
                 <small class="text-sm text-gray-500">
-                  {{ addBranchForm.get('add1')?.value?.length || 0 }} / 150
+                  {{ addBranchForm.get("add1")?.value?.length || 0 }} / 150
                 </small>
               </div>
             </div>
@@ -282,7 +282,7 @@
                 addBranchForm.controls['add2'].dirty
               "
               class="flex items-start justify-between"
-              >
+            >
               <div class="text-left">
                 <small
                   class="text-danger ml-2 text-red-600"
@@ -302,11 +302,10 @@
               </div>
 
               <div class="text-right">
-                  <small class="text-sm text-gray-500">
-                    {{ addBranchForm.get('add2')?.value?.length || 0 }} / 100
-                  </small>
+                <small class="text-sm text-gray-500">
+                  {{ addBranchForm.get("add2")?.value?.length || 0 }} / 100
+                </small>
               </div>
-              
             </div>
           </div>
           <div class="mb-6 grid gap-6 md:grid-cols-2">
@@ -331,7 +330,7 @@
                   addBranchForm.get('pinCode')?.value?.toString().length === 6
                 "
                 class="absolute mt-1 text-sm text-red-600"
-                >
+              >
                 <small>No Pincode found.</small>
               </div>
               <div
@@ -350,7 +349,7 @@
                   *ngIf="
                     addBranchForm.controls['pinCode'].errors?.['minlength']
                   "
-                  >
+                >
                   Pincode must have 6 digits !
                 </small>
               </div>

@@ -172,6 +172,9 @@ export const environment = {
   updatePOPrdDetails: Url + baseRequestApi + '/update/purchaseorderstatus/',
   fetchActiveModeOfPaymentList:
     Url + baseRequestApi + '/get/activemodeofpayments',
+  createModeOfPayment: Url + baseRequestApi + '/add/modeofpayment',
+  updateModeOfPayment: Url + baseRequestApi + '/update/modeofpayment/',
+  deleteModeOfPayment: Url + baseRequestApi + '/delete/modeofpayment/',
 
   // fetchIndentPrefixCode: Url + baseRequestApi + 'getcustomcode/',
 

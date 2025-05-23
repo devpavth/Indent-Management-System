@@ -442,4 +442,21 @@ export class RequestService {
       environment.fetchActiveModeOfPaymentList,
     );
   }
+
+  createModeOfPayment(modeOfPaymentForm: any){
+    return this.http.post(environment.createModeOfPayment, modeOfPaymentForm);
+  }
+
+  updateModeOfPayment(modeOfPaymentId: number, modeOfPaymentForm: any){
+    return this.http.put(
+      environment.updateModeOfPayment + modeOfPaymentId,
+      modeOfPaymentForm,
+    );
+  }
+
+  deleteModeOfPayment(modeOfPaymentId: number){
+    return this.http.delete(
+      environment.deleteModeOfPayment + modeOfPaymentId
+    )
+  }
 }

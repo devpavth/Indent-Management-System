@@ -43,6 +43,7 @@ import { PrefixComponent } from './prefix/prefix/prefix.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { PreviewCompanylogoComponent } from './Company/preview-companylogo/preview-companylogo.component';
 import { ModeOfPaymentListComponent } from './MOP/mode-of-payment-list/mode-of-payment-list.component';
+import { AddModeOfPaymentComponent } from './MOP/add-mode-of-payment/add-mode-of-payment.component';
 
 @NgModule({
   providers: [DatePipe],
@@ -84,6 +85,7 @@ import { ModeOfPaymentListComponent } from './MOP/mode-of-payment-list/mode-of-p
     PrefixComponent,
     PreviewCompanylogoComponent,
     ModeOfPaymentListComponent,
+    AddModeOfPaymentComponent,
   ],
   imports: [
     CommonModule,
@@ -93,6 +95,6 @@ import { ModeOfPaymentListComponent } from './MOP/mode-of-payment-list/mode-of-p
     ReactiveFormsModule,
     ImageCropperModule,
   ],
-  exports: [PrefixComponent],
+  exports: [PrefixComponent, ModeOfPaymentListComponent],
 })
 export class AdminModule {}

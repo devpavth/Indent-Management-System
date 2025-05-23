@@ -85,9 +85,10 @@ export class AddBranchComponent implements OnInit {
         console.log('reponse from pincode:', response);
         console.log('fetching pincode with live search:', this.pincodeList);
 
-        if(response?.[0]?.status === 'Error' &&
+        if (
+          response?.[0]?.status === 'Error' &&
           this.pincodeList.length === 0
-        ){
+        ) {
           console.log('Pincode API Error:', response?.[0]?.status);
           this.noPincode = true;
 
@@ -181,11 +182,11 @@ export class AddBranchComponent implements OnInit {
     });
   }
 
-  onAddressInput(event: Event, controlName: string, maxLength: number){
+  onAddressInput(event: Event, controlName: string, maxLength: number) {
     const input = event.target as HTMLInputElement;
     let value = input.value;
 
-    if(value.length >= maxLength){
+    if (value.length >= maxLength) {
       const trimmed = value.slice(0, maxLength);
       input.value = trimmed;
 
@@ -193,7 +194,7 @@ export class AddBranchComponent implements OnInit {
         emitEvent: false,
       });
 
-      this.addBranchForm.get(controlName)?.setErrors({maxlength: true});
+      this.addBranchForm.get(controlName)?.setErrors({ maxlength: true });
     }
   }
 

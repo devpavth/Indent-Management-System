@@ -630,8 +630,8 @@
           </li>
           <li>
             <a 
-              routerLinkActive="side-menu-active"
-              routerLink="/home/modeOfPayment"
+              [routerLinkActive]="isAuthenticateITAdmin || isAuthenticateQuoteCompare ? 'side-menu-active': ''"
+              [routerLink]="isAuthenticateITAdmin || isAuthenticateQuoteCompare ? '/home/modeOfPayment': '/home/unauth'"
               class="left-submenu group"
               >
               MOP

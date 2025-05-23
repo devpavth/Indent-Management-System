@@ -144,5 +144,22 @@ export class DeleteComponent {
           },
         );
     }
+
+    if(this.deleteData.action === 8){
+      console.log(this.deleteData);
+      this.requestService.deleteModeOfPayment(this.deleteData.deleteId).subscribe(
+        (res: any) => {
+          console.log("successfully deleted mode of payment:", res);
+          this.toastService.showSuccess(res.errorMessege);
+          setTimeout(() => {
+            this.route.navigate(['/home/modeOfPayment']);
+            this.close.emit(false);
+          }, 1000);
+        },
+        (error) => {
+          console.log("error while deleting mode of payment:", error);
+        }
+      )
+    }
   }
 }
