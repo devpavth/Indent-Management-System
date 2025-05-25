@@ -81,7 +81,7 @@ export class LeftMenuComponent {
     this.isAuthenticateUser = this.authService.isAuthenticateUser();
     this.isAuthenticateITAdmin = this.authService.isAuthenticateITAdmin();
     this.isAuthenticateFinance = this.authService.isAuthenticateFinance();
-    this.isAuthenticateQuoteCompare =
+    this.isAuthenticateQuoteCompare = 
       this.authService.isAuthenticateQuoteCompare();
     this.isAuthenticateTransaction =
       this.authService.isAuthenticatePrdTransaction();

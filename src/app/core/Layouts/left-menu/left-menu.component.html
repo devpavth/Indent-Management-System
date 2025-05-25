@@ -505,7 +505,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="/home/designationRoleMapping"
+                [routerLink]="isAuthenticateITAdmin ? '/home/designationRoleMapping': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Role Mapping
@@ -545,7 +545,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="productList"
+                [routerLink]="isAuthenticateITAdmin ? 'productList': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Product List
@@ -554,7 +554,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="headOfAcc"
+                [routerLink]="isAuthenticateITAdmin ? 'headOfAcc': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Head of Account
@@ -594,7 +594,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="/home/branchList"
+                [routerLink]="isAuthenticateITAdmin ? '/home/branchList': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Branch
@@ -603,7 +603,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="/home/viewList/1"
+                [routerLink]="isAuthenticateITAdmin ? '/home/viewList/1': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Department
@@ -612,7 +612,7 @@
                 [routerLinkActive]="
                   isAuthenticateITAdmin ? 'side-menu-active' : ''
                 "
-                routerLink="/home/viewList/2"
+                [routerLink]="isAuthenticateITAdmin ? '/home/viewList/2': '/home/unauth'"
                 class="left-submenu group ml-3 cursor-pointer"
               >
                 Project/Program
@@ -622,16 +622,16 @@
 
           <li>
             <a
-              routerLinkActive="side-menu-active"
-              routerLink="/home/vendorList"
+              [routerLinkActive]="isAuthenticateITAdmin ? 'side-menu-active' : ''"
+              [routerLink]="isAuthenticateITAdmin ? '/home/vendorList': '/home/unauth'"
               class="left-submenu group"
               >Vendor</a
             >
           </li>
           <li>
             <a 
-              [routerLinkActive]="isAuthenticateITAdmin || isAuthenticateQuoteCompare ? 'side-menu-active': ''"
-              [routerLink]="isAuthenticateITAdmin || isAuthenticateQuoteCompare ? '/home/modeOfPayment': '/home/unauth'"
+              [routerLinkActive]="authService.isAuthenticateMOP() ? 'side-menu-active': ''"
+              [routerLink]="authService.isAuthenticateMOP() ? '/home/modeOfPayment': '/home/unauth'"
               class="left-submenu group"
               >
               MOP

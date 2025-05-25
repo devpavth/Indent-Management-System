@@ -58,7 +58,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('../components/admin/admin.module').then((m) => m.AdminModule),
         canActivate: [authGuard],
-        data: { roles: ['ROLE_IT_ADMIN'] },
+        data: { roles: ['ROLE_IT_ADMIN', 'ROLE_QUOTE_COMPARE'] },
       },
 
       {

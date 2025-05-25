@@ -83,6 +83,13 @@ export class AuthService {
     return userRoles.includes('ROLE_QUOTE_COMPARE');
   }
 
+  isAuthenticateMOP(){
+    const userRoles = this.getUserRoles();
+    const MOPRoles = ['ROLE_QUOTE_COMPARE', 'ROLE_IT_ADMIN'];
+
+    return MOPRoles.some((role) => userRoles.includes(role));
+  }
+
   isAuthenticateSpecialRoles() {
     const userRoles = this.getUserRoles();
     const specialRoles = [
