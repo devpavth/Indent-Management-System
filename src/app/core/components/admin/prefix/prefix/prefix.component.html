@@ -4,7 +4,7 @@
     <div
       [ngClass]="{ 'animate-slide-out-right': isStyle }"
       class="animate-slide-in-right h-screen w-3/4 border bg-white shadow-xl"
-        >
+    >
       <div class="flex items-center justify-between border bg-purple-50 p-4">
         <div class="flex items-center space-x-3">
           <button (click)="closePrefix()">
@@ -53,7 +53,7 @@
           [class.text-gray-600]="selectedTab !== i"
           [class.border-transparent]="selectedTab !== i"
           class="border-b-2 px-6 py-3 font-medium transition-all duration-300 hover:border-purple-900 hover:text-purple-900"
-          >
+        >
           {{ tab }}
         </button>
       </div>
@@ -63,7 +63,7 @@
           <!-- <p class="text-gray-700">{{tabs[selectedTab].content}}</p> -->
 
           <div>
-            <div class="flex flex-col items-start gap-1 min-h-[85px]">
+            <div class="flex min-h-[85px] flex-col items-start gap-1">
               <input
                 type="text"
                 class="w-24 rounded-lg text-center"
@@ -71,10 +71,10 @@
                 [maxLength]="4"
                 [value]="POPrefixData?.firstCustomValue"
               />
-              <small *ngIf="isInvalidCompanyPrefix" class="text-red-600 w-24">
+              <small *ngIf="isInvalidCompanyPrefix" class="w-24 text-red-600">
                 A-Z, '-' allowed
               </small>
-            </div>            
+            </div>
           </div>
 
           <div class="relative w-32" *ngIf="POPrefixData?.id === 3">
@@ -224,7 +224,7 @@
           <div
             class="relative flex items-center"
             *ngIf="POPrefixData?.id === 2 || POPrefixData?.id === 3"
-            >
+          >
             <span class="absolute left-2 text-sm font-semibold text-gray-900"
               >FY</span
             >
@@ -240,7 +240,7 @@
           </div>
 
           <div *ngIf="POPrefixData?.id === 1">
-            <div class="flex flex-col items-start gap-1 min-h-[85px]">
+            <div class="flex min-h-[85px] flex-col items-start gap-1">
               <input
                 type="text"
                 class="w-24 rounded-lg text-center"
@@ -248,11 +248,13 @@
                 [value]="POPrefixData?.lastCustomValue"
                 [maxLength]="5"
               />
-              <small *ngIf="isInvalidIndentLastPrefix" class="text-red-600 w-24">
+              <small
+                *ngIf="isInvalidIndentLastPrefix"
+                class="w-24 text-red-600"
+              >
                 A-Z, 0-9, '-' are allowed.
               </small>
             </div>
-            
           </div>
         </div>
         <button
@@ -268,43 +270,50 @@
         </button>
       </div>
 
-      <fieldset class="p-4 ml-6 w-80 border border-gray-400 rounded-md"
-        >
-        <legend class="font-medium text-purple-700 px-2">Example</legend>
+      <fieldset class="ml-6 w-80 rounded-md border border-gray-400 p-4">
+        <legend class="px-2 font-medium text-purple-700">Example</legend>
         <div>
           <p class="flex items-start">
-            <span class="font-medium"
+            <span
+              class="font-medium"
               [ngClass]="{
                 'w-[100px]': POPrefixData?.id === 3,
                 'w-[173px]': POPrefixData?.id === 1 || POPrefixData?.id === 2
               }"
-              >{{ tabs[selectedTab] }}:</span> 
-            <span>{{ POPrefixData?.firstCustomValue }}</span><span *ngIf="POPrefixData?.branch">HEA</span><span *ngIf="POPrefixData?.transactionType">IWD</span><span *ngIf="POPrefixData?.dept">LIV</span><span>{{ POPrefixData?.lastCustomValue }}</span><span>001</span>
+              >{{ tabs[selectedTab] }}:</span
+            >
+            <span>{{ POPrefixData?.firstCustomValue }}</span
+            ><span *ngIf="POPrefixData?.branch">HEA</span
+            ><span *ngIf="POPrefixData?.transactionType">IWD</span
+            ><span *ngIf="POPrefixData?.dept">LIV</span
+            ><span>{{ POPrefixData?.lastCustomValue }}</span
+            ><span>001</span>
           </p>
         </div>
-        <div *ngIf="POPrefixData?.id === 1 || POPrefixData?.id === 2" class="mt-1">
+        <div
+          *ngIf="POPrefixData?.id === 1 || POPrefixData?.id === 2"
+          class="mt-1"
+        >
           <p class="flex items-start gap-3 text-sm">
-            <span class="font-medium w-[160px]">Branch Name:</span>
+            <span class="w-[160px] font-medium">Branch Name:</span>
             <span>Head Office</span>
           </p>
           <p class="flex items-start gap-3 text-sm">
-            <span class="font-medium w-[160px]">Department Name:</span>
+            <span class="w-[160px] font-medium">Department Name:</span>
             <span>Livelihood</span>
           </p>
         </div>
         <div *ngIf="POPrefixData?.id === 3" class="mt-1">
           <p class="flex items-start gap-3 text-sm">
-            <span class="font-medium w-[88px]">Inward:</span>
+            <span class="w-[88px] font-medium">Inward:</span>
             <span>IWD</span>
           </p>
           <p class="flex items-start gap-3 text-sm">
-            <span class="font-medium w-[88px]">Outward:</span>
+            <span class="w-[88px] font-medium">Outward:</span>
             <span>OWD</span>
           </p>
         </div>
-        
       </fieldset>
-      
     </div>
   </div>
 </section>

@@ -99,7 +99,7 @@ export class BranchApprovelComponent implements OnInit {
     this.fetchRequestList();
   }
 
-  clearSearch(){
+  clearSearch() {
     this.searchText = '';
     this.fetchRequestList();
   }
@@ -249,7 +249,7 @@ export class BranchApprovelComponent implements OnInit {
   handleInput(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;
 
-    if(inputValue === ''){
+    if (inputValue === '') {
       this.fetchRequestList();
     }
 

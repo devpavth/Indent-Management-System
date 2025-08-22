@@ -329,9 +329,9 @@ export class EditIndentRequestComponent {
 
     console.log('productData:', this.productData);
 
-    if(product.prdUnit === 200){
+    if (product.prdUnit === 200) {
       this.isBox = true;
-    } else{
+    } else {
       this.isBox = false;
     }
 

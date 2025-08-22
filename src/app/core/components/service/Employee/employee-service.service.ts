@@ -2,7 +2,11 @@ import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable, Subject, tap } from 'rxjs';
-import { DesignationRoleMapping, LevelMapping, RoleMapping } from '../../../models/designationRoleMapping/designation-role-mapping.model';
+import {
+  DesignationRoleMapping,
+  LevelMapping,
+  RoleMapping,
+} from '../../../models/designationRoleMapping/designation-role-mapping.model';
 import { Employeedetails } from '../../../models/employee/employeedetails.model';
 
 @Injectable({
@@ -156,22 +160,22 @@ export class EmployeeServiceService {
     return this.http.post(environment.postSignature, formData);
   }
 
-  fetchUploadedSignature(){
-    return this.http.get(environment.fetchUploadedSignature, 
-      {responseType: 'blob'}
-    );
+  fetchUploadedSignature() {
+    return this.http.get(environment.fetchUploadedSignature, {
+      responseType: 'blob',
+    });
   }
 
-  fetchEmployeeProfileDetails(){
+  fetchEmployeeProfileDetails() {
     return this.http.get(environment.fetchEmployeeProfileDetails);
   }
 
-  logoutApp(){
+  logoutApp() {
     // console.log("checking logout api:", environment.logoutApp);
     return this.http.post(environment.logoutApp, '');
   }
 
-  fetchNewAccessToken(){
+  fetchNewAccessToken() {
     const refreshToken = sessionStorage.getItem('refresh_token');
     return this.http.post(environment.fetchNewAccesToken, {
       refresh_token: refreshToken,

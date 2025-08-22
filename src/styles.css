@@ -93,7 +93,7 @@
 .sub-title {
   @apply text-base font-semibold leading-7 text-purple-900 dark:text-gray-200;
 }
-.side-menu-active {
+.header {
   @apply border-l border-purple-500 bg-gradient-to-r from-violet-50 font-medium text-purple-800;
 }
 
